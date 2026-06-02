@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>श्रेणियाँ — Mehfil Poetry Sanctuary | Explore Poetry by Mood & Genre</title>
+
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #FEF9F2;
+      color: #2C241F;
+      font-family: 'Inter', 'Noto Serif Devanagari', serif;
+      overflow-x: hidden;
+    }
+
+    :root {
+      --bg: #FEF9F2;
+      --card-bg: rgba(255, 253, 248, 0.92);
+      --accent: #C16A4B;
+      --accent-soft: #E8C8BA;
+      --accent-dark: #9E4F36;
+      --text-dark: #2C241F;
+      --text-muted: #756256;
+      --border-light: rgba(200, 180, 160, 0.35);
+      --shadow-sm: 0 25px 40px -15px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 35px 45px -20px rgba(0, 0, 0, 0.15);
+    }
+
+    .container {
+      max-width: 1280px;
+      width: 92%;
+      margin: 0 auto;
+    }
+
+    /* floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: -2;
+      opacity: 0.45;
+      animation: slowDrift 22s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: #FFD7C2;
+      top: -150px;
+      left: -10%;
+    }
+
+    .orb-2 {
+      width: 550px;
+      height: 550px;
+      background: #DDC7B0;
+      bottom: -100px;
+      right: -5%;
+      animation-delay: -5s;
+    }
+
+    @keyframes slowDrift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -40px) scale(1.15); }
+    }
+
+    /* scroll indicator */
+    .scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: var(--accent);
+      width: 0%;
+      z-index: 10000;
+      transition: width 0.08s linear;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* navbar - same as original */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(254, 249, 242, 0.7);
+      border-bottom: 1px solid var(--border-light);
+      transition: all 0.3s ease;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #C16A4B, #A84C2E);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+
+    .logo i {
+      background: none;
+      -webkit-background-clip: unset;
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--text-dark);
+      transition: 0.2s;
+      position: relative;
+      font-size: 1rem;
+    }
+
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      bottom: -6px;
+      left: 0;
+      transition: 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-links a:hover::before {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: var(--accent);
+    }
+
+    .nav-links a.active::before {
+      width: 100%;
+    }
+
+    .nav-btn {
+      background: var(--accent);
+      padding: 10px 24px;
+      border-radius: 50px;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      box-shadow: 0 5px 12px rgba(193, 106, 75, 0.2);
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-3px);
+      background: #A84C2E;
+      box-shadow: 0 12px 20px rgba(193, 106, 75, 0.3);
+    }
+
+    .menu-btn {
+      display: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: var(--accent);
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(193, 106, 75, 0.08);
+    }
+
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s;
+      z-index: 998;
+    }
+    .mobile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      padding: 2.5rem 0 1rem;
+    }
+
+    .page-header h1 {
+      font-size: 3.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .decor-line {
+      width: 80px;
+      height: 3px;
+      background: var(--accent);
+      margin: 0.8rem auto;
+      border-radius: 10px;
+    }
+
+    /* hero category banner */
+    .category-hero {
+      background: linear-gradient(135deg, #FFF5EC, #FFEDE2);
+      border-radius: 2rem;
+      padding: 2rem;
+      margin: 1.5rem 0 2rem;
+      text-align: center;
+      border: 1px solid var(--border-light);
+    }
+
+    .category-hero h2 {
+      font-size: 1.8rem;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* main categories grid */
+    .categories-main {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .category-card {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-card::before {
+      content: "✦";
+      position: absolute;
+      bottom: 15px;
+      right: 20px;
+      font-size: 55px;
+      opacity: 0.06;
+      font-family: serif;
+    }
+
+    .category-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--accent-soft);
+    }
+
+    .category-icon {
+      width: 85px;
+      height: 85px;
+      background: linear-gradient(145deg, #F5E6DD, #EDD9CE);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 2.8rem;
+      transition: 0.3s;
+    }
+
+    .category-card:hover .category-icon {
+      transform: scale(1.08);
+      background: var(--accent);
+      color: white;
+    }
+
+    .category-card h3 {
+      font-size: 1.6rem;
+      font-family: 'Cormorant Garamond', serif;
+      margin-bottom: 0.5rem;
+    }
+
+    .category-desc {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .category-stats {
+      font-size: 0.7rem;
+      color: var(--accent);
+      margin-top: 0.8rem;
+    }
+
+    /* featured poems under each category section */
+    .category-featured {
+      margin: 3rem 0;
+    }
+
+    .section-title-small {
+      font-size: 1.6rem;
+      font-family: 'Cormorant Garamond', serif;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid var(--accent);
+      padding-left: 1rem;
+    }
+
+    .mini-poem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .mini-poem-card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      transition: 0.3s;
+      border: 1px solid var(--border-light);
+    }
+
+    .mini-poem-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mini-poem-card h4 {
+      font-size: 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      margin-bottom: 0.3rem;
+    }
+
+    .mini-poem-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* style tags cloud */
+    .style-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .style-tag {
+      padding: 0.7rem 1.8rem;
+      background: white;
+      border-radius: 60px;
+      border: 1px solid var(--border-light);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .style-tag:hover, .style-tag.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    /* footer */
+    footer {
+      background: linear-gradient(145deg, #2C241F 0%, #1F1915 100%);
+      color: #E8DDD4;
+      margin-top: 4rem;
+      position: relative;
+    }
+
+    .footer-main {
+      padding: 3rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr;
+      gap: 2.5rem;
+    }
+
+    .footer-brand .footer-logo {
+      font-size: 2rem;
+      font-family: 'Cormorant Garamond', serif;
+      background: linear-gradient(135deg, #F5CFB3, #E8B694);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .footer-desc {
+      color: #CBBBAE;
+      line-height: 1.6;
+      font-size: 0.85rem;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-icons a {
+      width: 36px;
+      height: 36px;
+      background: rgba(255,245,235,0.08);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #E0CBBB;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .social-icons a:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    .footer-col h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .footer-links a {
+      color: #CBBBAE;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-soft);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(230,205,185,0.15);
+      padding: 1.2rem 0;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 0.75rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 880px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links {
+        display: none;
+      }
+      .menu-btn {
+        display: flex;
+      }
+      .nav-links.active {
+        display: flex;
+        position: fixed;
+        top: 70px;
+        right: 12px;
+        background: rgba(255,248,240,0.98);
+        backdrop-filter: blur(20px);
+        width: 260px;
+        flex-direction: column;
+        padding: 1.5rem;
+        border-radius: 24px;
+        gap: 1.2rem;
+        z-index: 1001;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        border: 1px solid var(--border-light);
+      }
+      .nav-btn span {
+        display: none;
+      }
+      .nav-btn {
+        padding: 10px 14px;
+      }
+      .page-header h1 {
+        font-size: 2.2rem;
+      }
+      .category-hero h2 {
+        font-size: 1.4rem;
+      }
+      .categories-main {
+        grid-template-columns: 1fr;
+      }
+      .mini-poem-grid {
+        grid-template-columns: 1fr;
+      }
+      .style-tag {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.75rem;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .social-icons {
+        justify-content: center;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+      }
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="scroll-indicator" id="scrollBar"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- Navbar - same behavior as original -->
+<nav>
+  <div class="container nav-inner">
+    <div class="logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
+    <div class="nav-links" id="navLinks">
+      <a href="./index.html">मुखपृष्ठ</a>
+      <a href="./poems.html">कविताएँ</a>
+      <a href="./poets.html">रचनाकार</a>
+      <a href="./category.html" class="active">श्रेणियाँ</a>
+      <a href="./login.html">प्रवेश करें</a>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button class="nav-btn" onclick="alert('📝 लेखन प्रारम्भ करें — अपनी रचना साझा करें!')">
+        <i class="fas fa-pen-fancy"></i> <span>लेखन</span>
+      </button>
+      <div class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></div>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="page-header fade-up">
+    <h1>श्रेणियाँ</h1>
+    <div class="decor-line"></div>
+    <p>भावनाओं, विधाओं और रंगों के संगम — अपनी मनपसंद श्रेणी चुनें और कविताओं की दुनिया में डूब जाएँ</p>
+  </div>
+
+  <!-- Hero Message -->
+  <div class="category-hero fade-up">
+    <i class="fas fa-chart-line" style="font-size: 2.5rem; color: var(--accent); opacity: 0.7;"></i>
+    <h2>हर एहसास के लिए एक श्रेणी</h2>
+    <p style="margin-top: 0.5rem; color: var(--text-muted);">प्रेम हो या विरह, सूफ़ी हो या शायरी — हर रंग यहाँ मौजूद है</p>
+  </div>
+
+  <!-- Main Categories Grid -->
+  <div class="categories-main" id="categoriesGrid"></div>
+
+  <!-- Style Tags Cloud (Secondary categories) -->
+  <div class="style-cloud fade-up">
+    <div class="style-tag active" data-filter="all">सभी श्रेणियाँ</div>
+    <div class="style-tag" data-filter="love">❤️ प्रेम काव्य</div>
+    <div class="style-tag" data-filter="sad">🌧 विरह / उदासी</div>
+    <div class="style-tag" data-filter="motivation">✨ प्रेरणादायक</div>
+    <div class="style-tag" data-filter="nature">🍃 प्रकृति</div>
+    <div class="style-tag" data-filter="sufi">☪ सूफ़ी कलाम</div>
+    <div class="style-tag" data-filter="shayari">🖋 शायरी / ग़ज़ल</div>
+  </div>
+
+  <!-- Featured Poems Section (dynamic based on selected category) -->
+  <div class="category-featured fade-up" id="featuredSection">
+    <div class="section-title-small" id="featuredTitle">
+      <i class="fas fa-star" style="color: var(--accent);"></i> चुनिंदा रचनाएँ — प्रेम काव्य
+    </div>
+    <div class="mini-poem-grid" id="featuredPoemsGrid"></div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="container footer-main">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
+        <p class="footer-desc">A sanctuary for Hindi & Urdu poetry — where words find wings and emotions echo timelessly.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#">विशेष रचनाएँ</a>
+          <a href="#">लोकप्रिय रचनाकार</a>
+          <a href="#">Poetry Moods</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <div class="footer-links">
+          <a href="#">Write a Poem</a>
+          <a href="#">Join Events</a>
+          <a href="#">Become a Member</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>पत्रिका</h4>
+        <p class="footer-desc" style="max-width: 100%;">Subscribe to receive poetic musings.</p>
+        <div style="display: flex; background: rgba(255,248,240,0.1); border-radius: 50px; overflow: hidden; margin-top: 0.5rem;">
+          <input type="email" placeholder="your@email.com" style="background: transparent; border: none; padding: 8px 12px; color: white; flex:1;">
+          <button style="background: var(--accent); border: none; padding: 0 15px; color: white; cursor: pointer;">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Mehfil — Crafted with <span style="color:#C16A4B;">❤️</span> for poetry lovers.</span>
+      <div style="display: flex; gap: 1rem;">
+        <a href="#" style="color: #A28976; text-decoration: none;">गोपनीयता नीति</a>
+        <a href="#" style="color: #A28976; text-decoration: none;">संपर्क</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Categories Data
+  const categories = [
+    { id: "love", name: "प्रेम काव्य", icon: "fa-heart", desc: "दिल की धड़कनों से लिखी गई रोमांटिक रचनाएँ", poemsCount: "2,450+", color: "#E86B52" },
+    { id: "sad", name: "विरह & उदासी", icon: "fa-cloud-rain", desc: "बिछड़न, तन्हाई और भीगी पलकों के अल्फ़ाज़", poemsCount: "1,890+", color: "#6B7B8D" },
+    { id: "motivation", name: "प्रेरणा", icon: "fa-star", desc: "जज़्बात जो आपको उड़ान दे, हौसला बढ़ाएँ", poemsCount: "1,240+", color: "#E8A735" },
+    { id: "nature", name: "प्रकृति", icon: "fa-leaf", desc: "बारिश, बहार, फूल और पत्तों की कविताएँ", poemsCount: "980+", color: "#6B8F5E" },
+    { id: "sufi", name: "सूफ़ी कलाम", icon: "fa-pray", desc: "रूह को छू लेने वाला सूफ़ीवाद और इश्क़-ए-हक़ीकी", poemsCount: "760+", color: "#9B6B9B" },
+    { id: "shayari", name: "शायरी / ग़ज़ल", icon: "fa-feather-alt", desc: "उर्दू अदब का जौहर, शेर-ओ-शायरी का संगम", poemsCount: "3,120+", color: "#C16A4B" }
+  ];
+
+  // Sample poems for each category
+  const poemsByCategory = {
+    love: [
+      { title: "तेरे नाम", poet: "आरमान", excerpt: "हर साँस तेरे नाम है, हर लम्हा तुझमें ढल जाता है..." },
+      { title: "मोहब्बत का सिलसिला", poet: "मेहर", excerpt: "बिना कहे ही बातें समझ में आ जाती हैं तुम्हारी..." },
+      { title: "दिल की बातें", poet: "आयशा", excerpt: "तेरे ख़यालों की गली में, हर सुबह मिलती है मुझे तन्हाई..." }
+    ],
+    sad: [
+      { title: "ख़ामोशी", poet: "ज़ोया", excerpt: "कुछ दर्द आवाज़ नहीं करते, बस इंसान को अंदर से बदल देते हैं..." },
+      { title: "बिछड़न", poet: "ज़यान", excerpt: "तेरे जाने के बाद ये दिल सुन्न सा है, हर सुबह अधूरी सी..." },
+      { title: "रात का दर्द", poet: "सना", excerpt: "रात भर जागते हैं, तेरे बिना ये दिन कटते नहीं..." }
+    ],
+    motivation: [
+      { title: "उड़ान", poet: "अरमान", excerpt: "ख्वाबों के पर लगा कर, उड़ चलें उस आसमान में..." },
+      { title: "मुकम्मल होना", poet: "प्रियंका", excerpt: "अधूरा हूँ मैं, मगर मुकम्मल होने का सफ़र खूबसूरत है..." },
+      { title: "नया सबेरा", poet: "रुद्र", excerpt: "हर सुबह नई उम्मीद लेकर आती है, बस देखना सीखो..." }
+    ],
+    nature: [
+      { title: "बारिश", poet: "रेहान", excerpt: "बारिश की बूंदों में आज भी तेरी हँसी सुनाई देती है..." },
+      { title: "पत्तों की कहानी", poet: "राहुल", excerpt: "हर पत्ता कहानी सुनाता है, बस सुनने वाला चाहिए..." },
+      { title: "वसंत ऋतु", poet: "सलोनी", excerpt: "बहारों में भी तेरी याद का गुल खिला है दिल में..." }
+    ],
+    sufi: [
+      { title: "रूहानी सफर", poet: "फ़िरोज़", excerpt: "ख़ुदा से मिलने का सफ़र, ख़ुद को खोजने से शुरू होता है..." },
+      { title: "इश्क़-ए-हक़ीकी", poet: "मकसूद", excerpt: "मैं तो बस रूह का पता लगाने निकला था..." },
+      { title: "दरवेश", poet: "क़ादरी", excerpt: "दरवेशों का दर्द भी अजब होता है, रोते हैं तो महकता है..." }
+    ],
+    shayari: [
+      { title: "ग़ज़ल का नग़मा", poet: "मन्नत काज़मी", excerpt: "दिल दुखता तो है, पर शिकवा नहीं; आदत है अब ये..." },
+      { title: "उर्दू का जादू", poet: "फ़रहान", excerpt: "शब्दों की नज़ाकत में बसे हैं हम, उर्दू हमारी पहचान है..." },
+      { title: "सदा", poet: "आयशा परवीन", excerpt: "वो देखते रहे और हम कहते रहे, इसी में बसर हुई..." }
+    ]
+  };
+
+  let currentFilter = "all";
+
+  // Render main category cards
+  function renderCategories() {
+    const grid = document.getElementById("categoriesGrid");
+    grid.innerHTML = categories.map(cat => `
+      <div class="category-card fade-up" data-category="${cat.id}">
+        <div class="category-icon" style="color: ${cat.color};">
+          <i class="fas ${cat.icon}"></i>
+        </div>
+        <h3>${cat.name}</h3>
+        <p class="category-desc">${cat.desc}</p>
+        <div class="category-stats">
+          <span><i class="fas fa-book-open"></i> ${cat.poemsCount} कविताएँ</span>
+        </div>
+      </div>
+    `).join('');
+
+    // attach click handlers to category cards
+    document.querySelectorAll('.category-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const catId = card.getAttribute('data-category');
+        currentFilter = catId;
+        updateFilterUI(catId);
+        updateFeaturedPoems(catId);
+        // scroll to featured section smoothly
+        document.getElementById('featuredSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  function updateFilterUI(selectedId) {
+    // update style tags active state
+    document.querySelectorAll('.style-tag').forEach(tag => {
+      const filterVal = tag.getAttribute('data-filter');
+      if (filterVal === selectedId || (filterVal === 'all' && selectedId === 'all')) {
+        tag.classList.add('active');
+      } else {
+        tag.classList.remove('active');
+      }
+    });
+  }
+
+  function updateFeaturedPoems(categoryId) {
+    let poemsList = [];
+    let titleText = "";
+    let titleIcon = "fa-star";
+    
+    if (categoryId === 'all') {
+      // combine all poems, take first 6
+      poemsList = [
+        ...poemsByCategory.love.slice(0, 2),
+        ...poemsByCategory.sad.slice(0, 1),
+        ...poemsByCategory.motivation.slice(0, 1),
+        ...poemsByCategory.nature.slice(0, 1),
+        ...poemsByCategory.shayari.slice(0, 1)
+      ];
+      titleText = "🌟 सभी श्रेणियों की चुनिंदा रचनाएँ";
+      titleIcon = "fa-star-of-life";
+    } else {
+      poemsList = poemsByCategory[categoryId] || poemsByCategory.love;
+      const category = categories.find(c => c.id === categoryId);
+      titleText = `✨ चुनिंदा रचनाएँ — ${category ? category.name : 'प्रेम काव्य'}`;
+      titleIcon = category ? category.icon : "fa-heart";
+    }
+    
+    const titleHtml = `
+      <i class="fas ${titleIcon}" style="color: var(--accent);"></i> ${titleText}
+    `;
+    document.getElementById('featuredTitle').innerHTML = titleHtml;
+    
+    const grid = document.getElementById('featuredPoemsGrid');
+    grid.innerHTML = poemsList.map(poem => `
+      <div class="mini-poem-card">
+        <h4>${poem.title}</h4>
+        <p>${poem.excerpt}</p>
+        <div style="margin-top: 0.7rem; font-size: 0.7rem; color: var(--accent);">
+          <i class="fas fa-user"></i> ${poem.poet}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // style tag click handlers
+  document.querySelectorAll('.style-tag').forEach(tag => {
+    tag.addEventListener('click', function() {
+      const filterVal = this.getAttribute('data-filter');
+      currentFilter = filterVal;
+      updateFilterUI(filterVal);
+      updateFeaturedPoems(filterVal);
+    });
+  });
+
+  renderCategories();
+  updateFeaturedPoems('all'); // default
+
+  // scroll progress
+  window.addEventListener("scroll", () => {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById("scrollBar").style.width = scrolled + "%";
+  });
+
+  // mobile menu toggle (same as original)
+  const menuBtn = document.getElementById("menuBtn");
+  const navLinks = document.getElementById("navLinks");
+  const mobileOverlay = document.getElementById("mobileOverlay");
+  
+  function closeMenu() {
+    navLinks.classList.remove("active");
+    mobileOverlay.classList.remove("active");
+    if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+  }
+  function openMenu() {
+    navLinks.classList.add("active");
+    mobileOverlay.classList.add("active");
+    if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-times"></i>';
+  }
+  if (menuBtn) {
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (navLinks.classList.contains("active")) closeMenu();
+      else openMenu();
+    });
+  }
+  mobileOverlay.addEventListener("click", closeMenu);
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener("click", closeMenu));
+
+  // fade-up observer
+  const fadeElements = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  fadeElements.forEach(el => observer.observe(el));
+  
+  // also observe dynamic category cards
+  const observerCards = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.category-card').forEach(el => observerCards.observe(el));
+</script>
+</body>
+
+</html>

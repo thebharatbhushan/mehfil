@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>मेहफ़िल · रचनाकार दरबार | Poetry Sanctuary</title>
+  
+  <!-- Google Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Tiro+Devanagari+Hindi&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #FFF8F0 0%, #FDF3E7 100%);
+      color: #2C241F;
+      font-family: 'Inter', 'Noto Serif Devanagari', system-ui, -apple-system;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    :root {
+      --bg-gradient: radial-gradient(circle at 10% 20%, rgba(255,235,215,0.5), rgba(250,240,225,0.3));
+      --card-bg: rgba(255, 252, 245, 0.88);
+      --glass-edge: rgba(193, 106, 75, 0.12);
+      --accent: #C16A4B;
+      --accent-glow: #E57F5C;
+      --accent-dark: #9E4F36;
+      --text-dark: #2C241F;
+      --text-muted: #7A685B;
+      --border-glow: 0 8px 32px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(193, 106, 75, 0.1);
+      --shadow-elegant: 0 25px 45px -12px rgba(0, 0, 0, 0.12);
+      --shadow-hover: 0 35px 50px -18px rgba(0, 0, 0, 0.2);
+      --success: #2D6A4F;
+      --danger: #E76F51;
+      --amber-glow: #FFE0B5;
+    }
+
+    /* ethereal orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: -2;
+      opacity: 0.5;
+      animation: floatOrb 28s infinite alternate ease-in-out;
+    }
+    .orb-1 { width: 550px; height: 550px; background: #FFD9BE; top: -180px; left: -5%; }
+    .orb-2 { width: 600px; height: 600px; background: #EAD3C2; bottom: -150px; right: -8%; animation-delay: -7s; }
+    .orb-3 { width: 420px; height: 420px; background: #FCE9DA; top: 45%; left: 80%; animation-duration: 20s; opacity: 0.4;}
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, -50px) scale(1.25); }
+    }
+
+    /* scroll progress */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--accent), #F3B491);
+      width: 0%; z-index: 10000; transition: width 0.08s linear; border-radius: 0 4px 4px 0;
+      box-shadow: 0 0 6px #C16A4B;
+    }
+
+    /* glass navigation */
+    nav {
+      position: sticky; top: 16px; z-index: 1000; width: min(1320px, 94%); margin: 0 auto;
+      background: rgba(255, 250, 242, 0.72);
+      backdrop-filter: blur(16px);
+      border-radius: 3rem;
+      border: 1px solid rgba(193,106,75,0.2);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.02);
+      transition: all 0.3s ease;
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 28px;
+    }
+    .logo {
+      font-size: 1.9rem; font-weight: 800; letter-spacing: -0.5px;
+      background: linear-gradient(130deg, #B85C3C, #A84526);
+      background-clip: text; -webkit-background-clip: text; color: transparent;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .logo i { background: none; -webkit-background-clip: unset; color: var(--accent); font-size: 1.7rem; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      text-decoration: none; font-weight: 500; color: var(--text-dark);
+      transition: 0.2s; font-size: 0.95rem; letter-spacing: -0.2px;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-btn {
+      background: var(--accent); padding: 8px 24px; border-radius: 40px; color: white;
+      font-weight: 600; transition: all 0.25s ease; border: none; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(193,106,75,0.25);
+    }
+    .nav-btn:hover { transform: scale(1.02); background: #B45432; box-shadow: 0 6px 14px rgba(193,106,75,0.4); }
+    .menu-btn { display: none; font-size: 1.7rem; cursor: pointer; color: var(--accent); background: rgba(193,106,75,0.1);
+      width: 48px; height: 48px; align-items: center; justify-content: center; border-radius: 30px;
+    }
+    .mobile-menu-panel {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.35); backdrop-filter: blur(8px);
+      opacity: 0; visibility: hidden; transition: 0.25s; z-index: 998;
+    }
+    .mobile-menu-panel.active { opacity: 1; visibility: visible; }
+
+    @media (max-width: 760px) {
+      .nav-links { display: none; }
+      .menu-btn { display: flex; }
+      .nav-links.mobile-open {
+        display: flex; position: fixed; top: 80px; right: 20px; left: 20px;
+        background: rgba(255, 251, 245, 0.98); backdrop-filter: blur(20px);
+        flex-direction: column; gap: 0; border-radius: 2rem; padding: 1rem;
+        border: 1px solid rgba(193,106,75,0.25); z-index: 999; box-shadow: 0 30px 40px rgba(0,0,0,0.2);
+      }
+      .nav-links.mobile-open a { width: 100%; padding: 14px; text-align: center; border-radius: 60px; margin: 4px 0; }
+      .nav-links.mobile-open button { margin-top: 8px; width: 100%; }
+    }
+
+    /* dashboard grid */
+    .dashboard-grid {
+      width: min(1300px, 92%); margin: 2rem auto 4rem;
+      display: grid; grid-template-columns: 320px 1fr; gap: 2rem;
+    }
+
+    /* profile card modern */
+    .profile-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 2.5rem;
+      border: 1px solid var(--border-glow);
+      padding: 2rem 1.8rem;
+      text-align: center;
+      box-shadow: var(--shadow-elegant);
+      transition: transform 0.2s ease;
+      position: sticky; top: 100px;
+    }
+    .avatar-frame {
+      position: relative; width: 140px; height: 140px; margin: 0 auto 1rem;
+    }
+    .profile-avatar {
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      border: 4px solid white; box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    .edit-avatar-ring {
+      position: absolute; bottom: 8px; right: 5px; background: var(--accent);
+      border-radius: 50%; width: 38px; height: 38px; display: flex;
+      align-items: center; justify-content: center; color: white; cursor: pointer;
+      border: 2px solid white; transition: 0.2s; backdrop-filter: blur(4px);
+    }
+    .edit-avatar-ring:hover { background: #A84C2E; transform: scale(1.05); }
+    .display-name {
+      font-size: 1.9rem; font-family: 'Cormorant Garamond', serif; font-weight: 700;
+      background: linear-gradient(to right, #3d2a20, #B85C3C); background-clip: text; -webkit-background-clip: text; color: transparent;
+    }
+    .bio-text { color: var(--text-muted); font-size: 0.9rem; margin: 0.5rem 0 1.2rem; font-style: italic; }
+    .stats-container {
+      display: flex; justify-content: space-between; background: rgba(193,106,75,0.08);
+      padding: 1rem; border-radius: 2rem; margin: 1.2rem 0;
+    }
+    .stat-block { text-align: center; }
+    .stat-num { font-weight: 800; font-size: 1.6rem; color: var(--accent-dark); }
+    .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+    .btn-ghost {
+      background: transparent; border: 1px solid var(--glass-edge); width: 100%;
+      padding: 12px; border-radius: 60px; font-weight: 500; cursor: pointer;
+      transition: 0.2s; font-family: inherit;
+    }
+    .btn-ghost:hover { background: var(--accent); color: white; border-color: transparent; }
+
+    /* main panels */
+    .dashboard-main { display: flex; flex-direction: column; gap: 2rem; }
+    .glass-panel {
+      background: rgba(255, 253, 248, 0.84); backdrop-filter: blur(8px);
+      border-radius: 2rem; border: 1px solid rgba(193,106,75,0.2);
+      padding: 1.6rem 2rem; box-shadow: var(--shadow-elegant);
+      transition: all 0.25s;
+    }
+    .panel-header {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid rgba(193,106,75,0.2); padding-bottom: 0.9rem;
+      margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .panel-header h2 {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;
+      font-weight: 700; display: flex; gap: 10px; align-items: center;
+    }
+    .btn-primary-light {
+      background: rgba(193,106,75,0.12); border: none; padding: 8px 20px;
+      border-radius: 60px; font-weight: 500; transition: 0.2s; cursor: pointer;
+    }
+    .btn-primary-light:hover { background: var(--accent); color: white; transform: translateY(-2px); }
+
+    /* poem items */
+    .poem-card-item {
+      background: white; border-radius: 1.5rem; padding: 1rem 1.4rem;
+      margin-bottom: 1rem; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; transition: 0.2s;
+      border: 1px solid rgba(193,106,75,0.15);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.02);
+    }
+    .poem-card-item:hover { transform: translateX(8px); border-color: var(--accent-soft); background: #FFFCF9; }
+    .poem-title h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .poem-date { font-size: 0.7rem; color: var(--text-muted); }
+    .action-buttons { display: flex; gap: 12px; }
+    .icon-btn {
+      background: none; border: none; font-size: 1rem; padding: 8px 10px;
+      border-radius: 2rem; cursor: pointer; transition: 0.2s; color: #7B5E4E;
+    }
+    .icon-btn.visible-toggle:hover { background: #FFE4D6; color: var(--accent); }
+    .icon-btn.delete:hover { background: #FCE5DF; color: var(--danger); }
+    .hidden-poem-style { opacity: 0.65; background: #F9F1EA; filter: grayscale(0.03); }
+
+    /* settings rows */
+    .settings-list { display: flex; flex-direction: column; gap: 1.2rem; }
+    .setting-row-item {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem; padding: 0.7rem 0;
+      border-bottom: 1px dashed rgba(193,106,75,0.2);
+    }
+    .setting-label strong { font-weight: 600; }
+    .btn-outline-sm {
+      background: transparent; border: 1px solid var(--border-glow);
+      padding: 6px 20px; border-radius: 60px; font-size: 0.8rem;
+      cursor: pointer; transition: 0.2s;
+    }
+    .btn-outline-sm:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .danger-btn-sm { background: rgba(231, 111, 81, 0.08); border-color: #EBD4CC; color: var(--danger); }
+    .danger-btn-sm:hover { background: var(--danger); color: white; }
+
+    /* modals */
+    .modal-mask {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+      z-index: 2000; display: flex; align-items: center; justify-content: center;
+      visibility: hidden; opacity: 0; transition: 0.2s;
+    }
+    .modal-mask.active { visibility: visible; opacity: 1; }
+    .modal-dialog {
+      background: #FFFBF6; border-radius: 2rem; max-width: 500px; width: 90%;
+      padding: 2rem; box-shadow: 0 40px 70px rgba(0,0,0,0.3); border: 1px solid var(--accent-soft);
+    }
+    .modal-dialog h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; margin-bottom: 1.2rem; text-align: center; }
+    .input-modern {
+      width: 100%; padding: 12px 16px; margin: 0.8rem 0; border-radius: 2rem;
+      border: 1px solid #e6ddd2; background: white; transition: 0.15s;
+    }
+    .input-modern:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(193,106,75,0.2); }
+    .modal-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+
+    .toast-beauty {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: #1F1B18; color: #FCE6D8; padding: 12px 28px; border-radius: 60px;
+      z-index: 3000; transition: 0.3s cubic-bezier(0.2,0.9,0.4,1.1); font-size: 0.85rem;
+      backdrop-filter: blur(10px); box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+    }
+    .fade-scroll { opacity: 0; transform: translateY(28px); transition: 0.7s ease; }
+    .fade-scroll.appear { opacity: 1; transform: translateY(0); }
+    @media (max-width: 880px) { .dashboard-grid { grid-template-columns: 1fr; } .profile-card { position: relative; top: 0; } }
+  </style>
+</head>
+<body>
+<div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="mobile-menu-panel" id="mobileMenuOverlay"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
+    <div class="nav-links" id="navLinksContainer">
+      <a href="./index.html">मुखपृष्ठ</a>
+      <a href="./poems.html">कविताएँ</a>
+      <a href="./poets.html">रचनाकार</a>
+      <a href="./dashboard.html" id="dashboardNavLink">डैशबोर्ड</a>
+      <button class="nav-btn" id="logoutBtnGlobal"><i class="fas fa-sign-out-alt"></i> लॉगआउट</button>
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <button class="nav-btn" id="quickWriteBtn"><i class="fas fa-pen-fancy"></i><span> लिखें</span></button>
+      <div class="menu-btn" id="mobileMenuToggle"><i class="fas fa-bars"></i></div>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-grid">
+  <aside class="profile-card fade-scroll">
+    <div class="avatar-frame">
+      <img class="profile-avatar" id="profileAvatarImg" src="https://randomuser.me/api/portraits/women/68.jpg" alt="avatar">
+      <div class="edit-avatar-ring" id="editAvatarTrigger"><i class="fas fa-camera"></i></div>
+    </div>
+    <h2 class="display-name" id="profileFullName">रिया शर्मा</h2>
+    <div class="bio-text" id="profileBioText">हर लफ्ज़ में जादू भरती हूँ ✨ | शायरा</div>
+    <div class="stats-container">
+      <div class="stat-block"><div class="stat-num" id="poemTotalCount">8</div><div class="stat-label">रचनाएँ</div></div>
+      <div class="stat-block"><div class="stat-num">1.2k</div><div class="stat-label">अनुयायी</div></div>
+      <div class="stat-block"><div class="stat-num">245</div><div class="stat-label">लाइक्स</div></div>
+    </div>
+    <button class="btn-ghost" id="openProfileEditBtn"><i class="fas fa-user-edit"></i> प्रोफ़ाइल संपादित करें</button>
+  </aside>
+
+  <div class="dashboard-main">
+    <div class="glass-panel fade-scroll">
+      <div class="panel-header">
+        <h2><i class="fas fa-book-open"></i> मेरी रचनाएँ</h2>
+        <button class="btn-primary-light" id="createPoemBtn"><i class="fas fa-plus-circle"></i> नई कविता</button>
+      </div>
+      <div id="dynamicPoemsList"></div>
+    </div>
+
+    <div class="glass-panel fade-scroll">
+      <div class="panel-header">
+        <h2><i class="fas fa-shield-alt"></i> सुरक्षा & खाता सेटिंग्स</h2>
+      </div>
+      <div class="settings-list">
+        <div class="setting-row-item"><div><strong><i class="fas fa-key"></i> पासवर्ड बदलें</strong><br><small>अपना पासवर्ड अपडेट करें</small></div><button class="btn-outline-sm" id="openPasswordModalBtn">बदलें</button></div>
+        <div class="setting-row-item"><div><strong><i class="fas fa-envelope"></i> ईमेल पता</strong><br><small id="emailDisplayValue">riya.sharma@mehfil.com</small></div><button class="btn-outline-sm" id="openEmailModalBtn">अपडेट करें</button></div>
+        <div class="setting-row-item"><div><strong><i class="fas fa-bell"></i> सूचनाएँ</strong><br><small>लाइक, कमेंट अलर्ट</small></div><button class="btn-outline-sm" id="openNotifyModalBtn">प्रबंधित करें</button></div>
+        <div class="setting-row-item"><div><strong><i class="fas fa-trash-alt"></i> खाता हटाएँ</strong><br><small style="color:var(--danger);">स्थायी हटाना (OTP सत्यापन)</small></div><button class="btn-outline-sm danger-btn-sm" id="openDeleteAccountModalBtn">हटाएँ</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="editProfileModal" class="modal-mask"><div class="modal-dialog"><h3><i class="fas fa-user-edit"></i> प्रोफ़ाइल संपादित करें</h3><input type="text" id="editNameField" class="input-modern" placeholder="नाम"><textarea id="editBioField" class="input-modern" rows="2" placeholder="जीवन परिचय"></textarea><div class="modal-actions"><button class="btn-outline-sm" id="saveProfileBtnFinal">सहेजें</button><button class="btn-outline-sm" id="closeProfileModalBtn">रद्द करें</button></div></div></div>
+<div id="passwordModalWin" class="modal-mask"><div class="modal-dialog"><h3><i class="fas fa-lock"></i> पासवर्ड बदलें</h3><input type="password" id="oldPassInput" class="input-modern" placeholder="वर्तमान पासवर्ड"><input type="password" id="newPassInput" class="input-modern" placeholder="नया पासवर्ड (min 4)"><input type="password" id="confirmPassInput" class="input-modern" placeholder="नया पासवर्ड पुष्टि करें"><div class="modal-actions"><button class="btn-outline-sm" id="confirmPassChangeBtn">अपडेट करें</button><button class="btn-outline-sm" id="closePasswordModalBtn">रद्द करें</button></div></div></div>
+<div id="deleteAccountModalWin" class="modal-mask"><div class="modal-dialog"><h3><i class="fas fa-exclamation-triangle"></i> खाता हटाने की पुष्टि</h3><p style="color:var(--danger); margin:0.5rem 0;">⚠️ यह क्रिया स्थायी है। आपकी सभी रचनाएँ हट जाएंगी।</p><div style="display:flex; gap:12px;"><input type="email" id="deleteEmailInput" class="input-modern" placeholder="पंजीकृत ईमेल" value="riya.sharma@mehfil.com"><button class="btn-outline-sm" id="sendOtpDynamicBtn">OTP भेजें</button></div><input type="text" id="otpCodeInput" class="input-modern" placeholder="OTP दर्ज करें"><div class="modal-actions"><button class="btn-outline-sm danger-btn-sm" id="confirmDeleteAccountBtn">स्थायी रूप से हटाएँ</button><button class="btn-outline-sm" id="closeDeleteModalBtn">रद्द करें</button></div></div></div>
+<div id="emailModalWin" class="modal-mask"><div class="modal-dialog"><h3><i class="fas fa-envelope"></i> ईमेल अपडेट करें</h3><input type="email" id="newEmailField" class="input-modern" placeholder="नया ईमेल"><div class="modal-actions"><button class="btn-outline-sm" id="updateEmailFinalBtn">अपडेट करें</button><button class="btn-outline-sm" id="closeEmailModalBtn">रद्द करें</button></div></div></div>
+<div id="notifyModalWin" class="modal-mask"><div class="modal-dialog"><h3><i class="fas fa-bell"></i> सूचना प्राथमिकताएँ</h3><label style="display:flex; gap:12px; margin:1rem 0;"><input type="checkbox" id="notifyLikeChk" checked> <span>लाइक्स पर सूचना</span></label><label style="display:flex; gap:12px; margin:1rem 0;"><input type="checkbox" id="notifyCommentChk" checked> <span>टिप्पणियों पर सूचना</span></label><div class="modal-actions"><button class="btn-outline-sm" id="saveNotifyPrefsBtn">सहेजें</button><button class="btn-outline-sm" id="closeNotifyModalBtn">रद्द करें</button></div></div></div>
+<div id="toastMsgGlobal" class="toast-beauty">✨</div>
+
+<script>
+  // ---------- STATE ----------
+  let poems = [
+    { id: 101, title: "तुम्हारी याद", content: "तुम्हारी याद किसी खुशबू की तरह है...", visible: true, date: "2 दिन पहले" },
+    { id: 102, title: "ख़ामोशी", content: "कुछ दर्द आवाज़ नहीं करते...", visible: true, date: "5 दिन पहले" },
+    { id: 103, title: "बारिश की बूंदें", content: "बारिश की बूंदों में तेरी हँसी...", visible: false, date: "1 सप्ताह पहले" },
+    { id: 104, title: "सफ़र", content: "रास्ते मंज़िल से ज़्यादा ख़ुद से मिलाते हैं...", visible: true, date: "3 दिन पहले" }
+  ];
+  let currentUser = { name: "रिया शर्मा", bio: "हर लफ्ज़ में जादू भरती हूँ ✨ | शायरा", avatar: "https://randomuser.me/api/portraits/women/68.jpg", email: "riya.sharma@mehfil.com", password: "admin123" };
+  let storedOtp = null;
+
+  // helpers
+  function saveData() { localStorage.setItem("mehfil_poems_v2", JSON.stringify(poems)); localStorage.setItem("mehfil_user_v2", JSON.stringify(currentUser)); }
+  function loadData() {
+    const savedPoems = localStorage.getItem("mehfil_poems_v2"), savedUser = localStorage.getItem("mehfil_user_v2");
+    if(savedPoems) poems = JSON.parse(savedPoems); if(savedUser) currentUser = JSON.parse(savedUser);
+    renderPoems(); updateProfileUI(); refreshStat();
+  }
+  function refreshStat() { document.getElementById("poemTotalCount").innerText = poems.filter(p => p.visible).length; }
+  function updateProfileUI() {
+    document.getElementById("profileFullName").innerText = currentUser.name;
+    document.getElementById("profileBioText").innerText = currentUser.bio;
+    document.getElementById("profileAvatarImg").src = currentUser.avatar;
+    document.getElementById("emailDisplayValue").innerText = currentUser.email;
+  }
+  function renderPoems() {
+    const container = document.getElementById("dynamicPoemsList");
+    if(!container) return;
+    if(poems.length === 0) { container.innerHTML = `<div style="text-align:center;padding:2rem;"><i class="fas fa-feather-alt"></i> कोई रचना नहीं, पहली कविता लिखें</div>`; return; }
+    container.innerHTML = poems.map(p => `
+      <div class="poem-card-item ${!p.visible ? 'hidden-poem-style' : ''}">
+        <div class="poem-title"><h4>${escapeHtml(p.title)}</h4><div class="poem-date">${p.date} • ${p.visible ? 'दृश्यमान' : 'छिपी'}</div></div>
+        <div class="action-buttons">
+          <button class="icon-btn visible-toggle" data-id="${p.id}" title="दृश्यता टॉगल"><i class="fas ${p.visible ? 'fa-eye-slash' : 'fa-eye'}"></i></button>
+          <button class="icon-btn delete" data-id="${p.id}" title="हटाएँ"><i class="fas fa-trash-alt"></i></button>
+        </div>
+      </div>
+    `).join("");
+    document.querySelectorAll('.visible-toggle').forEach(btn => btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); togglePoemVisibility(id); }));
+    document.querySelectorAll('.delete').forEach(btn => btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); if(confirm("रचना हटाएँ?")) { poems = poems.filter(p => p.id !== id); renderPoems(); refreshStat(); saveData(); showToast("कविता हटा दी गई ❌"); } }));
+  }
+  function togglePoemVisibility(id) { const poem = poems.find(p => p.id === id); if(poem) { poem.visible = !poem.visible; renderPoems(); refreshStat(); saveData(); showToast(poem.visible ? "कविता अब दिख रही है" : "कविता छिपा दी गई"); } }
+  function addPoem(title, content) { poems.unshift({ id: Date.now(), title, content, visible: true, date: "आज" }); renderPoems(); refreshStat(); saveData(); showToast("✨ नई रचना प्रकाशित!"); }
+  function escapeHtml(s) { return s.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+  function showToast(msg, isErr=false) { const t=document.getElementById("toastMsgGlobal"); t.innerText=msg; t.style.background=isErr?"#E76F51":"#2C241F"; t.style.transform="translateX(-50%) translateY(0px)"; setTimeout(()=>{ t.style.transform="translateX(-50%) translateY(100px)"; }, 2600); }
+
+  // modals mgmt
+  const modals = {
+    profile: document.getElementById("editProfileModal"), password: document.getElementById("passwordModalWin"),
+    deleteAcc: document.getElementById("deleteAccountModalWin"), email: document.getElementById("emailModalWin"),
+    notify: document.getElementById("notifyModalWin")
+  };
+  function openModal(m) { if(m) m.classList.add("active"); } function closeModal(m) { if(m) m.classList.remove("active"); }
+
+  // profile edit
+  document.getElementById("openProfileEditBtn")?.addEventListener("click",()=>{ document.getElementById("editNameField").value=currentUser.name; document.getElementById("editBioField").value=currentUser.bio; openModal(modals.profile); });
+  document.getElementById("saveProfileBtnFinal")?.addEventListener("click",()=>{ if(document.getElementById("editNameField").value.trim()) currentUser.name=document.getElementById("editNameField").value.trim(); currentUser.bio=document.getElementById("editBioField").value.trim()||"कवि"; updateProfileUI(); saveData(); closeModal(modals.profile); showToast("प्रोफ़ाइल अपडेट"); });
+  document.getElementById("closeProfileModalBtn")?.addEventListener("click",()=>closeModal(modals.profile));
+  document.getElementById("editAvatarTrigger")?.addEventListener("click",()=>{ let newUrl=prompt("Avatar URL:", currentUser.avatar); if(newUrl) { currentUser.avatar=newUrl; updateProfileUI(); saveData(); showToast("अवतार बदला"); } });
+
+  // password
+  document.getElementById("openPasswordModalBtn")?.addEventListener("click",()=>openModal(modals.password));
+  document.getElementById("confirmPassChangeBtn")?.addEventListener("click",()=>{ const old=document.getElementById("oldPassInput").value, newp=document.getElementById("newPassInput").value, conf=document.getElementById("confirmPassInput").value; if(old!==currentUser.password) { showToast("❌ वर्तमान पासवर्ड गलत", true); return; } if(newp.length<4) { showToast("पासवर्ड कम से कम 4 अक्षर", true); return; } if(newp!==conf) { showToast("पासवर्ड मेल नहीं खाते", true); return; } currentUser.password=newp; saveData(); showToast("✅ पासवर्ड बदला गया"); closeModal(modals.password); document.getElementById("oldPassInput").value=""; document.getElementById("newPassInput").value=""; document.getElementById("confirmPassInput").value=""; });
+  document.getElementById("closePasswordModalBtn")?.addEventListener("click",()=>closeModal(modals.password));
+
+  // email
+  document.getElementById("openEmailModalBtn")?.addEventListener("click",()=>{ openModal(modals.email); document.getElementById("newEmailField").value=currentUser.email; });
+  document.getElementById("updateEmailFinalBtn")?.addEventListener("click",()=>{ const mail=document.getElementById("newEmailField").value.trim(); if(mail && mail.includes('@')) { currentUser.email=mail; updateProfileUI(); saveData(); showToast("ईमेल अपडेट किया"); closeModal(modals.email); } else showToast("सही ईमेल डालें", true); });
+  document.getElementById("closeEmailModalBtn")?.addEventListener("click",()=>closeModal(modals.email));
+
+  // notifications
+  document.getElementById("openNotifyModalBtn")?.addEventListener("click",()=>openModal(modals.notify));
+  document.getElementById("saveNotifyPrefsBtn")?.addEventListener("click",()=>{ showToast("सूचना प्राथमिकताएँ सहेजी गईं"); closeModal(modals.notify); });
+  document.getElementById("closeNotifyModalBtn")?.addEventListener("click",()=>closeModal(modals.notify));
+
+  // delete account OTP flow
+  document.getElementById("openDeleteAccountModalBtn")?.addEventListener("click",()=>{ openModal(modals.deleteAcc); storedOtp=null; document.getElementById("otpCodeInput").value=""; });
+  document.getElementById("sendOtpDynamicBtn")?.addEventListener("click",()=>{ const emailVal=document.getElementById("deleteEmailInput").value.trim(); if(emailVal!==currentUser.email) { showToast("पंजीकृत ईमेल मेल नहीं खाता", true); return; } const otpGen=Math.floor(100000+Math.random()*900000).toString(); storedOtp=otpGen; showToast(`📧 OTP ${otpGen} (डेमो) भेजा गया`); });
+  document.getElementById("confirmDeleteAccountBtn")?.addEventListener("click",()=>{ const otpGiven=document.getElementById("otpCodeInput").value.trim(); if(!storedOtp) { showToast("पहले OTP भेजें", true); return; } if(otpGiven!==storedOtp) { showToast("OTP अमान्य", true); return; } if(confirm("स्थायी रूप से खाता हटाएँ? यह अपरिवर्तनीय है")) { poems = []; currentUser = { name: "अतिथि", bio: "कविता प्रेमी", avatar: "https://randomuser.me/api/portraits/lego/1.jpg", email: "guest@mehfil.com", password: "guest123" }; saveData(); updateProfileUI(); renderPoems(); refreshStat(); showToast("खाता हटा दिया गया"); closeModal(modals.deleteAcc); setTimeout(()=>window.location.reload(), 1400); } });
+  document.getElementById("closeDeleteModalBtn")?.addEventListener("click",()=>closeModal(modals.deleteAcc));
+
+  // new poem
+  document.getElementById("createPoemBtn")?.addEventListener("click",()=>{ let title=prompt("कविता का शीर्षक:"); if(title) addPoem(title, prompt("कविता की पंक्तियाँ:")||"अनमोल शब्द..."); });
+  document.getElementById("quickWriteBtn")?.addEventListener("click",()=>{ let title=prompt("शीर्षक:"); if(title) addPoem(title, prompt("रचना:")||"..."); });
+
+  // logout
+  document.getElementById("logoutBtnGlobal")?.addEventListener("click",()=>{ showToast("लॉगआउट हो रहा है..."); setTimeout(()=>{ localStorage.clear(); window.location.href="index.html"; }, 600); });
+  
+  // mobile menu toggle
+  const mobileBtn = document.getElementById("mobileMenuToggle"), mobilePanel = document.getElementById("mobileMenuOverlay"), navContainer = document.getElementById("navLinksContainer");
+  mobileBtn?.addEventListener("click",()=>{ navContainer.classList.toggle("mobile-open"); mobilePanel.classList.toggle("active"); mobileBtn.innerHTML = navContainer.classList.contains("mobile-open") ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>'; });
+  mobilePanel?.addEventListener("click",()=>{ navContainer.classList.remove("mobile-open"); mobilePanel.classList.remove("active"); if(mobileBtn) mobileBtn.innerHTML = '<i class="fas fa-bars"></i>'; });
+
+  // scroll indicator & animations
+  window.addEventListener("scroll",()=>{ const winScroll=document.documentElement.scrollTop, height=document.documentElement.scrollHeight-window.innerHeight; document.getElementById("scrollProgress").style.width=(winScroll/height)*100+"%"; });
+  const fadeItems=document.querySelectorAll('.fade-scroll'); const obs=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('appear'); obs.unobserve(e.target); } }); },{threshold:0.1}); fadeItems.forEach(el=>obs.observe(el));
+  loadData();
+</script>
+</body>
+</html>

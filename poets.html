@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>रचनाकार — Mehfil Poetry Sanctuary | Renowned Hindi Urdu Poets</title>
+
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #FEF9F2;
+      color: #2C241F;
+      font-family: 'Inter', 'Noto Serif Devanagari', serif;
+      overflow-x: hidden;
+    }
+
+    :root {
+      --bg: #FEF9F2;
+      --card-bg: rgba(255, 253, 248, 0.92);
+      --accent: #C16A4B;
+      --accent-soft: #E8C8BA;
+      --accent-dark: #9E4F36;
+      --text-dark: #2C241F;
+      --text-muted: #756256;
+      --border-light: rgba(200, 180, 160, 0.35);
+      --shadow-sm: 0 25px 40px -15px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 35px 45px -20px rgba(0, 0, 0, 0.15);
+    }
+
+    .container {
+      max-width: 1280px;
+      width: 92%;
+      margin: 0 auto;
+    }
+
+    /* floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: -2;
+      opacity: 0.45;
+      animation: slowDrift 22s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: #FFD7C2;
+      top: -150px;
+      left: -10%;
+    }
+
+    .orb-2 {
+      width: 550px;
+      height: 550px;
+      background: #DDC7B0;
+      bottom: -100px;
+      right: -5%;
+      animation-delay: -5s;
+    }
+
+    @keyframes slowDrift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -40px) scale(1.15); }
+    }
+
+    /* scroll indicator */
+    .scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: var(--accent);
+      width: 0%;
+      z-index: 10000;
+      transition: width 0.08s linear;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* navbar - same as original */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(254, 249, 242, 0.7);
+      border-bottom: 1px solid var(--border-light);
+      transition: all 0.3s ease;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #C16A4B, #A84C2E);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+
+    .logo i {
+      background: none;
+      -webkit-background-clip: unset;
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--text-dark);
+      transition: 0.2s;
+      position: relative;
+      font-size: 1rem;
+    }
+
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      bottom: -6px;
+      left: 0;
+      transition: 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-links a:hover::before {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: var(--accent);
+    }
+
+    .nav-links a.active::before {
+      width: 100%;
+    }
+
+    .nav-btn {
+      background: var(--accent);
+      padding: 10px 24px;
+      border-radius: 50px;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      box-shadow: 0 5px 12px rgba(193, 106, 75, 0.2);
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-3px);
+      background: #A84C2E;
+      box-shadow: 0 12px 20px rgba(193, 106, 75, 0.3);
+    }
+
+    .menu-btn {
+      display: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: var(--accent);
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(193, 106, 75, 0.08);
+    }
+
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s;
+      z-index: 998;
+    }
+    .mobile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      padding: 2.5rem 0 1.5rem;
+    }
+
+    .page-header h1 {
+      font-size: 3.8rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .decor-line {
+      width: 80px;
+      height: 3px;
+      background: var(--accent);
+      margin: 0.8rem auto;
+      border-radius: 10px;
+    }
+
+    /* filter bar */
+    .filter-bar {
+      background: white;
+      border-radius: 60px;
+      padding: 0.8rem 1.2rem;
+      margin: 1.5rem 0 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .filter-chip {
+      padding: 0.5rem 1.2rem;
+      border-radius: 50px;
+      background: #FEF9F2;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 1px solid var(--border-light);
+    }
+
+    .filter-chip:hover, .filter-chip.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .search-writer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #FEF9F2;
+      padding: 0.4rem 1.2rem;
+      border-radius: 50px;
+      border: 1px solid var(--border-light);
+    }
+
+    .search-writer i {
+      color: var(--accent);
+    }
+
+    .search-writer input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 180px;
+    }
+
+    /* writers grid */
+    .writers-count {
+      margin: 1rem 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .writers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .writer-card-premium {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+      border: 1px solid var(--border-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .writer-card-premium::before {
+      content: "✍️";
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      font-size: 55px;
+      opacity: 0.06;
+      font-family: serif;
+      pointer-events: none;
+    }
+
+    .writer-card-premium:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--accent-soft);
+    }
+
+    .writer-avatar {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(145deg, #DFBDA9, #C78D72);
+      margin: 0 auto 1.2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      transition: 0.3s;
+      box-shadow: 0 15px 25px -8px rgba(0,0,0,0.1);
+    }
+
+    .writer-card-premium:hover .writer-avatar {
+      transform: scale(1.05);
+    }
+
+    .writer-name {
+      font-size: 1.6rem;
+      font-family: 'Cormorant Garamond', serif;
+      margin: 0.5rem 0;
+    }
+
+    .writer-bio {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin: 0.5rem 0;
+      line-height: 1.5;
+    }
+
+    .writer-stats {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1rem 0;
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    .writer-stats span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* featured poet section */
+    .featured-poet {
+      background: linear-gradient(135deg, #FFF8F0, #FFF0E5);
+      border-radius: 2rem;
+      padding: 2rem;
+      margin: 2rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      border: 1px solid var(--border-light);
+    }
+
+    .featured-avatar {
+      width: 140px;
+      height: 140px;
+      background: linear-gradient(135deg, #D6A98A, #BC7A58);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .featured-info {
+      flex: 1;
+    }
+
+    .featured-badge-poet {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .quote-text {
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-dark);
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin-top: 1rem;
+    }
+
+    /* footer same as original */
+    footer {
+      background: linear-gradient(145deg, #2C241F 0%, #1F1915 100%);
+      color: #E8DDD4;
+      margin-top: 4rem;
+      position: relative;
+    }
+
+    .footer-main {
+      padding: 3rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr 1.2fr 1.5fr;
+      gap: 2.5rem;
+    }
+
+    .footer-brand .footer-logo {
+      font-size: 2rem;
+      font-family: 'Cormorant Garamond', serif;
+      background: linear-gradient(135deg, #F5CFB3, #E8B694);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .footer-desc {
+      color: #CBBBAE;
+      line-height: 1.6;
+      font-size: 0.85rem;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-icons a {
+      width: 36px;
+      height: 36px;
+      background: rgba(255,245,235,0.08);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #E0CBBB;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .social-icons a:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    .footer-col h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .footer-links a {
+      color: #CBBBAE;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-soft);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(230,205,185,0.15);
+      padding: 1.2rem 0;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 0.75rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 880px) {
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        border-radius: 28px;
+      }
+      .search-writer {
+        justify-content: center;
+      }
+      .search-writer input {
+        width: 100%;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links {
+        display: none;
+      }
+      .menu-btn {
+        display: flex;
+      }
+      .nav-links.active {
+        display: flex;
+        position: fixed;
+        top: 70px;
+        right: 12px;
+        background: rgba(255,248,240,0.98);
+        backdrop-filter: blur(20px);
+        width: 260px;
+        flex-direction: column;
+        padding: 1.5rem;
+        border-radius: 24px;
+        gap: 1.2rem;
+        z-index: 1001;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        border: 1px solid var(--border-light);
+      }
+      .nav-btn span {
+        display: none;
+      }
+      .nav-btn {
+        padding: 10px 14px;
+      }
+      .page-header h1 {
+        font-size: 2.2rem;
+      }
+      .writers-grid {
+        grid-template-columns: 1fr;
+      }
+      .featured-poet {
+        flex-direction: column;
+        text-align: center;
+      }
+      .quote-text {
+        text-align: left;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .social-icons {
+        justify-content: center;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+      }
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="scroll-indicator" id="scrollBar"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- Navbar - same behavior as original -->
+<nav>
+  <div class="container nav-inner">
+    <div class="logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
+    <div class="nav-links" id="navLinks">
+      <a href="./index.html">मुखपृष्ठ</a>
+      <a href="./poems.html">कविताएँ</a>
+      <a href="./poets.html" class="active">रचनाकार</a>
+      <a href="./category.html">श्रेणियाँ</a>
+      <a href="./login.html">प्रवेश करें</a>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button class="nav-btn" onclick="alert('📝 लेखन प्रारम्भ करें — अपनी रचना साझा करें!')">
+        <i class="fas fa-pen-fancy"></i> <span>लेखन</span>
+      </button>
+      <div class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></div>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="page-header fade-up">
+    <h1>रचनाकार</h1>
+    <div class="decor-line"></div>
+    <p>हिंदी और उर्दू साहित्य के वो चिराग़ जिनके अल्फ़ाज़ दिलों को रोशनी देते हैं</p>
+  </div>
+
+  <!-- Featured Poet Section -->
+  <div class="featured-poet fade-up">
+    <div class="featured-avatar">
+      <i class="fas fa-crown"></i>
+    </div>
+    <div class="featured-info">
+      <div class="featured-badge-poet"><i class="fas fa-star"></i> गुरुवार का विशेष रचनाकार</div>
+      <h2 style="font-family: 'Cormorant Garamond'; font-size: 2rem;">मन्नत काज़मी</h2>
+      <p style="color: var(--accent); margin: 0.3rem 0;">उर्दू शायरी & ग़ज़ल विशेषज्ञ | 15+ वर्ष का सफर</p>
+      <div class="writer-stats" style="justify-content: flex-start;">
+        <span><i class="fas fa-heart"></i> 28.4K प्रशंसक</span>
+        <span><i class="fas fa-book"></i> 245 रचनाएँ</span>
+      </div>
+      <div class="quote-text">
+        "शब्द वह दरिया हैं जिनमें तैरना सीख लिया तो साहित्य की गहराईयाँ अपने आप मिल जाती हैं।"
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter & Search -->
+  <div class="filter-bar fade-up">
+    <div class="filter-group" id="styleFilter">
+      <div class="filter-chip active" data-style="all">सभी रचनाकार</div>
+      <div class="filter-chip" data-style="ghazal">🎵 ग़ज़ल</div>
+      <div class="filter-chip" data-style="shayari">🖋 शायरी</div>
+      <div class="filter-chip" data-style="modern">✨ आधुनिक कविता</div>
+      <div class="filter-chip" data-style="sufi">☪ सूफ़ी कलाम</div>
+    </div>
+    <div class="search-writer">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchWriterInput" placeholder="नाम या शहर खोजें...">
+    </div>
+  </div>
+
+  <div class="writers-count fade-up" id="writersCount">✨ प्रसिद्ध रचनाकारों की सूची</div>
+
+  <!-- Writers Grid -->
+  <div class="writers-grid" id="writersGrid"></div>
+</main>
+
+<!-- Footer - exactly matching original style -->
+<footer>
+  <div class="container footer-main">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
+        <p class="footer-desc">A sanctuary for Hindi & Urdu poetry — where words find wings and emotions echo timelessly.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#">विशेष रचनाएँ</a>
+          <a href="#">लोकप्रिय रचनाकार</a>
+          <a href="#">Poetry Moods</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <div class="footer-links">
+          <a href="#">Write a Poem</a>
+          <a href="#">Join Events</a>
+          <a href="#">Become a Member</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>पत्रिका</h4>
+        <p class="footer-desc" style="max-width: 100%;">Subscribe to receive poetic musings.</p>
+        <div style="display: flex; background: rgba(255,248,240,0.1); border-radius: 50px; overflow: hidden; margin-top: 0.5rem;">
+          <input type="email" placeholder="your@email.com" style="background: transparent; border: none; padding: 8px 12px; color: white; flex:1;">
+          <button style="background: var(--accent); border: none; padding: 0 15px; color: white; cursor: pointer;">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Mehfil — Crafted with <span style="color:#C16A4B;">❤️</span> for poetry lovers.</span>
+      <div style="display: flex; gap: 1rem;">
+        <a href="#" style="color: #A28976; text-decoration: none;">गोपनीयता नीति</a>
+        <a href="#" style="color: #A28976; text-decoration: none;">संपर्क</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Writers Data (without follow buttons)
+  const writersData = [
+    { id: 1, name: "आरमान सिद्दीकी", bio: "मोहब्बत और उर्दू शायरी के लिए प्रसिद्ध। दिल को छू लेने वाले अल्फ़ाज़।", city: "लखनऊ", style: "shayari", followers: "12.4K", poems: "180", avatarIcon: "fa-feather-alt" },
+    { id: 2, name: "मेहर नज़ीर", bio: "ख़ामोशी और भावनाओं को शब्द देती हैं। उर्दू का कोमल एहसास।", city: "दिल्ली", style: "ghazal", followers: "10.8K", poems: "145", avatarIcon: "fa-moon" },
+    { id: 3, name: "ज़यान अख्तर", bio: "गहरी कहानियाँ और आत्ममंथन से भरी कविताएँ। आधुनिक सोच।", city: "मुंबई", style: "modern", followers: "9.6K", poems: "132", avatarIcon: "fa-book-open" },
+    { id: 4, name: "सना मीर", bio: "प्रकृति और जीवन की कोमल अभिव्यक्तियाँ। सादगी में गहराई।", city: "देहरादून", style: "modern", followers: "11.1K", poems: "165", avatarIcon: "fa-leaf" },
+    { id: 5, name: "फ़िरोज़ क़ादरी", bio: "सूफ़ी कलाम और रूहानी शायरी के धनी। दिल की गहराइयों से रिसता कलाम।", city: "हैदराबाद", style: "sufi", followers: "15.2K", poems: "210", avatarIcon: "fa-pray" },
+    { id: 6, name: "आयशा परवीन", bio: "ग़ज़लों की मल्लिका। रोमांटिक शायरी में माहिर।", city: "कोलकाता", style: "ghazal", followers: "14.7K", poems: "198", avatarIcon: "fa-music" },
+    { id: 7, name: "रुद्र प्रताप सिंह", bio: "आधुनिक हिंदी कविता के युवा हस्ताक्षर। प्रयोगधर्मी रचनाएँ।", city: "वाराणसी", style: "modern", followers: "8.9K", poems: "98", avatarIcon: "fa-pen-fancy" },
+    { id: 8, name: "मकसूद अहमद", bio: "शायरी के बेताज बादशाह। उर्दू अदब का सफर।", city: "आगरा", style: "shayari", followers: "20.3K", poems: "320", avatarIcon: "fa-king" }
+  ];
+
+  let currentStyle = "all";
+  let searchQuery = "";
+
+  function renderWriters() {
+    let filtered = writersData.filter(writer => {
+      const styleMatch = currentStyle === "all" || writer.style === currentStyle;
+      const searchMatch = searchQuery === "" || 
+        writer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        writer.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        writer.bio.toLowerCase().includes(searchQuery.toLowerCase());
+      return styleMatch && searchMatch;
+    });
+
+    document.getElementById("writersCount").innerHTML = `🌟 ${filtered.length} प्रतिष्ठित रचनाकार मिले`;
+    
+    const grid = document.getElementById("writersGrid");
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem;">😢 कोई रचनाकार नहीं मिला... दूसरी श्रेणी आज़माएँ</div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(writer => {
+      let styleLabel = writer.style === 'ghazal' ? 'ग़ज़ल' : writer.style === 'shayari' ? 'शायरी' : writer.style === 'modern' ? 'आधुनिक कविता' : 'सूफ़ी कलाम';
+      return `
+        <div class="writer-card-premium fade-up">
+          <div class="writer-avatar">
+            <i class="fas ${writer.avatarIcon}"></i>
+          </div>
+          <h3 class="writer-name">${writer.name}</h3>
+          <div style="font-size:0.7rem; color:var(--accent); margin-bottom: 0.3rem;">🎭 ${styleLabel}</div>
+          <p class="writer-bio">${writer.bio}</p>
+          <div class="writer-stats">
+            <span><i class="fas fa-heart"></i> ${writer.followers}</span>
+            <span><i class="fas fa-book"></i> ${writer.poems} रचनाएँ</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // re-apply fade animation
+    document.querySelectorAll('.writer-card-premium').forEach(card => {
+      card.classList.add('fade-up');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.1 });
+      obs.observe(card);
+    });
+  }
+
+  // filter event listeners
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      currentStyle = this.getAttribute('data-style');
+      renderWriters();
+    });
+  });
+
+  document.getElementById('searchWriterInput').addEventListener('input', function(e) {
+    searchQuery = e.target.value;
+    renderWriters();
+  });
+
+  renderWriters();
+
+  // scroll progress
+  window.addEventListener("scroll", () => {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById("scrollBar").style.width = scrolled + "%";
+  });
+
+  // mobile menu toggle (exactly same as original)
+  const menuBtn = document.getElementById("menuBtn");
+  const navLinks = document.getElementById("navLinks");
+  const mobileOverlay = document.getElementById("mobileOverlay");
+  
+  function closeMenu() {
+    navLinks.classList.remove("active");
+    mobileOverlay.classList.remove("active");
+    if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+  }
+  function openMenu() {
+    navLinks.classList.add("active");
+    mobileOverlay.classList.add("active");
+    if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-times"></i>';
+  }
+  if (menuBtn) {
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (navLinks.classList.contains("active")) closeMenu();
+      else openMenu();
+    });
+  }
+  mobileOverlay.addEventListener("click", closeMenu);
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener("click", closeMenu));
+
+  // fade-up observer for all elements
+  const fadeElements = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  fadeElements.forEach(el => observer.observe(el));
+</script>
+</body>
+
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>मेहफ़िल — Publish Your Poem | Share Your Verses</title>
+
+<!-- Preconnect & Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Tiro+Devanagari+Hindi&family=Hind:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #FEF9F2;
+    color: #2C241F;
+    font-family: 'Inter', 'Noto Serif Devanagari', serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* floating orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: -2;
+    opacity: 0.5;
+    animation: slowDrift 22s infinite alternate ease-in-out;
+  }
+
+  .orb-1 {
+    width: 500px;
+    height: 500px;
+    background: #FFD7C2;
+    top: -150px;
+    left: -10%;
+  }
+
+  .orb-2 {
+    width: 550px;
+    height: 550px;
+    background: #DDC7B0;
+    bottom: -100px;
+    right: -5%;
+    animation-delay: -5s;
+  }
+
+  .orb-3 {
+    width: 380px;
+    height: 380px;
+    background: #F7E1CF;
+    top: 40%;
+    left: 70%;
+    animation-duration: 18s;
+  }
+
+  @keyframes slowDrift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, -40px) scale(1.2); }
+  }
+
+  /* scroll indicator */
+  .scroll-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: #C16A4B;
+    width: 0%;
+    z-index: 10000;
+    transition: width 0.1s ease;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* navbar */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(18px);
+    background: rgba(254, 249, 242, 0.7);
+    border-bottom: 1px solid rgba(200, 180, 160, 0.35);
+    transition: all 0.3s ease;
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    width: min(1280px, 92%);
+    margin: 0 auto;
+  }
+
+  .logo {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(120deg, #C16A4B, #A84C2E);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    color: #2C241F;
+    transition: 0.2s;
+    position: relative;
+  }
+
+  .nav-links a::before {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background: #C16A4B;
+    bottom: -6px;
+    left: 0;
+    transition: 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  }
+
+  .nav-links a:hover {
+    color: #C16A4B;
+  }
+  .nav-links a:hover::before {
+    width: 100%;
+  }
+
+  .nav-btn {
+    background: #C16A4B;
+    padding: 12px 28px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 5px 12px rgba(193, 106, 75, 0.2);
+  }
+  .nav-btn:hover {
+    transform: translateY(-3px);
+    background: #A84C2E;
+    box-shadow: 0 12px 20px rgba(193, 106, 75, 0.3);
+  }
+
+  .menu-btn {
+    display: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #C16A4B;
+  }
+
+  /* main publish section */
+  .publish-section {
+    padding: 4rem 0 6rem;
+  }
+
+  .container {
+    width: min(1280px, 92%);
+    margin: 0 auto;
+  }
+
+  .publish-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 3.6rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    background: linear-gradient(130deg, #2C241F, #7D5A48);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .section-subtitle {
+    color: #756256;
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+    border-left: 3px solid #C16A4B;
+    padding-left: 1rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* form card */
+  .form-card {
+    background: rgba(255, 253, 248, 0.92);
+    backdrop-filter: blur(12px);
+    border-radius: 2.5rem;
+    border: 1px solid rgba(193, 106, 75, 0.15);
+    box-shadow: 0 25px 45px -15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 0.9fr;
+    gap: 0;
+  }
+
+  /* form left */
+  .form-main {
+    padding: 2.8rem;
+  }
+
+  .input-group {
+    margin-bottom: 1.8rem;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    color: #4a3a2f;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+  }
+
+  .input-group label i {
+    color: #C16A4B;
+    margin-right: 8px;
+  }
+
+  .input-group input, 
+  .input-group select, 
+  .input-group textarea {
+    width: 100%;
+    padding: 14px 18px;
+    background: #FFFFFF;
+    border: 1px solid #e7dbcf;
+    border-radius: 1.2rem;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.25s ease;
+    color: #2C241F;
+  }
+
+  .input-group textarea {
+    resize: vertical;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .input-group input:focus, 
+  .input-group select:focus, 
+  .input-group textarea:focus {
+    border-color: #C16A4B;
+    box-shadow: 0 0 0 3px rgba(193, 106, 75, 0.12);
+  }
+
+  .char-counter {
+    text-align: right;
+    font-size: 0.7rem;
+    color: #A28976;
+    margin-top: 5px;
+  }
+
+  /* tags row */
+  .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .tag-option {
+    padding: 8px 18px;
+    background: #F4EAE1;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+
+  .tag-option:hover {
+    background: #E8D5C8;
+    transform: translateY(-2px);
+  }
+
+  .tag-option.selected {
+    background: #C16A4B;
+    color: white;
+    border-color: #C16A4B;
+  }
+
+  /* right side - inspiration */
+  .form-inspiration {
+    background: linear-gradient(135deg, #fef0e8 0%, #fbe6da 100%);
+    padding: 2.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-inspiration::before {
+    content: "❦";
+    font-size: 12rem;
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    opacity: 0.08;
+    font-family: serif;
+    pointer-events: none;
+  }
+
+  .inspire-card {
+    position: relative;
+    z-index: 2;
+  }
+
+  .inspire-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+    color: #9E4F36;
+  }
+
+  .inspire-card p {
+    color: #5f4b3c;
+    line-height: 1.8;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+  }
+
+  .poem-preview {
+    background: rgba(255, 255, 245, 0.7);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    margin: 1.8rem 0;
+    border-left: 4px solid #C16A4B;
+  }
+
+  .poem-preview i {
+    color: #C16A4B;
+    font-size: 0.9rem;
+  }
+
+  .writing-tip {
+    background: rgba(255,255,240,0.6);
+    border-radius: 1rem;
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+
+  /* publish button */
+  .publish-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .publish-btn {
+    flex: 1;
+    background: #C16A4B;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 60px;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 18px rgba(193, 106, 75, 0.25);
+  }
+
+  .publish-btn:hover {
+    background: #A84C2E;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px -6px rgba(193, 106, 75, 0.4);
+  }
+
+  .draft-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid #d4c0b0;
+    padding: 14px 28px;
+    border-radius: 60px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .draft-btn:hover {
+    border-color: #C16A4B;
+    background: rgba(193, 106, 75, 0.05);
+    transform: translateY(-2px);
+  }
+
+  /* footer */
+  footer {
+    background: linear-gradient(145deg, #2C241F 0%, #1F1915 100%);
+    color: #E8DDD4;
+    margin-top: 4rem;
+    padding: 2.5rem 0;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
+  .heart-beat {
+    color: #C16A4B;
+    animation: pulse 1.5s infinite;
+    display: inline-block;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  /* responsive */
+  @media (max-width: 880px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+    .form-main {
+      padding: 2rem;
+    }
+    .form-inspiration {
+      padding: 2rem;
+    }
+    .section-title {
+      font-size: 1.8rem;
+    }
+    .nav-links {
+      display: none;
+    }
+    .menu-btn {
+      display: block;
+    }
+    .nav-links.active {
+      display: flex;
+      position: fixed;
+      top: 80px;
+      right: 0;
+      background: rgba(255,248,240,0.98);
+      backdrop-filter: blur(25px);
+      width: 70%;
+      flex-direction: column;
+      padding: 2rem;
+      border-radius: 2rem 0 0 2rem;
+      box-shadow: -5px 10px 30px rgba(0,0,0,0.1);
+      z-index: 1000;
+      gap: 1.8rem;
+    }
+    
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.6s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #2C241F;
+    color: #F1E2D2;
+    padding: 12px 28px;
+    border-radius: 60px;
+    font-size: 0.85rem;
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    transition: 0.3s cubic-bezier(0.2,0.9,0.4,1.1);
+    pointer-events: none;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    font-family: Inter;
+    border: 1px solid rgba(193,106,75,0.3);
+    white-space: nowrap;
+  }
+  @media (max-width: 600px) {
+    .toast { white-space: normal; max-width: 90%; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+
+  .publish-actions{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .publish-btn,
+  .draft-btn{
+    flex: unset;
+    width: 100%;
+    min-height: 56px;
+    padding: 12px 10px;
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .publish-btn i,
+  .draft-btn i{
+    margin-right: 6px;
+  }
+
+}
+
+
+
+/* Mobile header icon buttons */
+.header-actions{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+@media(max-width:880px){
+#profileBtn,
+.write-mobile-btn{
+width:48px;
+height:48px;
+padding:0 !important;
+border-radius:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:1.1rem;
+}
+
+#profileBtn span,
+.write-mobile-btn span{
+display:none;
+}
+}
+
+</style>
+</head>
+<body>
+
+<div class="scroll-indicator" id="scrollBar"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
+    <div class="nav-links" id="navLinks">
+      <a href="./index.html">मुखपृष्ठ</a>
+      <a href="./poems.html">कविताएँ</a>
+      <a href="./poets.html">रचनाकार</a>
+      <a href="./category.html">श्रेणियाँ</a>
+    </div>
+    <div class="header-actions">
+      <button class="nav-btn" id="profileBtn">
+        <i class="fas fa-book-open"></i><span> मेरी रचनाएँ</span>
+      </button>
+      <div class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></div>
+    </div>
+  </div>
+</nav>
+
+<section class="publish-section">
+  <div class="container">
+    <div class="publish-header fade-up">
+      <h1 class="section-title"><i class="fas fa-pen-fancy"></i> नई रचना प्रकाशित करें</h1>
+      <p class="section-subtitle">अपने अल्फ़ाज़ों को दुनिया तक पहुँचाएँ — हर शे’र अनमोल है।</p>
+    </div>
+
+    <div class="form-card fade-up" id="formCard">
+      <div class="form-grid">
+        <!-- Left: Main Form -->
+        <div class="form-main">
+          <form id="publishForm">
+            <div class="input-group">
+              <label><i class="fas fa-heading"></i> शीर्षक / Poem Title *</label>
+              <input type="text" id="poemTitle" placeholder="जैसे: 'वो बारिशें', 'तन्हाई का सफर'..." required>
+            </div>
+
+            <div class="input-group">
+              <label><i class="fas fa-tag"></i> श्रेणी / Category *</label>
+              <select id="poemCategory" required>
+                <option value="">चुनें / Select</option>
+                <option value="Love">❤️ प्रेम / Love</option>
+                <option value="Sad">🌧 विरह / Sad</option>
+                <option value="Motivation">✨ प्रेरणा / Motivation</option>
+                <option value="Nature">🍃 प्रकृति / Nature</option>
+                <option value="Life">🌙 जीवन / Life</option>
+                <option value="Sufi">☪ सूफी / Sufi</option>
+                <option value="Friendship">🤝 दोस्ती / Friendship</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label><i class="fas fa-feather-alt"></i> रचना (कविता / शे’र) *</label>
+              <textarea id="poemBody" rows="8" placeholder="यहाँ अपनी रचना लिखें...&#10;हर अल्फ़ाज़ को महसूस करें।&#10;&#10;तुम्हारी यादों का सिलसिला,&#10;आज भी दिल में बसा हुआ है..."></textarea>
+              <div class="char-counter"><span id="charCount">0</span> अक्षर</div>
+            </div>
+
+            <div class="input-group">
+              <label><i class="fas fa-hashtag"></i> टैग्स (भावनाएँ)</label>
+              <div class="tags-row" id="tagsContainer">
+                <span class="tag-option" data-tag="रोमांस">रोमांस</span>
+                <span class="tag-option" data-tag="उदासी">उदासी</span>
+                <span class="tag-option" data-tag="प्रेरणा">प्रेरणा</span>
+                <span class="tag-option" data-tag="शायरी">शायरी</span>
+                <span class="tag-option" data-tag="दर्शन">दर्शन</span>
+                <span class="tag-option" data-tag="यादें">यादें</span>
+              </div>
+              <input type="hidden" id="selectedTags" value="">
+            </div>
+
+            <div class="publish-actions">
+              <button type="submit" class="publish-btn"><i class="fas fa-cloud-upload-alt"></i> प्रकाशित करें</button>
+              <button type="button" id="draftBtn" class="draft-btn"><i class="fas fa-save"></i> ड्राफ़्ट में सहेजें</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right: Inspiration & poetic nudge -->
+        <div class="form-inspiration">
+          <div class="inspire-card">
+            <h3><i class="fas fa-quote-left"></i> रचना का सफर</h3>
+            <p>“शब्द वह पुल हैं जो दिलों को जोड़ते हैं। आपकी कविता किसी की तन्हाई में रौशनी बन सकती है।”</p>
+            <div class="poem-preview">
+              <i class="fas fa-feather-alt"></i> <strong>आज का सुझाव</strong>
+              <p style="margin-top: 10px; font-size: 0.9rem;">“ख़ामोशियों को ज़ुबान मिलती है,<br>जब कोई अपनी कविता लिखता है।”</p>
+            </div>
+            <div class="writing-tip">
+              <i class="fas fa-lightbulb"></i> <strong>रचनात्मक सुझाव</strong>
+              <p style="margin-top: 6px;">अपनी भावनाओं को बिना किसी बंधन के लिखें। सहजता ही सच्ची कविता की जान है।</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>© 2026 मेहफ़िल — Crafted with <span class="heart-beat">❤️</span> for poetry lovers. अपनी आवाज़ को पहचान दें।</p>
+  </div>
+</footer>
+
+<div id="toastMsg" class="toast">✨ महफ़िल में आपका स्वागत है</div>
+
+<script>
+  // toast function
+  function showToast(message, isError = false) {
+    const toast = document.getElementById('toastMsg');
+    toast.innerText = message;
+    if (isError) {
+      toast.style.background = "#7D3C2A";
+      toast.style.color = "#FFEAD2";
+    } else {
+      toast.style.background = "#2C241F";
+      toast.style.color = "#F1E2D2";
+    }
+    toast.style.transform = "translateX(-50%) translateY(0px)";
+    setTimeout(() => {
+      toast.style.transform = "translateX(-50%) translateY(100px)";
+    }, 2800);
+  }
+
+  // Mobile menu
+  const menuBtn = document.getElementById("menuBtn");
+  const navLinks = document.getElementById("navLinks");
+  menuBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+  });
+
+  // Scroll progress
+  window.addEventListener("scroll", () => {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById("scrollBar").style.width = scrolled + "%";
+  });
+
+  // fade-up observer
+  const fadeElements = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  fadeElements.forEach(el => observer.observe(el));
+
+  // Character counter
+  const poemBody = document.getElementById('poemBody');
+  const charCountSpan = document.getElementById('charCount');
+  poemBody.addEventListener('input', () => {
+    charCountSpan.innerText = poemBody.value.length;
+  });
+  charCountSpan.innerText = poemBody.value.length;
+
+  // Tag selection logic
+  const tagOptions = document.querySelectorAll('.tag-option');
+  let selectedTagsArray = [];
+  const selectedTagsHidden = document.getElementById('selectedTags');
+
+  function updateTagsHidden() {
+    selectedTagsHidden.value = selectedTagsArray.join(',');
+  }
+
+  tagOptions.forEach(tag => {
+    tag.addEventListener('click', () => {
+      const tagValue = tag.getAttribute('data-tag');
+      if (tag.classList.contains('selected')) {
+        tag.classList.remove('selected');
+        selectedTagsArray = selectedTagsArray.filter(t => t !== tagValue);
+      } else {
+        tag.classList.add('selected');
+        selectedTagsArray.push(tagValue);
+      }
+      updateTagsHidden();
+    });
+  });
+
+  // Form submit (publish)
+  const publishForm = document.getElementById('publishForm');
+  const titleInput = document.getElementById('poemTitle');
+  const categorySelect = document.getElementById('poemCategory');
+  const poemContent = document.getElementById('poemBody');
+
+  publishForm.addEventListener('submit', (e) => {
+    // e.preventDefault();
+    const title = titleInput.value.trim();
+    const category = categorySelect.value;
+    const body = poemContent.value.trim();
+
+    if (!title) {
+      showToast("❁ कृपया कविता का शीर्षक लिखें।", true);
+      titleInput.focus();
+      return;
+    }
+    if (!category) {
+      showToast("📖 कोई श्रेणी चुनें — प्रेम, विरह, या कोई और।", true);
+      return;
+    }
+    if (!body) {
+      showToast("🖋️ आपकी रचना खाली नहीं हो सकती। कुछ अल्फ़ाज़ तो लिखें।", true);
+      poemContent.focus();
+      return;
+    }
+    if (body.length < 20) {
+      showToast("🌹 कविता थोड़ी और विस्तार से लिखें (कम से कम 20 अक्षर)", true);
+      return;
+    }
+
+    const tags = selectedTagsArray.length ? selectedTagsArray.join(', ') : 'कोई टैग नहीं';
+    showToast(`✨ "${title}" सफलतापूर्वक प्रकाशित हुई! आपकी रचना महफ़िल में शामिल हो गई। ❤️`, false);
+    
+    // Clear form after publish? Or just reset tags? Demo friendly reset
+    setTimeout(() => {
+      alert(`🌸 आपकी कविता "${title}" प्रकाशित हो गई है!\n\nश्रेणी: ${category}\nटैग्स: ${tags}\n\nअब यह पूरी दुनिया देख सकेगी। (डेमो सबमिशन सफल)`);
+      // reset form optionally
+      titleInput.value = '';
+      categorySelect.value = '';
+      poemContent.value = '';
+      charCountSpan.innerText = '0';
+      // reset tags
+      tagOptions.forEach(t => t.classList.remove('selected'));
+      selectedTagsArray = [];
+      updateTagsHidden();
+    }, 400);
+  });
+
+  // Draft button
+  const draftBtn = document.getElementById('draftBtn');
+  draftBtn.addEventListener('click', () => {
+    const title = titleInput.value.trim();
+    if (!title && !poemContent.value.trim()) {
+      showToast("📝 कुछ लिखें ताकि ड्राफ़्ट में सहेज सकें।", true);
+      return;
+    }
+    showToast("💾 आपकी रचना ड्राफ़्ट में सुरक्षित कर ली गई। बाद में प्रकाशित करें।", false);
+    localStorage.setItem('mehfil_draft', JSON.stringify({
+      title: titleInput.value,
+      category: categorySelect.value,
+      body: poemContent.value,
+      tags: selectedTagsArray
+    }));
+  });
+
+  // load draft if exists
+  const savedDraft = localStorage.getItem('mehfil_draft');
+  if (savedDraft) {
+    try {
+      const draft = JSON.parse(savedDraft);
+      if (draft.title) titleInput.value = draft.title;
+      if (draft.category) categorySelect.value = draft.category;
+      if (draft.body) {
+        poemContent.value = draft.body;
+        charCountSpan.innerText = draft.body.length;
+      }
+      if (draft.tags && draft.tags.length) {
+        selectedTagsArray = draft.tags;
+        tagOptions.forEach(tag => {
+          if (selectedTagsArray.includes(tag.getAttribute('data-tag'))) {
+            tag.classList.add('selected');
+          }
+        });
+        updateTagsHidden();
+      }
+      showToast("📂 आपका पिछला ड्राफ़्ट लोड हो गया।", false);
+    } catch(e) {}
+  }
+
+  // profile button
+  const profileBtn = document.getElementById('profileBtn');
+  profileBtn.addEventListener('click', () => {
+    showToast("📖 आपकी सभी रचनाएँ यहाँ दिखेंगी (जल्द आ रहा है)", false);
+  });
+
+  // nav links demo
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      // e.preventDefault();
+      showToast("✨ महफ़िल के अन्य भाग जल्द ही उपलब्ध होंगे", false);
+    });
+  });
+</script>
+</body>
+</html>

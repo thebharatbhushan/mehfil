@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>मेहफ़िल — Sign in to Poetry Sanctuary | Hindi Urdu Community</title>
+
+<!-- Preconnect & Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Tiro+Devanagari+Hindi&family=Hind:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #FEF9F2;
+    color: #2C241F;
+    font-family: 'Inter', 'Noto Serif Devanagari', serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow-x: hidden;
+    padding: 2rem 1.5rem;
+  }
+
+  /* floating orbs (same as main page) */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: -2;
+    opacity: 0.5;
+    animation: slowDrift 22s infinite alternate ease-in-out;
+  }
+
+  .orb-1 {
+    width: 500px;
+    height: 500px;
+    background: #FFD7C2;
+    top: -150px;
+    left: -10%;
+  }
+
+  .orb-2 {
+    width: 550px;
+    height: 550px;
+    background: #DDC7B0;
+    bottom: -100px;
+    right: -5%;
+    animation-delay: -5s;
+  }
+
+  .orb-3 {
+    width: 380px;
+    height: 380px;
+    background: #F7E1CF;
+    top: 40%;
+    left: 70%;
+    animation-duration: 18s;
+  }
+
+  @keyframes slowDrift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, -40px) scale(1.2); }
+  }
+
+  /* back link */
+  .back-home {
+    position: fixed;
+    top: 28px;
+    left: 28px;
+    z-index: 100;
+    text-decoration: none;
+    font-weight: 500;
+    color: #7D5A48;
+    background: rgba(255, 252, 245, 0.7);
+    backdrop-filter: blur(8px);
+    padding: 10px 20px;
+    border-radius: 60px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(193,106,75,0.2);
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  .back-home i {
+    margin-right: 8px;
+    font-size: 0.85rem;
+  }
+  .back-home:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(193,106,75,0.2);
+  }
+
+  /* main card container */
+  .login-container {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .glass-card {
+    background: rgba(255, 253, 248, 0.92);
+    backdrop-filter: blur(20px);
+    border-radius: 3rem;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: 0 35px 65px -20px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(193, 106, 75, 0.1);
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 1120px;
+  }
+
+  /* left artistic side */
+  .login-art {
+    background: linear-gradient(135deg, #fef0e8 0%, #fbe6da 100%);
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-art::before {
+    content: "❦";
+    font-size: 18rem;
+    position: absolute;
+    bottom: -40px;
+    left: -40px;
+    opacity: 0.08;
+    font-family: serif;
+    pointer-events: none;
+    transform: rotate(-12deg);
+  }
+
+  .login-art::after {
+    content: "✍️";
+    font-size: 10rem;
+    position: absolute;
+    top: 20px;
+    right: -30px;
+    opacity: 0.07;
+    pointer-events: none;
+  }
+
+  .art-quote {
+    max-width: 320px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .art-quote i {
+    font-size: 3rem;
+    color: #C16A4B;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  .art-quote h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    background: linear-gradient(120deg, #2C241F, #9E4F36);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .art-quote p {
+    color: #5f4b3c;
+    line-height: 1.7;
+    font-size: 1rem;
+    font-style: italic;
+  }
+
+  .art-quote .urdu-line {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    border-top: 1px dashed rgba(193,106,75,0.3);
+    padding-top: 1.5rem;
+    color: #936E56;
+  }
+
+  /* right form area */
+  .login-form-wrapper {
+    padding: 3rem 2.5rem;
+    background: rgba(255, 252, 245, 0.75);
+  }
+
+  .brand-tag {
+    margin-bottom: 1rem;
+  }
+
+  .brand-tag .logo-icon {
+    font-size: 2rem;
+    background: linear-gradient(135deg, #C16A4B, #A84C2E);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .form-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #2C241F;
+  }
+
+  .form-sub {
+    color: #756256;
+    margin-bottom: 2rem;
+    border-left: 2px solid var(--accent);
+    padding-left: 12px;
+    font-size: 0.9rem;
+  }
+
+  .input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .input-group i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #CBBBAE;
+    font-size: 1.1rem;
+    transition: 0.2s;
+  }
+
+  .input-group input {
+    width: 100%;
+    padding: 16px 20px 16px 48px;
+    background: #FFFFFF;
+    border: 1px solid #e7dbcf;
+    border-radius: 60px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.25s ease;
+    color: #2C241F;
+  }
+
+  .input-group input:focus {
+    border-color: #C16A4B;
+    box-shadow: 0 0 0 3px rgba(193,106,75,0.15);
+  }
+
+  .password-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    font-size: 0.85rem;
+  }
+
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #5f4b3c;
+  }
+
+  .checkbox input {
+    accent-color: #C16A4B;
+  }
+
+  .forgot-link {
+    color: #C16A4B;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s;
+  }
+
+  .forgot-link:hover {
+    text-decoration: underline;
+  }
+
+  .login-btn {
+    width: 100%;
+    background: #C16A4B;
+    border: none;
+    padding: 14px;
+    border-radius: 60px;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 18px rgba(193,106,75,0.2);
+    margin-bottom: 1.8rem;
+  }
+
+  .login-btn:hover {
+    background: #A84C2E;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px -6px rgba(193,106,75,0.4);
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.8rem 0;
+    color: #CBBBAE;
+    font-size: 0.8rem;
+  }
+
+  .divider span {
+    flex: 1;
+    height: 1px;
+    background: #e2d2c4;
+  }
+
+  .social-login {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .social-btn {
+    background: white;
+    border: 1px solid #e2d2c4;
+    padding: 10px;
+    border-radius: 60px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #7D5A48;
+    transition: 0.25s;
+    cursor: pointer;
+  }
+
+  .social-btn:hover {
+    background: #FEF3EA;
+    transform: translateY(-3px);
+    border-color: #C16A4B;
+    color: #C16A4B;
+  }
+
+  .signup-prompt {
+    text-align: center;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(200,180,160,0.3);
+    padding-top: 1.8rem;
+  }
+
+  .signup-prompt a {
+    color: #C16A4B;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+  }
+
+  .signup-prompt a:hover {
+    text-decoration: underline;
+  }
+
+  /* additional poetry micro interaction */
+  .floating-ink {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 70px;
+    opacity: 0.03;
+    pointer-events: none;
+    transform: rotate(10deg);
+  }
+
+  @media (max-width: 880px) {
+    .glass-card {
+      grid-template-columns: 1fr;
+      max-width: 520px;
+    }
+    .login-art {
+      padding: 2rem;
+    }
+    .art-quote h2 {
+      font-size: 2rem;
+    }
+    .login-form-wrapper {
+      padding: 2rem 1.8rem;
+    }
+    .form-title {
+      font-size: 2rem;
+    }
+    body {
+      padding: 1rem;
+    }
+    .back-home {
+      top: 16px;
+      left: 16px;
+      font-size: 0.8rem;
+      padding: 8px 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .login-form-wrapper {
+      padding: 1.8rem;
+    }
+    .password-options {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .social-btn {
+      width: 42px;
+      height: 42px;
+    }
+  }
+
+  /* subtle fade animations */
+  .fade-in {
+    animation: fadeUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* tooltip effect */
+  .input-group input:focus + i {
+    color: #C16A4B;
+  }
+
+  hr {
+    border-color: #f0e2d6;
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<a href="#" class="back-home" id="backHomeBtn"><i class="fas fa-feather-alt"></i> वापस मेहफ़िल</a>
+
+<div class="login-container">
+  <div class="glass-card fade-in">
+    <!-- left panel : poetic essence -->
+    <div class="login-art">
+      <div class="art-quote">
+        <i class="fas fa-feather-alt"></i>
+        <h2>अल्फ़ाज़ की महफ़िल</h2>
+        <p>“हर लफ्ज़ एक एहसास है, हर शे’र एक दास्ताँ।”</p>
+        <div class="urdu-line">
+          <i class="fas fa-moon"></i>  جہاں الفاظ محسوسات بن جاتے ہیں
+        </div>
+        <div style="margin-top: 2rem; font-size: 0.8rem; color:#AA8D74;">
+          <i class="fas fa-quote-left"></i> साहित्य का सच्चा सफर
+        </div>
+      </div>
+      <div class="floating-ink">🪶</div>
+    </div>
+
+    <!-- right panel : login form -->
+    <div class="login-form-wrapper">
+      <div class="brand-tag">
+        <i class="fas fa-feather-alt logo-icon"></i>
+      </div>
+      <h2 class="form-title">स्वागत है</h2>
+      <p class="form-sub">अपने खाते में प्रवेश करें और रचनात्मकता में डूब जाएँ।</p>
+
+      <form id="loginForm" action="#" method="post">
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" placeholder="ईमेल / Email" required autocomplete="email">
+        </div>
+
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" placeholder="पासवर्ड / Password" required autocomplete="current-password">
+        </div>
+
+        <div class="password-options">
+          <label class="checkbox">
+            <input type="checkbox" id="remember"> <span>मुझे याद रखें</span>
+          </label>
+          <a href="#" class="forgot-link" id="forgotPwd">पासवर्ड भूल गए?</a>
+        </div>
+
+        <button type="submit" class="login-btn"><i class="fas fa-pen-fancy"></i> प्रवेश करें</button>
+
+        <div class="divider">
+          <span></span> या <span></span>
+        </div>
+
+        <div class="social-login">
+          <div class="social-btn" id="googleLogin"><i class="fab fa-google"></i></div>
+          <div class="social-btn" id="githubLogin"><i class="fab fa-github"></i></div>
+          <div class="social-btn" id="twitterLogin"><i class="fab fa-twitter"></i></div>
+        </div>
+
+        <div class="signup-prompt">
+          क्या आप नए सदस्य हैं? <a href="./signup.html" id="signupRedirect">नई रचना शुरू करें →</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- subtle modal for demo / forgot password (poetic interaction) -->
+<div id="notificationToast" style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(100px); background: #2C241F; color: #F1E2D2; padding: 12px 28px; border-radius: 60px; font-size: 0.85rem; backdrop-filter: blur(10px); z-index: 2000; transition: 0.3s cubic-bezier(0.2,0.9,0.4,1.1); pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: Inter; border: 1px solid rgba(193,106,75,0.3);">
+  <i class="fas fa-feather-alt" style="margin-right: 8px;"></i> <span id="toastMsg">✨ मेहफ़िल में आपका स्वागत है</span>
+</div>
+
+<script>
+  // unified function to show poetic toast
+  function showToast(message, isError = false) {
+    const toast = document.getElementById('notificationToast');
+    const msgSpan = document.getElementById('toastMsg');
+    msgSpan.innerText = message;
+    if (isError) {
+      toast.style.background = "#7D3C2A";
+      toast.style.color = "#FFEAD2";
+    } else {
+      toast.style.background = "#2C241F";
+      toast.style.color = "#F1E2D2";
+    }
+    toast.style.transform = "translateX(-50%) translateY(0px)";
+    setTimeout(() => {
+      toast.style.transform = "translateX(-50%) translateY(100px)";
+    }, 2600);
+  }
+
+  // back button (simulate main page navigation)
+  const backBtn = document.getElementById('backHomeBtn');
+  backBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showToast("🍂 मुख्य महफ़िल में लौट रहे हैं...", false);
+    setTimeout(() => {
+      // redirect to main page or simply simulate
+      window.location.href = "index.html"; // if in same project, else fallback alert
+      // but as a demo, we just inform
+      // alert("✨ आपको मुखपृष्ठ पर ले जाया जाएगा। (simulated navigation to main page)");
+    }, 500);
+  });
+
+  // FORM HANDLING (authentic poetic validation)
+  const form = document.getElementById('loginForm');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const rememberChk = document.getElementById('remember');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    const pwd = passwordInput.value.trim();
+
+    // poetic validation : simple check for demo to match the aesthetic
+    if (!email) {
+      showToast("❁ कृपया अपना ईमेल लिखें।", true);
+      emailInput.focus();
+      return;
+    }
+    if (!pwd) {
+      showToast("🖋️ शब्दों की तरह पासवर्ड भी आवश्यक है।", true);
+      passwordInput.focus();
+      return;
+    }
+    if (!email.includes('@')) {
+      showToast("🌙 एक सच्चे पते की तरह, ईमेल में '@' होना चाहिए।", true);
+      return;
+    }
+
+    // demo credentials : welcome poetry lovers
+    // just for ambiance; any non-empty creds works but we give special mehfil vibe
+    if (email === "hiibbhere@gmail.com" || pwd === "shayari" || (email === "mehfil@poetry.com") || pwd === "mehfil123") {
+      showToast("✨ आप सफलतापूर्वक लॉग इन कर चुके हैं! कविता की दुनिया में आपका स्वागत है। ❤️", false);
+      setTimeout(() => {
+        alert("❤️ प्रवेश मिला! अब आप नई रचनाएँ पढ़ और साझा कर सकते हैं। (Demo flow)\n🌹 धन्यवाद!");
+      }, 800);
+      window.location.href = "./profile.html"; // simulate redirect to main page after login
+    } else {
+      // but still accept any filled attempt with poetic message (demo friendly)
+      showToast("📖 'तुम्हारी कलम ने दस्तक दी' — सादर आपकी महफ़िल में आपका स्वागत है।", false);
+      setTimeout(() => {
+        alert("🎭 सादर अभिवादन! (Demo Login Successful) \n\nहम आपको रचनात्मकता की नई उड़ान भरने के लिए आमंत्रित करते हैं।");
+      }, 400);
+    }
+    // optional store remember me flag
+    if (rememberChk.checked) {
+      localStorage.setItem("mehfil_remember", "true");
+      showToast("☪️ आपकी याद हमेशा रहेगी।", false);
+    } else {
+      localStorage.removeItem("mehfil_remember");
+    }
+  });
+
+  // Forgot password poetic gesture
+  const forgotLink = document.getElementById('forgotPwd');
+  forgotLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    showToast("🕊️ 'विस्मृत अल्फ़ाज़' — जल्द ही आपके ईमेल पर पुनर्प्राप्ति लिंक भेजा जाएगा।", false);
+  });
+
+  // Social login demo (interactive alerts with poetic flavor)
+  const googleBtn = document.getElementById('googleLogin');
+  const githubBtn = document.getElementById('githubLogin');
+  const twitterBtn = document.getElementById('twitterLogin');
+
+  googleBtn.addEventListener('click', () => {
+    showToast("📜 गूगल के संग महफ़िल में प्रवेश, जल्दी ही सुविधा उपलब्ध होगी।", false);
+  });
+  githubBtn.addEventListener('click', () => {
+    showToast("🐙 गिटहब से जुड़ें — शायद आप भी यहाँ कोड और कविता लिखें।", false);
+  });
+  twitterBtn.addEventListener('click', () => {
+    showToast("🕊️ ट्विटर से आ रहे हैं अल्फ़ाज़, जल्द मिलेंगे!", false);
+  });
+
+  // signup redirect link
+  const signupLink = document.getElementById('signupRedirect');
+  signupLink.addEventListener('click', (e) => {
+    // e.preventDefault();
+    showToast("✍️ एक नई रचना शुरू करें: जल्द ही रजिस्ट्रेशन खुलेगा। तब तक आप अपनी रचनाएँ हमें भेज सकते हैं। 💫", false);
+    // setTimeout(() => {
+    //   alert("🌟 रचनाकार बनने की प्रक्रिया : जल्द ही मेहफ़िल के सदस्य बनें और अपनी कविताएँ प्रकाशित करें।");
+    // }, 300);
+  });
+
+  // load dummy saved preference (demo)
+  if (localStorage.getItem("mehfil_remember") === "true") {
+    // optional prefill demo - but not storing sensitive, just poetic effect
+    rememberChk.checked = true;
+  }
+
+  // add hover effect for floating cards vibe
+  const glassCard = document.querySelector('.glass-card');
+  if (glassCard) {
+    glassCard.addEventListener('mousemove', (e) => {
+      // subtle interactive effect - just for elegance
+      let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+      let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+      glassCard.style.transform = `rotateY(${xAxis * 0.3}deg) rotateX(${yAxis * -0.2}deg)`;
+    });
+    glassCard.addEventListener('mouseleave', () => {
+      glassCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
+    });
+  }
+
+  // tiny load animation for input icons
+  document.querySelectorAll('.input-group input').forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.querySelector('i').style.color = "#C16A4B";
+    });
+    input.addEventListener('blur', function() {
+      if(!this.value) this.parentElement.querySelector('i').style.color = "#CBBBAE";
+    });
+  });
+</script>
+</body>
+</html>
