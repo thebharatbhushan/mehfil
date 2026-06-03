@@ -13,8 +13,10 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+  <link rel="stylesheet" href="./header.css">
+  <link rel="stylesheet" href="./footer.css">
   <style>
+    
     * {
       margin: 0;
       padding: 0;
@@ -97,134 +99,6 @@
       border-radius: 0 2px 2px 0;
     }
 
-    /* navbar - EXACT same behavior */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(18px);
-      background: rgba(254, 249, 242, 0.7);
-      border-bottom: 1px solid var(--border-light);
-      transition: all 0.3s ease;
-    }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 0;
-      gap: 15px;
-    }
-
-    .logo {
-      font-size: 1.8rem;
-      font-weight: 800;
-      background: linear-gradient(120deg, #C16A4B, #A84C2E);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      letter-spacing: -0.5px;
-      white-space: nowrap;
-    }
-
-    .logo i {
-      background: none;
-      -webkit-background-clip: unset;
-      color: var(--accent);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      align-items: center;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      font-weight: 500;
-      color: var(--text-dark);
-      transition: 0.2s;
-      position: relative;
-      font-size: 1rem;
-    }
-
-    .nav-links a::before {
-      content: '';
-      position: absolute;
-      width: 0%;
-      height: 2px;
-      background: var(--accent);
-      bottom: -6px;
-      left: 0;
-      transition: 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    }
-
-    .nav-links a:hover {
-      color: var(--accent);
-    }
-
-    .nav-links a:hover::before {
-      width: 100%;
-    }
-
-    .nav-links a.active {
-      color: var(--accent);
-    }
-
-    .nav-links a.active::before {
-      width: 100%;
-    }
-
-    .nav-btn {
-      background: var(--accent);
-      padding: 10px 20px;
-      border-radius: 50px;
-      color: white;
-      font-weight: 600;
-      transition: all 0.3s;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 5px 12px rgba(193, 106, 75, 0.2);
-      font-size: 0.9rem;
-      white-space: nowrap;
-    }
-
-    .nav-btn:hover {
-      transform: translateY(-3px);
-      background: #A84C2E;
-      box-shadow: 0 12px 20px rgba(193, 106, 75, 0.3);
-    }
-
-    .menu-btn {
-      display: none;
-      font-size: 1.6rem;
-      cursor: pointer;
-      color: var(--accent);
-      width: 44px;
-      height: 44px;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      background: rgba(193, 106, 75, 0.08);
-    }
-
-    /* Mobile Menu Overlay */
-    .mobile-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(4px);
-      opacity: 0;
-      visibility: hidden;
-      transition: 0.3s;
-      z-index: 998;
-    }
-    .mobile-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Page Header */
     .page-header {
       text-align: center;
       padding: 2.5rem 0 1.5rem;
@@ -465,104 +339,7 @@
     }
 
     /* Footer */
-    footer {
-      background: linear-gradient(145deg, #2C241F 0%, #1F1915 100%);
-      color: #E8DDD4;
-      margin-top: 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .footer-main {
-      padding: 2.5rem 0 1.5rem;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      align-items: start;
-    }
-
-    .footer-brand .footer-logo {
-      font-size: 1.8rem;
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 700;
-      background: linear-gradient(135deg, #F5CFB3, #E8B694);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      margin-bottom: 0.8rem;
-    }
-
-    .footer-desc {
-      color: #CBBBAE;
-      line-height: 1.6;
-      font-size: 0.8rem;
-      max-width: 260px;
-    }
-
-    .social-icons {
-      display: flex;
-      gap: 0.8rem;
-      margin-top: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .social-icons a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px;
-      height: 34px;
-      background: rgba(255, 245, 235, 0.08);
-      border-radius: 50%;
-      color: #E0CBBB;
-      transition: all 0.3s;
-      text-decoration: none;
-    }
-
-    .social-icons a:hover {
-      background: var(--accent);
-      color: white;
-      transform: translateY(-3px);
-    }
-
-    .footer-col h4 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      color: #F2DFD0;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .footer-links a {
-      color: #CBBBAE;
-      text-decoration: none;
-      font-size: 0.8rem;
-      transition: 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--accent-soft);
-      transform: translateX(5px);
-    }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(230, 205, 185, 0.15);
-      padding: 1.2rem 0;
-      text-align: center;
-      font-size: 0.7rem;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-    }
+   
 
     /* RESPONSIVE BREAKPOINTS - FIXED */
     @media (max-width: 768px) {
@@ -666,28 +443,7 @@
       .poem-card h3 {
         font-size: 1.3rem;
       }
-      
-      .footer-grid {
-        text-align: center;
-        gap: 1.5rem;
-      }
-      
-      .footer-brand .footer-desc {
-        margin: 0 auto;
-      }
-      
-      .social-icons {
-        justify-content: center;
-      }
-      
-      .footer-links {
-        align-items: center;
-      }
-      
-      .footer-bottom {
-        flex-direction: column;
-        text-align: center;
-      }
+    
     }
 
     @media (max-width: 480px) {
@@ -804,45 +560,56 @@
   <footer>
     <div class="container footer-main">
       <div class="footer-grid">
+
         <div class="footer-brand">
           <div class="footer-logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
-          <p class="footer-desc">A sanctuary for Hindi & Urdu poetry — where words find wings and emotions echo timelessly.</p>
+          <p class="footer-desc">A sanctuary for Hindi & Urdu poetry — where words find wings and emotions echo
+            timelessly. Join a community of passionate storytellers.</p>
           <div class="social-icons">
             <a href="#"><i class="fab fa-instagram"></i></a>
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
           </div>
         </div>
+
         <div class="footer-col">
           <h4>Explore</h4>
           <div class="footer-links">
-            <a href="#">विशेष रचनाएँ</a>
-            <a href="#">लोकप्रिय रचनाकार</a>
-            <a href="#">Poetry Moods</a>
+            <a href="#"><i class="fas fa-chevron-right"></i> विशेष रचनाएँ</a>
+            <a href="#"><i class="fas fa-chevron-right"></i> लोकप्रिय रचनाकार</a>
+            <a href="#"><i class="fas fa-chevron-right"></i> Poetry Moods</a>
+            <a href="#"><i class="fas fa-chevron-right"></i> Community Hub</a>
           </div>
         </div>
+
         <div class="footer-col">
           <h4>Community</h4>
           <div class="footer-links">
-            <a href="#">Write a Poem</a>
-            <a href="#">Join Events</a>
-            <a href="#">Become a Member</a>
+            <a href="#"><i class="fas fa-chevron-right"></i> Write a Poem</a>
+            <a href="#"><i class="fas fa-chevron-right"></i> Join Events</a>
+            <a href="#"><i class="fas fa-chevron-right"></i> Feedback</a>
+            <a href="#"><i class="fas fa-chevron-right"></i> Become a Member</a>
           </div>
         </div>
+
         <div class="footer-col">
           <h4>पत्रिका</h4>
-          <p class="footer-desc" style="max-width: 100%;">Subscribe to receive poetic musings.</p>
-          <div style="display: flex; background: rgba(255,248,240,0.1); border-radius: 50px; overflow: hidden; margin-top: 0.5rem;">
-            <input type="email" placeholder="your@email.com" style="background: transparent; border: none; padding: 8px 12px; color: white; font-size:0.8rem; flex:1;">
-            <button style="background: var(--accent); border: none; padding: 0 15px; color: white; cursor: pointer; font-size:0.8rem;">→</button>
+          <p class="newsletter-text">Subscribe to receive poetic musings & latest verses in your inbox.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="your@email.com">
+            <button><i class="fas fa-paper-plane"></i> Subscribe</button>
           </div>
         </div>
+
       </div>
+
       <div class="footer-bottom">
-        <span>© 2026 Mehfil — Crafted with ❤️ for poetry lovers.</span>
-        <div style="display: flex; gap: 1rem;">
-          <a href="#" style="color: #A28976; text-decoration: none;">गोपनीयता</a>
-          <a href="#" style="color: #A28976; text-decoration: none;">संपर्क</a>
+        <span>© 2026 Mehfil — Crafted with <span class="heart-beat">❤️</span> for poetry lovers.</span>
+        <div class="footer-bottom-links">
+          <a href="#">गोपनीयता नीति</a>
+          <a href="#">नियम एवं शर्तें</a>
+          <a href="#">संपर्क</a>
         </div>
       </div>
     </div>

@@ -13,8 +13,37 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Tiro+Devanagari+Hindi&family=Hind:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <!-- External Header CSS - can be reused across all pages -->
+  <link rel="stylesheet" href="header.css">
 
   <style>
+    /* ===== DISABLE BLUE SELECTION / HIGHLIGHT ON LINKS & INTERACTIVE ELEMENTS ===== */
+    a, button, .nav-links a, .action, .category, .follow-btn, .primary-btn, .secondary-btn, .write-btn, .newsletter-form button, .footer-links a, .poem-actions .action {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      outline: none;
+    }
+    
+    /* Remove default focus ring but keep accessibility outline for keyboard users (soft custom) */
+    a:focus-visible, button:focus-visible, .nav-links a:focus-visible, .action:focus-visible {
+      outline: 2px solid #C16A4B;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+    
+    /* Prevent blue selection background on double-click/text selection globally (optional) */
+    body {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* All original design preserved below (header styles removed) */
+
     * {
       margin: 0;
       padding: 0;
@@ -110,94 +139,6 @@
       z-index: 10000;
       transition: width 0.1s ease;
       border-radius: 0 2px 2px 0;
-    }
-
-    /* navbar */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(18px);
-      background: rgba(254, 249, 242, 0.7);
-      border-bottom: 1px solid var(--border-light);
-      transition: all 0.3s ease;
-    }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 0;
-    }
-
-    .logo {
-      font-size: 2rem;
-      /* font-family: 'Cormorant Garamond', serif; */
-      font-weight: 800;
-      background: linear-gradient(120deg, #C16A4B, #A84C2E);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      letter-spacing: -0.5px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      align-items: center;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      font-weight: 500;
-      color: var(--text-dark);
-      transition: 0.2s;
-      position: relative;
-      font-size: 1rem;
-    }
-
-    .nav-links a::before {
-      content: '';
-      position: absolute;
-      width: 0%;
-      height: 2px;
-      background: var(--accent);
-      bottom: -6px;
-      left: 0;
-      transition: 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    }
-
-    .nav-links a:hover {
-      color: var(--accent);
-    }
-
-    .nav-links a:hover::before {
-      width: 100%;
-    }
-
-    .nav-btn {
-      background: var(--accent);
-      padding: 12px 28px;
-      border-radius: 50px;
-      color: white;
-      font-weight: 600;
-      transition: all 0.3s;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 5px 12px rgba(193, 106, 75, 0.2);
-    }
-
-    .nav-btn:hover {
-      transform: translateY(-3px);
-      background: #A84C2E;
-      box-shadow: 0 12px 20px rgba(193, 106, 75, 0.3);
-    }
-
-    .menu-btn {
-      display: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: var(--accent);
     }
 
     /* section common */
@@ -840,31 +781,6 @@
         gap: 2rem;
       }
 
-      .nav-links {
-        display: none;
-      }
-
-      .menu-btn {
-        display: block;
-      }
-
-      .nav-links.active {
-        display: flex;
-        position: fixed;
-        top: 80px;
-        right: 0;
-        background: rgba(255, 248, 240, 0.98);
-        backdrop-filter: blur(25px);
-        width: 70%;
-        height: auto;
-        flex-direction: column;
-        padding: 2rem;
-        border-radius: 2rem 0 0 2rem;
-        box-shadow: -5px 10px 30px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        gap: 1.8rem;
-      }
-
       .hero-cards {
         display: flex;
         flex-direction: column;
@@ -1352,178 +1268,82 @@
       }
     }
   
-/* ===== Featured Cards Premium Design ===== */
-.poem-card{
-  position:relative;
-  overflow:hidden;
-  background:linear-gradient(135deg,#fffcf8,#fff7f0);
-  border:1px solid rgba(193,106,75,.15);
-}
-.poem-card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle at top right,rgba(193,106,75,.08),transparent 45%);
-  pointer-events:none;
-}
-.poem-card:nth-child(1){
-  background:linear-gradient(135deg,#fff8f8,#fff2f4);
-}
-.poem-card:nth-child(1)::after{
-  content:"❀";
-  position:absolute;
-  right:18px;
-  bottom:8px;
-  font-size:110px;
-  color:rgba(255,150,170,.12);
-}
-.poem-card:nth-child(2){
-  background:linear-gradient(135deg,#fafcff,#f1f5fb);
-}
-.poem-card:nth-child(2)::after{
-  content:"☾";
-  position:absolute;
-  right:20px;
-  bottom:10px;
-  font-size:110px;
-  color:rgba(120,130,170,.12);
-}
-.poem-card:nth-child(3){
-  background:linear-gradient(135deg,#fffdf8,#fff6e7);
-}
-.poem-card:nth-child(3)::after{
-  content:"❋";
-  position:absolute;
-  right:20px;
-  bottom:10px;
-  font-size:110px;
-  color:rgba(220,170,80,.12);
-}
-.poem-card .card-top-icon{
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
-  margin-bottom:18px;
-}
-.poem-card h3{position:relative;z-index:2}
-.poem-card p{position:relative;z-index:2}
+    /* ===== Featured Cards Premium Design ===== */
+    .poem-card{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(135deg,#fffcf8,#fff7f0);
+      border:1px solid rgba(193,106,75,.15);
+    }
+    .poem-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at top right,rgba(193,106,75,.08),transparent 45%);
+      pointer-events:none;
+    }
+    .poem-card:nth-child(1){
+      background:linear-gradient(135deg,#fff8f8,#fff2f4);
+    }
+    .poem-card:nth-child(1)::after{
+      content:"❀";
+      position:absolute;
+      right:18px;
+      bottom:8px;
+      font-size:110px;
+      color:rgba(255,150,170,.12);
+    }
+    .poem-card:nth-child(2){
+      background:linear-gradient(135deg,#fafcff,#f1f5fb);
+    }
+    .poem-card:nth-child(2)::after{
+      content:"☾";
+      position:absolute;
+      right:20px;
+      bottom:10px;
+      font-size:110px;
+      color:rgba(120,130,170,.12);
+    }
+    .poem-card:nth-child(3){
+      background:linear-gradient(135deg,#fffdf8,#fff6e7);
+    }
+    .poem-card:nth-child(3)::after{
+      content:"❋";
+      position:absolute;
+      right:20px;
+      bottom:10px;
+      font-size:110px;
+      color:rgba(220,170,80,.12);
+    }
+    .poem-card .card-top-icon{
+      width:58px;
+      height:58px;
+      border-radius:50%;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      box-shadow:0 10px 25px rgba(0,0,0,.08);
+      margin-bottom:18px;
+    }
+    .poem-card h3{position:relative;z-index:2}
+    .poem-card p{position:relative;z-index:2}
 
 
-.poem-card-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-}
-.poem-card .card-top-icon{
-margin-bottom:0 !important;
-flex-shrink:0;
-}
-.poem-card .mood{
-margin-bottom:0 !important;
-}
-
-
-/* ===== MODERN MOBILE MENU ===== */
-.mobile-overlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.35);
-backdrop-filter:blur(4px);
-opacity:0;
-visibility:hidden;
-transition:.35s;
-z-index:998;
-}
-.mobile-overlay.active{opacity:1;visibility:visible;}
-
-@media (max-width:680px){
-.nav-links.active{
-top:12px !important;
-right:12px !important;
-width:calc(100% - 24px) !important;
-height:auto !important;
-padding:28px !important;
-border-radius:32px !important;
-background:linear-gradient(135deg,#fffdfb,#fff6f0) !important;
-border:1px solid rgba(193,106,75,.15);
-box-shadow:0 25px 60px rgba(0,0,0,.15);
-gap:0 !important;
-overflow:hidden;
-}
-
-.nav-links.active a{
-width:100%;
-padding:18px 16px;
-border-radius:18px;
-font-size:1.05rem;
-font-weight:600;
-display:flex;
-align-items:center;
-justify-content:center;
-background:rgba(193,106,75,.04);
-margin:6px 0;
-}
-
-.nav-links.active a:hover{
-background:#C16A4B;
-color:#fff;
-transform:translateX(4px);
-}
-
-.menu-btn{
-width:48px;
-height:48px;
-border-radius:14px;
-display:flex !important;
-align-items:center;
-justify-content:center;
-background:rgba(193,106,75,.08);
-border:1px solid rgba(193,106,75,.15);
-}
-
-.nav-btn{
-padding:12px 20px;
-font-size:.9rem;
-}
-}
-
-
-/* ===== REF STYLE WRITE BUTTON ===== */
-.write-btn{
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-@media (max-width:680px){
-.write-btn{
-width:48px;
-height:48px;
-padding:0 !important;
-border-radius:14px;
-justify-content:center;
-box-shadow:none;
-background:rgba(193,106,75,.08) !important;
-border:1px solid rgba(193,106,75,.15);
-color:#C16A4B;
-}
-.write-btn span{
-display:none;
-}
-.write-btn i{
-font-size:1.25rem;
-margin:0;
-}
-}
-
-
+    .poem-card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+    }
+    .poem-card .card-top-icon{
+      margin-bottom:0 !important;
+      flex-shrink:0;
+    }
+    .poem-card .mood{
+      margin-bottom:0 !important;
+    }
 </style>
 </head>
 
@@ -1860,14 +1680,15 @@ margin:0;
       }
     });
 
-    // Interactive actions
-    const btns = document.querySelectorAll('.primary-btn, .secondary-btn, .follow-btn, .action, .newsletter-form button');
+    // Interactive actions with no default highlight feedback
+    const btns = document.querySelectorAll('.primary-btn, .secondary-btn, .follow-btn, .action, .newsletter-form button, .category, .footer-links a, .social-icons a');
     btns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         if (btn.innerText.includes('Follow')) alert("✨ You're now following this writer!");
         else if (btn.innerText.includes('Like')) alert("❤️ You liked this poem!");
         else if (btn.innerText.includes('Subscribe')) alert("📖 Thank you! You'll receive beautiful poetry soon.");
+        else if (btn.classList.contains('category')) alert(`✨ Explore ${btn.innerText} poetry!`);
         else alert("✨ Mehfil welcomes your emotion!");
       });
     });

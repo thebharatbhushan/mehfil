@@ -1,781 +1,813 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>मेहफ़िल — Begin Your Poetic Journey | Sign Up</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>मेहफ़िल — Begin Your Poetic Journey | Sign Up</title>
 
-<!-- Preconnect & Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Tiro+Devanagari+Hindi&family=Hind:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Tiro+Devanagari+Hindi&family=Hind:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    background: #FEF9F2;
-    color: #2C241F;
-    font-family: 'Inter', 'Noto Serif Devanagari', serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow-x: hidden;
-    padding: 2rem 1.5rem;
-  }
-
-  /* floating orbs (same as main theme) */
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(90px);
-    z-index: -2;
-    opacity: 0.5;
-    animation: slowDrift 22s infinite alternate ease-in-out;
-  }
-
-  .orb-1 {
-    width: 500px;
-    height: 500px;
-    background: #FFD7C2;
-    top: -150px;
-    left: -10%;
-  }
-
-  .orb-2 {
-    width: 550px;
-    height: 550px;
-    background: #DDC7B0;
-    bottom: -100px;
-    right: -5%;
-    animation-delay: -5s;
-  }
-
-  .orb-3 {
-    width: 380px;
-    height: 380px;
-    background: #F7E1CF;
-    top: 40%;
-    left: 70%;
-    animation-duration: 18s;
-  }
-
-  @keyframes slowDrift {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(40px, -40px) scale(1.2); }
-  }
-
-  /* back link */
-  .back-home {
-    position: fixed;
-    top: 28px;
-    left: 28px;
-    z-index: 100;
-    text-decoration: none;
-    font-weight: 500;
-    color: #7D5A48;
-    background: rgba(255, 252, 245, 0.7);
-    backdrop-filter: blur(8px);
-    padding: 10px 20px;
-    border-radius: 60px;
-    font-size: 0.9rem;
-    border: 1px solid rgba(193,106,75,0.2);
-    transition: all 0.3s ease;
-    font-family: 'Inter', sans-serif;
-  }
-  .back-home i {
-    margin-right: 8px;
-    font-size: 0.85rem;
-  }
-  .back-home:hover {
-    background: var(--accent, #C16A4B);
-    color: white;
-    border-color: var(--accent, #C16A4B);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(193,106,75,0.2);
-  }
-
-  /* main card container */
-  .signup-container {
-    width: 100%;
-    max-width: 1320px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .glass-card {
-    background: rgba(255, 253, 248, 0.92);
-    backdrop-filter: blur(20px);
-    border-radius: 3rem;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    box-shadow: 0 35px 65px -20px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(193, 106, 75, 0.1);
-    transition: transform 0.3s ease;
-    width: 100%;
-    max-width: 1120px;
-  }
-
-  /* left artistic side */
-  .signup-art {
-    background: linear-gradient(135deg, #fef0e8 0%, #fbe6da 100%);
-    padding: 3rem 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .signup-art::before {
-    content: "❦";
-    font-size: 18rem;
-    position: absolute;
-    bottom: -40px;
-    left: -40px;
-    opacity: 0.08;
-    font-family: serif;
-    pointer-events: none;
-    transform: rotate(-12deg);
-  }
-
-  .signup-art::after {
-    content: "🪶";
-    font-size: 10rem;
-    position: absolute;
-    top: 20px;
-    right: -30px;
-    opacity: 0.07;
-    pointer-events: none;
-  }
-
-  .art-quote {
-    max-width: 320px;
-    position: relative;
-    z-index: 2;
-  }
-
-  .art-quote i {
-    font-size: 3rem;
-    color: #C16A4B;
-    margin-bottom: 1rem;
-    opacity: 0.7;
-  }
-
-  .art-quote h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin: 1rem 0;
-    background: linear-gradient(120deg, #2C241F, #9E4F36);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-  }
-
-  .art-quote p {
-    color: #5f4b3c;
-    line-height: 1.7;
-    font-size: 1rem;
-    font-style: italic;
-  }
-
-  .art-quote .urdu-line {
-    font-family: 'Tiro Devanagari Hindi', serif;
-    font-size: 1.25rem;
-    margin-top: 1.5rem;
-    border-top: 1px dashed rgba(193,106,75,0.3);
-    padding-top: 1.5rem;
-    color: #936E56;
-  }
-
-  /* right form area */
-  .signup-form-wrapper {
-    padding: 3rem 2.5rem;
-    background: rgba(255, 252, 245, 0.75);
-  }
-
-  .brand-tag {
-    margin-bottom: 1rem;
-  }
-
-  .brand-tag .logo-icon {
-    font-size: 2rem;
-    background: linear-gradient(135deg, #C16A4B, #A84C2E);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-  }
-
-  .form-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.4rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #2C241F;
-  }
-
-  .form-sub {
-    color: #756256;
-    margin-bottom: 2rem;
-    border-left: 2px solid #C16A4B;
-    padding-left: 12px;
-    font-size: 0.9rem;
-  }
-
-  /* two column row for name fields */
-  .name-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .input-group {
-    margin-bottom: 1.5rem;
-    position: relative;
-  }
-
-  .input-group i {
-    position: absolute;
-    left: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #CBBBAE;
-    font-size: 1.1rem;
-    transition: 0.2s;
-    pointer-events: none;
-  }
-
-  .input-group input, .input-group select {
-    width: 100%;
-    padding: 16px 20px 16px 48px;
-    background: #FFFFFF;
-    border: 1px solid #e7dbcf;
-    border-radius: 60px;
-    font-size: 1rem;
-    font-family: 'Inter', sans-serif;
-    outline: none;
-    transition: all 0.25s ease;
-    color: #2C241F;
-  }
-
-  .input-group select {
-    appearance: none;
-    padding: 16px 20px 16px 48px;
-    cursor: pointer;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23C16A4B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-    background-repeat: no-repeat;
-    background-position: right 20px center;
-  }
-
-  .input-group input:focus, .input-group select:focus {
-    border-color: #C16A4B;
-    box-shadow: 0 0 0 3px rgba(193,106,75,0.15);
-  }
-
-  .input-group input:focus + i, .input-group select:focus + i {
-    color: #C16A4B;
-  }
-
-  .password-strength {
-    font-size: 0.7rem;
-    margin-top: 6px;
-    margin-left: 18px;
-    color: #A28976;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .strength-bar {
-    display: inline-flex;
-    gap: 4px;
-    align-items: center;
-  }
-
-  .strength-segment {
-    width: 30px;
-    height: 4px;
-    background: #E2D2C4;
-    border-radius: 4px;
-    transition: all 0.2s;
-  }
-
-  .checkbox {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 1rem 0 1.8rem 0;
-    font-size: 0.8rem;
-    color: #5f4b3c;
-  }
-
-  .checkbox input {
-    accent-color: #C16A4B;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-  }
-
-  .checkbox a {
-    color: #C16A4B;
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .checkbox a:hover {
-    text-decoration: underline;
-  }
-
-  .signup-btn {
-    width: 100%;
-    background: #C16A4B;
-    border: none;
-    padding: 14px;
-    border-radius: 60px;
-    color: white;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    box-shadow: 0 8px 18px rgba(193,106,75,0.2);
-    margin-bottom: 1.8rem;
-  }
-
-  .signup-btn:hover {
-    background: #A84C2E;
-    transform: translateY(-3px);
-    box-shadow: 0 15px 25px -6px rgba(193,106,75,0.4);
-  }
-
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 1.8rem 0;
-    color: #CBBBAE;
-    font-size: 0.8rem;
-  }
-
-  .divider span {
-    flex: 1;
-    height: 1px;
-    background: #e2d2c4;
-  }
-
-  .social-signup {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2rem;
-  }
-
-  .social-btn {
-    background: white;
-    border: 1px solid #e2d2c4;
-    padding: 10px;
-    border-radius: 60px;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    color: #7D5A48;
-    transition: 0.25s;
-    cursor: pointer;
-  }
-
-  .social-btn:hover {
-    background: #FEF3EA;
-    transform: translateY(-3px);
-    border-color: #C16A4B;
-    color: #C16A4B;
-  }
-
-  .login-prompt {
-    text-align: center;
-    font-size: 0.9rem;
-    border-top: 1px solid rgba(200,180,160,0.3);
-    padding-top: 1.8rem;
-  }
-
-  .login-prompt a {
-    color: #C16A4B;
-    text-decoration: none;
-    font-weight: 600;
-    margin-left: 5px;
-  }
-
-  .login-prompt a:hover {
-    text-decoration: underline;
-  }
-
-  .floating-ink {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    font-size: 70px;
-    opacity: 0.03;
-    pointer-events: none;
-    transform: rotate(10deg);
-  }
-
-  @media (max-width: 880px) {
-    .glass-card {
-      grid-template-columns: 1fr;
-      max-width: 540px;
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
-    .signup-art {
-      padding: 2rem;
-    }
-    .art-quote h2 {
-      font-size: 2rem;
-    }
-    .signup-form-wrapper {
-      padding: 2rem 1.8rem;
-    }
-    .form-title {
-      font-size: 2rem;
-    }
+
     body {
-      padding: 1rem;
+      background: #FEF9F2;
+      color: #2C241F;
+      font-family: 'Inter', 'Noto Serif Devanagari', serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+      padding: 2rem 1.5rem;
     }
+
+    /* floating orbs (same as main theme) */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: -2;
+      opacity: 0.5;
+      animation: slowDrift 22s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: #FFD7C2;
+      top: -150px;
+      left: -10%;
+    }
+
+    .orb-2 {
+      width: 550px;
+      height: 550px;
+      background: #DDC7B0;
+      bottom: -100px;
+      right: -5%;
+      animation-delay: -5s;
+    }
+
+    .orb-3 {
+      width: 380px;
+      height: 380px;
+      background: #F7E1CF;
+      top: 40%;
+      left: 70%;
+      animation-duration: 18s;
+    }
+
+    @keyframes slowDrift {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(40px, -40px) scale(1.2);
+      }
+    }
+
+    /* back link */
     .back-home {
-      top: 16px;
-      left: 16px;
-      font-size: 0.8rem;
-      padding: 8px 16px;
+      position: fixed;
+      top: 28px;
+      left: 28px;
+      z-index: 100;
+      text-decoration: none;
+      font-weight: 500;
+      color: #7D5A48;
+      background: rgba(255, 252, 245, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 10px 20px;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      border: 1px solid rgba(193, 106, 75, 0.2);
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
     }
-    .name-row {
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-  }
 
-  @media (max-width: 480px) {
+    .back-home i {
+      margin-right: 8px;
+      font-size: 0.85rem;
+    }
+
+    .back-home:hover {
+      background: var(--accent, #C16A4B);
+      color: white;
+      border-color: var(--accent, #C16A4B);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(193, 106, 75, 0.2);
+    }
+
+    /* main card container */
+    .signup-container {
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-card {
+      background: rgba(255, 253, 248, 0.92);
+      backdrop-filter: blur(20px);
+      border-radius: 3rem;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-shadow: 0 35px 65px -20px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(193, 106, 75, 0.1);
+      transition: transform 0.3s ease;
+      width: 100%;
+      max-width: 1120px;
+    }
+
+    /* left artistic side */
+    .signup-art {
+      background: linear-gradient(135deg, #fef0e8 0%, #fbe6da 100%);
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .signup-art::before {
+      content: "❦";
+      font-size: 18rem;
+      position: absolute;
+      bottom: -40px;
+      left: -40px;
+      opacity: 0.08;
+      font-family: serif;
+      pointer-events: none;
+      transform: rotate(-12deg);
+    }
+
+    .signup-art::after {
+      content: "🪶";
+      font-size: 10rem;
+      position: absolute;
+      top: 20px;
+      right: -30px;
+      opacity: 0.07;
+      pointer-events: none;
+    }
+
+    .art-quote {
+      max-width: 320px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .art-quote i {
+      font-size: 3rem;
+      color: #C16A4B;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+
+    .art-quote h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 1rem 0;
+      background: linear-gradient(120deg, #2C241F, #9E4F36);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .art-quote p {
+      color: #5f4b3c;
+      line-height: 1.7;
+      font-size: 1rem;
+      font-style: italic;
+    }
+
+    .art-quote .urdu-line {
+      font-family: 'Tiro Devanagari Hindi', serif;
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+      border-top: 1px dashed rgba(193, 106, 75, 0.3);
+      padding-top: 1.5rem;
+      color: #936E56;
+    }
+
+    /* right form area */
     .signup-form-wrapper {
-      padding: 1.8rem;
+      padding: 3rem 2.5rem;
+      background: rgba(255, 252, 245, 0.75);
     }
+
+    .brand-tag {
+      margin-bottom: 1rem;
+    }
+
+    .brand-tag .logo-icon {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #C16A4B, #A84C2E);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .form-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #2C241F;
+    }
+
+    .form-sub {
+      color: #756256;
+      margin-bottom: 2rem;
+      border-left: 2px solid #C16A4B;
+      padding-left: 12px;
+      font-size: 0.9rem;
+    }
+
+    /* two column row for name fields */
+    .name-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #CBBBAE;
+      font-size: 1.1rem;
+      transition: 0.2s;
+      pointer-events: none;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 16px 20px 16px 48px;
+      background: #FFFFFF;
+      border: 1px solid #e7dbcf;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: all 0.25s ease;
+      color: #2C241F;
+    }
+
+    .input-group select {
+      appearance: none;
+      padding: 16px 20px 16px 48px;
+      cursor: pointer;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23C16A4B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+      background-repeat: no-repeat;
+      background-position: right 20px center;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: #C16A4B;
+      box-shadow: 0 0 0 3px rgba(193, 106, 75, 0.15);
+    }
+
+    .input-group input:focus+i,
+    .input-group select:focus+i {
+      color: #C16A4B;
+    }
+
+    .password-strength {
+      font-size: 0.7rem;
+      margin-top: 6px;
+      margin-left: 18px;
+      color: #A28976;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .strength-bar {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .strength-segment {
+      width: 30px;
+      height: 4px;
+      background: #E2D2C4;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 1rem 0 1.8rem 0;
+      font-size: 0.8rem;
+      color: #5f4b3c;
+    }
+
+    .checkbox input {
+      accent-color: #C16A4B;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .checkbox a {
+      color: #C16A4B;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .checkbox a:hover {
+      text-decoration: underline;
+    }
+
+    .signup-btn {
+      width: 100%;
+      background: #C16A4B;
+      border: none;
+      padding: 14px;
+      border-radius: 60px;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 18px rgba(193, 106, 75, 0.2);
+      margin-bottom: 1.8rem;
+    }
+
+    .signup-btn:hover {
+      background: #A84C2E;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 25px -6px rgba(193, 106, 75, 0.4);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 1.8rem 0;
+      color: #CBBBAE;
+      font-size: 0.8rem;
+    }
+
+    .divider span {
+      flex: 1;
+      height: 1px;
+      background: #e2d2c4;
+    }
+
+    .social-signup {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
     .social-btn {
-      width: 42px;
-      height: 42px;
+      background: white;
+      border: 1px solid #e2d2c4;
+      padding: 10px;
+      border-radius: 60px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #7D5A48;
+      transition: 0.25s;
+      cursor: pointer;
     }
-  }
 
-  .fade-in {
-    animation: fadeUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-  }
+    .social-btn:hover {
+      background: #FEF3EA;
+      transform: translateY(-3px);
+      border-color: #C16A4B;
+      color: #C16A4B;
+    }
 
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
+    .login-prompt {
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(200, 180, 160, 0.3);
+      padding-top: 1.8rem;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+
+    .login-prompt a {
+      color: #C16A4B;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 5px;
     }
-  }
-</style>
+
+    .login-prompt a:hover {
+      text-decoration: underline;
+    }
+
+    .floating-ink {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 70px;
+      opacity: 0.03;
+      pointer-events: none;
+      transform: rotate(10deg);
+    }
+
+    @media (max-width: 880px) {
+      .glass-card {
+        grid-template-columns: 1fr;
+        max-width: 540px;
+      }
+
+      .signup-art {
+        padding: 2rem;
+      }
+
+      .art-quote h2 {
+        font-size: 2rem;
+      }
+
+      .signup-form-wrapper {
+        padding: 2rem 1.8rem;
+      }
+
+      .form-title {
+        font-size: 2rem;
+      }
+
+      body {
+        padding: 1rem;
+      }
+
+      .back-home {
+        top: 16px;
+        left: 16px;
+        font-size: 0.8rem;
+        padding: 8px 16px;
+      }
+
+      .name-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .signup-form-wrapper {
+        padding: 1.8rem;
+      }
+
+      .social-btn {
+        width: 42px;
+        height: 42px;
+      }
+    }
+
+    .fade-in {
+      animation: fadeUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
-<a href="./index.html" class="back-home" id="backHomeBtn"><i class="fas fa-feather-alt"></i> वापस मेहफ़िल</a>
+  <a href="./index.html" class="back-home" id="backHomeBtn"><i class="fas fa-feather-alt"></i> वापस मेहफ़िल</a>
 
-<div class="signup-container">
-  <div class="glass-card fade-in">
-    <!-- left panel : poetic inspiration -->
-    <div class="signup-art">
-      <div class="art-quote">
-        <i class="fas fa-pen-fancy"></i>
-        <h2>नई रचना का आग़ाज़</h2>
-        <p>“हर शख्स के अंदर एक कवि छिपा होता है — बस उसे उड़ान चाहिए।”</p>
-        <div class="urdu-line">
-          <i class="fas fa-feather-alt"></i>  अपनी कलम को पंख दें
+  <div class="signup-container">
+    <div class="glass-card fade-in">
+      <!-- left panel : poetic inspiration -->
+      <div class="signup-art">
+        <div class="art-quote">
+          <i class="fas fa-pen-fancy"></i>
+          <h2>नई रचना का आग़ाज़</h2>
+          <p>“हर शख्स के अंदर एक कवि छिपा होता है — बस उसे उड़ान चाहिए।”</p>
+          <div class="urdu-line">
+            <i class="fas fa-feather-alt"></i> अपनी कलम को पंख दें
+          </div>
+          <div style="margin-top: 2rem; font-size: 0.8rem; color:#AA8D74;">
+            <i class="fas fa-quote-left"></i> शब्दों की नई महफ़िल सजाने का वादा
+          </div>
         </div>
-        <div style="margin-top: 2rem; font-size: 0.8rem; color:#AA8D74;">
-          <i class="fas fa-quote-left"></i> शब्दों की नई महफ़िल सजाने का वादा
-        </div>
+        <div class="floating-ink">✍️</div>
       </div>
-      <div class="floating-ink">✍️</div>
-    </div>
 
-    <!-- right panel : signup form -->
-    <div class="signup-form-wrapper">
-      <div class="brand-tag">
-        <i class="fas fa-feather-alt logo-icon"></i>
+      <!-- right panel : signup form -->
+      <div class="signup-form-wrapper">
+        <div class="brand-tag">
+          <i class="fas fa-feather-alt logo-icon"></i>
+        </div>
+        <h2 class="form-title">खाता बनाएँ</h2>
+        <p class="form-sub">महफ़िल का हिस्सा बनें और अपनी रचनात्मकता को नई पहचान दें।</p>
+
+        <form id="signupForm" action="#" method="post">
+          <div class="name-row">
+            <div class="input-group">
+              <i class="fas fa-user"></i>
+              <input type="text" id="firstName" placeholder="पहला नाम / First Name" required autocomplete="given-name">
+            </div>
+            <div class="input-group">
+              <i class="fas fa-user-friends"></i>
+              <input type="text" id="lastName" placeholder="अंतिम नाम / Last Name" autocomplete="family-name">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="ईमेल पता / Email Address" required autocomplete="email">
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="पासवर्ड बनाएँ / Create Password" required
+              autocomplete="new-password">
+          </div>
+          <div class="password-strength" id="pwdStrengthWrapper">
+            <span>पासवर्ड की मज़बूती:</span>
+            <div class="strength-bar">
+              <span class="strength-segment" id="seg1"></span>
+              <span class="strength-segment" id="seg2"></span>
+              <span class="strength-segment" id="seg3"></span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-check-circle"></i>
+            <input type="password" id="confirmPassword" placeholder="पासवर्ड पुष्टि करें / Confirm Password" required
+              autocomplete="off">
+          </div>
+
+          <div class="input-group">
+            <i class="fas fa-globe"></i>
+            <select id="languagePref">
+              <option value="hi">हिन्दी / Hindi</option>
+              <option value="ur">उर्दू / Urdu</option>
+              <option value="en" selected>English</option>
+              <option value="bilingual">द्विभाषी / Bilingual</option>
+            </select>
+            <i class="fas fa-language" style="pointer-events: none;"></i>
+          </div>
+
+          <div class="checkbox">
+            <input type="checkbox" id="termsCheck" required>
+            <label for="termsCheck">मैं <a href="#" id="termsLink">मेहफ़िल के नियम</a> और साहित्यिक मर्यादाओं से सहमत
+              हूँ।</label>
+          </div>
+
+          <button type="submit" class="signup-btn"><i class="fas fa-feather-alt"></i> नई शुरुआत करें</button>
+
+          <div class="divider">
+            <span></span> या साइनअप करें <span></span>
+          </div>
+
+          <div class="social-signup">
+            <div class="social-btn" id="googleSignup"><i class="fab fa-google"></i></div>
+            <div class="social-btn" id="githubSignup"><i class="fab fa-github"></i></div>
+            <div class="social-btn" id="twitterSignup"><i class="fab fa-twitter"></i></div>
+          </div>
+
+          <div class="login-prompt">
+            पहले से सदस्य हैं? <a href="./login.html" id="loginRedirect">प्रवेश करें →</a>
+          </div>
+        </form>
       </div>
-      <h2 class="form-title">खाता बनाएँ</h2>
-      <p class="form-sub">महफ़िल का हिस्सा बनें और अपनी रचनात्मकता को नई पहचान दें।</p>
-
-      <form id="signupForm" action="#" method="post">
-        <div class="name-row">
-          <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" id="firstName" placeholder="पहला नाम / First Name" required autocomplete="given-name">
-          </div>
-          <div class="input-group">
-            <i class="fas fa-user-friends"></i>
-            <input type="text" id="lastName" placeholder="अंतिम नाम / Last Name" autocomplete="family-name">
-          </div>
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-envelope"></i>
-          <input type="email" id="email" placeholder="ईमेल पता / Email Address" required autocomplete="email">
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-lock"></i>
-          <input type="password" id="password" placeholder="पासवर्ड बनाएँ / Create Password" required autocomplete="new-password">
-        </div>
-        <div class="password-strength" id="pwdStrengthWrapper">
-          <span>पासवर्ड की मज़बूती:</span>
-          <div class="strength-bar">
-            <span class="strength-segment" id="seg1"></span>
-            <span class="strength-segment" id="seg2"></span>
-            <span class="strength-segment" id="seg3"></span>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-check-circle"></i>
-          <input type="password" id="confirmPassword" placeholder="पासवर्ड पुष्टि करें / Confirm Password" required autocomplete="off">
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-globe"></i>
-          <select id="languagePref">
-            <option value="hi">हिन्दी / Hindi</option>
-            <option value="ur">उर्दू / Urdu</option>
-            <option value="en" selected>English</option>
-            <option value="bilingual">द्विभाषी / Bilingual</option>
-          </select>
-          <i class="fas fa-language" style="pointer-events: none;"></i>
-        </div>
-
-        <div class="checkbox">
-          <input type="checkbox" id="termsCheck" required>
-          <label for="termsCheck">मैं <a href="#" id="termsLink">मेहफ़िल के नियम</a> और साहित्यिक मर्यादाओं से सहमत हूँ।</label>
-        </div>
-
-        <button type="submit" class="signup-btn"><i class="fas fa-feather-alt"></i> नई शुरुआत करें</button>
-
-        <div class="divider">
-          <span></span> या साइनअप करें <span></span>
-        </div>
-
-        <div class="social-signup">
-          <div class="social-btn" id="googleSignup"><i class="fab fa-google"></i></div>
-          <div class="social-btn" id="githubSignup"><i class="fab fa-github"></i></div>
-          <div class="social-btn" id="twitterSignup"><i class="fab fa-twitter"></i></div>
-        </div>
-
-        <div class="login-prompt">
-          पहले से सदस्य हैं? <a href="./login.html" id="loginRedirect">प्रवेश करें →</a>
-        </div>
-      </form>
     </div>
   </div>
-</div>
 
-<!-- toast notification -->
-<div id="notificationToast" style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(100px); background: #2C241F; color: #F1E2D2; padding: 12px 28px; border-radius: 60px; font-size: 0.85rem; backdrop-filter: blur(10px); z-index: 2000; transition: 0.3s cubic-bezier(0.2,0.9,0.4,1.1); pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: Inter; border: 1px solid rgba(193,106,75,0.3);">
-  <i class="fas fa-feather-alt" style="margin-right: 8px;"></i> <span id="toastMsg">✨ महफ़िल में आपका स्वागत है</span>
-</div>
+  <!-- toast notification -->
+  <div id="notificationToast"
+    style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(100px); background: #2C241F; color: #F1E2D2; padding: 12px 28px; border-radius: 60px; font-size: 0.85rem; backdrop-filter: blur(10px); z-index: 2000; transition: 0.3s cubic-bezier(0.2,0.9,0.4,1.1); pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: Inter; border: 1px solid rgba(193,106,75,0.3);">
+    <i class="fas fa-feather-alt" style="margin-right: 8px;"></i> <span id="toastMsg">✨ महफ़िल में आपका स्वागत है</span>
+  </div>
 
-<script>
-  // toast helper
-  function showToast(message, isError = false) {
-    const toast = document.getElementById('notificationToast');
-    const msgSpan = document.getElementById('toastMsg');
-    msgSpan.innerText = message;
-    if (isError) {
-      toast.style.background = "#7D3C2A";
-      toast.style.color = "#FFEAD2";
-    } else {
-      toast.style.background = "#2C241F";
-      toast.style.color = "#F1E2D2";
+  <script>
+    // toast helper
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('notificationToast');
+      const msgSpan = document.getElementById('toastMsg');
+      msgSpan.innerText = message;
+      if (isError) {
+        toast.style.background = "#7D3C2A";
+        toast.style.color = "#FFEAD2";
+      } else {
+        toast.style.background = "#2C241F";
+        toast.style.color = "#F1E2D2";
+      }
+      toast.style.transform = "translateX(-50%) translateY(0px)";
+      setTimeout(() => {
+        toast.style.transform = "translateX(-50%) translateY(100px)";
+      }, 2800);
     }
-    toast.style.transform = "translateX(-50%) translateY(0px)";
-    setTimeout(() => {
-      toast.style.transform = "translateX(-50%) translateY(100px)";
-    }, 2800);
-  }
 
-  // back to home
-  const backBtn = document.getElementById('backHomeBtn');
-  backBtn.addEventListener('click', (e) => {
-    // e.preventDefault();
-    showToast("🍂 मुख्य महफ़िल में लौट रहे हैं...", false);
-    // setTimeout(() => {
-    //   alert("✨ आपको मुखपृष्ठ पर ले जाया जाएगा। (simulated navigation to main page)");
-    // }, 500);
-  });
-
-  // password strength indicator
-  const pwdInput = document.getElementById('password');
-  const seg1 = document.getElementById('seg1');
-  const seg2 = document.getElementById('seg2');
-  const seg3 = document.getElementById('seg3');
-
-  function updateStrength(password) {
-    let strength = 0;
-    if (password.length >= 6) strength++;
-    if (password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
-    if (password.length >= 10 && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) strength++;
-    if (strength >= 3) strength = 3;
-    else if (strength === 2) strength = 2;
-    else if (strength === 1) strength = 1;
-    else strength = 0;
-
-    const segments = [seg1, seg2, seg3];
-    const colors = ['#E2D2C4', '#E2D2C4', '#E2D2C4'];
-    if (strength >= 1) colors[0] = '#C16A4B';
-    if (strength >= 2) colors[1] = '#C16A4B';
-    if (strength >= 3) colors[2] = '#9E4F36';
-    segments.forEach((seg, idx) => {
-      seg.style.background = colors[idx];
+    // back to home
+    const backBtn = document.getElementById('backHomeBtn');
+    backBtn.addEventListener('click', (e) => {
+      // e.preventDefault();
+      showToast("🍂 मुख्य महफ़िल में लौट रहे हैं...", false);
+      // setTimeout(() => {
+      //   alert("✨ आपको मुखपृष्ठ पर ले जाया जाएगा। (simulated navigation to main page)");
+      // }, 500);
     });
-    return strength;
-  }
 
-  pwdInput.addEventListener('input', function() {
-    updateStrength(this.value);
-  });
+    // password strength indicator
+    const pwdInput = document.getElementById('password');
+    const seg1 = document.getElementById('seg1');
+    const seg2 = document.getElementById('seg2');
+    const seg3 = document.getElementById('seg3');
 
-  // form validation and poetic signup
-  const signupForm = document.getElementById('signupForm');
-  const firstName = document.getElementById('firstName');
-  const lastName = document.getElementById('lastName');
-  const email = document.getElementById('email');
-  const confirmPwd = document.getElementById('confirmPassword');
-  const termsCheck = document.getElementById('termsCheck');
+    function updateStrength(password) {
+      let strength = 0;
+      if (password.length >= 6) strength++;
+      if (password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
+      if (password.length >= 10 && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) strength++;
+      if (strength >= 3) strength = 3;
+      else if (strength === 2) strength = 2;
+      else if (strength === 1) strength = 1;
+      else strength = 0;
 
-  signupForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const fname = firstName.value.trim();
-    const lname = lastName.value.trim();
-    const mail = email.value.trim();
-    const pwd = pwdInput.value;
-    const confirm = confirmPwd.value;
-    
-    if (!fname) {
-      showToast("❁ कृपया अपना पहला नाम लिखें — हर रचना की पहचान ज़रूरी है।", true);
-      firstName.focus();
-      return;
+      const segments = [seg1, seg2, seg3];
+      const colors = ['#E2D2C4', '#E2D2C4', '#E2D2C4'];
+      if (strength >= 1) colors[0] = '#C16A4B';
+      if (strength >= 2) colors[1] = '#C16A4B';
+      if (strength >= 3) colors[2] = '#9E4F36';
+      segments.forEach((seg, idx) => {
+        seg.style.background = colors[idx];
+      });
+      return strength;
     }
-    if (!mail) {
-      showToast("✉️ ईमेल के बिना महफ़िल अधूरी है, कृपया ईमेल दर्ज करें।", true);
-      email.focus();
-      return;
-    }
-    if (!mail.includes('@')) {
-      showToast("📬 एक सही ईमेल पता दें, जैसे कोई सही अल्फ़ाज़।", true);
-      return;
-    }
-    if (!pwd) {
-      showToast("🔒 एक रचनात्मक पासवर्ड बनाएँ, आपकी सुरक्षा के लिए।", true);
-      pwdInput.focus();
-      return;
-    }
-    if (pwd !== confirm) {
-      showToast("⚠️ पासवर्ड और पुष्टि पासवर्ड एक जैसे नहीं हैं। फिर से लिखें।", true);
-      confirmPwd.focus();
-      return;
-    }
-    if (pwd.length < 6) {
-      showToast("🪶 पासवर्ड कम से कम 6 अक्षरों का होना चाहिए — रचना की तरह मज़बूत।", true);
-      return;
-    }
-    if (!termsCheck.checked) {
-      showToast("📜 कृपया नियमों और मर्यादाओं को स्वीकार करें — यह महफ़िल का संस्कार है।", true);
-      return;
-    }
-    
-    // success: poetic welcome
-    let displayName = fname;
-    if (lname) displayName += " " + lname;
-    showToast(`✨ धन्यवाद ${displayName}! आपकी रचनात्मक यात्रा शुरू हो चुकी है। ❤️`, false);
-    setTimeout(() => {
-      alert(`🌸 सादर स्वागत, ${displayName}!\n\nआप अब मेहफ़िल के सदस्य हैं। अपनी पहली कविता साझा करने के लिए तैयार हो जाइए।\n\n(डेमो साइनअप सफल रहा)`);
-      // optional reset form or redirect simulation
-      signupForm.reset();
-      updateStrength('');
-      if (seg1) seg1.style.background = '#E2D2C4';
-      if (seg2) seg2.style.background = '#E2D2C4';
-      if (seg3) seg3.style.background = '#E2D2C4';
-    }, 600);
-  });
 
-  // Terms link demo
-  const termsLink = document.getElementById('termsLink');
-  termsLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    showToast("📖 मेहफ़िल के नियम: सम्मान, रचनात्मकता और साहित्यिक सत्यता। विवरण जल्द ही।", false);
-  });
-
-  // social signup interactions
-  document.getElementById('googleSignup').addEventListener('click', () => showToast("📜 गूगल साइनअप जल्द आ रहा है। तब तक ईमेल से जुड़ें।", false));
-  document.getElementById('githubSignup').addEventListener('click', () => showToast("🐙 गिटहब से जुड़ें — कोड और कविता दोनों के लिए जगह है।", false));
-  document.getElementById('twitterSignup').addEventListener('click', () => showToast("🕊️ ट्विटर के माध्यम से महफ़िल में शामिल हों, जल्द सुविधा सक्रिय होगी।", false));
-
-  // redirect to login
-  const loginRedirect = document.getElementById('loginRedirect');
-  loginRedirect.addEventListener('click', (e) => {
-    // e.preventDefault();
-    showToast("📖 प्रवेश पृष्ठ पर जा रहे हैं...", false);
-    // setTimeout(() => {
-    //   alert("🔐 आपको लॉगिन पेज पर ले जाया जाएगा। (simulated navigation to login page)");
-    // }, 300);
-  });
-
-  // hover effect for glass card 3d
-  const glassCard = document.querySelector('.glass-card');
-  if (glassCard) {
-    glassCard.addEventListener('mousemove', (e) => {
-      let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-      let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-      glassCard.style.transform = `rotateY(${xAxis * 0.3}deg) rotateX(${yAxis * -0.2}deg)`;
+    pwdInput.addEventListener('input', function () {
+      updateStrength(this.value);
     });
-    glassCard.addEventListener('mouseleave', () => {
-      glassCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
-    });
-  }
 
-  // input icon color sync
-  document.querySelectorAll('.input-group input, .input-group select').forEach(field => {
-    field.addEventListener('focus', function() {
-      const icon = this.parentElement.querySelector('i');
-      if (icon) icon.style.color = "#C16A4B";
+    // form validation and poetic signup
+    const signupForm = document.getElementById('signupForm');
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const email = document.getElementById('email');
+    const confirmPwd = document.getElementById('confirmPassword');
+    const termsCheck = document.getElementById('termsCheck');
+
+    signupForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fname = firstName.value.trim();
+      const lname = lastName.value.trim();
+      const mail = email.value.trim();
+      const pwd = pwdInput.value;
+      const confirm = confirmPwd.value;
+
+      if (!fname) {
+        showToast("❁ कृपया अपना पहला नाम लिखें — हर रचना की पहचान ज़रूरी है।", true);
+        firstName.focus();
+        return;
+      }
+      if (!mail) {
+        showToast("✉️ ईमेल के बिना महफ़िल अधूरी है, कृपया ईमेल दर्ज करें।", true);
+        email.focus();
+        return;
+      }
+      if (!mail.includes('@')) {
+        showToast("📬 एक सही ईमेल पता दें, जैसे कोई सही अल्फ़ाज़।", true);
+        return;
+      }
+      if (!pwd) {
+        showToast("🔒 एक रचनात्मक पासवर्ड बनाएँ, आपकी सुरक्षा के लिए।", true);
+        pwdInput.focus();
+        return;
+      }
+      if (pwd !== confirm) {
+        showToast("⚠️ पासवर्ड और पुष्टि पासवर्ड एक जैसे नहीं हैं। फिर से लिखें।", true);
+        confirmPwd.focus();
+        return;
+      }
+      if (pwd.length < 6) {
+        showToast("🪶 पासवर्ड कम से कम 6 अक्षरों का होना चाहिए — रचना की तरह मज़बूत।", true);
+        return;
+      }
+      if (!termsCheck.checked) {
+        showToast("📜 कृपया नियमों और मर्यादाओं को स्वीकार करें — यह महफ़िल का संस्कार है।", true);
+        return;
+      }
+
+      // success: poetic welcome
+      let displayName = fname;
+      if (lname) displayName += " " + lname;
+      showToast(`✨ धन्यवाद ${displayName}! आपकी रचनात्मक यात्रा शुरू हो चुकी है। ❤️`, false);
+      setTimeout(() => {
+        alert(`🌸 सादर स्वागत, ${displayName}!\n\nआप अब मेहफ़िल के सदस्य हैं। अपनी पहली कविता साझा करने के लिए तैयार हो जाइए।\n\n(डेमो साइनअप सफल रहा)`);
+        // optional reset form or redirect simulation
+        signupForm.reset();
+        updateStrength('');
+        if (seg1) seg1.style.background = '#E2D2C4';
+        if (seg2) seg2.style.background = '#E2D2C4';
+        if (seg3) seg3.style.background = '#E2D2C4';
+      }, 600);
     });
-    field.addEventListener('blur', function() {
-      const icon = this.parentElement.querySelector('i');
-      if (icon && !this.value) icon.style.color = "#CBBBAE";
-      else if (icon && this.value) icon.style.color = "#C16A4B";
+
+    // Terms link demo
+    const termsLink = document.getElementById('termsLink');
+    termsLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      showToast("📖 मेहफ़िल के नियम: सम्मान, रचनात्मकता और साहित्यिक सत्यता। विवरण जल्द ही।", false);
     });
-  });
-</script>
+
+    // social signup interactions
+    document.getElementById('googleSignup').addEventListener('click', () => showToast("📜 गूगल साइनअप जल्द आ रहा है। तब तक ईमेल से जुड़ें।", false));
+    document.getElementById('githubSignup').addEventListener('click', () => showToast("🐙 गिटहब से जुड़ें — कोड और कविता दोनों के लिए जगह है।", false));
+    document.getElementById('twitterSignup').addEventListener('click', () => showToast("🕊️ ट्विटर के माध्यम से महफ़िल में शामिल हों, जल्द सुविधा सक्रिय होगी।", false));
+
+    // redirect to login
+    const loginRedirect = document.getElementById('loginRedirect');
+    loginRedirect.addEventListener('click', (e) => {
+      // e.preventDefault();
+      showToast("📖 प्रवेश पृष्ठ पर जा रहे हैं...", false);
+      // setTimeout(() => {
+      //   alert("🔐 आपको लॉगिन पेज पर ले जाया जाएगा। (simulated navigation to login page)");
+      // }, 300);
+    });
+
+    // hover effect for glass card 3d
+    const glassCard = document.querySelector('.glass-card');
+    if (glassCard) {
+      glassCard.addEventListener('mousemove', (e) => {
+        let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+        let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+        glassCard.style.transform = `rotateY(${xAxis * 0.3}deg) rotateX(${yAxis * -0.2}deg)`;
+      });
+      glassCard.addEventListener('mouseleave', () => {
+        glassCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
+      });
+    }
+
+    // input icon color sync
+    document.querySelectorAll('.input-group input, .input-group select').forEach(field => {
+      field.addEventListener('focus', function () {
+        const icon = this.parentElement.querySelector('i');
+        if (icon) icon.style.color = "#C16A4B";
+      });
+      field.addEventListener('blur', function () {
+        const icon = this.parentElement.querySelector('i');
+        if (icon && !this.value) icon.style.color = "#CBBBAE";
+        else if (icon && this.value) icon.style.color = "#C16A4B";
+      });
+    });
+  </script>
 </body>
+
 </html>
