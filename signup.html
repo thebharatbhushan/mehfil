@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -38,7 +37,7 @@
       padding: 2rem 1.5rem;
     }
 
-    /* floating orbs (same as main theme) */
+    /* floating orbs */
     .orb {
       position: fixed;
       border-radius: 50%;
@@ -78,7 +77,6 @@
       0% {
         transform: translate(0, 0) scale(1);
       }
-
       100% {
         transform: translate(40px, -40px) scale(1.2);
       }
@@ -248,8 +246,69 @@
       font-size: 0.9rem;
     }
 
-    /* two column row for name fields */
-    .name-row {
+    /* new profile picture section */
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      background: #FFFBF5;
+      border-radius: 24px;
+      padding: 1rem;
+      border: 1px dashed #DDC7B0;
+    }
+
+    .avatar-preview {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: #F4E4D8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 10px;
+      border: 2px solid #C16A4B;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    }
+
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-placeholder {
+      font-size: 3rem;
+      color: #C16A4B;
+      opacity: 0.7;
+    }
+
+    .profile-upload-btn {
+      background: none;
+      border: 1px solid #DBC6B6;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      color: #7D5A48;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .profile-upload-btn:hover {
+      background: #C16A4B;
+      color: white;
+      border-color: #C16A4B;
+    }
+
+    .hidden-file-input {
+      display: none;
+    }
+
+    /* name row + new fields row */
+    .row-2cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
@@ -284,6 +343,11 @@
       outline: none;
       transition: all 0.25s ease;
       color: #2C241F;
+    }
+
+    .input-group input[type="date"] {
+      padding: 16px 20px 16px 48px;
+      color-scheme: light;
     }
 
     .input-group select {
@@ -352,10 +416,6 @@
       font-weight: 500;
     }
 
-    .checkbox a:hover {
-      text-decoration: underline;
-    }
-
     .signup-btn {
       width: 100%;
       background: #C16A4B;
@@ -375,10 +435,15 @@
       margin-bottom: 1.8rem;
     }
 
-    .signup-btn:hover {
+    .signup-btn:hover:not(:disabled) {
       background: #A84C2E;
       transform: translateY(-3px);
       box-shadow: 0 15px 25px -6px rgba(193, 106, 75, 0.4);
+    }
+
+    .signup-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
     }
 
     .divider {
@@ -440,18 +505,19 @@
       margin-left: 5px;
     }
 
-    .login-prompt a:hover {
-      text-decoration: underline;
+    /* Loading spinner */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.6s linear infinite;
+      display: inline-block;
     }
 
-    .floating-ink {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      font-size: 70px;
-      opacity: 0.03;
-      pointer-events: none;
-      transform: rotate(10deg);
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     @media (max-width: 880px) {
@@ -459,34 +525,28 @@
         grid-template-columns: 1fr;
         max-width: 540px;
       }
-
       .signup-art {
         padding: 2rem;
       }
-
-      .art-quote h2 {
-        font-size: 2rem;
-      }
-
       .signup-form-wrapper {
         padding: 2rem 1.8rem;
       }
-
       .form-title {
         font-size: 2rem;
       }
-
       body {
         padding: 1rem;
       }
-
       .back-home {
         top: 16px;
         left: 16px;
         font-size: 0.8rem;
         padding: 8px 16px;
       }
-
+      .row-2cols {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
       .name-row {
         grid-template-columns: 1fr;
         gap: 0;
@@ -497,7 +557,6 @@
       .signup-form-wrapper {
         padding: 1.8rem;
       }
-
       .social-btn {
         width: 42px;
         height: 42px;
@@ -513,7 +572,6 @@
         opacity: 0;
         transform: translateY(20px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
@@ -521,293 +579,414 @@
     }
   </style>
 </head>
-
 <body>
 
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
 
-  <a href="./index.html" class="back-home" id="backHomeBtn"><i class="fas fa-feather-alt"></i> वापस मेहफ़िल</a>
+<a href="./index.html" class="back-home" id="backHomeBtn"><i class="fas fa-feather-alt"></i> वापस मेहफ़िल</a>
 
-  <div class="signup-container">
-    <div class="glass-card fade-in">
-      <!-- left panel : poetic inspiration -->
-      <div class="signup-art">
-        <div class="art-quote">
-          <i class="fas fa-pen-fancy"></i>
-          <h2>नई रचना का आग़ाज़</h2>
-          <p>“हर शख्स के अंदर एक कवि छिपा होता है — बस उसे उड़ान चाहिए।”</p>
-          <div class="urdu-line">
-            <i class="fas fa-feather-alt"></i> अपनी कलम को पंख दें
-          </div>
-          <div style="margin-top: 2rem; font-size: 0.8rem; color:#AA8D74;">
-            <i class="fas fa-quote-left"></i> शब्दों की नई महफ़िल सजाने का वादा
-          </div>
+<div class="signup-container">
+  <div class="glass-card fade-in">
+    <!-- left panel : poetic inspiration -->
+    <div class="signup-art">
+      <div class="art-quote">
+        <i class="fas fa-pen-fancy"></i>
+        <h2>नई रचना का आग़ाज़</h2>
+        <p>“हर शख्स के अंदर एक कवि छिपा होता है — बस उसे उड़ान चाहिए।”</p>
+        <div class="urdu-line">
+          <i class="fas fa-feather-alt"></i> अपनी कलम को पंख दें
         </div>
-        <div class="floating-ink">✍️</div>
+        <div style="margin-top: 2rem; font-size: 0.8rem; color:#AA8D74;">
+          <i class="fas fa-quote-left"></i> शब्दों की नई महफ़िल सजाने का वादा
+        </div>
       </div>
+      <div class="floating-ink">✍️</div>
+    </div>
 
-      <!-- right panel : signup form -->
-      <div class="signup-form-wrapper">
-        <div class="brand-tag">
-          <i class="fas fa-feather-alt logo-icon"></i>
+    <!-- right panel : signup form with Gender + DOB + Profile Pic -->
+    <div class="signup-form-wrapper">
+      <div class="brand-tag">
+        <i class="fas fa-feather-alt logo-icon"></i>
+      </div>
+      <h2 class="form-title">खाता बनाएँ</h2>
+      <p class="form-sub">महफ़िल का हिस्सा बनें और अपनी रचनात्मकता को नई पहचान दें।</p>
+
+      <form id="signupForm" action="#" method="post">
+        <!-- Profile Picture upload section -->
+        <div class="profile-section">
+          <div class="avatar-preview" id="avatarPreview">
+            <i class="fas fa-user-circle avatar-placeholder" id="avatarIcon"></i>
+            <img id="profileImage" src="#" alt="Profile" style="display: none;">
+          </div>
+          <button type="button" class="profile-upload-btn" id="uploadPicBtn"><i class="fas fa-camera"></i> प्रोफ़ाइल तस्वीर</button>
+          <input type="file" id="profilePicInput" class="hidden-file-input" accept="image/jpeg, image/png, image/jpg">
+          <small style="font-size: 0.65rem; color:#A68D7A;">अपनी कलम की पहचान के लिए एक छवि जोड़ें</small>
         </div>
-        <h2 class="form-title">खाता बनाएँ</h2>
-        <p class="form-sub">महफ़िल का हिस्सा बनें और अपनी रचनात्मकता को नई पहचान दें।</p>
 
-        <form id="signupForm" action="#" method="post">
-          <div class="name-row">
-            <div class="input-group">
-              <i class="fas fa-user"></i>
-              <input type="text" id="firstName" placeholder="पहला नाम / First Name" required autocomplete="given-name">
-            </div>
-            <div class="input-group">
-              <i class="fas fa-user-friends"></i>
-              <input type="text" id="lastName" placeholder="अंतिम नाम / Last Name" autocomplete="family-name">
-            </div>
-          </div>
-
+        <!-- Name row -->
+        <div class="row-2cols">
           <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" id="email" placeholder="ईमेल पता / Email Address" required autocomplete="email">
+            <i class="fas fa-user"></i>
+            <input type="text" id="firstName" placeholder="पहला नाम / First Name" required autocomplete="given-name">
           </div>
-
           <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="password" placeholder="पासवर्ड बनाएँ / Create Password" required
-              autocomplete="new-password">
+            <i class="fas fa-user-friends"></i>
+            <input type="text" id="lastName" placeholder="अंतिम नाम / Last Name" autocomplete="family-name">
           </div>
-          <div class="password-strength" id="pwdStrengthWrapper">
-            <span>पासवर्ड की मज़बूती:</span>
-            <div class="strength-bar">
-              <span class="strength-segment" id="seg1"></span>
-              <span class="strength-segment" id="seg2"></span>
-              <span class="strength-segment" id="seg3"></span>
-            </div>
-          </div>
+        </div>
 
+        <!-- Gender + Date of Birth (2 cols) -->
+        <div class="row-2cols">
           <div class="input-group">
-            <i class="fas fa-check-circle"></i>
-            <input type="password" id="confirmPassword" placeholder="पासवर्ड पुष्टि करें / Confirm Password" required
-              autocomplete="off">
-          </div>
-
-          <div class="input-group">
-            <i class="fas fa-globe"></i>
-            <select id="languagePref">
-              <option value="hi">हिन्दी / Hindi</option>
-              <option value="ur">उर्दू / Urdu</option>
-              <option value="en" selected>English</option>
-              <option value="bilingual">द्विभाषी / Bilingual</option>
+            <i class="fas fa-venus-mars"></i>
+            <select id="gender" required>
+              <option value="" disabled selected>लिंग / Gender</option>
+              <option value="male">पुरुष / Male</option>
+              <option value="female">स्त्री / Female</option>
+              <option value="non-binary">नॉन-बाइनरी / Non-binary</option>
+              <option value="prefer-not">अन्य / अनिर्दिष्ट</option>
             </select>
-            <i class="fas fa-language" style="pointer-events: none;"></i>
           </div>
-
-          <div class="checkbox">
-            <input type="checkbox" id="termsCheck" required>
-            <label for="termsCheck">मैं <a href="#" id="termsLink">मेहफ़िल के नियम</a> और साहित्यिक मर्यादाओं से सहमत
-              हूँ।</label>
+          <div class="input-group">
+            <i class="fas fa-calendar-alt"></i>
+            <input type="date" id="dob" name="dob" required>
           </div>
+        </div>
 
-          <button type="submit" class="signup-btn"><i class="fas fa-feather-alt"></i> नई शुरुआत करें</button>
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" placeholder="ईमेल पता / Email Address" required autocomplete="email">
+        </div>
 
-          <div class="divider">
-            <span></span> या साइनअप करें <span></span>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" placeholder="पासवर्ड बनाएँ / Create Password" required autocomplete="new-password">
+        </div>
+        <div class="password-strength" id="pwdStrengthWrapper">
+          <span>पासवर्ड की मज़बूती:</span>
+          <div class="strength-bar">
+            <span class="strength-segment" id="seg1"></span>
+            <span class="strength-segment" id="seg2"></span>
+            <span class="strength-segment" id="seg3"></span>
           </div>
+        </div>
 
-          <div class="social-signup">
-            <div class="social-btn" id="googleSignup"><i class="fab fa-google"></i></div>
-            <div class="social-btn" id="githubSignup"><i class="fab fa-github"></i></div>
-            <div class="social-btn" id="twitterSignup"><i class="fab fa-twitter"></i></div>
-          </div>
+        <div class="input-group">
+          <i class="fas fa-check-circle"></i>
+          <input type="password" id="confirmPassword" placeholder="पासवर्ड पुष्टि करें / Confirm Password" required autocomplete="off">
+        </div>
 
-          <div class="login-prompt">
-            पहले से सदस्य हैं? <a href="./login.html" id="loginRedirect">प्रवेश करें →</a>
-          </div>
-        </form>
-      </div>
+        <div class="input-group">
+          <i class="fas fa-globe"></i>
+          <select id="languagePref">
+            <option value="hi">हिन्दी / Hindi</option>
+            <option value="ur">उर्दू / Urdu</option>
+            <option value="en" selected>English</option>
+            <option value="bilingual">द्विभाषी / Bilingual</option>
+          </select>
+          <i class="fas fa-language" style="pointer-events: none;"></i>
+        </div>
+
+        <div class="checkbox">
+          <input type="checkbox" id="termsCheck" required>
+          <label for="termsCheck">मैं <a href="#" id="termsLink">मेहफ़िल के नियम</a> और साहित्यिक मर्यादाओं से सहमत हूँ।</label>
+        </div>
+
+        <button type="submit" class="signup-btn" id="signupBtn"><i class="fas fa-feather-alt"></i> नई शुरुआत करें</button>
+
+        <div class="divider">
+          <span></span> या साइनअप करें <span></span>
+        </div>
+
+        <div class="social-signup">
+          <div class="social-btn" id="googleSignup"><i class="fab fa-google"></i></div>
+          <div class="social-btn" id="githubSignup"><i class="fab fa-github"></i></div>
+          <div class="social-btn" id="twitterSignup"><i class="fab fa-twitter"></i></div>
+        </div>
+
+        <div class="login-prompt">
+          पहले से सदस्य हैं? <a href="./login.html" id="loginRedirect">प्रवेश करें →</a>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-  <!-- toast notification -->
-  <div id="notificationToast"
-    style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(100px); background: #2C241F; color: #F1E2D2; padding: 12px 28px; border-radius: 60px; font-size: 0.85rem; backdrop-filter: blur(10px); z-index: 2000; transition: 0.3s cubic-bezier(0.2,0.9,0.4,1.1); pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: Inter; border: 1px solid rgba(193,106,75,0.3);">
-    <i class="fas fa-feather-alt" style="margin-right: 8px;"></i> <span id="toastMsg">✨ महफ़िल में आपका स्वागत है</span>
-  </div>
+<!-- Toast Notification -->
+<div id="notificationToast"
+  style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(100px); background: #2C241F; color: #F1E2D2; padding: 12px 28px; border-radius: 60px; font-size: 0.85rem; backdrop-filter: blur(10px); z-index: 2000; transition: 0.3s cubic-bezier(0.2,0.9,0.4,1.1); pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: Inter; border: 1px solid rgba(193,106,75,0.3);">
+  <i class="fas fa-feather-alt" style="margin-right: 8px;"></i> <span id="toastMsg">✨ महफ़िल में आपका स्वागत है</span>
+</div>
 
-  <script>
-    // toast helper
-    function showToast(message, isError = false) {
-      const toast = document.getElementById('notificationToast');
-      const msgSpan = document.getElementById('toastMsg');
-      msgSpan.innerText = message;
-      if (isError) {
-        toast.style.background = "#7D3C2A";
-        toast.style.color = "#FFEAD2";
+<script>
+  // API Configuration - Update this with your actual backend URL
+  const API_BASE_URL = 'https://mehfilbackend.onrender.com'; // Change to your backend URL
+  const API_ENDPOINTS = {
+    signup: `${API_BASE_URL}/api/auth/signup` // Adjust route according to your backend routing
+  };
+
+  // toast helper
+  function showToast(message, isError = false) {
+    const toast = document.getElementById('notificationToast');
+    const msgSpan = document.getElementById('toastMsg');
+    msgSpan.innerText = message;
+    if (isError) {
+      toast.style.background = "#7D3C2A";
+      toast.style.color = "#FFEAD2";
+    } else {
+      toast.style.background = "#2C241F";
+      toast.style.color = "#F1E2D2";
+    }
+    toast.style.transform = "translateX(-50%) translateY(0px)";
+    setTimeout(() => {
+      toast.style.transform = "translateX(-50%) translateY(100px)";
+    }, 3000);
+  }
+
+  // Profile picture handling
+  const profileInput = document.getElementById('profilePicInput');
+  const uploadBtn = document.getElementById('uploadPicBtn');
+  const avatarPreview = document.getElementById('avatarPreview');
+  const profileImg = document.getElementById('profileImage');
+  const avatarIcon = document.getElementById('avatarIcon');
+  let selectedProfileFile = null;
+
+  uploadBtn.addEventListener('click', () => {
+    profileInput.click();
+  });
+
+  profileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      selectedProfileFile = file;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        profileImg.src = e.target.result;
+        profileImg.style.display = 'block';
+        avatarIcon.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      resetProfileImage();
+    }
+  });
+
+  function resetProfileImage() {
+    selectedProfileFile = null;
+    profileImg.src = '#';
+    profileImg.style.display = 'none';
+    avatarIcon.style.display = 'flex';
+    profileInput.value = '';
+  }
+
+  // password strength
+  const pwdInput = document.getElementById('password');
+  const seg1 = document.getElementById('seg1');
+  const seg2 = document.getElementById('seg2');
+  const seg3 = document.getElementById('seg3');
+
+  function updateStrength(password) {
+    let strength = 0;
+    if (password.length >= 6) strength++;
+    if (password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
+    if (password.length >= 10 && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) strength++;
+    if (strength >= 3) strength = 3;
+    else if (strength === 2) strength = 2;
+    else if (strength === 1) strength = 1;
+    else strength = 0;
+    const segments = [seg1, seg2, seg3];
+    const colors = ['#E2D2C4', '#E2D2C4', '#E2D2C4'];
+    if (strength >= 1) colors[0] = '#C16A4B';
+    if (strength >= 2) colors[1] = '#C16A4B';
+    if (strength >= 3) colors[2] = '#9E4F36';
+    segments.forEach((seg, idx) => { if(seg) seg.style.background = colors[idx]; });
+    return strength;
+  }
+  pwdInput.addEventListener('input', function () { updateStrength(this.value); });
+
+  // Helper function to format date for backend (YYYY-MM-DD)
+  function formatDateForBackend(dateString) {
+    return dateString; // The date input already gives YYYY-MM-DD format
+  }
+
+  // Signup form submission with API integration
+  const signupForm = document.getElementById('signupForm');
+  const signupBtn = document.getElementById('signupBtn');
+  const firstName = document.getElementById('firstName');
+  const lastName = document.getElementById('lastName');
+  const email = document.getElementById('email');
+  const confirmPwd = document.getElementById('confirmPassword');
+  const termsCheck = document.getElementById('termsCheck');
+  const genderSelect = document.getElementById('gender');
+  const dobInput = document.getElementById('dob');
+  const languagePref = document.getElementById('languagePref');
+
+  async function submitSignup(formData) {
+    try {
+      const response = await fetch(API_ENDPOINTS.signup, {
+        method: 'POST',
+        body: formData // Using FormData for file upload
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        showToast(`✨ धन्यवाद ${data.user.firstName}! आपकी रचनात्मक यात्रा शुरू हो चुकी है। ❤️`, false);
+        
+        // Store user data in localStorage if needed
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Redirect to login or dashboard after 2 seconds
+        setTimeout(() => {
+          showToast('कृपया लॉगिन करें...', false);
+          window.location.href = './login.html';
+        }, 2000);
       } else {
-        toast.style.background = "#2C241F";
-        toast.style.color = "#F1E2D2";
+        showToast(data.message || 'साइनअप विफल रहा। कृपया पुनः प्रयास करें।', true);
       }
-      toast.style.transform = "translateX(-50%) translateY(0px)";
-      setTimeout(() => {
-        toast.style.transform = "translateX(-50%) translateY(100px)";
-      }, 2800);
+    } catch (error) {
+      console.error('Signup error:', error);
+      showToast('नेटवर्क त्रुटि। कृपया सर्वर से कनेक्शन जांचें।', true);
+    } finally {
+      // Re-enable button
+      signupBtn.disabled = false;
+      signupBtn.innerHTML = '<i class="fas fa-feather-alt"></i> नई शुरुआत करें';
+    }
+  }
+
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Validation
+    const fname = firstName.value.trim();
+    const lname = lastName.value.trim();
+    const mail = email.value.trim();
+    const pwd = pwdInput.value;
+    const confirm = confirmPwd.value;
+    const gender = genderSelect.value;
+    const dob = dobInput.value;
+    const language = languagePref.value;
+
+    if (!fname) {
+      showToast("❁ कृपया अपना पहला नाम लिखें — हर रचना की पहचान ज़रूरी है।", true);
+      firstName.focus();
+      return;
+    }
+    if (!gender) {
+      showToast("⚥ कृपया लिंग चुनें — महफ़िल में हर पहचान सम्मानित है।", true);
+      genderSelect.focus();
+      return;
+    }
+    if (!dob) {
+      showToast("📅 जन्मतिथि चुनें — यह आपकी रचनात्मक यात्रा का हिस्सा है।", true);
+      dobInput.focus();
+      return;
+    }
+    
+    // Validate age (minimum 13 years)
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
+    if (age < 13) {
+      showToast("🌱 महफ़िल 13 वर्ष से अधिक आयु के लिए उपयुक्त है। कृपया सही जन्मतिथि दें।", true);
+      return;
+    }
+    
+    if (!mail) {
+      showToast("✉️ ईमेल के बिना महफ़िल अधूरी है, कृपया ईमेल दर्ज करें।", true);
+      email.focus();
+      return;
+    }
+    if (!mail.includes('@')) {
+      showToast("📬 एक सही ईमेल पता दें, जैसे कोई सही अल्फ़ाज़।", true);
+      return;
+    }
+    if (!pwd) {
+      showToast("🔒 एक रचनात्मक पासवर्ड बनाएँ, आपकी सुरक्षा के लिए।", true);
+      pwdInput.focus();
+      return;
+    }
+    if (pwd !== confirm) {
+      showToast("⚠️ पासवर्ड और पुष्टि पासवर्ड एक जैसे नहीं हैं। फिर से लिखें।", true);
+      confirmPwd.focus();
+      return;
+    }
+    if (pwd.length < 6) {
+      showToast("🪶 पासवर्ड कम से कम 6 अक्षरों का होना चाहिए — रचना की तरह मज़बूत।", true);
+      return;
+    }
+    if (!termsCheck.checked) {
+      showToast("📜 कृपया नियमों और मर्यादाओं को स्वीकार करें — यह महफ़िल का संस्कार है।", true);
+      return;
     }
 
-    // back to home
-    const backBtn = document.getElementById('backHomeBtn');
-    backBtn.addEventListener('click', (e) => {
-      // e.preventDefault();
-      showToast("🍂 मुख्य महफ़िल में लौट रहे हैं...", false);
-      // setTimeout(() => {
-      //   alert("✨ आपको मुखपृष्ठ पर ले जाया जाएगा। (simulated navigation to main page)");
-      // }, 500);
-    });
+    // Disable button and show loading state
+    signupBtn.disabled = true;
+    signupBtn.innerHTML = '<span class="spinner"></span> कृपया प्रतीक्षा करें...';
 
-    // password strength indicator
-    const pwdInput = document.getElementById('password');
-    const seg1 = document.getElementById('seg1');
-    const seg2 = document.getElementById('seg2');
-    const seg3 = document.getElementById('seg3');
-
-    function updateStrength(password) {
-      let strength = 0;
-      if (password.length >= 6) strength++;
-      if (password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
-      if (password.length >= 10 && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) strength++;
-      if (strength >= 3) strength = 3;
-      else if (strength === 2) strength = 2;
-      else if (strength === 1) strength = 1;
-      else strength = 0;
-
-      const segments = [seg1, seg2, seg3];
-      const colors = ['#E2D2C4', '#E2D2C4', '#E2D2C4'];
-      if (strength >= 1) colors[0] = '#C16A4B';
-      if (strength >= 2) colors[1] = '#C16A4B';
-      if (strength >= 3) colors[2] = '#9E4F36';
-      segments.forEach((seg, idx) => {
-        seg.style.background = colors[idx];
-      });
-      return strength;
+    // Prepare FormData for API request
+    const formData = new FormData();
+    formData.append('firstName', fname);
+    formData.append('lastName', lname || '');
+    formData.append('gender', gender);
+    formData.append('dob', dob);
+    formData.append('email', mail);
+    formData.append('password', pwd);
+    formData.append('languagePref', language);
+    
+    if (selectedProfileFile) {
+      formData.append('profilePic', selectedProfileFile);
     }
 
-    pwdInput.addEventListener('input', function () {
-      updateStrength(this.value);
+    // Submit to backend
+    await submitSignup(formData);
+  });
+
+  // terms link toast
+  document.getElementById('termsLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    showToast("📖 मेहफ़िल के नियम: सम्मान, रचनात्मकता और साहित्यिक सत्यता। विवरण जल्द ही।", false);
+  });
+
+  // social interactions (placeholder for future implementation)
+  document.getElementById('googleSignup').addEventListener('click', () => showToast("📜 गूगल साइनअप जल्द आ रहा है। तब तक ईमेल से जुड़ें।", false));
+  document.getElementById('githubSignup').addEventListener('click', () => showToast("🐙 गिटहब से जुड़ें — कोड और कविता दोनों के लिए जगह है।", false));
+  document.getElementById('twitterSignup').addEventListener('click', () => showToast("🕊️ ट्विटर के माध्यम से महफ़िल में शामिल हों, जल्द सुविधा सक्रिय होगी।", false));
+  document.getElementById('loginRedirect').addEventListener('click', (e) => { 
+    e.preventDefault(); 
+    showToast("📖 प्रवेश पृष्ठ पर जा रहे हैं...", false);
+    setTimeout(() => {
+      window.location.href = './login.html';
+    }, 1000);
+  });
+  document.getElementById('backHomeBtn').addEventListener('click', (e) => { 
+    e.preventDefault();
+    showToast("🍂 मुख्य महफ़िल में लौट रहे हैं...", false);
+    setTimeout(() => {
+      window.location.href = './index.html';
+    }, 1000);
+  });
+
+  // Optional 3D hover effect
+  const glassCard = document.querySelector('.glass-card');
+  if (glassCard) {
+    glassCard.addEventListener('mousemove', (e) => {
+      let xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+      let yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+      glassCard.style.transform = `rotateY(${xAxis * 0.2}deg) rotateX(${yAxis * -0.15}deg)`;
     });
-
-    // form validation and poetic signup
-    const signupForm = document.getElementById('signupForm');
-    const firstName = document.getElementById('firstName');
-    const lastName = document.getElementById('lastName');
-    const email = document.getElementById('email');
-    const confirmPwd = document.getElementById('confirmPassword');
-    const termsCheck = document.getElementById('termsCheck');
-
-    signupForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const fname = firstName.value.trim();
-      const lname = lastName.value.trim();
-      const mail = email.value.trim();
-      const pwd = pwdInput.value;
-      const confirm = confirmPwd.value;
-
-      if (!fname) {
-        showToast("❁ कृपया अपना पहला नाम लिखें — हर रचना की पहचान ज़रूरी है।", true);
-        firstName.focus();
-        return;
-      }
-      if (!mail) {
-        showToast("✉️ ईमेल के बिना महफ़िल अधूरी है, कृपया ईमेल दर्ज करें।", true);
-        email.focus();
-        return;
-      }
-      if (!mail.includes('@')) {
-        showToast("📬 एक सही ईमेल पता दें, जैसे कोई सही अल्फ़ाज़।", true);
-        return;
-      }
-      if (!pwd) {
-        showToast("🔒 एक रचनात्मक पासवर्ड बनाएँ, आपकी सुरक्षा के लिए।", true);
-        pwdInput.focus();
-        return;
-      }
-      if (pwd !== confirm) {
-        showToast("⚠️ पासवर्ड और पुष्टि पासवर्ड एक जैसे नहीं हैं। फिर से लिखें।", true);
-        confirmPwd.focus();
-        return;
-      }
-      if (pwd.length < 6) {
-        showToast("🪶 पासवर्ड कम से कम 6 अक्षरों का होना चाहिए — रचना की तरह मज़बूत।", true);
-        return;
-      }
-      if (!termsCheck.checked) {
-        showToast("📜 कृपया नियमों और मर्यादाओं को स्वीकार करें — यह महफ़िल का संस्कार है।", true);
-        return;
-      }
-
-      // success: poetic welcome
-      let displayName = fname;
-      if (lname) displayName += " " + lname;
-      showToast(`✨ धन्यवाद ${displayName}! आपकी रचनात्मक यात्रा शुरू हो चुकी है। ❤️`, false);
-      setTimeout(() => {
-        alert(`🌸 सादर स्वागत, ${displayName}!\n\nआप अब मेहफ़िल के सदस्य हैं। अपनी पहली कविता साझा करने के लिए तैयार हो जाइए।\n\n(डेमो साइनअप सफल रहा)`);
-        // optional reset form or redirect simulation
-        signupForm.reset();
-        updateStrength('');
-        if (seg1) seg1.style.background = '#E2D2C4';
-        if (seg2) seg2.style.background = '#E2D2C4';
-        if (seg3) seg3.style.background = '#E2D2C4';
-      }, 600);
-    });
-
-    // Terms link demo
-    const termsLink = document.getElementById('termsLink');
-    termsLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      showToast("📖 मेहफ़िल के नियम: सम्मान, रचनात्मकता और साहित्यिक सत्यता। विवरण जल्द ही।", false);
-    });
-
-    // social signup interactions
-    document.getElementById('googleSignup').addEventListener('click', () => showToast("📜 गूगल साइनअप जल्द आ रहा है। तब तक ईमेल से जुड़ें।", false));
-    document.getElementById('githubSignup').addEventListener('click', () => showToast("🐙 गिटहब से जुड़ें — कोड और कविता दोनों के लिए जगह है।", false));
-    document.getElementById('twitterSignup').addEventListener('click', () => showToast("🕊️ ट्विटर के माध्यम से महफ़िल में शामिल हों, जल्द सुविधा सक्रिय होगी।", false));
-
-    // redirect to login
-    const loginRedirect = document.getElementById('loginRedirect');
-    loginRedirect.addEventListener('click', (e) => {
-      // e.preventDefault();
-      showToast("📖 प्रवेश पृष्ठ पर जा रहे हैं...", false);
-      // setTimeout(() => {
-      //   alert("🔐 आपको लॉगिन पेज पर ले जाया जाएगा। (simulated navigation to login page)");
-      // }, 300);
-    });
-
-    // hover effect for glass card 3d
-    const glassCard = document.querySelector('.glass-card');
-    if (glassCard) {
-      glassCard.addEventListener('mousemove', (e) => {
-        let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-        let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-        glassCard.style.transform = `rotateY(${xAxis * 0.3}deg) rotateX(${yAxis * -0.2}deg)`;
-      });
-      glassCard.addEventListener('mouseleave', () => {
-        glassCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
-      });
-    }
-
-    // input icon color sync
-    document.querySelectorAll('.input-group input, .input-group select').forEach(field => {
-      field.addEventListener('focus', function () {
-        const icon = this.parentElement.querySelector('i');
-        if (icon) icon.style.color = "#C16A4B";
-      });
-      field.addEventListener('blur', function () {
-        const icon = this.parentElement.querySelector('i');
-        if (icon && !this.value) icon.style.color = "#CBBBAE";
-        else if (icon && this.value) icon.style.color = "#C16A4B";
-      });
-    });
-  </script>
+    glassCard.addEventListener('mouseleave', () => { glassCard.style.transform = `rotateY(0deg) rotateX(0deg)`; });
+  }
+  
+  // Input field icon color change
+  document.querySelectorAll('.input-group input, .input-group select').forEach(field => {
+    field.addEventListener('focus', function () { const icon = this.parentElement.querySelector('i'); if (icon) icon.style.color = "#C16A4B"; });
+    field.addEventListener('blur', function () { const icon = this.parentElement.querySelector('i'); if (icon && !this.value) icon.style.color = "#CBBBAE"; else if (icon && this.value) icon.style.color = "#C16A4B"; });
+  });
+</script>
 </body>
-
 </html>

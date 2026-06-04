@@ -643,7 +643,7 @@
         <a href="./poems.html">कविताएँ</a>
         <a href="./poets.html">रचनाकार</a>
         <a href="./category.html">श्रेणियाँ</a>
-        <a href="./dashboard.html" class="active">डैशबोर्ड</a>
+        <a href="./profile.html" class="active">डैशबोर्ड</a>
       </div>
       <div style="display:flex; align-items:center; gap:12px;">
         <button class="nav-btn" id="logoutBtnGlobal">
@@ -779,7 +779,7 @@
       { id: 103, title: "बारिश की बूंदें", content: "बारिश की बूंदों में तेरी हँसी...", visible: false, date: "1 सप्ताह पहले" },
       { id: 104, title: "सफ़र", content: "रास्ते मंज़िल से ज़्यादा ख़ुद से मिलाते हैं...", visible: true, date: "3 दिन पहले" }
     ];
-    let currentUser = { name: "रिया शर्मा", bio: "हर लफ्ज़ में जादू भरती हूँ ✨ | शायरा", avatar: "https://randomuser.me/api/portraits/women/68.jpg", email: "riya.sharma@mehfil.com", password: "admin123" };
+    let currentUser = {};
     let storedOtp = null;
 
     function saveData() { localStorage.setItem("mehfil_poems_v2", JSON.stringify(poems)); localStorage.setItem("mehfil_user_v2", JSON.stringify(currentUser)); }
@@ -790,10 +790,19 @@
     }
     function refreshStat() { document.getElementById("poemTotalCount").innerText = poems.filter(p => p.visible).length; }
     function updateProfileUI() {
-      document.getElementById("profileFullName").innerText = currentUser.name;
-      document.getElementById("profileBioText").innerText = currentUser.bio;
-      document.getElementById("profileAvatarImg").src = currentUser.avatar;
-      document.getElementById("emailDisplayValue").innerText = currentUser.email;
+
+      document.getElementById("profileFullName").innerText =
+        currentUser.firstName + " " + currentUser.lastName;
+
+      document.getElementById("profileBioText").innerText =
+        currentUser.gender + " • " + currentUser.languagePref;
+
+      document.getElementById("profileAvatarImg").src =
+        currentUser.profilePic;
+
+      document.getElementById("emailDisplayValue").innerText =
+        currentUser.email;
+
     }
     function renderPoems() {
       const container = document.getElementById("dynamicPoemsList");
@@ -815,6 +824,46 @@
     function addPoem(title, content) { poems.unshift({ id: Date.now(), title, content, visible: true, date: "आज" }); renderPoems(); refreshStat(); saveData(); showToast("✨ नई रचना प्रकाशित!"); }
     function escapeHtml(s) { return s.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
     function showToast(msg, isErr = false) { const t = document.getElementById("toastMsgGlobal"); t.innerText = msg; t.style.background = isErr ? "#E76F51" : "#2C241F"; t.style.transform = "translateX(-50%) translateY(0px)"; setTimeout(() => { t.style.transform = "translateX(-50%) translateY(100px)"; }, 2600); }
+    async function fetchProfile() {
+
+      try {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          window.location.href = "./login.html";
+          return;
+        }
+
+        const response = await fetch(
+          "https://mehfilbackend.onrender.com/api/auth/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+          showToast(data.message, true);
+          return;
+        }
+
+        currentUser = data.user;
+
+        updateProfileUI();
+
+      }
+      catch (error) {
+
+        console.log(error);
+        showToast("Profile load failed", true);
+
+      }
+
+    }
 
     // ----- DEVICE UPLOAD FOR PROFILE PICTURE (ADDED FEATURE) -----
     const fileInput = document.getElementById('avatarFileInput');
@@ -948,7 +997,7 @@
     const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('appear'); obs.unobserve(e.target); } }); }, { threshold: 0.1 });
     fadeItems.forEach(el => obs.observe(el));
 
-    loadData();
+    fetchProfile();
   </script>
 </body>
 

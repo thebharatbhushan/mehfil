@@ -25,8 +25,6 @@
       user-select: none;
     }
 
-
-
     body {
       background: #FEF9F2;
       color: #2C241F;
@@ -111,9 +109,9 @@
     }
 
     .back-home:hover {
-      background: var(--accent);
+      background: #C16A4B;
       color: white;
-      border-color: var(--accent);
+      border-color: #C16A4B;
       transform: translateY(-2px);
       box-shadow: 0 8px 18px rgba(193, 106, 75, 0.2);
     }
@@ -245,7 +243,7 @@
     .form-sub {
       color: #756256;
       margin-bottom: 2rem;
-      border-left: 2px solid var(--accent);
+      border-left: 2px solid #C16A4B;
       padding-left: 12px;
       font-size: 0.9rem;
     }
@@ -283,6 +281,10 @@
       box-shadow: 0 0 0 3px rgba(193, 106, 75, 0.15);
     }
 
+    .input-group input:focus+i {
+      color: #C16A4B;
+    }
+
     .password-options {
       display: flex;
       justify-content: space-between;
@@ -300,6 +302,11 @@
 
     .checkbox input {
       accent-color: #C16A4B;
+      cursor: pointer;
+    }
+
+    .checkbox span {
+      cursor: pointer;
     }
 
     .forgot-link {
@@ -307,6 +314,7 @@
       text-decoration: none;
       font-weight: 500;
       transition: 0.2s;
+      cursor: pointer;
     }
 
     .forgot-link:hover {
@@ -332,10 +340,15 @@
       margin-bottom: 1.8rem;
     }
 
-    .login-btn:hover {
+    .login-btn:hover:not(:disabled) {
       background: #A84C2E;
       transform: translateY(-3px);
       box-shadow: 0 15px 25px -6px rgba(193, 106, 75, 0.4);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
     }
 
     .divider {
@@ -399,6 +412,23 @@
 
     .signup-prompt a:hover {
       text-decoration: underline;
+    }
+
+    /* Spinner animation */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.6s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     /* additional poetry micro interaction */
@@ -480,11 +510,6 @@
       }
     }
 
-    /* tooltip effect */
-    .input-group input:focus+i {
-      color: #C16A4B;
-    }
-
     hr {
       border-color: #f0e2d6;
     }
@@ -544,7 +569,7 @@
             <a href="#" class="forgot-link" id="forgotPwd">पासवर्ड भूल गए?</a>
           </div>
 
-          <button type="submit" class="login-btn"><i class="fas fa-pen-fancy"></i> प्रवेश करें</button>
+          <button type="submit" class="login-btn" id="loginBtn"><i class="fas fa-pen-fancy"></i> प्रवेश करें</button>
 
           <div class="divider">
             <span></span> या <span></span>
@@ -564,7 +589,7 @@
     </div>
   </div>
 
-  <!-- subtle modal for demo / forgot password (poetic interaction) -->
+  <!-- toast notification -->
   <div id="notificationToast"
     style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(100px); background: #2C241F; color: #F1E2D2; padding: 12px 28px; border-radius: 60px; font-size: 0.85rem; backdrop-filter: blur(10px); z-index: 2000; transition: 0.3s cubic-bezier(0.2,0.9,0.4,1.1); pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: Inter; border: 1px solid rgba(193,106,75,0.3);">
     <i class="fas fa-feather-alt" style="margin-right: 8px;"></i> <span id="toastMsg">✨ मेहफ़िल में आपका स्वागत
@@ -572,6 +597,12 @@
   </div>
 
   <script>
+    // API Configuration - Update with your actual backend URL
+    const API_BASE_URL = 'https://mehfilbackend.onrender.com'; // Change to your backend URL
+    const API_ENDPOINTS = {
+      login: `${API_BASE_URL}/api/auth/login`
+    };
+
     // unified function to show poetic toast
     function showToast(message, isError = false) {
       const toast = document.getElementById('notificationToast');
@@ -587,34 +618,117 @@
       toast.style.transform = "translateX(-50%) translateY(0px)";
       setTimeout(() => {
         toast.style.transform = "translateX(-50%) translateY(100px)";
-      }, 2600);
+      }, 3000);
     }
 
-    // back button (simulate main page navigation)
-    const backBtn = document.getElementById('backHomeBtn');
-    backBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      showToast("🍂 मुख्य महफ़िल में लौट रहे हैं...", false);
-      setTimeout(() => {
-        // redirect to main page or simply simulate
-        window.location.href = "index.html"; // if in same project, else fallback alert
-        // but as a demo, we just inform
-        // alert("✨ आपको मुखपृष्ठ पर ले जाया जाएगा। (simulated navigation to main page)");
-      }, 500);
-    });
+    // Save user data to localStorage
+    function saveUserData(userData, rememberMe) {
+      if (rememberMe) {
+        localStorage.setItem('mehfil_user', JSON.stringify(userData));
+        localStorage.setItem('mehfil_remember', 'true');
+      } else {
+        sessionStorage.setItem('mehfil_user', JSON.stringify(userData));
+        localStorage.removeItem('mehfil_remember');
+      }
+    }
 
-    // FORM HANDLING (authentic poetic validation)
+    // Clear any existing user data on logout (if needed)
+    function clearUserData() {
+      localStorage.removeItem('mehfil_user');
+      localStorage.removeItem('mehfil_remember');
+      sessionStorage.removeItem('mehfil_user');
+    }
+
+    // Login function with API integration
+    async function loginUser(email, password, rememberMe) {
+      try {
+        const response = await fetch(API_ENDPOINTS.login, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+
+          const userData = {
+            id: data.user._id,
+            firstName: data.user.firstName,
+            lastName: data.user.lastName,
+            email: data.user.email,
+            profilePic: data.user.profilePic,
+            languagePref: data.user.languagePref
+          };
+
+          saveUserData(userData, rememberMe);
+
+          localStorage.setItem(
+            "token",
+            data.token
+          );
+
+          showToast(
+            `✨ स्वागत है ${data.user.firstName}! आपकी कविता यात्रा शुरू होती है। ❤️`,
+            false
+          );
+
+          setTimeout(() => {
+            window.location.href = "./profile.html";
+          }, 1500);
+
+          return true;
+        } else {
+          showToast(data.message || 'लॉगिन विफल रहा। कृपया अपना ईमेल और पासवर्ड जांचें।', true);
+          return false;
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showToast('नेटवर्क त्रुटि। कृपया सर्वर से कनेक्शन जांचें।', true);
+        return false;
+      }
+    }
+
+    // Check if user is already logged in
+    function checkExistingLogin() {
+      const storedUser = localStorage.getItem('mehfil_user') || sessionStorage.getItem('mehfil_user');
+      const rememberMe = localStorage.getItem('mehfil_remember') === 'true';
+
+      if (storedUser && rememberMe) {
+        // Auto-login the user
+        const user = JSON.parse(storedUser);
+        showToast(`✨ पुनः स्वागत है ${user.firstName}!`, false);
+        setTimeout(() => {
+          window.location.href = "./profile.html";
+        }, 1000);
+        return true;
+      }
+      return false;
+    }
+
+    // FORM HANDLING with API integration
     const form = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const rememberChk = document.getElementById('remember');
+    const loginBtn = document.getElementById('loginBtn');
 
-    form.addEventListener('submit', (e) => {
+    // Check for existing login on page load
+    if (checkExistingLogin()) {
+      // Prevent form interaction if redirecting
+      if (form) form.style.opacity = '0.5';
+    }
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = emailInput.value.trim();
-      const pwd = passwordInput.value.trim();
 
-      // poetic validation : simple check for demo to match the aesthetic
+      const email = emailInput.value.trim().toLowerCase();
+      const pwd = passwordInput.value.trim();
+      const rememberMe = rememberChk.checked;
+
+      // Validation checks
       if (!email) {
         showToast("❁ कृपया अपना ईमेल लिखें।", true);
         emailInput.focus();
@@ -630,73 +744,85 @@
         return;
       }
 
-      // demo credentials : welcome poetry lovers
-      // just for ambiance; any non-empty creds works but we give special mehfil vibe
-      if (email === "hiibbhere@gmail.com" || pwd === "shayari" || (email === "mehfil@poetry.com") || pwd === "mehfil123") {
-        showToast("✨ आप सफलतापूर्वक लॉग इन कर चुके हैं! कविता की दुनिया में आपका स्वागत है। ❤️", false);
-        setTimeout(() => {
-          alert("❤️ प्रवेश मिला! अब आप नई रचनाएँ पढ़ और साझा कर सकते हैं। (Demo flow)\n🌹 धन्यवाद!");
-        }, 800);
-        window.location.href = "./profile.html"; // simulate redirect to main page after login
-      } else {
-        // but still accept any filled attempt with poetic message (demo friendly)
-        showToast("📖 'तुम्हारी कलम ने दस्तक दी' — सादर आपकी महफ़िल में आपका स्वागत है।", false);
-        setTimeout(() => {
-          alert("🎭 सादर अभिवादन! (Demo Login Successful) \n\nहम आपको रचनात्मकता की नई उड़ान भरने के लिए आमंत्रित करते हैं।");
-        }, 400);
-      }
-      // optional store remember me flag
-      if (rememberChk.checked) {
-        localStorage.setItem("mehfil_remember", "true");
-        showToast("☪️ आपकी याद हमेशा रहेगी।", false);
-      } else {
-        localStorage.removeItem("mehfil_remember");
+      // Disable button and show loading state
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<span class="spinner"></span> कृपया प्रतीक्षा करें...';
+
+      // Attempt login
+      const loginSuccess = await loginUser(email, pwd, rememberMe);
+
+      // Re-enable button if login failed
+      if (!loginSuccess) {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-pen-fancy"></i> प्रवेश करें';
       }
     });
 
-    // Forgot password poetic gesture
+    // Forgot password handler
     const forgotLink = document.getElementById('forgotPwd');
     forgotLink.addEventListener('click', (e) => {
       e.preventDefault();
       showToast("🕊️ 'विस्मृत अल्फ़ाज़' — जल्द ही आपके ईमेल पर पुनर्प्राप्ति लिंक भेजा जाएगा।", false);
+      // You can implement forgot password API here
     });
 
-    // Social login demo (interactive alerts with poetic flavor)
+    // Social login handlers (to be implemented with OAuth)
     const googleBtn = document.getElementById('googleLogin');
     const githubBtn = document.getElementById('githubLogin');
     const twitterBtn = document.getElementById('twitterLogin');
 
     googleBtn.addEventListener('click', () => {
       showToast("📜 गूगल के संग महफ़िल में प्रवेश, जल्दी ही सुविधा उपलब्ध होगी।", false);
+      // Implement Google OAuth
     });
+
     githubBtn.addEventListener('click', () => {
       showToast("🐙 गिटहब से जुड़ें — शायद आप भी यहाँ कोड और कविता लिखें।", false);
+      // Implement GitHub OAuth
     });
+
     twitterBtn.addEventListener('click', () => {
       showToast("🕊️ ट्विटर से आ रहे हैं अल्फ़ाज़, जल्द मिलेंगे!", false);
+      // Implement Twitter OAuth
     });
 
-    // signup redirect link
+    // Signup redirect
     const signupLink = document.getElementById('signupRedirect');
     signupLink.addEventListener('click', (e) => {
-      // e.preventDefault();
-      showToast("✍️ एक नई रचना शुरू करें: जल्द ही रजिस्ट्रेशन खुलेगा। तब तक आप अपनी रचनाएँ हमें भेज सकते हैं। 💫", false);
-      // setTimeout(() => {
-      //   alert("🌟 रचनाकार बनने की प्रक्रिया : जल्द ही मेहफ़िल के सदस्य बनें और अपनी कविताएँ प्रकाशित करें।");
-      // }, 300);
+      // Allow the redirect to signup page
+      showToast("✍️ नई रचना शुरू करने के लिए कृपया पंजीकरण करें। 💫", false);
     });
 
-    // load dummy saved preference (demo)
-    if (localStorage.getItem("mehfil_remember") === "true") {
-      // optional prefill demo - but not storing sensitive, just poetic effect
-      rememberChk.checked = true;
+    // Back button handler
+    const backBtn = document.getElementById('backHomeBtn');
+    backBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showToast("🍂 मुख्य महफ़िल में लौट रहे हैं...", false);
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 500);
+    });
+
+    // Load saved email if "Remember Me" was checked
+    if (localStorage.getItem('mehfil_remember') === 'true') {
+      const savedUser = localStorage.getItem('mehfil_user');
+      if (savedUser) {
+        try {
+          const user = JSON.parse(savedUser);
+          if (user.email) {
+            emailInput.value = user.email;
+            rememberChk.checked = true;
+          }
+        } catch (e) {
+          console.error('Error parsing saved user data');
+        }
+      }
     }
 
-    // add hover effect for floating cards vibe
+    // Add hover effect for floating cards vibe
     const glassCard = document.querySelector('.glass-card');
     if (glassCard) {
       glassCard.addEventListener('mousemove', (e) => {
-        // subtle interactive effect - just for elegance
         let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
         let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
         glassCard.style.transform = `rotateY(${xAxis * 0.3}deg) rotateX(${yAxis * -0.2}deg)`;
@@ -706,13 +832,16 @@
       });
     }
 
-    // tiny load animation for input icons
+    // Input icon color change on focus
     document.querySelectorAll('.input-group input').forEach(input => {
       input.addEventListener('focus', function () {
-        this.parentElement.querySelector('i').style.color = "#C16A4B";
+        const icon = this.parentElement.querySelector('i');
+        if (icon) icon.style.color = "#C16A4B";
       });
       input.addEventListener('blur', function () {
-        if (!this.value) this.parentElement.querySelector('i').style.color = "#CBBBAE";
+        const icon = this.parentElement.querySelector('i');
+        if (icon && !this.value) icon.style.color = "#CBBBAE";
+        else if (icon && this.value) icon.style.color = "#C16A4B";
       });
     });
   </script>
