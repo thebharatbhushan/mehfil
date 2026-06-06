@@ -1257,7 +1257,7 @@
         <a href="./login.html" id="dynamicAuthLink">प्रवेश करें</a>
       </div>
       <div style="display:flex;align-items:center;gap:12px;">
-        <button class="nav-btn write-btn" onclick="window.location.href='./publish.html'">
+        <button class="nav-btn write-btn" id="publishPoemBtnNav">
           <i class="fas fa-pen-fancy"></i>
           <span>लेखन प्रारम्भ करें</span>
         </button>
@@ -1292,7 +1292,7 @@
 
         <div class="hero-buttons">
           <button class="primary-btn"><i class="fas fa-book-open"></i> Explore Poetry</button>
-          <button class="secondary-btn"><i class="fas fa-feather"></i> Publish Poem</button>
+          <button class="secondary-btn" id="publishPoemBtnHero"><i class="fas fa-feather"></i> Publish Poem</button>
         </div>
       </div>
       <div class="hero-cards">
@@ -1535,7 +1535,7 @@
         <h2 style="font-size: 3rem; font-family:'Cormorant Garamond';">अपनी रचनाओं को <br> दुनिया तक पहुँचाइए</h2>
         <p style="margin: 1.2rem 0;">Join thousands of writers and poetry lovers sharing emotions, stories, and timeless
           words through beautiful literature.</p>
-        <button class="primary-btn" style="background:#9E4F36;"><i class="fas fa-palette"></i> लेखन प्रारम्भ करें
+        <button class="primary-btn" id="publishPoemBtnCTA" style="background:#9E4F36;"><i class="fas fa-palette"></i> लेखन प्रारम्भ करें
           Today</button>
       </div>
     </div>
@@ -1603,7 +1603,7 @@
   <script>
     // ========== SESSION & AUTH HANDLING (Integrated from login) ==========
     // API Configuration - matches login page
-    const API_BASE_URL = 'https://mehfilbackend.onrender.com';
+    const API_BASE_URL = 'http://192.168.0.79:5000';
     
     // Helper: show toast (poetic)
     function showToast(message, isError = false) {
@@ -1654,6 +1654,25 @@
       return null;
     }
 
+    // Check login and redirect to login page if not authenticated
+    function requireLoginAndRedirect() {
+      const user = getCurrentUser();
+      if (!user) {
+        showToast('✍️ कृपया पहले प्रवेश करें या पंजीकरण करें।', true);
+        setTimeout(()=> { window.location.href='./login.html'; }, 1200);
+        return false;
+      }
+      return true;
+    }
+
+    // Direct publish action: if logged in, redirect to publish.html, else to login
+    function handlePublishClick(event) {
+      event.preventDefault();
+      if (requireLoginAndRedirect()) {
+        window.location.href = './publish.html';
+      }
+    }
+
     // Update UI based on login state
     function updateAuthUI() {
       const user = getCurrentUser();
@@ -1680,9 +1699,9 @@
       } else {
         // Not logged in
         if (authLink) {
-          // authLink.style.display = 'inline-block';
           authLink.href = './login.html';
           authLink.innerHTML = 'प्रवेश करें';
+          // authLink.style.display = 'inline-block';
         }
         if (avatarContainer) avatarContainer.style.display = 'none';
       }
@@ -1767,27 +1786,40 @@
       }
     });
 
+    // Handle non-publish interactive buttons (Follow, Like, Subscribe, Category) but keep original toast behaviors
     const btns = document.querySelectorAll('.primary-btn, .secondary-btn, .follow-btn, .action, .newsletter-form button, .category, .footer-links a, .social-icons a');
     btns.forEach(btn => {
       btn.addEventListener('click', (e) => {
-        if(btn.classList.contains('primary-btn') || btn.classList.contains('secondary-btn')) {
-          if(btn.innerText.includes('Explore') || btn.innerText.includes('Publish')) {
-            if(!getCurrentUser()) {
-              e.preventDefault();
-              showToast('✍️ कृपया पहले प्रवेश करें या पंजीकरण करें।', true);
-              setTimeout(()=> { window.location.href='./login.html'; }, 1200);
-              return;
-            }
+        // Skip our custom publish buttons to avoid double handling
+        if(btn.id === 'publishPoemBtnNav' || btn.id === 'publishPoemBtnHero' || btn.id === 'publishPoemBtnCTA') return;
+        
+        if(btn.classList.contains('primary-btn') && btn.innerText.includes('Explore')) {
+          e.preventDefault();
+          if(!getCurrentUser()) {
+            showToast('✍️ कृपया पहले प्रवेश करें।', true);
+            setTimeout(()=> { window.location.href='./login.html'; }, 1200);
+            return;
           }
+          showToast("✨ Exploring poetry sanctuary!");
+        } else {
+          e.preventDefault();
+          if (btn.innerText.includes('Follow')) showToast("✨ You're now following this writer!");
+          else if (btn.innerText.includes('Like')) showToast("❤️ You liked this poem!");
+          else if (btn.innerText.includes('Subscribe')) showToast("📖 Thank you! You'll receive beautiful poetry soon.");
+          else if (btn.classList.contains('category')) showToast(`✨ Explore ${btn.innerText} poetry!`);
+          else if (!btn.closest('.profile-avatar') && !btn.id === 'logoutBtn') showToast("✨ Mehfil welcomes your emotion!");
         }
-        e.preventDefault();
-        if (btn.innerText.includes('Follow')) showToast("✨ You're now following this writer!");
-        else if (btn.innerText.includes('Like')) showToast("❤️ You liked this poem!");
-        else if (btn.innerText.includes('Subscribe')) showToast("📖 Thank you! You'll receive beautiful poetry soon.");
-        else if (btn.classList.contains('category')) showToast(`✨ Explore ${btn.innerText} poetry!`);
-        else if (!btn.closest('.profile-avatar') && !btn.id === 'logoutBtn') showToast("✨ Mehfil welcomes your emotion!");
       });
     });
+
+    // Add specific publish listeners for all publish buttons in navbar, hero, cta
+    const publishNavBtn = document.getElementById('publishPoemBtnNav');
+    const publishHeroBtn = document.getElementById('publishPoemBtnHero');
+    const publishCtaBtn = document.getElementById('publishPoemBtnCTA');
+    
+    if(publishNavBtn) publishNavBtn.addEventListener('click', handlePublishClick);
+    if(publishHeroBtn) publishHeroBtn.addEventListener('click', handlePublishClick);
+    if(publishCtaBtn) publishCtaBtn.addEventListener('click', handlePublishClick);
 
     // Initialize everything on load
     window.addEventListener('DOMContentLoaded', () => {
@@ -1803,54 +1835,33 @@
     });
 
     /* ===== Featured Poems Auto Scroll ===== */
-
-const featuredSlider = document.getElementById("featuredSlider");
-
-if(featuredSlider){
-
-  let autoScroll;
-
-  function startAutoScroll(){
-
-    autoScroll = setInterval(() => {
-
-      featuredSlider.scrollBy({
-        left: 340,
-        behavior: "smooth"
-      });
-
-      const maxScroll =
-        featuredSlider.scrollWidth -
-        featuredSlider.clientWidth;
-
-      if(featuredSlider.scrollLeft >= maxScroll - 20){
-
-        setTimeout(() => {
-          featuredSlider.scrollTo({
-            left: 0,
+    const featuredSlider = document.getElementById("featuredSlider");
+    if(featuredSlider){
+      let autoScroll;
+      function startAutoScroll(){
+        autoScroll = setInterval(() => {
+          featuredSlider.scrollBy({
+            left: 340,
             behavior: "smooth"
           });
-        }, 500);
-
+          const maxScroll = featuredSlider.scrollWidth - featuredSlider.clientWidth;
+          if(featuredSlider.scrollLeft >= maxScroll - 20){
+            setTimeout(() => {
+              featuredSlider.scrollTo({
+                left: 0,
+                behavior: "smooth"
+              });
+            }, 500);
+          }
+        }, 1800);
       }
-
-    }, 1800); // fast scroll
-  }
-
-  function stopAutoScroll(){
-    clearInterval(autoScroll);
-  }
-
-  startAutoScroll();
-
-  // User manual scroll kar sake
-  featuredSlider.addEventListener("mouseenter", stopAutoScroll);
-  featuredSlider.addEventListener("mouseleave", startAutoScroll);
-
-  featuredSlider.addEventListener("touchstart", stopAutoScroll);
-  featuredSlider.addEventListener("touchend", startAutoScroll);
-
-}
+      function stopAutoScroll(){ clearInterval(autoScroll); }
+      startAutoScroll();
+      featuredSlider.addEventListener("mouseenter", stopAutoScroll);
+      featuredSlider.addEventListener("mouseleave", startAutoScroll);
+      featuredSlider.addEventListener("touchstart", stopAutoScroll);
+      featuredSlider.addEventListener("touchend", startAutoScroll);
+    }
   </script>
 </body>
 
