@@ -58,7 +58,6 @@
         --danger: #e76f51;
       }
 
-      /* floating orbs (same as category) */
       .orb {
         position: fixed;
         border-radius: 50%;
@@ -105,7 +104,6 @@
         }
       }
 
-      /* scroll indicator (same as category) */
       .scroll-indicator {
         position: fixed;
         top: 0;
@@ -119,7 +117,6 @@
         box-shadow: 0 0 6px #c16a4b;
       }
 
-      /* NAVBAR - IDENTICAL TO CATEGORY PAGE */
       nav {
         position: sticky;
         top: 0;
@@ -213,7 +210,6 @@
         display: block;
       }
 
-      /* responsive navbar */
       @media (max-width: 760px) {
         .nav-links {
           display: none;
@@ -252,7 +248,6 @@
         }
       }
 
-      /* dashboard grid */
       .dashboard-grid {
         width: min(1300px, 92%);
         margin: 2rem auto 4rem;
@@ -261,7 +256,6 @@
         gap: 2rem;
       }
 
-      /* profile card modern */
       .profile-card {
         background: rgba(255, 252, 245, 0.92);
         backdrop-filter: blur(12px);
@@ -316,12 +310,10 @@
         transform: scale(1.05);
       }
 
-      /* custom file input hidden */
       #avatarFileInput {
         display: none;
       }
 
-      /* upload label animation */
       .avatar-frame:hover .profile-avatar {
         filter: brightness(0.96);
       }
@@ -382,7 +374,6 @@
         border-color: transparent;
       }
 
-      /* main panels */
       .dashboard-main {
         display: flex;
         flex-direction: column;
@@ -433,7 +424,6 @@
         color: white;
       }
 
-      /* poem items */
       .poem-card-item {
         background: white;
         border-radius: 1.5rem;
@@ -479,22 +469,16 @@
         color: #7b5e4e;
       }
 
-      .icon-btn.visible-toggle:hover {
-        background: #ffe4d6;
-        color: var(--accent);
-      }
-
       .icon-btn.delete:hover {
         background: #fce5df;
         color: var(--danger);
       }
 
-      .hidden-poem-style {
-        opacity: 0.65;
-        background: #f9f1ea;
+      .icon-btn.edit:hover {
+        background: #ffe4d6;
+        color: var(--accent);
       }
 
-      /* settings rows */
       .settings-list {
         display: flex;
         flex-direction: column;
@@ -538,7 +522,6 @@
         color: white;
       }
 
-      /* modals */
       .modal-mask {
         position: fixed;
         inset: 0;
@@ -596,6 +579,32 @@
         margin-top: 1.5rem;
       }
 
+      /* Poem Editor Modal - Full UI */
+      .poem-editor-dialog {
+        max-width: 750px;
+        width: 92%;
+        padding: 2rem;
+      }
+
+      .poem-editor-dialog textarea {
+        min-height: 280px;
+        font-family: "Inter", "Noto Serif Devanagari", monospace;
+        line-height: 1.6;
+        resize: vertical;
+      }
+
+      .form-group-poem {
+        margin-bottom: 1.2rem;
+      }
+
+      .form-group-poem label {
+        font-weight: 600;
+        margin-left: 8px;
+        display: inline-block;
+        margin-bottom: 6px;
+        color: var(--accent-dark);
+      }
+
       .toast-beauty {
         position: fixed;
         bottom: 30px;
@@ -632,6 +641,11 @@
           position: relative;
           top: 0;
         }
+
+        .poem-editor-dialog {
+          width: 95%;
+          padding: 1.5rem;
+        }
       }
     </style>
   </head>
@@ -643,7 +657,6 @@
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
 
-    <!-- NAVBAR -->
     <nav>
       <div class="nav-inner">
         <div class="logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
@@ -697,12 +710,7 @@
         <button class="btn-ghost" id="openProfileEditBtn">
           <i class="fas fa-user-edit"></i> प्रोफ़ाइल संपादित करें
         </button>
-        <!-- hidden file input for device upload -->
-        <input
-          type="file"
-          id="avatarFileInput"
-          accept="image/jpeg, image/png, image/jpg, image/webp"
-        />
+        <input type="file" id="avatarFileInput" accept="image/jpeg, image/png, image/jpg, image/webp" />
       </aside>
 
       <div class="dashboard-main">
@@ -723,261 +731,164 @@
           <div class="settings-list">
             <div class="setting-row-item">
               <div>
-                <strong><i class="fas fa-key"></i> पासवर्ड बदलें</strong
-                ><br /><small>अपना पासवर्ड अपडेट करें</small>
+                <strong><i class="fas fa-key"></i> पासवर्ड बदलें</strong><br /><small>अपना पासवर्ड अपडेट करें</small>
               </div>
-              <button class="btn-outline-sm" id="openPasswordModalBtn">
-                बदलें
-              </button>
+              <button class="btn-outline-sm" id="openPasswordModalBtn">बदलें</button>
             </div>
             <div class="setting-row-item">
               <div>
-                <strong><i class="fas fa-envelope"></i> ईमेल पता</strong
-                ><br /><small id="emailDisplayValue"
-                  >Loading..</small
-                >
+                <strong><i class="fas fa-envelope"></i> ईमेल पता</strong><br /><small id="emailDisplayValue">Loading..</small>
               </div>
-              <button class="btn-outline-sm" id="openEmailModalBtn">
-                अपडेट करें
-              </button>
+              <button class="btn-outline-sm" id="openEmailModalBtn">अपडेट करें</button>
             </div>
             <div class="setting-row-item">
               <div>
-                <strong><i class="fas fa-bell"></i> सूचनाएँ</strong><br /><small
-                  >लाइक, कमेंट अलर्ट</small
-                >
+                <strong><i class="fas fa-bell"></i> सूचनाएँ</strong><br /><small>लाइक, कमेंट अलर्ट</small>
               </div>
-              <button class="btn-outline-sm" id="openNotifyModalBtn">
-                प्रबंधित करें
-              </button>
+              <button class="btn-outline-sm" id="openNotifyModalBtn">प्रबंधित करें</button>
             </div>
             <div class="setting-row-item">
               <div>
-                <strong><i class="fas fa-trash-alt"></i> खाता हटाएँ</strong
-                ><br /><small style="color: var(--danger)"
-                  >स्थायी हटाना (OTP सत्यापन)</small
-                >
+                <strong><i class="fas fa-trash-alt"></i> खाता हटाएँ</strong><br /><small style="color: var(--danger)">स्थायी हटाना (OTP सत्यापन)</small>
               </div>
-              <button
-                class="btn-outline-sm danger-btn-sm"
-                id="openDeleteAccountModalBtn"
-              >
-                हटाएँ
-              </button>
+              <button class="btn-outline-sm danger-btn-sm" id="openDeleteAccountModalBtn">हटाएँ</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- MODALS (existing) -->
+    <!-- MODALS -->
     <div id="editProfileModal" class="modal-mask">
       <div class="modal-dialog">
         <h3><i class="fas fa-user-edit"></i> प्रोफ़ाइल संपादित करें</h3>
-        <input
-          type="text"
-          id="editNameField"
-          class="input-modern"
-          placeholder="नाम"
-        /><textarea
-          id="editBioField"
-          class="input-modern"
-          rows="2"
-          placeholder="जीवन परिचय"
-        ></textarea>
+        <input type="text" id="editNameField" class="input-modern" placeholder="नाम" />
+        <textarea id="editBioField" class="input-modern" rows="2" placeholder="जीवन परिचय"></textarea>
         <div class="modal-actions">
-          <button class="btn-outline-sm" id="saveProfileBtnFinal">सहेजें</button
-          ><button class="btn-outline-sm" id="closeProfileModalBtn">
-            रद्द करें
-          </button>
+          <button class="btn-outline-sm" id="saveProfileBtnFinal">सहेजें</button>
+          <button class="btn-outline-sm" id="closeProfileModalBtn">रद्द करें</button>
         </div>
       </div>
     </div>
+
     <div id="passwordModalWin" class="modal-mask">
       <div class="modal-dialog">
         <h3><i class="fas fa-lock"></i> पासवर्ड बदलें</h3>
-        <input
-          type="password"
-          id="oldPassInput"
-          class="input-modern"
-          placeholder="वर्तमान पासवर्ड"
-        /><input
-          type="password"
-          id="newPassInput"
-          class="input-modern"
-          placeholder="नया पासवर्ड (min 4)"
-        /><input
-          type="password"
-          id="confirmPassInput"
-          class="input-modern"
-          placeholder="नया पासवर्ड पुष्टि करें"
-        />
+        <input type="password" id="oldPassInput" class="input-modern" placeholder="वर्तमान पासवर्ड" />
+        <input type="password" id="newPassInput" class="input-modern" placeholder="नया पासवर्ड (min 4)" />
+        <input type="password" id="confirmPassInput" class="input-modern" placeholder="नया पासवर्ड पुष्टि करें" />
         <div class="modal-actions">
-          <button class="btn-outline-sm" id="confirmPassChangeBtn">
-            अपडेट करें</button
-          ><button class="btn-outline-sm" id="closePasswordModalBtn">
-            रद्द करें
-          </button>
+          <button class="btn-outline-sm" id="confirmPassChangeBtn">अपडेट करें</button>
+          <button class="btn-outline-sm" id="closePasswordModalBtn">रद्द करें</button>
         </div>
       </div>
     </div>
+
     <div id="deleteAccountModalWin" class="modal-mask">
       <div class="modal-dialog">
-        <h3>
-          <i class="fas fa-exclamation-triangle"></i> खाता हटाने की पुष्टि
-        </h3>
-        <p style="color: var(--danger); margin: 0.5rem 0">
-          ⚠️ यह क्रिया स्थायी है। आपकी सभी रचनाएँ हट जाएंगी।
-        </p>
+        <h3><i class="fas fa-exclamation-triangle"></i> खाता हटाने की पुष्टि</h3>
+        <p style="color: var(--danger); margin: 0.5rem 0">⚠️ यह क्रिया स्थायी है। आपकी सभी रचनाएँ हट जाएंगी।</p>
         <div style="display: flex; gap: 12px">
-          <input
-            type="email"
-            id="deleteEmailInput"
-            class="input-modern"
-            placeholder="पंजीकृत ईमेल"
-            value="riya.sharma@mehfil.com"
-          /><button class="btn-outline-sm" id="sendOtpDynamicBtn">
-            OTP भेजें
-          </button>
+          <input type="email" id="deleteEmailInput" class="input-modern" placeholder="पंजीकृत ईमेल" />
+          <button class="btn-outline-sm" id="sendOtpDynamicBtn">OTP भेजें</button>
         </div>
-        <input
-          type="text"
-          id="otpCodeInput"
-          class="input-modern"
-          placeholder="OTP दर्ज करें"
-        />
+        <input type="text" id="otpCodeInput" class="input-modern" placeholder="OTP दर्ज करें" />
         <div class="modal-actions">
-          <button
-            class="btn-outline-sm danger-btn-sm"
-            id="confirmDeleteAccountBtn"
-          >
-            स्थायी रूप से हटाएँ</button
-          ><button class="btn-outline-sm" id="closeDeleteModalBtn">
-            रद्द करें
-          </button>
+          <button class="btn-outline-sm danger-btn-sm" id="confirmDeleteAccountBtn">स्थायी रूप से हटाएँ</button>
+          <button class="btn-outline-sm" id="closeDeleteModalBtn">रद्द करें</button>
         </div>
       </div>
     </div>
+
     <div id="emailModalWin" class="modal-mask">
       <div class="modal-dialog">
         <h3><i class="fas fa-envelope"></i> ईमेल अपडेट करें</h3>
-        <input
-          type="email"
-          id="newEmailField"
-          class="input-modern"
-          placeholder="नया ईमेल"
-        />
+        <input type="email" id="newEmailField" class="input-modern" placeholder="नया ईमेल" />
         <div class="modal-actions">
-          <button class="btn-outline-sm" id="updateEmailFinalBtn">
-            अपडेट करें</button
-          ><button class="btn-outline-sm" id="closeEmailModalBtn">
-            रद्द करें
-          </button>
+          <button class="btn-outline-sm" id="updateEmailFinalBtn">अपडेट करें</button>
+          <button class="btn-outline-sm" id="closeEmailModalBtn">रद्द करें</button>
         </div>
       </div>
     </div>
+
     <div id="notifyModalWin" class="modal-mask">
       <div class="modal-dialog">
         <h3><i class="fas fa-bell"></i> सूचना प्राथमिकताएँ</h3>
-        <label style="display: flex; gap: 12px; margin: 1rem 0"
-          ><input type="checkbox" id="notifyLikeChk" checked />
-          <span>लाइक्स पर सूचना</span></label
-        ><label style="display: flex; gap: 12px; margin: 1rem 0"
-          ><input type="checkbox" id="notifyCommentChk" checked />
-          <span>टिप्पणियों पर सूचना</span></label
-        >
+        <label style="display: flex; gap: 12px; margin: 1rem 0">
+          <input type="checkbox" id="notifyLikeChk" checked /> <span>लाइक्स पर सूचना</span>
+        </label>
+        <label style="display: flex; gap: 12px; margin: 1rem 0">
+          <input type="checkbox" id="notifyCommentChk" checked /> <span>टिप्पणियों पर सूचना</span>
+        </label>
         <div class="modal-actions">
-          <button class="btn-outline-sm" id="saveNotifyPrefsBtn">सहेजें</button
-          ><button class="btn-outline-sm" id="closeNotifyModalBtn">
-            रद्द करें
-          </button>
+          <button class="btn-outline-sm" id="saveNotifyPrefsBtn">सहेजें</button>
+          <button class="btn-outline-sm" id="closeNotifyModalBtn">रद्द करें</button>
         </div>
       </div>
     </div>
+
+    <!-- POEM EDIT MODAL - FULL UI -->
+    <div id="poemEditModal" class="modal-mask">
+      <div class="modal-dialog poem-editor-dialog">
+        <h3><i class="fas fa-feather-alt"></i> कविता संपादित करें</h3>
+        <div class="form-group-poem">
+          <label><i class="fas fa-heading"></i> शीर्षक</label>
+          <input type="text" id="poemEditTitle" class="input-modern" placeholder="कविता का शीर्षक" />
+        </div>
+        <div class="form-group-poem">
+          <label><i class="fas fa-align-left"></i> कविता की पंक्तियाँ</label>
+          <textarea id="poemEditBody" class="input-modern" rows="8" placeholder="यहाँ अपनी रचना लिखें..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-outline-sm" id="poemUpdateConfirmBtn"><i class="fas fa-save"></i> अपडेट करें</button>
+          <button class="btn-outline-sm" id="poemEditCancelBtn">रद्द करें</button>
+        </div>
+      </div>
+    </div>
+
     <div id="toastMsgGlobal" class="toast-beauty">✨</div>
 
     <script>
-      // ---------- STATE ----------
-
       let currentUser = {};
       let storedOtp = null;
+      let currentEditingPoemId = null;
 
       function updateProfileUI() {
-        document.getElementById("profileFullName").innerText =
-          currentUser.firstName + " " + currentUser.lastName;
-
-        document.getElementById("profileBioText").innerText =
-          currentUser.gender + " • " + currentUser.languagePref;
-
-        document.getElementById("profileAvatarImg").src =
-          currentUser.profilePic;
-
-        document.getElementById("emailDisplayValue").innerText =
-          currentUser.email;
+        document.getElementById("profileFullName").innerText = currentUser.firstName + " " + currentUser.lastName;
+        document.getElementById("profileBioText").innerText = currentUser.gender + " • " + currentUser.languagePref;
+        document.getElementById("profileAvatarImg").src = currentUser.profilePic;
+        document.getElementById("emailDisplayValue").innerText = currentUser.email;
       }
+
       function renderPoems(poems) {
         const container = document.getElementById("dynamicPoemsList");
-
         if (!poems.length) {
-          container.innerHTML = `
-    <div style="text-align:center;padding:2rem;">
-      कोई रचना नहीं
-    </div>`;
-
+          container.innerHTML = `<div style="text-align:center;padding:2rem;">कोई रचना नहीं</div>`;
           return;
         }
-
-        container.innerHTML = poems
-          .map(
-            (poem) => `
-
-<div class="poem-card-item">
-
-<div class="poem-title">
-
-<h4>${poem.title}</h4>
-
-<div class="poem-date">
-
-${new Date(poem.createdAt).toLocaleDateString()}
-
-</div>
-
-</div>
-
-<div class="action-buttons">
-
-<button
-class="icon-btn edit"
-onclick="editPoem('${poem._id}')">
-
-<i class="fas fa-pen"></i>
-
-</button>
-
-<button
-class="icon-btn delete"
-onclick="deletePoem('${poem._id}')">
-
-<i class="fas fa-trash"></i>
-
-</button>
-
-</div>
-
-</div>
-
-`,
-          )
-          .join("");
+        container.innerHTML = poems.map(poem => `
+          <div class="poem-card-item">
+            <div class="poem-title">
+              <h4>${escapeHtml(poem.title)}</h4>
+              <div class="poem-date">${new Date(poem.createdAt).toLocaleDateString()}</div>
+            </div>
+            <div class="action-buttons">
+              <button class="icon-btn edit" onclick="openEditPoemModal('${poem._id}')">
+                <i class="fas fa-pen"></i>
+              </button>
+              <button class="icon-btn delete" onclick="deletePoem('${poem._id}')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `).join("");
       }
 
       function escapeHtml(s) {
-        return s.replace(
-          /[&<>]/g,
-          (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[m],
-        );
+        if (!s) return "";
+        return s.replace(/[&<>]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[m]);
       }
+
       function showToast(msg, isErr = false) {
         const t = document.getElementById("toastMsgGlobal");
         t.innerText = msg;
@@ -988,82 +899,138 @@ onclick="deletePoem('${poem._id}')">
         }, 2600);
       }
 
-      async function deletePoem(id) {
-        if (!confirm("कविता हटानी है ?")) return;
+      // EDIT POEM - Open Modal UI
+      window.openEditPoemModal = async function(id) {
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch("https://mehfilbackend.onrender.com/api/poems/my-poems", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const data = await response.json();
+          if (!data.success) return;
+          const poem = data.poems.find(p => p._id === id);
+          if (!poem) return;
+          
+          currentEditingPoemId = id;
+          document.getElementById("poemEditTitle").value = poem.title || "";
+          document.getElementById("poemEditBody").value = poem.body || "";
+          document.getElementById("poemEditModal").classList.add("active");
+        } catch (error) {
+          console.log(error);
+          showToast("कविता लोड नहीं हुई", true);
+        }
+      };
 
-        const token = localStorage.getItem("token");
-
-        await fetch(
-          `https://mehfilbackend.onrender.com/api/poems/${id}`,
-
-          {
-            method: "DELETE",
-
+      // UPDATE POEM from Modal
+      async function updatePoemFromModal() {
+        if (!currentEditingPoemId) return;
+        const newTitle = document.getElementById("poemEditTitle").value.trim();
+        const newBody = document.getElementById("poemEditBody").value.trim();
+        
+        if (!newTitle) {
+          showToast("कृपया शीर्षक दर्ज करें", true);
+          return;
+        }
+        if (!newBody) {
+          showToast("कविता की पंक्तियाँ लिखें", true);
+          return;
+        }
+        
+        try {
+          const token = localStorage.getItem("token");
+          // Get original poem to preserve category and tags
+          const fetchOriginal = await fetch("https://mehfilbackend.onrender.com/api/poems/my-poems", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const origData = await fetchOriginal.json();
+          const originalPoem = origData.poems?.find(p => p._id === currentEditingPoemId);
+          const category = originalPoem?.category || "general";
+          const tags = originalPoem?.tags || [];
+          
+          const updateResponse = await fetch(`https://mehfilbackend.onrender.com/api/poems/${currentEditingPoemId}`, {
+            method: "PUT",
             headers: {
-              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
             },
-          },
-        );
-
-        loadMyPoems();
-
-        showToast("कविता हटा दी गई");
+            body: JSON.stringify({ title: newTitle, body: newBody, category, tags })
+          });
+          const updateData = await updateResponse.json();
+          
+          if (updateData.success) {
+            showToast("कविता अपडेट हो गई");
+            loadMyPoems();
+            closePoemEditModal();
+          } else {
+            showToast("Update failed: " + (updateData.message || "unknown"), true);
+          }
+        } catch (error) {
+          console.log(error);
+          showToast("Update failed", true);
+        }
       }
-      function editPoem(id) {
-        showToast("Edit feature coming soon");
+
+      function closePoemEditModal() {
+        document.getElementById("poemEditModal").classList.remove("active");
+        currentEditingPoemId = null;
+        document.getElementById("poemEditTitle").value = "";
+        document.getElementById("poemEditBody").value = "";
       }
+
+      // DELETE POEM - Same as before
+      window.deletePoem = async function(id) {
+        if (!confirm("क्या आप यह कविता हटाना चाहते हैं?")) return;
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(`https://mehfilbackend.onrender.com/api/poems/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const data = await response.json();
+          if (data.success) {
+            loadMyPoems();
+            showToast("कविता हटा दी गई");
+          } else {
+            showToast("Delete failed", true);
+          }
+        } catch (error) {
+          console.log(error);
+          showToast("Delete failed", true);
+        }
+      };
+
       async function loadMyPoems() {
         try {
           const token = localStorage.getItem("token");
-
-          const response = await fetch(
-            "https://mehfilbackend.onrender.com/api/poems/my-poems",
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          );
-
+          const response = await fetch("https://mehfilbackend.onrender.com/api/poems/my-poems", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
           const data = await response.json();
-
           if (data.success) {
             renderPoems(data.poems);
-
-            document.getElementById("poemTotalCount").innerText =
-              data.poems.length;
+            document.getElementById("poemTotalCount").innerText = data.poems.length;
           }
         } catch (error) {
           console.log(error);
         }
       }
+
       async function fetchProfile() {
         try {
           const token = localStorage.getItem("token");
-
           if (!token) {
             window.location.href = "./login.html";
             return;
           }
-
-          const response = await fetch(
-            "https://mehfilbackend.onrender.com/api/auth/profile",
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          );
-
+          const response = await fetch("https://mehfilbackend.onrender.com/api/auth/profile", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
           const data = await response.json();
-
           if (!data.success) {
             showToast(data.message, true);
             return;
           }
-
           currentUser = data.user;
-
           updateProfileUI();
         } catch (error) {
           console.log(error);
@@ -1071,296 +1038,129 @@ onclick="deletePoem('${poem._id}')">
         }
       }
 
-      // ----- DEVICE UPLOAD FOR PROFILE PICTURE (ADDED FEATURE) -----
+      // Profile Picture Upload
       const fileInput = document.getElementById("avatarFileInput");
       const avatarImg = document.getElementById("profileAvatarImg");
       const editTrigger = document.getElementById("editAvatarTrigger");
       const avatarFrame = document.getElementById("avatarFrameClick");
 
-      // function to handle file upload and convert to dataURL / store
       function handleAvatarUpload(file) {
         if (!file) return;
-        // validate type
         if (!file.type.match("image.*")) {
-          showToast("कृपया केवल छवि फ़ाइल चुनें (JPG, PNG, WEBP)", true);
+          showToast("कृपया केवल छवि फ़ाइल चुनें", true);
           return;
         }
-        // limit size (2MB)
         if (file.size > 2 * 1024 * 1024) {
           showToast("छवि 2MB से कम होनी चाहिए", true);
           return;
         }
         const reader = new FileReader();
-        reader.onload = function (e) {
-          const imageDataUrl = e.target.result;
-          // update currentUser avatar
-          // currentUser.avatar = imageDataUrl;
-          currentUser.profilePic = imageDataUrl;
-          avatarImg.src = imageDataUrl;
+        reader.onload = function(e) {
+          currentUser.profilePic = e.target.result;
+          avatarImg.src = e.target.result;
           showToast("प्रोफ़ाइल चित्र अपडेट हो गया 🎉");
         };
-        reader.onerror = function () {
-          showToast("फ़ाइल पढ़ने में त्रुटि", true);
-        };
+        reader.onerror = () => showToast("फ़ाइल पढ़ने में त्रुटि", true);
         reader.readAsDataURL(file);
       }
 
-      // open file selector when clicking on camera icon or avatar frame (double utility)
-      if (editTrigger) {
-        editTrigger.addEventListener("click", (e) => {
-          e.stopPropagation();
-          fileInput.click();
-        });
-      }
-      // optionally clicking on avatar frame can also open
-      if (avatarFrame) {
-        avatarFrame.addEventListener("click", (e) => {
-          // Avoid conflict if click exactly on camera icon already handled
-          if (e.target === editTrigger || editTrigger.contains(e.target))
-            return;
-          fileInput.click();
-        });
-      }
-      // when user selects a file
-      if (fileInput) {
-        fileInput.addEventListener("change", (e) => {
-          if (e.target.files && e.target.files.length > 0) {
-            handleAvatarUpload(e.target.files[0]);
-          }
-          fileInput.value = ""; // allow re-upload same file later
-        });
-      }
+      editTrigger?.addEventListener("click", (e) => { e.stopPropagation(); fileInput.click(); });
+      avatarFrame?.addEventListener("click", (e) => { if (e.target !== editTrigger && !editTrigger.contains(e.target)) fileInput.click(); });
+      fileInput?.addEventListener("change", (e) => { if (e.target.files?.length) handleAvatarUpload(e.target.files[0]); fileInput.value = ""; });
 
-      // modals mgmt
+      // Modal Management
       const modals = {
         profile: document.getElementById("editProfileModal"),
         password: document.getElementById("passwordModalWin"),
         deleteAcc: document.getElementById("deleteAccountModalWin"),
         email: document.getElementById("emailModalWin"),
-        notify: document.getElementById("notifyModalWin"),
+        notify: document.getElementById("notifyModalWin")
       };
-      function openModal(m) {
-        if (m) m.classList.add("active");
-      }
-      function closeModal(m) {
-        if (m) m.classList.remove("active");
-      }
 
-      document
-        .getElementById("openProfileEditBtn")
-        ?.addEventListener("click", () => {
-          document.getElementById("editNameField").value = currentUser.firstName
-            ? currentUser.firstName + " " + currentUser.lastName
-            : "";
-          document.getElementById("editBioField").value =
-            currentUser.languagePref || "";
-          openModal(modals.profile);
-        });
-      document
-        .getElementById("saveProfileBtnFinal")
-        ?.addEventListener("click", () => {
-          showToast("Profile update API coming soon");
+      function openModal(m) { if (m) m.classList.add("active"); }
+      function closeModal(m) { if (m) m.classList.remove("active"); }
 
-          closeModal(modals.profile);
-        });
-      document
-        .getElementById("closeProfileModalBtn")
-        ?.addEventListener("click", () => closeModal(modals.profile));
+      document.getElementById("openProfileEditBtn")?.addEventListener("click", () => {
+        document.getElementById("editNameField").value = currentUser.firstName ? currentUser.firstName + " " + currentUser.lastName : "";
+        document.getElementById("editBioField").value = currentUser.languagePref || "";
+        openModal(modals.profile);
+      });
+      document.getElementById("saveProfileBtnFinal")?.addEventListener("click", () => { showToast("Profile update API coming soon"); closeModal(modals.profile); });
+      document.getElementById("closeProfileModalBtn")?.addEventListener("click", () => closeModal(modals.profile));
+      document.getElementById("openPasswordModalBtn")?.addEventListener("click", () => openModal(modals.password));
+      document.getElementById("confirmPassChangeBtn")?.addEventListener("click", () => {
+        const newp = document.getElementById("newPassInput").value;
+        const conf = document.getElementById("confirmPassInput").value;
+        if (newp.length < 4) { showToast("पासवर्ड कम से कम 4 अक्षर", true); return; }
+        if (newp !== conf) { showToast("पासवर्ड मेल नहीं खाते", true); return; }
+        showToast("Password API coming soon");
+        closeModal(modals.password);
+        document.getElementById("oldPassInput").value = "";
+        document.getElementById("newPassInput").value = "";
+        document.getElementById("confirmPassInput").value = "";
+      });
+      document.getElementById("closePasswordModalBtn")?.addEventListener("click", () => closeModal(modals.password));
+      document.getElementById("openEmailModalBtn")?.addEventListener("click", () => { openModal(modals.email); document.getElementById("newEmailField").value = currentUser.email; });
+      document.getElementById("updateEmailFinalBtn")?.addEventListener("click", () => {
+        const mail = document.getElementById("newEmailField").value.trim();
+        if (mail && mail.includes("@")) { currentUser.email = mail; updateProfileUI(); showToast("ईमेल अपडेट किया"); closeModal(modals.email); }
+        else showToast("सही ईमेल डालें", true);
+      });
+      document.getElementById("closeEmailModalBtn")?.addEventListener("click", () => closeModal(modals.email));
+      document.getElementById("openNotifyModalBtn")?.addEventListener("click", () => openModal(modals.notify));
+      document.getElementById("saveNotifyPrefsBtn")?.addEventListener("click", () => { showToast("सूचना प्राथमिकताएँ सहेजी गईं"); closeModal(modals.notify); });
+      document.getElementById("closeNotifyModalBtn")?.addEventListener("click", () => closeModal(modals.notify));
+      document.getElementById("openDeleteAccountModalBtn")?.addEventListener("click", () => { openModal(modals.deleteAcc); storedOtp = null; document.getElementById("otpCodeInput").value = ""; });
+      document.getElementById("sendOtpDynamicBtn")?.addEventListener("click", () => {
+        const emailVal = document.getElementById("deleteEmailInput").value.trim();
+        if (emailVal !== currentUser.email) { showToast("पंजीकृत ईमेल मेल नहीं खाता", true); return; }
+        const otpGen = Math.floor(100000 + Math.random() * 900000).toString();
+        storedOtp = otpGen;
+        showToast(`📧 OTP ${otpGen} (डेमो) भेजा गया`);
+      });
+      document.getElementById("confirmDeleteAccountBtn")?.addEventListener("click", () => {
+        const otpGiven = document.getElementById("otpCodeInput").value.trim();
+        if (!storedOtp) { showToast("पहले OTP भेजें", true); return; }
+        if (otpGiven !== storedOtp) { showToast("OTP अमान्य", true); return; }
+        showToast("Delete Account API coming soon");
+        closeModal(modals.deleteAcc);
+      });
+      document.getElementById("closeDeleteModalBtn")?.addEventListener("click", () => closeModal(modals.deleteAcc));
+      document.getElementById("createPoemBtn")?.addEventListener("click", () => { window.location.href = "./publish.html"; });
 
-      document
-        .getElementById("openPasswordModalBtn")
-        ?.addEventListener("click", () => openModal(modals.password));
-      document
-        .getElementById("confirmPassChangeBtn")
-        ?.addEventListener("click", () => {
-          const newp = document.getElementById("newPassInput").value;
+      // Poem Edit Modal Buttons
+      document.getElementById("poemUpdateConfirmBtn")?.addEventListener("click", updatePoemFromModal);
+      document.getElementById("poemEditCancelBtn")?.addEventListener("click", closePoemEditModal);
 
-          const conf = document.getElementById("confirmPassInput").value;
+      // Logout
+      document.getElementById("logoutBtnGlobal")?.addEventListener("click", () => {
+        showToast("लॉगआउट हो रहा है...");
+        setTimeout(() => { localStorage.clear(); window.location.href = "index.html"; }, 600);
+      });
 
-          if (newp.length < 4) {
-            showToast("पासवर्ड कम से कम 4 अक्षर", true);
-
-            return;
-          }
-
-          if (newp !== conf) {
-            showToast("पासवर्ड मेल नहीं खाते", true);
-
-            return;
-          }
-
-          showToast("Password API coming soon");
-
-          closeModal(modals.password);
-
-          document.getElementById("oldPassInput").value = "";
-
-          document.getElementById("newPassInput").value = "";
-
-          document.getElementById("confirmPassInput").value = "";
-        });
-      document
-        .getElementById("closePasswordModalBtn")
-        ?.addEventListener("click", () => closeModal(modals.password));
-
-      document
-        .getElementById("openEmailModalBtn")
-        ?.addEventListener("click", () => {
-          openModal(modals.email);
-          document.getElementById("newEmailField").value = currentUser.email;
-        });
-      document
-        .getElementById("updateEmailFinalBtn")
-        ?.addEventListener("click", () => {
-          const mail = document.getElementById("newEmailField").value.trim();
-          if (mail && mail.includes("@")) {
-            currentUser.email = mail;
-            updateProfileUI();
-            showToast("ईमेल अपडेट किया");
-            closeModal(modals.email);
-          } else showToast("सही ईमेल डालें", true);
-        });
-      document
-        .getElementById("closeEmailModalBtn")
-        ?.addEventListener("click", () => closeModal(modals.email));
-
-      document
-        .getElementById("openNotifyModalBtn")
-        ?.addEventListener("click", () => openModal(modals.notify));
-      document
-        .getElementById("saveNotifyPrefsBtn")
-        ?.addEventListener("click", () => {
-          showToast("सूचना प्राथमिकताएँ सहेजी गईं");
-          closeModal(modals.notify);
-        });
-      document
-        .getElementById("closeNotifyModalBtn")
-        ?.addEventListener("click", () => closeModal(modals.notify));
-
-      document
-        .getElementById("openDeleteAccountModalBtn")
-        ?.addEventListener("click", () => {
-          openModal(modals.deleteAcc);
-          storedOtp = null;
-          document.getElementById("otpCodeInput").value = "";
-        });
-      document
-        .getElementById("sendOtpDynamicBtn")
-        ?.addEventListener("click", () => {
-          const emailVal = document
-            .getElementById("deleteEmailInput")
-            .value.trim();
-          if (emailVal !== currentUser.email) {
-            showToast("पंजीकृत ईमेल मेल नहीं खाता", true);
-            return;
-          }
-          const otpGen = Math.floor(100000 + Math.random() * 900000).toString();
-          storedOtp = otpGen;
-          showToast(`📧 OTP ${otpGen} (डेमो) भेजा गया`);
-        });
-      document
-        .getElementById("confirmDeleteAccountBtn")
-        ?.addEventListener("click", () => {
-          const otpGiven = document.getElementById("otpCodeInput").value.trim();
-
-          if (!storedOtp) {
-            showToast("पहले OTP भेजें", true);
-
-            return;
-          }
-
-          if (otpGiven !== storedOtp) {
-            showToast("OTP अमान्य", true);
-
-            return;
-          }
-
-          showToast("Delete Account API coming soon");
-
-          closeModal(modals.deleteAcc);
-        });
-      document
-        .getElementById("closeDeleteModalBtn")
-        ?.addEventListener("click", () => closeModal(modals.deleteAcc));
-
-      // document
-      //   .getElementById("createPoemBtn")
-      //   ?.addEventListener("click", () => {
-      //     let title = prompt("कविता का शीर्षक:");
-      //     if (title)
-      //       addPoem(title, prompt("कविता की पंक्तियाँ:") || "अनमोल शब्द...");
-      //   });
-
-      document
-        .getElementById("createPoemBtn")
-        ?.addEventListener("click", () => {
-          window.location.href = "./publish.html";
-        });
-
-      // logout
-      document
-        .getElementById("logoutBtnGlobal")
-        ?.addEventListener("click", () => {
-          showToast("लॉगआउट हो रहा है...");
-          setTimeout(() => {
-            localStorage.clear();
-            window.location.href = "index.html";
-          }, 600);
-        });
-
-      // MOBILE MENU TOGGLE
+      // Mobile Menu
       const menuBtn = document.getElementById("menuBtn");
       const navLinks = document.getElementById("navLinks");
       const mobileOverlay = document.getElementById("mobileOverlay");
+      function closeMenu() { navLinks.classList.remove("active"); mobileOverlay.classList.remove("active"); if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-bars"></i>'; }
+      function openMenu() { navLinks.classList.add("active"); mobileOverlay.classList.add("active"); if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-times"></i>'; }
+      menuBtn?.addEventListener("click", (e) => { e.stopPropagation(); if (navLinks.classList.contains("active")) closeMenu(); else openMenu(); });
+      mobileOverlay?.addEventListener("click", closeMenu);
+      document.querySelectorAll(".nav-links a").forEach(link => link.addEventListener("click", closeMenu));
 
-      function closeMenu() {
-        navLinks.classList.remove("active");
-        mobileOverlay.classList.remove("active");
-        if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-      }
-      function openMenu() {
-        navLinks.classList.add("active");
-        mobileOverlay.classList.add("active");
-        if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-times"></i>';
-      }
-      if (menuBtn) {
-        menuBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (navLinks.classList.contains("active")) closeMenu();
-          else openMenu();
-        });
-      }
-      mobileOverlay.addEventListener("click", closeMenu);
-      document
-        .querySelectorAll(".nav-links a")
-        .forEach((link) => link.addEventListener("click", closeMenu));
-
-      // scroll progress
+      // Scroll Progress
       window.addEventListener("scroll", () => {
         const winScroll = document.documentElement.scrollTop;
-        const height =
-          document.documentElement.scrollHeight - window.innerHeight;
-        const scrolled = (winScroll / height) * 100;
-        document.getElementById("scrollBar").style.width = scrolled + "%";
+        const height = document.documentElement.scrollHeight - window.innerHeight;
+        document.getElementById("scrollBar").style.width = (winScroll / height) * 100 + "%";
       });
 
-      // fade animations
+      // Fade Animations
       const fadeItems = document.querySelectorAll(".fade-scroll");
-      const obs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add("appear");
-              obs.unobserve(e.target);
-            }
-          });
-        },
-        { threshold: 0.1 },
-      );
-      fadeItems.forEach((el) => obs.observe(el));
+      const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("appear"); obs.unobserve(e.target); } }); }, { threshold: 0.1 });
+      fadeItems.forEach(el => obs.observe(el));
 
       fetchProfile();
-
       loadMyPoems();
     </script>
   </body>
