@@ -525,6 +525,89 @@
         visibility: visible;
       }
      
+      /* ===== ATTRACTIVE LOADER (added for poets page) ===== */
+      .poets-loader-overlay {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 380px;
+        width: 100%;
+        grid-column: 1/-1;
+      }
+      .loader-container-poets {
+        text-align: center;
+        background: rgba(255, 253, 248, 0.85);
+        backdrop-filter: blur(5px);
+        padding: 2rem 2.5rem;
+        border-radius: 48px;
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
+      }
+      .ink-loader-poets {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .ink-dot-poets {
+        width: 20px;
+        height: 20px;
+        background: var(--accent);
+        border-radius: 50%;
+        animation: inkFlowPoets 1.4s infinite ease-in-out both;
+      }
+      .ink-dot-poets:nth-child(1) {
+        animation-delay: -0.32s;
+        background: #e0a87c;
+      }
+      .ink-dot-poets:nth-child(2) {
+        animation-delay: -0.16s;
+        background: var(--accent);
+      }
+      .ink-dot-poets:nth-child(3) {
+        background: var(--accent-dark);
+      }
+      @keyframes inkFlowPoets {
+        0%, 80%, 100% {
+          transform: scale(0.5);
+          opacity: 0.4;
+        }
+        40% {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+      }
+      .loader-text-poets {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.15rem;
+        letter-spacing: 1px;
+        background: linear-gradient(120deg, #c16a4b, #e4a482);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        font-weight: 700;
+        margin-top: 10px;
+      }
+      .loader-sub-poets {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .loader-sub-poets i {
+        font-size: 0.75rem;
+        animation: featherSwayPoets 1.8s infinite;
+      }
+      @keyframes featherSwayPoets {
+        0% { transform: rotate(0deg); }
+        50% { transform: rotate(8deg); }
+        100% { transform: rotate(0deg); }
+      }
 
       /* footer styles (matching original) */
     
@@ -544,8 +627,8 @@
     <div class="nav-links" id="navLinks">
       <a href="./index.html">मुखपृष्ठ</a>
       <a href="./poems.html">कविताएँ</a>
-      <a href="./poets.html">रचनाकार</a>
-      <a href="./category.html" class="active">श्रेणियाँ</a>
+      <a href="./poets.html" class="active">रचनाकार</a>
+      <a href="./category.html">श्रेणियाँ</a>
       <a href="./login.html" id="dynamicAuthLink">प्रवेश करें</a>
     </div>
     <div style="display:flex; align-items:center; gap:12px;">
@@ -731,11 +814,36 @@
       const API_BASE = "https://mehfilbackend.onrender.com/api";
       let currentStyle = "all", searchQuery = "";
 
+      // Show loader inside writers grid
+      function showLoaderOnPoets() {
+        const grid = document.getElementById("writersGrid");
+        if (grid) {
+          grid.innerHTML = `
+            <div class="poets-loader-overlay">
+              <div class="loader-container-poets">
+                <div class="ink-loader-poets">
+                  <div class="ink-dot-poets"></div>
+                  <div class="ink-dot-poets"></div>
+                  <div class="ink-dot-poets"></div>
+                </div>
+                <div class="loader-text-poets">साहित्यिक आत्माओं का संसार खुल रहा है...</div>
+                <div class="loader-sub-poets"><i class="fas fa-feather-alt"></i> रचनाकार सज रहे हैं <i class="fas fa-spinner fa-pulse"></i></div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
       async function fetchWriters() {
+        // show loader while backend sync
+        showLoaderOnPoets();
         try {
           const res = await fetch(`${API_BASE}/admin/users`);
           const data = await res.json();
-          if (!data.success) return;
+          if (!data.success) {
+            document.getElementById("writersGrid").innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;">😢 रचनाकार लोड नहीं हुए, कृपया पुनः प्रयास करें</div>`;
+            return;
+          }
           writersData = await Promise.all(data.users.map(async (user) => {
             try {
               const res2 = await fetch(`${API_BASE}/auth/user/${user._id}`);
@@ -750,7 +858,10 @@
           }));
           writersData = writersData.filter(Boolean);
           renderWriters();
-        } catch(e) { console.error(e); }
+        } catch(e) { 
+          console.error(e);
+          document.getElementById("writersGrid").innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;">🌿 नेटवर्क समस्या, कृपया पुनः प्रयास करें</div>`;
+        }
       }
 
       function renderWriters() {
