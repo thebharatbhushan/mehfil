@@ -718,7 +718,7 @@
 
       async function fetchAuthorData(authorId) {
         const response = await fetch(
-          `https://mehfilbackend.onrender.com5000/api/auth/user/${authorId}`,
+          `https://mehfilbackend.onrender.com/api/auth/user/${authorId}`,
         );
         if (!response.ok) throw new Error("Author not found");
         const data = await response.json();
