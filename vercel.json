@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/poem/:slug",
+      "destination": "/poem.html"
+    }
+  ]
+}

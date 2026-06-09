@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="hi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>रचनाकार — Mehfil Poetry Sanctuary | Poet's World</title>
+
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./header.css" />
+    <link rel="stylesheet" href="./footer.css" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #fef9f2;
+        color: #2c241f;
+        font-family: "Inter", "Noto Serif Devanagari", serif;
+        overflow-x: hidden;
+      }
+
+      :root {
+        --bg: #fef9f2;
+        --card-bg: rgba(255, 253, 248, 0.96);
+        --accent: #c16a4b;
+        --accent-soft: #e8c8ba;
+        --accent-dark: #9e4f36;
+        --text-dark: #2c241f;
+        --text-muted: #756256;
+        --border-light: rgba(200, 180, 160, 0.35);
+        --shadow-sm: 0 20px 35px -12px rgba(0, 0, 0, 0.05);
+        --shadow-hover: 0 30px 40px -18px rgba(0, 0, 0, 0.12);
+      }
+
+      .container {
+        max-width: 1280px;
+        width: 92%;
+        margin: 0 auto;
+      }
+
+      /* Floating Orbs */
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(90px);
+        z-index: -2;
+        opacity: 0.4;
+        animation: slowFloat 24s infinite alternate ease-in-out;
+      }
+      .orb-1 {
+        width: 520px;
+        height: 520px;
+        background: #ffd7c2;
+        top: -180px;
+        left: -8%;
+      }
+      .orb-2 {
+        width: 560px;
+        height: 560px;
+        background: #ddc7b0;
+        bottom: -120px;
+        right: -6%;
+        animation-delay: -6s;
+      }
+      @keyframes slowFloat {
+        0% {
+          transform: translate(0, 0) scale(1);
+        }
+        100% {
+          transform: translate(35px, -35px) scale(1.12);
+        }
+      }
+
+      /* Scroll Indicator */
+      .scroll-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: var(--accent);
+        width: 0%;
+        z-index: 10000;
+        transition: width 0.08s linear;
+        border-radius: 0 2px 2px 0;
+      }
+
+      /* Main Content */
+      .author-main {
+        padding: 2rem 0 4rem;
+      }
+
+      /* Back Button */
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255, 255, 245, 0.8);
+        backdrop-filter: blur(4px);
+        border: 1px solid var(--border-light);
+        padding: 0.7rem 1.5rem;
+        border-radius: 60px;
+        font-weight: 500;
+        color: var(--text-dark);
+        text-decoration: none;
+        transition: 0.25s;
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+      }
+      .back-link i {
+        font-size: 0.9rem;
+        transition: transform 0.2s;
+      }
+      .back-link:hover {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+        transform: translateX(-5px);
+      }
+      .back-link:hover i {
+        transform: translateX(-3px);
+      }
+
+      /* Hero Profile Card */
+      .hero-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(2px);
+        border-radius: 2rem;
+        border: 1px solid var(--border-light);
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s;
+        text-align: center;
+      }
+      .hero-card:hover {
+        box-shadow: var(--shadow-hover);
+      }
+      .profile-avatar-large {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--accent);
+        margin: 0 auto 1.2rem;
+        background: #efe0d2;
+      }
+      .hero-name {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--accent-dark);
+        margin-bottom: 0.5rem;
+      }
+      .hero-email {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(193, 106, 75, 0.08);
+        padding: 0.3rem 1rem;
+        border-radius: 40px;
+      }
+      .share-profile-btn {
+        background: var(--accent);
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 60px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 0.5rem;
+      }
+      .share-profile-btn:hover {
+        background: var(--accent-dark);
+        transform: scale(1.02);
+      }
+
+      /* Stats Grid — Improved for single-line on mobile */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+      .stat-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid var(--border-light);
+        transition: 0.25s;
+      }
+      .stat-card i {
+        font-size: 2.2rem;
+        color: var(--accent);
+        margin-bottom: 0.8rem;
+      }
+      .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: "Cormorant Garamond", serif;
+        color: var(--accent-dark);
+      }
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-top: 0.3rem;
+      }
+
+      /* Responsive: Force all three cards in one row even on smallest screens */
+      @media (max-width: 680px) {
+        .hero-card {
+          padding: 1.5rem;
+        }
+        .hero-name {
+          font-size: 1.8rem;
+        }
+        .profile-avatar-large {
+          width: 100px;
+          height: 100px;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0.75rem;
+        }
+        .stat-card {
+          padding: 0.9rem 0.4rem;
+        }
+        .stat-card i {
+          font-size: 1.4rem;
+          margin-bottom: 0.4rem;
+        }
+        .stat-number {
+          font-size: 1.2rem;
+        }
+        .stat-label {
+          font-size: 0.65rem;
+          line-height: 1.3;
+        }
+        .section-title {
+          font-size: 1.5rem;
+        }
+        .poems-grid {
+          grid-template-columns: 1fr;
+        }
+        .toast-notify {
+          white-space: normal;
+          width: 90%;
+          text-align: center;
+        }
+      }
+
+      /* Extra small devices (≤480px): ensure they never wrap into multiple rows */
+      @media (max-width: 480px) {
+        .stats-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0.5rem;
+        }
+        .stat-card {
+          padding: 0.7rem 0.2rem;
+        }
+        .stat-number {
+          font-size: 1rem;
+        }
+        .stat-label {
+          font-size: 0.58rem;
+        }
+        .stat-card i {
+          font-size: 1.2rem;
+        }
+      }
+
+      /* Bio Section */
+      .bio-section {
+        background: rgba(255, 250, 240, 0.7);
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        margin-bottom: 2.5rem;
+        border-left: 4px solid var(--accent);
+        font-style: italic;
+        color: var(--text-dark);
+        font-size: 1rem;
+      }
+
+      /* Search Bar */
+      .search-bar {
+        margin-bottom: 2rem;
+        position: relative;
+      }
+      .search-bar input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem;
+        border-radius: 60px;
+        border: 1px solid var(--border-light);
+        background: white;
+        font-family: "Inter", sans-serif;
+        font-size: 0.9rem;
+        transition: 0.2s;
+      }
+      .search-bar input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(193, 106, 75, 0.1);
+      }
+      .search-bar i {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+      }
+
+      /* Poems Section */
+      .section-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2rem;
+        margin-bottom: 1.8rem;
+        border-left: 5px solid var(--accent);
+        padding-left: 1rem;
+      }
+      .poems-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.8rem;
+      }
+      .poem-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        transition: 0.25s;
+        border: 1px solid var(--border-light);
+        cursor: pointer;
+      }
+      .poem-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--accent);
+      }
+      .poem-title-mini {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+        color: var(--accent-dark);
+      }
+      .poem-category {
+        font-size: 0.7rem;
+        color: var(--accent);
+        text-transform: capitalize;
+        display: inline-block;
+        background: #f5e6dd;
+        padding: 0.2rem 0.8rem;
+        border-radius: 40px;
+        margin-bottom: 0.8rem;
+      }
+      .poem-excerpt {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+      .poem-date-mini {
+        font-size: 0.7rem;
+        color: #b29b88;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      /* Loading & Empty States */
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+        gap: 1rem;
+      }
+      .ink-loader {
+        width: 60px;
+        height: 60px;
+        border: 3px solid var(--accent-soft);
+        border-top: 3px solid var(--accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .empty-state {
+        text-align: center;
+        padding: 4rem 1rem;
+        background: rgba(255, 250, 240, 0.8);
+        border-radius: 2rem;
+      }
+      .empty-state i {
+        font-size: 3.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        margin-bottom: 1rem;
+      }
+      .toast-notify {
+        position: fixed;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #2c241f;
+        color: #f1e2d2;
+        padding: 12px 28px;
+        border-radius: 60px;
+        font-size: 0.85rem;
+        z-index: 2100;
+        transition: 0.25s;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        font-family: "Inter", sans-serif;
+        border: 1px solid rgba(193, 106, 75, 0.4);
+        pointer-events: none;
+        white-space: nowrap;
+      }
+
+      /* Responsive fine-tune for very small devices */
+      @media (max-width: 680px) {
+        .toast-notify {
+          white-space: normal;
+          width: 90%;
+          text-align: center;
+        }
+      }
+
+      .fade-up {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.65s ease,
+          transform 0.55s ease;
+      }
+      .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Navbar -->
+    <nav>
+      <div class="container nav-inner">
+        <div class="logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
+        <div class="nav-links" id="navLinks">
+          <a href="./index.html">मुखपृष्ठ</a>
+          <a href="./poems.html">कविताएँ</a>
+          <a href="./poets.html">रचनाकार</a>
+          <a href="./category.html">श्रेणियाँ</a>
+          <a href="./login.html" id="dynamicAuthLink">प्रवेश करें</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px">
+          <button class="nav-btn" id="writePoemBtn">
+            <i class="fas fa-pen-fancy"></i> <span>लेखन</span>
+          </button>
+          <div
+            id="profileAvatarContainer"
+            style="display: none"
+            class="profile-avatar"
+          >
+            <img id="userAvatarImg" class="avatar-img" src="" alt="profile" />
+            <div class="profile-dropdown">
+              <div class="user-greeting" id="dropdownUserName">Welcome</div>
+              <a href="./profile.html" class="dropdown-item"
+                ><i class="fas fa-user-circle"></i> मेरी प्रोफ़ाइल</a
+              >
+              <a href="./my-poems.html" class="dropdown-item"
+                ><i class="fas fa-book-open"></i> मेरी रचनाएँ</a
+              >
+              <div class="dropdown-divider"></div>
+              <a href="#" id="logoutBtn" class="dropdown-item"
+                ><i class="fas fa-sign-out-alt"></i> लॉग आउट</a
+              >
+            </div>
+          </div>
+          <div class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="author-main container" id="mainContent">
+      <div id="dynamicAuthorContainer">
+        <div class="loading-container">
+          <div class="ink-loader"></div>
+          <p style="color: var(--text-muted)">
+            रचनाकार की दुनिया में आपका स्वागत है... कृपया प्रतीक्षा करें
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container footer-main">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <i class="fas fa-feather-alt"></i> मेहफ़िल
+            </div>
+            <p class="footer-desc">
+              A sanctuary for Hindi & Urdu poetry — where words find wings and
+              emotions echo timelessly. Join a community of passionate
+              storytellers.
+            </p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Explore</h4>
+            <div class="footer-links">
+              <a href="#"><i class="fas fa-chevron-right"></i> विशेष रचनाएँ</a>
+              <a href="#"
+                ><i class="fas fa-chevron-right"></i> लोकप्रिय रचनाकार</a
+              >
+              <a href="#"><i class="fas fa-chevron-right"></i> Poetry Moods</a>
+              <a href="#"><i class="fas fa-chevron-right"></i> Community Hub</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Community</h4>
+            <div class="footer-links">
+              <a href="#"><i class="fas fa-chevron-right"></i> Write a Poem</a>
+              <a href="#"><i class="fas fa-chevron-right"></i> Join Events</a>
+              <a href="#"><i class="fas fa-chevron-right"></i> Feedback</a>
+              <a href="#"
+                ><i class="fas fa-chevron-right"></i> Become a Member</a
+              >
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>पत्रिका</h4>
+            <p class="newsletter-text">
+              Subscribe to receive poetic musings & latest verses in your inbox.
+            </p>
+            <div class="newsletter-form">
+              <input type="email" placeholder="your@email.com" />
+              <button><i class="fas fa-paper-plane"></i> Subscribe</button>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span
+            >© 2026 Mehfil — Crafted with <span class="heart-beat">❤️</span> for
+            poetry lovers.</span
+          >
+          <div class="footer-bottom-links">
+            <a href="#">गोपनीयता नीति</a>
+            <a href="#">नियम एवं शर्तें</a>
+            <a href="#">संपर्क</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Toast helper
+      function showToast(message, isError = false) {
+        let toast = document.getElementById("globalToast");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = "globalToast";
+          toast.className = "toast-notify";
+          document.body.appendChild(toast);
+        }
+        toast.innerHTML = `<i class="fas fa-feather-alt" style="margin-right: 8px;"></i> ${message}`;
+        toast.style.background = isError ? "#7D3C2A" : "#2C241F";
+        toast.style.transform = "translateX(-50%) translateY(0px)";
+        setTimeout(() => {
+          toast.style.transform = "translateX(-50%) translateY(100px)";
+        }, 3000);
+      }
+
+      // Auth helpers
+      function getCurrentUser() {
+        const user =
+          localStorage.getItem("mehfil_user") ||
+          sessionStorage.getItem("mehfil_user");
+        if (user) {
+          try {
+            return JSON.parse(user);
+          } catch (e) {
+            return null;
+          }
+        }
+        return null;
+      }
+      function updateAuthUI() {
+        const user = getCurrentUser();
+        const authLink = document.getElementById("dynamicAuthLink");
+        const avatarContainer = document.getElementById(
+          "profileAvatarContainer",
+        );
+        const userAvatarImg = document.getElementById("userAvatarImg");
+        const dropdownUserName = document.getElementById("dropdownUserName");
+        if (user && user.firstName) {
+          if (authLink) authLink.style.display = "none";
+          if (avatarContainer) {
+            avatarContainer.style.display = "block";
+            if (user.profilePic) userAvatarImg.src = user.profilePic;
+            else {
+              const initial = (user.firstName.charAt(0) || "U").toUpperCase();
+              userAvatarImg.src = `https://ui-avatars.com/api/?name=${initial}&background=C16A4B&color=fff&bold=true&size=44&rounded=true`;
+            }
+            if (dropdownUserName)
+              dropdownUserName.innerHTML = `✨ नमस्ते, ${user.firstName}`;
+          }
+        } else {
+          if (authLink) {
+            authLink.style.display = "inline-block";
+            authLink.href = "./login.html";
+            authLink.innerHTML = "प्रवेश करें";
+          }
+          if (avatarContainer) avatarContainer.style.display = "none";
+        }
+      }
+      function logout() {
+        localStorage.removeItem("mehfil_user");
+        localStorage.removeItem("mehfil_remember");
+        sessionStorage.removeItem("mehfil_user");
+        showToast("🍂 लॉग आउट हो गए। फिर मिलेंगे महफ़िल में!");
+        setTimeout(() => (window.location.href = "./author.html"), 800);
+      }
+      function initAvatarDropdown() {
+        const avatar = document.getElementById("profileAvatarContainer");
+        if (avatar) {
+          avatar.addEventListener("click", (e) => {
+            e.stopPropagation();
+            avatar.classList.toggle("active");
+          });
+          document.addEventListener("click", () =>
+            avatar.classList.remove("active"),
+          );
+        }
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn)
+          logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+          });
+      }
+      document.getElementById("writePoemBtn")?.addEventListener("click", () => {
+        if (!getCurrentUser()) {
+          showToast("✍️ कृपया पहले प्रवेश करें", true);
+          setTimeout(() => (window.location.href = "./login.html"), 1000);
+        } else showToast("📝 लेखन प्रारम्भ करें — अपनी रचना साझा करें!");
+      });
+
+      // Helper functions
+      function formatDate(dateStr) {
+        if (!dateStr) return "अज्ञात";
+        const d = new Date(dateStr);
+        return d.toLocaleDateString("hi-IN", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+      }
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function (m) {
+          if (m === "&") return "&amp;";
+          if (m === "<") return "&lt;";
+          if (m === ">") return "&gt;";
+          return m;
+        });
+      }
+
+      function getLanguageLabel(langPref) {
+        if (!langPref) return "हिंदी / उर्दू";
+        const langs = {
+          hindi: "हिंदी",
+          urdu: "उर्दू",
+          english: "अंग्रेज़ी",
+          bilingual: "द्विभाषी",
+        };
+        return langs[langPref.toLowerCase()] || langPref;
+      }
+
+      async function fetchAuthorData(authorId) {
+        const response = await fetch(
+          `http://192.168.0.79:5000/api/auth/user/${authorId}`,
+        );
+        if (!response.ok) throw new Error("Author not found");
+        const data = await response.json();
+        if (!data.success) throw new Error("Invalid response");
+        return { user: data.user, poems: data.poems || [] };
+      }
+
+      let allPoems = [];
+      let currentUserId = "";
+
+      function renderPoems(filterText = "") {
+        const poemsContainer = document.getElementById("poemsGridContainer");
+        if (!poemsContainer) return;
+        const filtered = allPoems.filter(
+          (p) =>
+            filterText === "" ||
+            p.title?.toLowerCase().includes(filterText.toLowerCase()) ||
+            p.body?.toLowerCase().includes(filterText.toLowerCase()),
+        );
+        if (filtered.length === 0) {
+          poemsContainer.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-feather-alt"></i><p>😢 कोई रचना इस खोज में नहीं मिली</p></div>`;
+          return;
+        }
+        poemsContainer.innerHTML = filtered
+          .map(
+            (poem) => `
+      <div class="poem-card" data-slug="${poem.slug}">
+        <h3 class="poem-title-mini">${escapeHtml(poem.title) || "अनामिका"}</h3>
+        <span class="poem-category"><i class="fas fa-tag"></i> ${escapeHtml(poem.category) || "कविता"}</span>
+        <div class="poem-excerpt">${escapeHtml(poem.body ? poem.body.substring(0, 120) : "कोई विवरण नहीं")}${poem.body?.length > 120 ? "..." : ""}</div>
+        <div class="poem-date-mini"><i class="far fa-calendar-alt"></i> ${formatDate(poem.createdAt)}</div>
+      </div>
+    `,
+          )
+          .join("");
+        document.querySelectorAll(".poem-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            const slug = card.getAttribute("data-slug");
+
+            if (slug) {
+              window.location.href = `/poem/${slug}`;
+            }
+          });
+        });
+      }
+
+      async function initAuthorPage() {
+        const params = new URLSearchParams(window.location.search);
+        const authorId = params.get("id");
+        if (!authorId) {
+          showEmptyState("😢 कोई रचनाकार आईडी नहीं मिली");
+          return;
+        }
+        const container = document.getElementById("dynamicAuthorContainer");
+        try {
+          container.innerHTML = `<div class="loading-container"><div class="ink-loader"></div><p>रचनाकार की कलम से रूबरू हो रहे हैं...</p></div>`;
+          const { user, poems } = await fetchAuthorData(authorId);
+          if (!user) throw new Error("No user data");
+          currentUserId = user._id;
+          allPoems = poems;
+          const fullName =
+            `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
+            "अनाम रचनाकार";
+          const profilePic =
+            user.profilePic ||
+            `https://res.cloudinary.com/djdvpnrnf/image/upload/v1780752284/profilePic_roaig0.png`;
+
+          const memberSince = formatDate(user.createdAt);
+          const langPref = getLanguageLabel(user.languagePref);
+          const poemsCount = user.poemsCount || poems.length || 0;
+
+          const bioText = user.bio || "शब्दों का मुसाफ़िर, एहसासों का हमसफ़र।";
+
+          const mainHTML = `
+        <a href="./poems.html" class="back-link fade-up"><i class="fas fa-arrow-left"></i> सभी कविताएँ</a>
+        
+        <div class="hero-card fade-up">
+          <img class="profile-avatar-large" src="${profilePic}" alt="${escapeHtml(fullName)}">
+          <h1 class="hero-name">${escapeHtml(fullName)}</h1>
+          <div class="hero-email"><i class="far fa-envelope"></i> ${escapeHtml(user.email || "alumni@mehfil.com")}</div>
+          <button class="share-profile-btn" id="shareProfileBtn"><i class="fas fa-share-alt"></i> प्रोफ़ाइल साझा करें</button>
+        </div>
+
+        <div class="stats-grid fade-up">
+          <div class="stat-card"><i class="fas fa-book-open"></i><div class="stat-number">${poemsCount}</div><div class="stat-label">कुल रचनाएँ</div></div>
+          <div class="stat-card"><i class="fas fa-language"></i><div class="stat-number">${escapeHtml(langPref)}</div><div class="stat-label">भाषा प्राथमिकता</div></div>
+          <div class="stat-card"><i class="fas fa-calendar-plus"></i><div class="stat-number">${memberSince}</div><div class="stat-label">सदस्यता</div></div>
+        </div>
+
+        <div class="bio-section fade-up">
+          <i class="fas fa-quote-left" style="color: var(--accent); margin-right: 8px;"></i> ${escapeHtml(bioText)}
+        </div>
+
+        <div class="section-title fade-up"><i class="fas fa-feather-alt" style="color: var(--accent); margin-right: 12px;"></i> इस रचनाकार की रचनाएँ</div>
+        
+        <div class="search-bar fade-up">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchPoemsInput" placeholder="शीर्षक या कविता के अंश से खोजें...">
+        </div>
+
+        <div class="poems-grid" id="poemsGridContainer">
+          ${poems.length === 0 ? `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-leaf"></i><p>😢 अभी तक कोई रचना प्रकाशित नहीं हुई।</p></div>` : ""}
+        </div>
+      `;
+          container.innerHTML = mainHTML;
+
+          if (poems.length > 0) {
+            renderPoems("");
+            const searchInput = document.getElementById("searchPoemsInput");
+            if (searchInput) {
+              searchInput.addEventListener("input", (e) =>
+                renderPoems(e.target.value),
+              );
+            }
+          } else {
+            const grid = document.getElementById("poemsGridContainer");
+            if (grid && poems.length === 0)
+              grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-leaf"></i><p>😢 अभी तक कोई रचना प्रकाशित नहीं हुई।</p></div>`;
+          }
+
+          const shareBtn = document.getElementById("shareProfileBtn");
+          if (shareBtn) {
+            shareBtn.addEventListener("click", () => {
+              const url = window.location.href;
+              if (navigator.share) {
+                navigator
+                  .share({
+                    title: `${fullName} | Mehfil Poetry`,
+                    text: `${fullName} की रचनाएँ पढ़ें`,
+                    url: url,
+                  })
+                  .catch(() => copyToClipboard(url));
+              } else {
+                copyToClipboard(url);
+              }
+            });
+          }
+
+          const fadeElements = document.querySelectorAll(".fade-up");
+          const obs = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((e) => {
+                if (e.isIntersecting) e.target.classList.add("visible");
+              });
+            },
+            { threshold: 0.1 },
+          );
+          fadeElements.forEach((el) => obs.observe(el));
+        } catch (error) {
+          console.error(error);
+          showEmptyState(
+            "😢 रचनाकार नहीं मिला | यह कलम अब यहाँ विराजमान नहीं है",
+          );
+        }
+      }
+
+      function copyToClipboard(text) {
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            showToast("🔗 प्रोफ़ाइल लिंक कॉपी हो गया! अब साझा करें");
+          })
+          .catch(() => showToast("कॉपी नहीं कर पाए", true));
+      }
+
+      function showEmptyState(message) {
+        const container = document.getElementById("dynamicAuthorContainer");
+        container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-user-slash"></i>
+        <h3 style="font-family: 'Cormorant Garamond'; margin: 1rem 0;">${message}</h3>
+        <a href="./poems.html" class="back-link" style="margin-top: 1rem;"><i class="fas fa-arrow-left"></i> वापस कविताओं पर जाएँ</a>
+      </div>
+    `;
+      }
+
+      // scroll indicator
+      window.addEventListener("scroll", () => {
+        const winScroll = document.documentElement.scrollTop;
+        const height =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = (winScroll / height) * 100;
+        const indicator = document.getElementById("scrollIndicator");
+        if (indicator) indicator.style.width = scrolled + "%";
+      });
+
+      // Mobile Menu Setup
+      const menuBtn = document.getElementById("menuBtn");
+      const navLinks = document.getElementById("navLinks");
+      const mobileOverlay = document.createElement("div");
+      mobileOverlay.id = "mobileOverlay";
+      mobileOverlay.style.position = "fixed";
+      mobileOverlay.style.top = "0";
+      mobileOverlay.style.left = "0";
+      mobileOverlay.style.width = "100%";
+      mobileOverlay.style.height = "100%";
+      mobileOverlay.style.background = "rgba(0,0,0,0.2)";
+      mobileOverlay.style.backdropFilter = "blur(3px)";
+      mobileOverlay.style.zIndex = "999";
+      mobileOverlay.style.display = "none";
+      document.body.appendChild(mobileOverlay);
+      function closeMenu() {
+        navLinks.classList.remove("active");
+        mobileOverlay.style.display = "none";
+        if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+      }
+      function openMenu() {
+        navLinks.classList.add("active");
+        mobileOverlay.style.display = "block";
+        if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-times"></i>';
+      }
+      if (menuBtn) {
+        menuBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (navLinks.classList.contains("active")) closeMenu();
+          else openMenu();
+        });
+      }
+      mobileOverlay.addEventListener("click", closeMenu);
+      document
+        .querySelectorAll(".nav-links a")
+        .forEach((l) => l.addEventListener("click", closeMenu));
+
+      updateAuthUI();
+      initAvatarDropdown();
+      initAuthorPage();
+    </script>
+  </body>
+</html>

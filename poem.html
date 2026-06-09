@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="hi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>कविता — Mehfil Poetry Sanctuary | Immerse in Verses</title>
+
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+Devanagari:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/header.css" />
+    <link rel="stylesheet" href="/footer.css" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #fef9f2;
+        color: #2c241f;
+        font-family: "Inter", "Noto Serif Devanagari", serif;
+        overflow-x: hidden;
+      }
+
+      :root {
+        --bg: #fef9f2;
+        --card-bg: rgba(255, 253, 248, 0.96);
+        --accent: #c16a4b;
+        --accent-soft: #e8c8ba;
+        --accent-dark: #9e4f36;
+        --text-dark: #2c241f;
+        --text-muted: #756256;
+        --border-light: rgba(200, 180, 160, 0.35);
+        --shadow-sm: 0 20px 35px -12px rgba(0, 0, 0, 0.05);
+        --shadow-hover: 0 30px 40px -18px rgba(0, 0, 0, 0.12);
+      }
+
+      .container {
+        max-width: 1280px;
+        width: 92%;
+        margin: 0 auto;
+      }
+
+      /* Floating Orbs */
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(90px);
+        z-index: -2;
+        opacity: 0.4;
+        animation: slowFloat 24s infinite alternate ease-in-out;
+      }
+      .orb-1 {
+        width: 520px;
+        height: 520px;
+        background: #ffd7c2;
+        top: -180px;
+        left: -8%;
+      }
+      .orb-2 {
+        width: 560px;
+        height: 560px;
+        background: #ddc7b0;
+        bottom: -120px;
+        right: -6%;
+        animation-delay: -6s;
+      }
+      @keyframes slowFloat {
+        0% {
+          transform: translate(0, 0) scale(1);
+        }
+        100% {
+          transform: translate(35px, -35px) scale(1.12);
+        }
+      }
+
+      /* Scroll Indicator */
+      .scroll-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: var(--accent);
+        width: 0%;
+        z-index: 10000;
+        transition: width 0.08s linear;
+        border-radius: 0 2px 2px 0;
+      }
+
+      /* Main Content */
+      .poem-main {
+        padding: 2rem 0 4rem;
+      }
+
+      /* Back Button */
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255, 255, 245, 0.8);
+        backdrop-filter: blur(4px);
+        border: 1px solid var(--border-light);
+        padding: 0.7rem 1.5rem;
+        border-radius: 60px;
+        font-weight: 500;
+        color: var(--text-dark);
+        text-decoration: none;
+        transition: 0.25s;
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+      }
+      .back-link i {
+        font-size: 0.9rem;
+        transition: transform 0.2s;
+      }
+      .back-link:hover {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+        transform: translateX(-5px);
+      }
+      .back-link:hover i {
+        transform: translateX(-3px);
+      }
+
+      /* Poem Glass Card */
+      .poem-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(2px);
+        border-radius: 2rem;
+        border: 1px solid var(--border-light);
+        padding: 2.5rem;
+        margin-bottom: 3rem;
+        box-shadow: var(--shadow-sm);
+        transition: box-shadow 0.3s;
+      }
+      .poem-card:hover {
+        box-shadow: var(--shadow-hover);
+      }
+
+      .poem-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--accent-dark);
+        line-height: 1.2;
+        margin-bottom: 0.75rem;
+      }
+      .poem-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 1px dashed var(--border-light);
+        padding-bottom: 1rem;
+      }
+      .category-badge {
+        background: var(--accent-soft);
+        padding: 0.3rem 1rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #7b3f2a;
+        letter-spacing: 0.3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .poem-date {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .poem-body {
+        font-family: "Noto Serif Devanagari", "Cormorant Garamond", serif;
+        font-size: 1.2rem;
+        line-height: 1.85;
+        color: #2a241e;
+        white-space: pre-wrap;
+        word-break: break-word;
+        background: rgba(250, 245, 235, 0.5);
+        padding: 1.8rem;
+        border-radius: 1.5rem;
+        margin: 1rem 0 0.8rem;
+      }
+
+      /* Author Card (Glassmorphism) */
+      .author-card {
+        background: white;
+        border-radius: 1.8rem;
+        border: 1px solid var(--border-light);
+        padding: 1.8rem;
+        margin-bottom: 3rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .author-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--accent-soft);
+      }
+      .author-avatar {
+        width: 85px;
+        height: 85px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--accent);
+        background: #efe0d2;
+      }
+      .author-info h3 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.7rem;
+        margin-bottom: 0.3rem;
+      }
+      .author-stats {
+        color: var(--accent);
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .author-bio-line {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      /* Share Button */
+      .share-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 2rem;
+      }
+      .share-btn {
+        background: rgba(193, 106, 75, 0.1);
+        border: 1px solid var(--accent-soft);
+        padding: 0.7rem 1.6rem;
+        border-radius: 60px;
+        font-weight: 600;
+        color: var(--accent-dark);
+        cursor: pointer;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+      }
+      .share-btn:hover {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+
+      /* More Poems Section */
+      .more-poems {
+        margin-top: 2rem;
+      }
+      .section-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2rem;
+        margin-bottom: 1.8rem;
+        border-left: 5px solid var(--accent);
+        padding-left: 1rem;
+      }
+      .poems-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.8rem;
+      }
+      .poem-mini-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        transition: 0.25s;
+        border: 1px solid var(--border-light);
+        cursor: pointer;
+      }
+      .poem-mini-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--accent);
+      }
+      .poem-mini-card h4 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.35rem;
+        margin-bottom: 0.5rem;
+        color: var(--accent-dark);
+      }
+      .mini-category {
+        font-size: 0.7rem;
+        color: var(--accent);
+        text-transform: capitalize;
+        margin-bottom: 0.6rem;
+        display: inline-block;
+        background: #f5e6dd;
+        padding: 0.2rem 0.8rem;
+        border-radius: 40px;
+      }
+      .mini-excerpt {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      /* Loading & Empty States */
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+        gap: 1rem;
+      }
+      .ink-loader {
+        width: 60px;
+        height: 60px;
+        border: 3px solid var(--accent-soft);
+        border-top: 3px solid var(--accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .empty-state {
+        text-align: center;
+        padding: 4rem 1rem;
+        background: rgba(255, 250, 240, 0.8);
+        border-radius: 2rem;
+      }
+      .empty-state i {
+        font-size: 3.5rem;
+        color: var(--accent);
+        opacity: 0.6;
+        margin-bottom: 1rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 680px) {
+        .poem-card {
+          padding: 1.5rem;
+        }
+        .poem-title {
+          font-size: 2rem;
+        }
+        .poem-body {
+          font-size: 1rem;
+          padding: 1rem;
+        }
+        .author-card {
+          flex-direction: column;
+          text-align: center;
+        }
+        .section-title {
+          font-size: 1.5rem;
+        }
+        .back-link {
+          font-size: 0.8rem;
+        }
+      }
+
+      /* fade up animation */
+      .fade-up {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.65s ease,
+          transform 0.55s ease;
+      }
+      .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .toast-notify {
+        position: fixed;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #2c241f;
+        color: #f1e2d2;
+        padding: 12px 28px;
+        border-radius: 60px;
+        font-size: 0.85rem;
+        z-index: 2100;
+        transition: 0.25s;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        font-family: "Inter", sans-serif;
+        border: 1px solid rgba(193, 106, 75, 0.4);
+        pointer-events: none;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- NAVBAR (replicated from header styles but integrated) -->
+    <nav>
+      <div class="container nav-inner">
+        <div class="logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</div>
+        <div class="nav-links" id="navLinks">
+          <a href="/index.html">मुखपृष्ठ</a>
+          <a href="/poems.html">कविताएँ</a>
+          <a href="/poets.html">रचनाकार</a>
+          <a href="/category.html">श्रेणियाँ</a>
+          <a href="/login.html" id="dynamicAuthLink">प्रवेश करें</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px">
+          <button class="nav-btn" id="writePoemBtn">
+            <i class="fas fa-pen-fancy"></i> <span>लेखन</span>
+          </button>
+          <div
+            id="profileAvatarContainer"
+            style="display: none"
+            class="profile-avatar"
+          >
+            <img id="userAvatarImg" class="avatar-img" src="" alt="profile" />
+            <div class="profile-dropdown">
+              <div class="user-greeting" id="dropdownUserName">Welcome</div>
+              <a href="./profile.html" class="dropdown-item"
+                ><i class="fas fa-user-circle"></i> मेरी प्रोफ़ाइल</a
+              >
+              <a href="./my-poems.html" class="dropdown-item"
+                ><i class="fas fa-book-open"></i> मेरी रचनाएँ</a
+              >
+              <div class="dropdown-divider"></div>
+              <a href="#" id="logoutBtn" class="dropdown-item"
+                ><i class="fas fa-sign-out-alt"></i> लॉग आउट</a
+              >
+            </div>
+          </div>
+          <div class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="poem-main container" id="mainContent">
+      <!-- dynamic content injected -->
+      <div id="dynamicPoemContainer">
+        <div class="loading-container">
+          <div class="ink-loader"></div>
+          <p style="color: var(--text-muted)">
+            कविता सांस ले रही है... कृपया प्रतीक्षा करें
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer (same style as mehfil) -->
+    <footer>
+      <div class="container footer-main">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <i class="fas fa-feather-alt"></i> मेहफ़िल
+            </div>
+            <p class="footer-desc">
+              A sanctuary for Hindi & Urdu poetry — where words find wings and
+              emotions echo timelessly. Join a community of passionate
+              storytellers.
+            </p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Explore</h4>
+            <div class="footer-links">
+              <a href="#"><i class="fas fa-chevron-right"></i> विशेष रचनाएँ</a>
+              <a href="#"
+                ><i class="fas fa-chevron-right"></i> लोकप्रिय रचनाकार</a
+              >
+              <a href="#"><i class="fas fa-chevron-right"></i> Poetry Moods</a>
+              <a href="#"><i class="fas fa-chevron-right"></i> Community Hub</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Community</h4>
+            <div class="footer-links">
+              <a href="#"><i class="fas fa-chevron-right"></i> Write a Poem</a>
+              <a href="#"><i class="fas fa-chevron-right"></i> Join Events</a>
+              <a href="#"><i class="fas fa-chevron-right"></i> Feedback</a>
+              <a href="#"
+                ><i class="fas fa-chevron-right"></i> Become a Member</a
+              >
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>पत्रिका</h4>
+            <p class="newsletter-text">
+              Subscribe to receive poetic musings & latest verses in your inbox.
+            </p>
+            <div class="newsletter-form">
+              <input type="email" placeholder="your@email.com" />
+              <button><i class="fas fa-paper-plane"></i> Subscribe</button>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span
+            >© 2026 Mehfil — Crafted with <span class="heart-beat">❤️</span> for
+            poetry lovers.</span
+          >
+          <div class="footer-bottom-links">
+            <a href="#">गोपनीयता नीति</a>
+            <a href="#">नियम एवं शर्तें</a>
+            <a href="#">संपर्क</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ---------- UTILITIES ----------
+      function showToast(message, isError = false) {
+        let toast = document.getElementById("globalToast");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = "globalToast";
+          toast.className = "toast-notify";
+          document.body.appendChild(toast);
+        }
+        toast.innerHTML = `<i class="fas fa-feather-alt" style="margin-right: 8px;"></i> ${message}`;
+        toast.style.background = isError ? "#7D3C2A" : "#2C241F";
+        toast.style.transform = "translateX(-50%) translateY(0px)";
+        setTimeout(() => {
+          toast.style.transform = "translateX(-50%) translateY(100px)";
+        }, 3000);
+      }
+
+      // Auth helpers (from original)
+      function getCurrentUser() {
+        const user =
+          localStorage.getItem("mehfil_user") ||
+          sessionStorage.getItem("mehfil_user");
+        if (user) {
+          try {
+            return JSON.parse(user);
+          } catch (e) {
+            return null;
+          }
+        }
+        return null;
+      }
+      function updateAuthUI() {
+        const user = getCurrentUser();
+        const authLink = document.getElementById("dynamicAuthLink");
+        const avatarContainer = document.getElementById(
+          "profileAvatarContainer",
+        );
+        const userAvatarImg = document.getElementById("userAvatarImg");
+        const dropdownUserName = document.getElementById("dropdownUserName");
+        if (user && user.firstName) {
+          if (authLink) authLink.style.display = "none";
+          if (avatarContainer) {
+            avatarContainer.style.display = "block";
+            if (user.profilePic) userAvatarImg.src = user.profilePic;
+            else {
+              const initial = (user.firstName.charAt(0) || "U").toUpperCase();
+              userAvatarImg.src = `https://ui-avatars.com/api/?name=${initial}&background=C16A4B&color=fff&bold=true&size=44&rounded=true`;
+            }
+            if (dropdownUserName)
+              dropdownUserName.innerHTML = `✨ नमस्ते, ${user.firstName}`;
+          }
+        } else {
+          if (authLink) {
+            authLink.style.display = "inline-block";
+            authLink.href = "./login.html";
+            authLink.innerHTML = "प्रवेश करें";
+          }
+          if (avatarContainer) avatarContainer.style.display = "none";
+        }
+      }
+      function logout() {
+        localStorage.removeItem("mehfil_user");
+        localStorage.removeItem("mehfil_remember");
+        sessionStorage.removeItem("mehfil_user");
+        showToast("🍂 लॉग आउट हो गए। फिर मिलेंगे महफ़िल में!");
+        setTimeout(
+          () => (window.location.href = `${window.location.origin}/poem.html`),
+          800,
+        );
+      }
+      function initAvatarDropdown() {
+        const avatar = document.getElementById("profileAvatarContainer");
+        if (avatar) {
+          avatar.addEventListener("click", (e) => {
+            e.stopPropagation();
+            avatar.classList.toggle("active");
+          });
+          document.addEventListener("click", () =>
+            avatar.classList.remove("active"),
+          );
+        }
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn)
+          logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+          });
+      }
+      document.getElementById("writePoemBtn")?.addEventListener("click", () => {
+        if (!getCurrentUser()) {
+          showToast("✍️ कृपया पहले प्रवेश करें", true);
+          setTimeout(() => {
+            window.location.href = `${window.location.origin}/login.html`;
+          }, 1000);
+        } else showToast("📝 लेखन प्रारम्भ करें — अपनी रचना साझा करें!");
+      });
+
+      // Helper: format date
+      function formatDate(dateStr) {
+        if (!dateStr) return "अज्ञात तिथि";
+        const d = new Date(dateStr);
+        return d.toLocaleDateString("hi-IN", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+      }
+
+      // API Functions
+      async function fetchPoemBySlug(slug) {
+        const response = await fetch(
+          `http://192.168.0.79:5000/api/poems/slug/${slug}`,
+        );
+
+        if (!response.ok) throw new Error("Poem not found");
+
+        const data = await response.json();
+
+        if (!data.success || !data.poem) throw new Error("Invalid response");
+
+        return data.poem;
+      }
+
+      async function fetchAuthorDetails(authorId) {
+        const resp = await fetch(
+          `http://192.168.0.79:5000/api/auth/user/${authorId}`,
+        );
+        if (!resp.ok) throw new Error("Author fetch failed");
+        const data = await resp.json();
+        if (!data.success) throw new Error("Author error");
+        return { user: data.user, poems: data.poems || [] };
+      }
+
+      // Render main UI
+      async function initPoemPage() {
+        const slug = window.location.pathname.split("/").pop();
+
+        if (!slug) {
+          showEmptyState("😢 कोई कविता नहीं मिली");
+
+          return;
+        }
+        const container = document.getElementById("dynamicPoemContainer");
+        try {
+          container.innerHTML = `<div class="loading-container"><div class="ink-loader"></div><p>कविता सांस ले रही है...</p></div>`;
+          const poem = await fetchPoemBySlug(slug);
+          if (!poem) throw new Error("No poem data");
+
+          // Fetch author poems (for more poems section)
+          let authorData = null;
+          let authorPoemsList = [];
+          if (poem.author && poem.author._id) {
+            try {
+              authorData = await fetchAuthorDetails(poem.author._id);
+              authorPoemsList = authorData.poems.filter(
+                (p) => p._id !== poem._id,
+              );
+            } catch (err) {
+              console.warn("Author detail fetch failed", err);
+            }
+          }
+
+          // Build the page HTML
+          const authorName = poem.author
+            ? `${poem.author.firstName || ""} ${poem.author.lastName || ""}`.trim()
+            : "अज्ञात रचनाकार";
+          const authorPic =
+            poem.author?.profilePic ||
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=C16A4B&color=fff&rounded=true&size=80`;
+          const totalPoemsCount =
+            authorData?.user?.poemsCount || authorPoemsList.length || 0;
+          console.log("Author Poems Count:", authorData);
+
+          const categoryDisplay = poem.category
+            ? poem.category.charAt(0).toUpperCase() + poem.category.slice(1)
+            : "अन्य";
+
+          let morePoemsHTML = "";
+          if (authorPoemsList.length > 0) {
+            morePoemsHTML = `
+          <div class="more-poems fade-up">
+            <div class="section-title"><i class="fas fa-book-open" style="color: var(--accent); margin-right: 10px;"></i> इसी रचनाकार की और कविताएँ</div>
+            <div class="poems-grid">
+              ${authorPoemsList
+                .map(
+                  (p) => `
+                <div class="poem-mini-card" data-slug="${p.slug}">
+                  <h4>${escapeHtml(p.title) || "अनामिका"}</h4>
+                  <span class="mini-category"><i class="fas fa-tag"></i> ${escapeHtml(p.category) || "कविता"}</span>
+                  <div class="mini-excerpt">${escapeHtml(p.body ? p.body.substring(0, 90) + "..." : "कोई विवरण नहीं")}</div>
+                </div>
+              `,
+                )
+                .join("")}
+            </div>
+          </div>
+        `;
+          }
+
+          const fullHTML = `
+        <a href="./poems.html" class="back-link"><i class="fas fa-arrow-left"></i> सभी कविताएँ</a>
+        <div class="poem-card fade-up">
+          <h1 class="poem-title">${escapeHtml(poem.title) || "बेनाम कविता"}</h1>
+          <div class="poem-meta">
+            <span class="category-badge"><i class="fas fa-feather-alt"></i> ${escapeHtml(categoryDisplay)}</span>
+            <span class="poem-date"><i class="far fa-calendar-alt"></i> ${formatDate(poem.createdAt)}</span>
+          </div>
+          <div class="poem-body">${escapeHtml(poem.body || "").replace(/\n/g, "<br>")}</div>
+        </div>
+
+        <div class="share-actions fade-up">
+          <button class="share-btn" id="sharePoemBtn"><i class="fas fa-share-alt"></i> साझा करें</button>
+        </div>
+
+        <div class="author-card fade-up" id="authorCard" data-author-id="${poem.author?._id || ""}">
+          <img class="author-avatar" src="${authorPic}" alt="author">
+          <div class="author-info">
+            <h3>${escapeHtml(authorName)}</h3>
+            <div class="author-stats"><i class="fas fa-pen-fancy"></i> कुल रचनाएँ: ${totalPoemsCount}</div>
+            <div class="author-bio-line"><i class="fas fa-quote-left"></i> कलम के सिपाही, शब्दों के संगीतकार</div>
+          </div>
+        </div>
+        ${morePoemsHTML}
+      `;
+          container.innerHTML = fullHTML;
+
+          // Attach listeners: share button
+          const shareBtn = document.getElementById("sharePoemBtn");
+          if (shareBtn) {
+            shareBtn.addEventListener("click", () => {
+              const currentUrl = window.location.href;
+              if (navigator.share) {
+                navigator
+                  .share({
+                    title: poem.title || "कविता",
+                    text: poem.body?.substring(0, 100),
+                    url: currentUrl,
+                  })
+                  .catch(() => copyToClipboard(currentUrl));
+              } else {
+                copyToClipboard(currentUrl);
+              }
+            });
+          }
+          // Click on author card -> author.html
+          const authorCard = document.getElementById("authorCard");
+          if (authorCard && poem.author?._id) {
+            authorCard.addEventListener("click", (e) => {
+              e.stopPropagation();
+              window.location.href = `${window.location.origin}/author.html?id=${poem.author._id}`;
+            });
+          }
+          // More poems cards click navigation
+          document.querySelectorAll(".poem-mini-card").forEach((card) => {
+            card.addEventListener("click", () => {
+              const slug = card.getAttribute("data-slug");
+
+              if (slug) {
+                window.location.href = `${window.location.origin}/poem/${slug}`;
+              }
+            });
+          });
+          // Scroll & fade-up observer for new content
+          const fadeItems = document.querySelectorAll(".fade-up");
+          const obs = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((e) => {
+                if (e.isIntersecting) e.target.classList.add("visible");
+              });
+            },
+            { threshold: 0.1 },
+          );
+          fadeItems.forEach((el) => obs.observe(el));
+        } catch (error) {
+          console.error(error);
+          showEmptyState(
+            "😢 कविता नहीं मिली | यह रचना संसार से विदा हो चुकी है",
+          );
+        }
+      }
+
+      function copyToClipboard(text) {
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            showToast("🔗 लिंक कॉपी हो गया! अब साझा करें");
+          })
+          .catch(() => showToast("कॉपी नहीं कर पाए", true));
+      }
+
+      function showEmptyState(message) {
+        const container = document.getElementById("dynamicPoemContainer");
+        container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-leaf"></i>
+        <h3 style="font-family: 'Cormorant Garamond'; margin: 1rem 0;">${message}</h3>
+        <a href="./poems.html" class="back-link" style="margin-top: 1rem;"><i class="fas fa-arrow-left"></i> वापस कविताओं पर जाएँ</a>
+      </div>
+    `;
+      }
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return str
+          .replace(/[&<>]/g, function (m) {
+            if (m === "&") return "&amp;";
+            if (m === "<") return "&lt;";
+            if (m === ">") return "&gt;";
+            return m;
+          })
+          .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function (c) {
+            return c;
+          });
+      }
+
+      // scroll indicator
+      window.addEventListener("scroll", () => {
+        const winScroll = document.documentElement.scrollTop;
+        const height =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = (winScroll / height) * 100;
+        const indicator = document.getElementById("scrollIndicator");
+        if (indicator) indicator.style.width = scrolled + "%";
+      });
+
+      // Mobile Menu
+      const menuBtn = document.getElementById("menuBtn");
+      const navLinks = document.getElementById("navLinks");
+      const mobileOverlay = document.createElement("div");
+      mobileOverlay.id = "mobileOverlay";
+      mobileOverlay.style.position = "fixed";
+      mobileOverlay.style.top = "0";
+      mobileOverlay.style.left = "0";
+      mobileOverlay.style.width = "100%";
+      mobileOverlay.style.height = "100%";
+      mobileOverlay.style.background = "rgba(0,0,0,0.2)";
+      mobileOverlay.style.backdropFilter = "blur(3px)";
+      mobileOverlay.style.zIndex = "999";
+      mobileOverlay.style.display = "none";
+      document.body.appendChild(mobileOverlay);
+      function closeMenu() {
+        navLinks.classList.remove("active");
+        mobileOverlay.style.display = "none";
+        if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+      }
+      function openMenu() {
+        navLinks.classList.add("active");
+        mobileOverlay.style.display = "block";
+        if (menuBtn) menuBtn.innerHTML = '<i class="fas fa-times"></i>';
+      }
+      if (menuBtn) {
+        menuBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (navLinks.classList.contains("active")) closeMenu();
+          else openMenu();
+        });
+      }
+      mobileOverlay.addEventListener("click", closeMenu);
+      document
+        .querySelectorAll(".nav-links a")
+        .forEach((l) => l.addEventListener("click", closeMenu));
+
+      // On load
+      updateAuthUI();
+      initAvatarDropdown();
+      initPoemPage();
+    </script>
+  </body>
+</html>
