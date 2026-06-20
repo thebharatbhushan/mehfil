@@ -596,7 +596,7 @@
           }
         } else {
           if (authLink) {
-            authLink.style.display = "inline-block";
+            // authLink.style.display = "inline-block";
             authLink.href = "./login.html";
             authLink.innerHTML = "प्रवेश करें";
           }
@@ -743,7 +743,7 @@
           }
 
           const fullHTML = `
-        <a href="./poems.html" class="back-link"><i class="fas fa-arrow-left"></i> सभी कविताएँ</a>
+        <a href="../poems.html" class="back-link"><i class="fas fa-arrow-left"></i> सभी कविताएँ</a>
         <div class="poem-card fade-up">
           <h1 class="poem-title">${escapeHtml(poem.title) || "बेनाम कविता"}</h1>
           <div class="poem-meta">
