@@ -307,7 +307,31 @@
         padding: 1rem;
         font-size: 0.85rem;
       }
+      .copyright-declaration {
+        margin-top: 25px;
+        padding: 18px;
+        border-radius: 18px;
+        background: #fffaf5;
+        border: 1px solid #e7dbcf;
+      }
 
+      .copyright-declaration label {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        line-height: 1.8;
+        font-size: 0.9rem;
+        color: #4a3a2f;
+        cursor: pointer;
+      }
+
+      .copyright-declaration input[type="checkbox"] {
+        margin-top: 5px;
+        transform: scale(1.15);
+        accent-color: #c16a4b;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
       /* publish button */
       .publish-actions {
         display: flex;
@@ -542,7 +566,9 @@
 
     <nav>
       <div class="nav-inner">
-        <a href="./index.html" class="logo"><i class="fas fa-feather-alt"></i> मेहफ़िल</a>
+        <a href="./index.html" class="logo"
+          ><i class="fas fa-feather-alt"></i> मेहफ़िल</a
+        >
         <div class="nav-links" id="navLinks">
           <a href="./index.html">मुखपृष्ठ</a>
           <a href="./poems.html">कविताएँ</a>
@@ -627,7 +653,17 @@
                   </div>
                   <input type="hidden" id="selectedTags" value="" />
                 </div>
-
+                <div class="copyright-declaration">
+                  <label>
+                    <input type="checkbox" id="copyrightDeclaration" />
+                    मैं घोषणा करता/करती हूँ कि यह रचना मेरी स्वयं की मौलिक रचना
+                    है। यह किसी अन्य स्रोत से कॉपी, चोरी या बिना अनुमति के
+                    प्रकाशित सामग्री नहीं है। यदि इस रचना के कारण किसी कॉपीराइट,
+                    बौद्धिक संपदा अधिकार या अन्य कानूनी अधिकार का उल्लंघन होता
+                    है, तो उसकी सम्पूर्ण ज़िम्मेदारी मेरी होगी। इसके लिए Mehfil
+                    या उसकी टीम किसी भी प्रकार से उत्तरदायी नहीं होगी।
+                  </label>
+                </div>
                 <div class="publish-actions">
                   <button type="submit" class="publish-btn">
                     <i class="fas fa-cloud-upload-alt"></i> प्रकाशित करें
@@ -766,6 +802,7 @@
       const titleInput = document.getElementById("poemTitle");
       const categorySelect = document.getElementById("poemCategory");
       const poemContent = document.getElementById("poemBody");
+      const copyrightCheckbox = document.getElementById("copyrightDeclaration");
 
       publishForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -801,7 +838,10 @@
           );
           return;
         }
-
+        if (!copyrightCheckbox.checked) {
+          showToast("कृपया मौलिकता एवं कॉपीराइट घोषणा स्वीकार करें।", true);
+          return;
+        }
         try {
           const token = localStorage.getItem("token");
 
@@ -820,6 +860,7 @@
                 category,
                 body,
                 tags: selectedTagsArray,
+                copyrightDeclaration: copyrightCheckbox.checked,
               }),
             },
           );
@@ -833,6 +874,7 @@
             categorySelect.value = "";
             poemContent.value = "";
             charCountSpan.innerText = "0";
+            copyrightCheckbox.checked = false;
 
             tagOptions.forEach((tag) => {
               tag.classList.remove("selected");
