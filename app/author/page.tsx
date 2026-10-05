@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState, Suspense } from 'react';
+import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { API_BASE_URL, DEFAULT_AVATAR, Writer, Poem, formatDate } from '@/lib/mehfil';
@@ -54,6 +54,8 @@ function AuthorContent() {
   const [editName, setEditName] = useState('');
   const [editBio, setEditBio] = useState('');
   const [saving, setSaving] = useState(false);
+  const [uploadingPic, setUploadingPic] = useState(false);
+  const picInputRef = useRef<HTMLInputElement>(null);
 
   // Who is looking at this page? (Used to recognise the user's own profile.)
   useEffect(() => {
@@ -191,28 +193,61 @@ function AuthorContent() {
     setEditOpen(true);
   };
 
-  const saveProfile = async () => {
-    setSaving(true);
+  // Sends multipart form data to PUT /api/auth/profile and syncs page state + stored user.
+  const sendProfileUpdate = async (formData: FormData): Promise<boolean> => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/auth/profile`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-        body: JSON.stringify({ name: editName, bio: editBio }),
+        headers: { Authorization: `Bearer ${getToken()}` }, // browser sets the multipart boundary
+        body: formData,
       });
-      const data = await res.json();
-      if (data.success) {
+      let data: { success?: boolean; user?: Record<string, unknown>; message?: string } = {};
+      try { data = await res.json(); } catch { /* non-JSON error body */ }
+      if (res.ok && data.success && data.user) {
         setAuthor((prev) => (prev ? { ...prev, ...data.user } : prev));
-        updateStoredUser(data.user || {});
-        showToast('प्रोफ़ाइल अपडेट हुई!');
-        setEditOpen(false);
-      } else {
-        showToast(data.message || 'अपडेट विफल।', true);
+        updateStoredUser(data.user);
+        return true;
       }
+      showToast(data.message || 'अपडेट विफल।', true);
     } catch {
       showToast('सर्वर त्रुटि।', true);
-    } finally {
-      setSaving(false);
     }
+    return false;
+  };
+
+  const saveProfile = async () => {
+    const parts = editName.trim().split(/\s+/).filter(Boolean);
+    const formData = new FormData();
+    formData.append('firstName', parts.shift() || '');
+    formData.append('lastName', parts.join(' '));
+    formData.append('bio', editBio);
+    setSaving(true);
+    const ok = await sendProfileUpdate(formData);
+    setSaving(false);
+    if (ok) {
+      showToast('प्रोफ़ाइल अपडेट हुई!');
+      setEditOpen(false);
+    }
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/jpg', 'image/webp'].includes(file.type)) {
+      showToast('केवल JPG, PNG या WebP चित्र चुनें।', true);
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('चित्र 5 MB से छोटा होना चाहिए।', true);
+      return;
+    }
+    const formData = new FormData();
+    formData.append('profilePic', file);
+    setUploadingPic(true);
+    const ok = await sendProfileUpdate(formData);
+    setUploadingPic(false);
+    if (ok) showToast('प्रोफ़ाइल तस्वीर अपडेट हुई!');
   };
 
   if (loading) return <AuthorLoader />;
@@ -254,8 +289,33 @@ function AuthorContent() {
         </div>
 
         <div className="ap-hero-body">
-          <div className="ap-avatar-ring">
+          <div className="ap-avatar-ring" style={{ position: 'relative' }}>
             <img src={profilePic} alt={fullName} className="ap-avatar" />
+            {isOwner && (
+              <>
+                <button
+                  type="button"
+                  aria-label="प्रोफ़ाइल तस्वीर बदलें"
+                  title="प्रोफ़ाइल तस्वीर बदलें"
+                  disabled={uploadingPic}
+                  onClick={() => picInputRef.current?.click()}
+                  style={{
+                    position: 'absolute', right: 2, bottom: 2, width: 34, height: 34, borderRadius: '50%',
+                    border: '2px solid #fff', background: 'var(--accent)', color: '#fff', cursor: uploadingPic ? 'wait' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem',
+                  }}
+                >
+                  <i className={uploadingPic ? 'fas fa-spinner fa-spin' : 'fas fa-camera'} aria-hidden="true" />
+                </button>
+                <input
+                  ref={picInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/jpg,image/webp"
+                  style={{ display: 'none' }}
+                  onChange={handleAvatarChange}
+                />
+              </>
+            )}
           </div>
 
           <div className="ap-identity">
