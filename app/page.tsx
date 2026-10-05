@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL, DEFAULT_AVATAR, Poem, Writer } from '@/lib/mehfil';
+
+type SelectedPoem = Poem & { selectedImage?: string };
 import { useToast } from '@/components/site/ToastProvider';
 import { SherOfTheDay } from '@/components/home/SherOfTheDay';
 import { LafzOfTheDay } from '@/components/home/LafzOfTheDay';
@@ -42,7 +44,7 @@ export default function Home() {
   const [poems, setPoems] = useState<Poem[]>([]);
   const [writers, setWriters] = useState<Writer[]>([]);
   const [weeklyWriter, setWeeklyWriter] = useState<Writer | null>(null);
-  const [selectedPoem, setSelectedPoem] = useState<Poem | null>(null);
+  const [selectedPoem, setSelectedPoem] = useState<SelectedPoem | null>(null);
   const [loadingSelectedPoem, setLoadingSelectedPoem] = useState(true);
   const [loadingPoems, setLoadingPoems] = useState(true);
   const [loadingWriters, setLoadingWriters] = useState(true);
@@ -464,8 +466,9 @@ export default function Home() {
               (() => {
                 const authorName = `${selectedPoem.author?.firstName || 'अज्ञात'} ${selectedPoem.author?.lastName || ''}`.trim();
                 const poemLines = (selectedPoem.body || '').split(/\r?\n/).filter(Boolean);
+                const hasMoreContent = poemLines.length > 8 || (selectedPoem.body || '').length > 500;
                 return (
-                  <Link href={`/poem/${selectedPoem.slug}`} className="featured-reading-card" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+                  <div className="featured-reading-card" style={{ color: 'inherit' }}>
                     <div className="poem-side">
                       <div className="poem-badge"><i className="fas fa-feather-alt" /> चयनित रचना</div>
                       <h2 className="poem-title">{selectedPoem.title}</h2>
@@ -484,11 +487,16 @@ export default function Home() {
                         <div className="action"><i className="far fa-bookmark" /> Save</div>
                         <div className="action"><i className="fas fa-share-alt" /> Share</div>
                       </div>
+                      {hasMoreContent && (
+                        <Link href={`/poem/${selectedPoem.slug}`} className="primary-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '1rem', textDecoration: 'none' }}>
+                          पूरा पढ़ें <i className="fas fa-arrow-right" />
+                        </Link>
+                      )}
                     </div>
                     <div className="visual-side">
-                      <img src={selectedPoem.author?.profilePic || DEFAULT_AVATAR} alt={authorName} onError={(e) => { e.currentTarget.src = DEFAULT_AVATAR; }} />
+                      <img src={selectedPoem.selectedImage || selectedPoem.author?.profilePic || DEFAULT_AVATAR} alt={authorName} onError={(e) => { e.currentTarget.src = DEFAULT_AVATAR; }} />
                     </div>
-                  </Link>
+                  </div>
                 );
               })()
             )}
