@@ -29,6 +29,8 @@ export default function Home() {
   const [poems, setPoems] = useState<Poem[]>([]);
   const [writers, setWriters] = useState<Writer[]>([]);
   const [weeklyWriter, setWeeklyWriter] = useState<Writer | null>(null);
+  const [selectedPoem, setSelectedPoem] = useState<Poem | null>(null);
+  const [loadingSelectedPoem, setLoadingSelectedPoem] = useState(true);
   const [loadingPoems, setLoadingPoems] = useState(true);
   const [loadingWriters, setLoadingWriters] = useState(true);
   const [loadingWeeklyWriter, setLoadingWeeklyWriter] = useState(true);
@@ -50,7 +52,7 @@ export default function Home() {
     );
     document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [poems, writers, weeklyWriter]);
+  }, [poems, writers, weeklyWriter, selectedPoem]);
 
   // Load featured poems
   useEffect(() => {
@@ -90,6 +92,24 @@ export default function Home() {
       }
     };
     loadWeeklyWriter();
+    return () => { cancelled = true; };
+  }, []);
+
+  // Load the separately managed "चयनित रचना". This is independent of featured poems.
+  useEffect(() => {
+    let cancelled = false;
+    const loadSelectedPoem = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/selected-poem`, { cache: 'no-store' });
+        const data = await response.json();
+        if (!cancelled && data.success) setSelectedPoem(data.poem || null);
+      } catch {
+        if (!cancelled) setSelectedPoem(null);
+      } finally {
+        if (!cancelled) setLoadingSelectedPoem(false);
+      }
+    };
+    loadSelectedPoem();
     return () => { cancelled = true; };
   }, []);
 
@@ -414,42 +434,51 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Immersive Poem Reading */}
+      {/* Separately managed Selected Poem */}
       <section>
         <div className="mehfil-container">
           <div className="reading-layout fade-up">
-            <div className="featured-reading-card">
-              <div className="poem-side">
-                <div className="poem-badge">
-                  <i className="fas fa-feather-alt" /> चयनित रचना
-                </div>
-                <h2 className="poem-title">एक अधूरी शाम</h2>
-                <div className="poem-line"></div>
-                <div className="poet">
-                  <i className="far fa-user" /> Written by Ayaan &nbsp; | &nbsp;
-                  <i className="far fa-calendar" /> 12 May 2026
-                </div>
-                <div className="poem-text">
-                  तुम्हारी आवाज़ अब भी<br />
-                  मेरे कमरे की दीवारों में रहती है...<br /><br />
-                  कुछ बातें थीं जो कभी पूरी नहीं हुईं,<br />
-                  कुछ शामें थीं जो आज भी अधूरी हैं...<br /><br />
-                  और हाँ, हर रात उन्हीं अल्फ़ाज़ों में तुम्हें ढूँढ लेता हूँ...
-                </div>
-                <div className="poem-actions">
-                  <div className="action"><i className="far fa-heart" /> Like</div>
-                  <div className="action"><i className="far fa-comment-dots" /> Comment</div>
-                  <div className="action"><i className="far fa-bookmark" /> Save</div>
-                  <div className="action"><i className="fas fa-share-alt" /> Share</div>
-                </div>
+            {loadingSelectedPoem ? (
+              <div className="loader-wrapper">
+                <div className="loader-dots"><span></span><span></span><span></span></div>
+                <div className="loader-text">चयनित रचना आ रही है...</div>
               </div>
-              <div className="visual-side">
-                <img
-                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop"
-                  alt="Poetry Evening"
-                />
-              </div>
-            </div>
+            ) : !selectedPoem ? (
+              <p style={{ textAlign: 'center', width: '100%', color: 'var(--text-muted)', padding: '2rem' }}>
+                ✨ अभी कोई चयनित रचना उपलब्ध नहीं है।
+              </p>
+            ) : (
+              (() => {
+                const authorName = `${selectedPoem.author?.firstName || 'अज्ञात'} ${selectedPoem.author?.lastName || ''}`.trim();
+                const poemLines = (selectedPoem.body || '').split(/\r?\n/).filter(Boolean);
+                return (
+                  <Link href={`/poem/${selectedPoem.slug}`} className="featured-reading-card" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+                    <div className="poem-side">
+                      <div className="poem-badge"><i className="fas fa-feather-alt" /> चयनित रचना</div>
+                      <h2 className="poem-title">{selectedPoem.title}</h2>
+                      <div className="poem-line"></div>
+                      <div className="poet">
+                        <i className="far fa-user" /> {authorName} &nbsp; | &nbsp;
+                        <i className="far fa-calendar" /> {formatDate(selectedPoem.createdAt)}
+                      </div>
+                      <div className="poem-text">
+                        {poemLines.slice(0, 8).map((line, index) => <span key={`${selectedPoem._id}-${index}`}>{line}<br /></span>)}
+                        {poemLines.length > 8 && <span>...</span>}
+                      </div>
+                      <div className="poem-actions">
+                        <div className="action"><i className="far fa-heart" /> Like</div>
+                        <div className="action"><i className="far fa-comment-dots" /> Comment</div>
+                        <div className="action"><i className="far fa-bookmark" /> Save</div>
+                        <div className="action"><i className="fas fa-share-alt" /> Share</div>
+                      </div>
+                    </div>
+                    <div className="visual-side">
+                      <img src={selectedPoem.author?.profilePic || DEFAULT_AVATAR} alt={authorName} onError={(e) => { e.currentTarget.src = DEFAULT_AVATAR; }} />
+                    </div>
+                  </Link>
+                );
+              })()
+            )}
           </div>
         </div>
       </section>
