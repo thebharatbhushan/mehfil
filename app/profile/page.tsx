@@ -29,6 +29,8 @@ export default function ProfilePage() {
   const [editModal, setEditModal] = useState(false);
   const [editName, setEditName] = useState('');
   const [editBio, setEditBio] = useState('');
+  const [editProfilePic, setEditProfilePic] = useState<File | null>(null);
+  const [editProfilePicPreview, setEditProfilePicPreview] = useState('');
   const [poemModal, setPoemModal] = useState<Poem | null>(null);
 
   useEffect(() => {
@@ -76,6 +78,7 @@ export default function ProfilePage() {
         setProfile(merged);
         setEditName(`${merged.firstName || ''} ${merged.lastName || ''}`.trim());
         setEditBio(merged.bio || '');
+        setEditProfilePicPreview(merged.profilePic || '');
       }
       setLoading(false);
     });
@@ -91,15 +94,26 @@ export default function ProfilePage() {
   const handleUpdateProfile = async () => {
     const token = localStorage.getItem('token');
     try {
+      const nameParts = editName.trim().split(/\s+/).filter(Boolean);
+      const firstName = nameParts.shift() || '';
+      const lastName = nameParts.join(' ');
+      const formData = new FormData();
+      formData.append('firstName', firstName);
+      formData.append('lastName', lastName);
+      formData.append('bio', editBio);
+      if (editProfilePic) formData.append('profilePic', editProfilePic);
+
       const res = await fetch(`${API_BASE_URL}/api/auth/profile`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ name: editName, bio: editBio }),
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
       });
       const data = await res.json();
       if (data.success) {
         const updated = { ...profile, ...data.user };
         setProfile(updated);
+        setEditProfilePic(null);
+        setEditProfilePicPreview(updated.profilePic || '');
         const stored = localStorage.getItem('mehfil_user') || sessionStorage.getItem('mehfil_user');
         if (stored) {
           try {
@@ -324,6 +338,31 @@ export default function ProfilePage() {
               <button className="modal-close-x" onClick={() => setEditModal(false)}>
                 <i className="fas fa-times" />
               </button>
+            </div>
+            <div className="modal-field">
+              <label className="modal-label">प्रोफ़ाइल तस्वीर</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                <div style={{ width: 72, height: 72, borderRadius: '50%', overflow: 'hidden', border: '2px solid var(--accent)', flexShrink: 0 }}>
+                  {editProfilePicPreview ? (
+                    <img src={editProfilePicPreview} alt="Profile preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <div className="profile-avatar-placeholder" style={{ width: '100%', height: '100%', fontSize: '1.7rem' }}>{initials}</div>
+                  )}
+                </div>
+                <div>
+                  <input
+                    id="profilePicInput"
+                    type="file"
+                    accept="image/jpeg,image/png,image/jpg,image/webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      setEditProfilePic(file);
+                      if (file) setEditProfilePicPreview(URL.createObjectURL(file));
+                    }}
+                  />
+                  <small style={{ display: 'block', marginTop: 6, color: 'var(--text-muted)' }}>JPG, PNG या WebP</small>
+                </div>
+              </div>
             </div>
             <div className="modal-field">
               <label className="modal-label">नाम</label>

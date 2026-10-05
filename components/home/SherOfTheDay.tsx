@@ -98,8 +98,8 @@ export function SherOfTheDay({ poems, ready }: Props) {
     <section className="daily-card sher-card" aria-labelledby="sher-heading">
       <span className="sher-mark" aria-hidden="true">&ldquo;</span>
       <header className="daily-head">
-        <span className="daily-kicker">शेर-ए-रोज़</span>
-        <h2 id="sher-heading" className="daily-title">आज का शेर</h2>
+        <span className="daily-kicker">काव्य-ए-रोज़</span>
+        <h2 id="sher-heading" className="daily-title">आज का काव्य</h2>
       </header>
       {sher ? (
         sher.href ? (

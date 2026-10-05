@@ -246,7 +246,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* आज का शेर + आज का लफ़्ज़ */}
+      {/* आज का काव्य + आज का लफ़्ज़ */}
       <section className="daily-section">
         <div className="mehfil-container daily-grid">
           <SherOfTheDay poems={poems} ready={!loadingPoems} />
@@ -482,10 +482,7 @@ export default function Home() {
                         {poemLines.length > 8 && <span>...</span>}
                       </div>
                       <div className="poem-actions">
-                        <div className="action"><i className="far fa-heart" /> Like</div>
-                        <div className="action"><i className="far fa-comment-dots" /> Comment</div>
                         <div className="action"><i className="far fa-bookmark" /> Save</div>
-                        <div className="action"><i className="fas fa-share-alt" /> Share</div>
                       </div>
                       {hasMoreContent && (
                         <Link href={`/poem/${selectedPoem.slug}`} className="primary-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '1rem', textDecoration: 'none' }}>
