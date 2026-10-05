@@ -90,7 +90,7 @@ export function Header() {
   const navLinks = [
     { href: '/', label: 'मुखपृष्ठ', active: pathname === '/' },
     { href: '/poems', label: 'कविताएँ', active: pathname.startsWith('/poems') || pathname.startsWith('/poem/') },
-    { href: '/poets', label: 'रचनाकार', active: pathname.startsWith('/poets') || pathname.startsWith('/author') },
+    { href: '/poets', label: 'रचनाकार', active: pathname.startsWith('/poets') || pathname.startsWith('/author') || pathname.startsWith('/u/') },
     { href: '/category', label: 'श्रेणियाँ', active: pathname.startsWith('/category') },
   ];
 

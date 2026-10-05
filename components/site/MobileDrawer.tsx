@@ -99,7 +99,7 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
   const items: NavItem[] = [
     { href: '/', label: 'मुखपृष्ठ', sub: 'Home', icon: 'fa-home', active: pathname === '/' },
     { href: '/poems', label: 'कविताएँ', sub: 'Poems', icon: 'fa-book-open', active: pathname.startsWith('/poems') || pathname.startsWith('/poem/') },
-    { href: '/poets', label: 'रचनाकार', sub: 'Authors', icon: 'fa-feather-alt', active: pathname.startsWith('/poets') || pathname.startsWith('/author') },
+    { href: '/poets', label: 'रचनाकार', sub: 'Authors', icon: 'fa-feather-alt', active: pathname.startsWith('/poets') || pathname.startsWith('/author') || pathname.startsWith('/u/') },
     { href: '/category', label: 'श्रेणियाँ', sub: 'Categories', icon: 'fa-th-large', active: pathname.startsWith('/category') },
   ];
   const mine: NavItem[] = user

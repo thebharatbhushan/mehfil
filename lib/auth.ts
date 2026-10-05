@@ -129,7 +129,9 @@ export async function resolveCurrentUserId(signal?: AbortSignal): Promise<string
   return idFrom(own?._id) || idFrom(own?.id);
 }
 
-/** URL of the logged-in user's author profile. Falls back to /author, which resolves the user itself. */
+/** URL of the logged-in user's public profile: /u/<username> when known, else the id URL. */
 export function myProfileHref(id: string | null | undefined = getCurrentUserId()): string {
+  const username = getStoredUser()?.username;
+  if (typeof username === 'string' && username) return `/u/${encodeURIComponent(username)}`;
   return id ? `/author?id=${encodeURIComponent(id)}` : '/author';
 }

@@ -15,6 +15,7 @@ export interface Poem {
   tags?: string[];
   author?: {
     _id: string;
+    username?: string;
     firstName?: string;
     lastName?: string;
     profilePic?: string;
@@ -34,6 +35,12 @@ export interface Writer {
   email?: string;
   createdAt?: string;
   poemsCount?: number;
+}
+
+/** Public profile URL: /u/<username> when known, otherwise the id-based fallback. */
+export function authorHref(a: { _id?: string; username?: string } | null | undefined): string {
+  if (a?.username) return `/u/${encodeURIComponent(a.username)}`;
+  return a?._id ? `/author?id=${encodeURIComponent(a._id)}` : '/author';
 }
 
 export const CATEGORIES = [
