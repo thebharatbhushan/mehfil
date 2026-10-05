@@ -8,6 +8,19 @@ import { useToast } from '@/components/site/ToastProvider';
 import { SherOfTheDay } from '@/components/home/SherOfTheDay';
 import { LafzOfTheDay } from '@/components/home/LafzOfTheDay';
 
+const formatDate = (date: string | Date | undefined | null) => {
+  if (!date) return '';
+
+  const parsedDate = new Date(date);
+  if (Number.isNaN(parsedDate.getTime())) return '';
+
+  return parsedDate.toLocaleDateString('hi-IN', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+};
+
 const MOOD_ICONS: Record<string, string> = {
   Love: '❤️', Sad: '🌧', Motivation: '✨', Nature: '🍃', Life: '🌙', Sufi: '☪', Shayari: '🖋', Friendship: '🤝',
 };
