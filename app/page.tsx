@@ -28,8 +28,15 @@ export default function Home() {
   const { showToast } = useToast();
   const [poems, setPoems] = useState<Poem[]>([]);
   const [writers, setWriters] = useState<Writer[]>([]);
+<<<<<<< HEAD
   const [loadingPoems, setLoadingPoems] = useState(true);
   const [loadingWriters, setLoadingWriters] = useState(true);
+=======
+  const [weeklyWriter, setWeeklyWriter] = useState<Writer | null>(null);
+  const [loadingPoems, setLoadingPoems] = useState(true);
+  const [loadingWriters, setLoadingWriters] = useState(true);
+  const [loadingWeeklyWriter, setLoadingWeeklyWriter] = useState(true);
+>>>>>>> a2be731 (Initial commit)
   const sliderRef = useRef<HTMLDivElement>(null);
   const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -48,7 +55,11 @@ export default function Home() {
     );
     document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
+<<<<<<< HEAD
   }, [poems, writers]);
+=======
+  }, [poems, writers, weeklyWriter]);
+>>>>>>> a2be731 (Initial commit)
 
   // Load featured poems
   useEffect(() => {
@@ -72,6 +83,28 @@ export default function Home() {
       .catch(() => setLoadingWriters(false));
   }, []);
 
+<<<<<<< HEAD
+=======
+  // Load the Writer of the Week. If admin has not selected one for this week,
+  // the backend deterministically selects a writer automatically.
+  useEffect(() => {
+    let cancelled = false;
+    const loadWeeklyWriter = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/weekly-writer`, { cache: 'no-store' });
+        const data = await response.json();
+        if (!cancelled && data.success) setWeeklyWriter(data.writer || null);
+      } catch {
+        if (!cancelled) setWeeklyWriter(null);
+      } finally {
+        if (!cancelled) setLoadingWeeklyWriter(false);
+      }
+    };
+    loadWeeklyWriter();
+    return () => { cancelled = true; };
+  }, []);
+
+>>>>>>> a2be731 (Initial commit)
   // Auto-slider for featured poems
   useEffect(() => {
     if (loadingPoems || poems.length === 0) return;
@@ -261,11 +294,16 @@ export default function Home() {
             </p>
           </div>
 
+<<<<<<< HEAD
           {loadingWriters ? (
+=======
+          {loadingWeeklyWriter ? (
+>>>>>>> a2be731 (Initial commit)
             <div className="loader-wrapper">
               <div className="loader-dots"><span></span><span></span><span></span></div>
               <div className="loader-text">सप्ताह के रचनाकार आ रहे हैं...</div>
             </div>
+<<<<<<< HEAD
           ) : writers.length === 0 ? (
             <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
               ✨ अभी तक कोई सप्ताह के रचनाकार नहीं चुने गए।
@@ -273,12 +311,26 @@ export default function Home() {
           ) : (
             <Link
               href={`/author?id=${writers[0]._id}`}
+=======
+          ) : weeklyWriter === null ? (
+            <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
+              ✨ इस सप्ताह के रचनाकार का चयन अभी उपलब्ध नहीं है।
+            </p>
+          ) : (
+            <Link
+              href={`/author?id=${weeklyWriter._id}`}
+>>>>>>> a2be731 (Initial commit)
               className="wotw-card fade-up"
               style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
             >
               <div className="wotw-image-side">
+<<<<<<< HEAD
                 {writers[0].profilePic ? (
                   <img src={writers[0].profilePic} alt={`${writers[0].firstName} ${writers[0].lastName || ''}`} />
+=======
+                {weeklyWriter.profilePic ? (
+                  <img src={weeklyWriter.profilePic} alt={`${weeklyWriter.firstName} ${weeklyWriter.lastName || ''}`} />
+>>>>>>> a2be731 (Initial commit)
                 ) : (
                   <div className="wotw-image-placeholder">
                     <i className="fas fa-feather-alt" />
@@ -293,21 +345,38 @@ export default function Home() {
                   <i className="fas fa-award" /> सप्ताह का सम्मान
                 </div>
                 <h3 className="wotw-name">
+<<<<<<< HEAD
                   {writers[0].firstName} {writers[0].lastName || ''}
                 </h3>
                 <div className="wotw-divider"><span></span>❦<span></span></div>
                 <p className="wotw-bio">
                   {writers[0].bio || 'शब्दों का मुसाफ़िर, एहसासों का हमसफ़र। इनकी कलम में वो जादू है जो हर दिल को छू जाता है।'}
+=======
+                  {weeklyWriter.firstName} {weeklyWriter.lastName || ''}
+                </h3>
+                <div className="wotw-divider"><span></span>❦<span></span></div>
+                <p className="wotw-bio">
+                  {weeklyWriter.bio || 'शब्दों का मुसाफ़िर, एहसासों का हमसफ़र। इनकी कलम में वो जादू है जो हर दिल को छू जाता है।'}
+>>>>>>> a2be731 (Initial commit)
                 </p>
                 <div className="wotw-stats">
                   <div className="wotw-stat">
                     <i className="fas fa-book-open" />
+<<<<<<< HEAD
                     <span>{writers[0].poemsCount || 0} रचनाएँ</span>
                   </div>
                   {writers[0].city && (
                     <div className="wotw-stat">
                       <i className="fas fa-map-marker-alt" />
                       <span>{writers[0].city}</span>
+=======
+                    <span>{weeklyWriter.poemsCount || 0} रचनाएँ</span>
+                  </div>
+                  {weeklyWriter.city && (
+                    <div className="wotw-stat">
+                      <i className="fas fa-map-marker-alt" />
+                      <span>{weeklyWriter.city}</span>
+>>>>>>> a2be731 (Initial commit)
                     </div>
                   )}
                 </div>
