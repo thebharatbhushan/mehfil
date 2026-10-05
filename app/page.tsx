@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { API_BASE_URL, DEFAULT_AVATAR, Poem, Writer } from '@/lib/mehfil';
+import { API_BASE_URL, DEFAULT_AVATAR, Poem, Writer, authorHref } from '@/lib/mehfil';
 
 type SelectedPoem = Poem & { selectedImage?: string };
 import { useToast } from '@/components/site/ToastProvider';
@@ -328,7 +328,7 @@ export default function Home() {
             </p>
           ) : (
             <Link
-              href={`/author?id=${weeklyWriter._id}`}
+              href={authorHref(weeklyWriter)}
               className="wotw-card fade-up"
               style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
             >
@@ -405,7 +405,7 @@ export default function Home() {
               writers.map((writer) => {
                 const fullName = `${writer.firstName || ''} ${writer.lastName || ''}`.trim() || 'मेहफ़िल रचनाकार';
                 return (
-                  <Link href={`/author?id=${writer._id}`} key={writer._id} className="writer-card fade-up">
+                  <Link href={authorHref(writer)} key={writer._id} className="writer-card fade-up">
                     <div className="writer-img">
                       <img
                         src={writer.profilePic || DEFAULT_AVATAR}

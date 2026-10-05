@@ -29,6 +29,7 @@ export default function ProfilePage() {
   const [editModal, setEditModal] = useState(false);
   const [editName, setEditName] = useState('');
   const [editBio, setEditBio] = useState('');
+  const [editUsername, setEditUsername] = useState('');
   const [editProfilePic, setEditProfilePic] = useState<File | null>(null);
   const [editProfilePicPreview, setEditProfilePicPreview] = useState('');
   const [poemModal, setPoemModal] = useState<Poem | null>(null);
@@ -87,6 +88,7 @@ export default function ProfilePage() {
         setProfile(merged);
         setEditName(`${merged.firstName || ''} ${merged.lastName || ''}`.trim());
         setEditBio(merged.bio || '');
+        setEditUsername(merged.username || '');
         setEditProfilePicPreview(merged.profilePic || '');
         if (remote) updateStoredUser(remote as Record<string, unknown>); // keep header/storage in sync
       }
@@ -135,6 +137,8 @@ export default function ProfilePage() {
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
     formData.append('bio', editBio);
+    const newUsername = editUsername.trim().replace(/^@/, '').toLowerCase();
+    if (newUsername && newUsername !== (profile?.username || '')) formData.append('username', newUsername);
     if (editProfilePic) formData.append('profilePic', editProfilePic);
 
     setSaving(true);
@@ -438,6 +442,10 @@ export default function ProfilePage() {
                   <small style={{ display: 'block', marginTop: 6, color: 'var(--text-muted)' }}>JPG, PNG या WebP</small>
                 </div>
               </div>
+            </div>
+            <div className="modal-field">
+              <label className="modal-label">यूज़रनेम</label>
+              <input className="form-input" value={editUsername} onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._@]/g, '').slice(0, 21))} placeholder="rahul_sharma" autoCapitalize="none" spellCheck={false} />
             </div>
             <div className="modal-field">
               <label className="modal-label">नाम</label>

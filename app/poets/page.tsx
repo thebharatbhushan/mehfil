@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
-import { API_BASE_URL, Writer } from '@/lib/mehfil';
+import { API_BASE_URL, Writer, authorHref } from '@/lib/mehfil';
 
 import { matchesSearch } from '@/lib/search';
 
@@ -138,7 +138,8 @@ export default function PoetsPage() {
     if (search.trim()) {
       result = result.filter((w) =>
         matchesSearch(
-          search,
+          search.trim().replace(/^@/, ''),
+          w.username || '',
           `${w.firstName} ${w.lastName || ''}`,
           w.firstName,
           w.lastName || '',
@@ -251,7 +252,7 @@ export default function PoetsPage() {
           <i className="fas fa-search" style={{ color: 'var(--accent)' }} />
           <input
             type="text"
-            placeholder="नाम या शहर खोजें..."
+            placeholder="नाम, @यूज़रनेम या शहर खोजें..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{ border: 'none', background: 'transparent', outline: 'none', width: 180, fontFamily: 'inherit' }}
@@ -273,7 +274,7 @@ export default function PoetsPage() {
         <div className="poets-grid">
           {filtered.map((writer) => (
             <Link
-              href={`/author?id=${writer._id}`}
+              href={authorHref(writer)}
               key={writer._id}
               className="writer-card-premium poet-card fade-up"
               style={{

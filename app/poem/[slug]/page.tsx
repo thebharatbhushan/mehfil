@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
-import { API_BASE_URL, Poem, Writer, formatDate } from '@/lib/mehfil';
+import { API_BASE_URL, Poem, Writer, formatDate, authorHref } from '@/lib/mehfil';
 import { sharePoemImage } from '@/lib/shareImage';
 import { useToast } from '@/components/site/ToastProvider';
 import { SharePoemButton } from '@/components/share/SharePoemButton';
@@ -190,7 +190,7 @@ function PoemContent() {
         {/* Author Card */}
         {poem.author?._id && (
           <Link
-            href={`/author?id=${poem.author._id}`}
+            href={authorHref(poem.author)}
             className="author-card fade-up"
             style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}
           >

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { API_BASE_URL } from '@/lib/mehfil';
@@ -10,13 +10,34 @@ export default function SignupPage() {
   const router = useRouter();
   const { showToast } = useToast();
   const [formData, setFormData] = useState({
-    firstName: '', lastName: '', email: '', password: '', confirmPassword: '',
+    username: '', firstName: '', lastName: '', email: '', password: '', confirmPassword: '',
     gender: 'male', dob: '', languagePref: 'hi',
   });
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [strength, setStrength] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [usernameStatus, setUsernameStatus] = useState<{ state: 'idle' | 'checking' | 'ok' | 'bad'; msg: string }>({ state: 'idle', msg: '' });
+
+  // Live username availability check (debounced).
+  useEffect(() => {
+    const u = formData.username;
+    if (!u) { setUsernameStatus({ state: 'idle', msg: '' }); return; }
+    if (!/^[a-z0-9][a-z0-9._]{1,18}[a-z0-9]$/.test(u) || u.includes('..')) {
+      setUsernameStatus({ state: 'bad', msg: '3-20 अक्षर: a-z, 0-9, _ या . (शुरू/अंत अक्षर या अंक से)' });
+      return;
+    }
+    setUsernameStatus({ state: 'checking', msg: 'जाँच हो रही है…' });
+    const controller = new AbortController();
+    const t = setTimeout(async () => {
+      try {
+        const r = await fetch(`${API_BASE_URL}/api/auth/username-available?username=${encodeURIComponent(u)}`, { signal: controller.signal });
+        const d = await r.json();
+        setUsernameStatus(d.available ? { state: 'ok', msg: 'यह यूज़रनेम उपलब्ध है ✓' } : { state: 'bad', msg: d.message === 'Username already taken' ? 'यह यूज़रनेम पहले से लिया जा चुका है' : 'अमान्य यूज़रनेम' });
+      } catch { /* aborted or offline: server re-validates on submit */ }
+    }, 400);
+    return () => { clearTimeout(t); controller.abort(); };
+  }, [formData.username]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const card = cardRef.current;
@@ -56,6 +77,10 @@ export default function SignupPage() {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       showToast('❌ पासवर्ड मेल नहीं खाते।', true);
+      return;
+    }
+    if (usernameStatus.state === 'bad' || !formData.username) {
+      showToast('❌ कृपया सही और उपलब्ध यूज़रनेम चुनें।', true);
       return;
     }
     const age = new Date().getFullYear() - new Date(formData.dob).getFullYear();
@@ -157,6 +182,25 @@ export default function SignupPage() {
                   <input className="auth-input" placeholder="अंतिम नाम" value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} />
                 </div>
               </div>
+
+              <div className="auth-input-group">
+                <i className="fas fa-at auth-input-icon" />
+                <input
+                  className="auth-input"
+                  placeholder="यूज़रनेम (जैसे rahul_sharma)"
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, '').slice(0, 20) })}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  required
+                />
+              </div>
+              {usernameStatus.msg && (
+                <small style={{ display: 'block', marginTop: -6, marginBottom: 10, color: usernameStatus.state === 'ok' ? '#2e7d32' : usernameStatus.state === 'bad' ? '#c62828' : 'var(--text-muted)' }}>
+                  {usernameStatus.msg}
+                </small>
+              )}
 
               <div className="signup-field-grid">
                 <div className="auth-input-group">
