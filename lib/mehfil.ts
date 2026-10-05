@@ -1,4 +1,5 @@
-export const API_BASE_URL = 'https://mehfilbackend.onrender.com';
+// Set NEXT_PUBLIC_API_URL=http://localhost:5000 in .env.local to talk to a local backend.
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mehfilbackend.onrender.com';
 // export const API_BASE_URL = 'http://192.168.0.79:5000';
 
 /** Default profile picture used when a user has not uploaded one. */

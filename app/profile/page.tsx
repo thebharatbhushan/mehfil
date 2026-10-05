@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { API_BASE_URL, Poem, formatDate } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
-import { getCurrentUserId, myProfileHref } from '@/lib/auth';
+import { getCurrentUserId, myProfileHref, updateStoredUser } from '@/lib/auth';
 
 interface Profile {
   username?: string;
@@ -32,6 +32,9 @@ export default function ProfilePage() {
   const [editProfilePic, setEditProfilePic] = useState<File | null>(null);
   const [editProfilePicPreview, setEditProfilePicPreview] = useState('');
   const [poemModal, setPoemModal] = useState<Poem | null>(null);
+  const [uploadingPic, setUploadingPic] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const picInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -54,6 +57,12 @@ export default function ProfilePage() {
         const r = await fetch(`${API_BASE_URL}/api/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (r.status === 401) {
+          // Token expired/invalid: clear it and send the user back to login.
+          localStorage.removeItem('token');
+          router.push('/login');
+          return null;
+        }
         if (r.ok) {
           const data = await r.json();
           if (data.user) return data.user as Profile;
@@ -79,6 +88,7 @@ export default function ProfilePage() {
         setEditName(`${merged.firstName || ''} ${merged.lastName || ''}`.trim());
         setEditBio(merged.bio || '');
         setEditProfilePicPreview(merged.profilePic || '');
+        if (remote) updateStoredUser(remote as Record<string, unknown>); // keep header/storage in sync
       }
       setLoading(false);
     });
@@ -91,46 +101,70 @@ export default function ProfilePage() {
       .catch(() => {});
   }, [router]);
 
-  const handleUpdateProfile = async () => {
+  // Sends the given form to PUT /api/auth/profile and syncs state + stored user with the response.
+  const sendProfileUpdate = async (formData: FormData): Promise<boolean> => {
     const token = localStorage.getItem('token');
     try {
-      const nameParts = editName.trim().split(/\s+/).filter(Boolean);
-      const firstName = nameParts.shift() || '';
-      const lastName = nameParts.join(' ');
-      const formData = new FormData();
-      formData.append('firstName', firstName);
-      formData.append('lastName', lastName);
-      formData.append('bio', editBio);
-      if (editProfilePic) formData.append('profilePic', editProfilePic);
-
       const res = await fetch(`${API_BASE_URL}/api/auth/profile`, {
         method: 'PUT',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }, // no Content-Type: browser sets the multipart boundary
         body: formData,
       });
-      const data = await res.json();
-      if (data.success) {
-        const updated = { ...profile, ...data.user };
+      let data: { success?: boolean; user?: Profile; message?: string } = {};
+      try { data = await res.json(); } catch { /* non-JSON error body */ }
+      if (res.ok && data.success && data.user) {
+        const updated = { ...profile, ...data.user } as Profile;
         setProfile(updated);
         setEditProfilePic(null);
         setEditProfilePicPreview(updated.profilePic || '');
-        const stored = localStorage.getItem('mehfil_user') || sessionStorage.getItem('mehfil_user');
-        if (stored) {
-          try {
-            const parsed = JSON.parse(stored);
-            const merged = { ...parsed, ...data.user };
-            if (localStorage.getItem('mehfil_user')) localStorage.setItem('mehfil_user', JSON.stringify(merged));
-            else sessionStorage.setItem('mehfil_user', JSON.stringify(merged));
-          } catch { /* ignore */ }
-        }
-        showToast('प्रोफ़ाइल अपडेट हुई!');
-        setEditModal(false);
-      } else {
-        showToast(data.message || 'अपडेट विफल।', true);
+        updateStoredUser(data.user as Record<string, unknown>);
+        return true;
       }
+      showToast(data.message || 'अपडेट विफल।', true);
     } catch {
       showToast('सर्वर त्रुटि।', true);
     }
+    return false;
+  };
+
+  const handleUpdateProfile = async () => {
+    const nameParts = editName.trim().split(/\s+/).filter(Boolean);
+    const firstName = nameParts.shift() || '';
+    const lastName = nameParts.join(' ');
+    const formData = new FormData();
+    formData.append('firstName', firstName);
+    formData.append('lastName', lastName);
+    formData.append('bio', editBio);
+    if (editProfilePic) formData.append('profilePic', editProfilePic);
+
+    setSaving(true);
+    const ok = await sendProfileUpdate(formData);
+    setSaving(false);
+    if (ok) {
+      showToast('प्रोफ़ाइल अपडेट हुई!');
+      setEditModal(false);
+    }
+  };
+
+  // Click avatar -> pick image -> upload immediately.
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-selecting the same file later
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/jpg', 'image/webp'].includes(file.type)) {
+      showToast('केवल JPG, PNG या WebP चित्र चुनें।', true);
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('चित्र 5 MB से छोटा होना चाहिए।', true);
+      return;
+    }
+    const formData = new FormData();
+    formData.append('profilePic', file);
+    setUploadingPic(true);
+    const ok = await sendProfileUpdate(formData);
+    setUploadingPic(false);
+    if (ok) showToast('प्रोफ़ाइल तस्वीर अपडेट हुई!');
   };
 
   const handleDeletePoem = async (id: string) => {
@@ -185,7 +219,7 @@ export default function ProfilePage() {
     <section className="profile-page-wrap">
       <div className="mehfil-container">
         {/* Profile Hero Card */}
-        <div className="profile-hero-card fade-up">
+        <div className="profile-hero-card fade-up visible">
           {/* Cover */}
           <div className="profile-cover">
             <div className="profile-cover-pattern">अ क म ह र स</div>
@@ -199,7 +233,21 @@ export default function ProfilePage() {
             <div className="profile-hero-top">
               {/* Avatar */}
               <div className="profile-avatar-wrap">
-                <div className="profile-avatar-ring">
+                <div
+                  className="profile-avatar-ring"
+                  style={{ position: 'relative', cursor: uploadingPic ? 'wait' : 'pointer' }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="प्रोफ़ाइल तस्वीर बदलें"
+                  title="प्रोफ़ाइल तस्वीर बदलें"
+                  onClick={() => !uploadingPic && picInputRef.current?.click()}
+                  onKeyDown={(e) => {
+                    if ((e.key === 'Enter' || e.key === ' ') && !uploadingPic) {
+                      e.preventDefault();
+                      picInputRef.current?.click();
+                    }
+                  }}
+                >
                   {profile.profilePic ? (
                     <img
                       src={profile.profilePic}
@@ -209,7 +257,34 @@ export default function ProfilePage() {
                   ) : (
                     <div className="profile-avatar-placeholder">{initials}</div>
                   )}
+                  <div
+                    style={{
+                      position: 'absolute', inset: 0, borderRadius: '50%',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: uploadingPic ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.0)',
+                      color: '#fff', fontSize: '1.1rem', transition: 'background 0.2s',
+                      pointerEvents: 'none',
+                    }}
+                  >
+                    {uploadingPic ? <i className="fas fa-spinner fa-spin" /> : null}
+                  </div>
+                  <span
+                    style={{
+                      position: 'absolute', right: 2, bottom: 2, width: 28, height: 28, borderRadius: '50%',
+                      background: 'var(--accent)', color: '#fff', display: 'flex', alignItems: 'center',
+                      justifyContent: 'center', fontSize: '0.8rem', pointerEvents: 'none',
+                    }}
+                  >
+                    <i className="fas fa-camera" />
+                  </span>
                 </div>
+                <input
+                  ref={picInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/jpg,image/webp"
+                  style={{ display: 'none' }}
+                  onChange={handleAvatarChange}
+                />
               </div>
 
               {/* Info */}
@@ -374,7 +449,7 @@ export default function ProfilePage() {
             </div>
             <div className="modal-actions">
               <button className="secondary-btn" onClick={() => setEditModal(false)}>रद्द करें</button>
-              <button className="primary-btn" onClick={handleUpdateProfile}>सहेजें</button>
+              <button className="primary-btn" onClick={handleUpdateProfile} disabled={saving}>{saving ? 'सहेजा जा रहा है...' : 'सहेजें'}</button>
             </div>
           </div>
         </div>
