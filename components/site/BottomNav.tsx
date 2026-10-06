@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { getCurrentUserId, getStoredUser, myProfileHref } from '@/lib/auth';
+import { getCurrentUserId, getStoredUser } from '@/lib/auth';
 
 interface Item {
   href: string;
@@ -68,7 +68,7 @@ export function BottomNav() {
     { href: loggedIn ? '/publish' : '/login', label: 'लिखें', sub: 'Write', icon: 'fa-pen-fancy', match: () => false, center: true },
     { href: '/poets', label: 'शायर', sub: 'Authors', icon: 'fa-feather-alt', match: (p) => p.startsWith('/poets') || ((p.startsWith('/author') || p.startsWith('/u/')) && !ownProfile) },
     loggedIn
-      ? { href: myProfileHref(), label: 'प्रोफ़ाइल', sub: 'Profile', icon: 'fa-user-circle', match: (p) => p.startsWith('/profile') || ownProfile }
+      ? { href: '/profile', label: 'प्रोफ़ाइल', sub: 'Profile', icon: 'fa-user-circle', match: (p) => p.startsWith('/profile') || ownProfile }
       : { href: '/login', label: 'प्रवेश', sub: 'Login', icon: 'fa-sign-in-alt', match: (p) => p.startsWith('/login') },
   ];
 

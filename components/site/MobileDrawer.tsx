@@ -104,8 +104,8 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
   ];
   const mine: NavItem[] = user
     ? [
-        { href: myProfileHref(), label: 'मेरी प्रोफ़ाइल', sub: 'Profile', icon: 'fa-user-circle', active: false },
-        { href: '/profile#my-poems', label: 'मेरी रचनाएँ', sub: 'My Rachna', icon: 'fa-pen-nib', active: pathname.startsWith('/profile') },
+        { href: '/profile', label: 'मेरी प्रोफ़ाइल', sub: 'Profile', icon: 'fa-user-circle', active: pathname.startsWith('/profile') },
+        { href: myProfileHref(), label: 'मेरी रचनाएँ', sub: 'My Rachna', icon: 'fa-pen-nib', active: false },
       ]
     : [];
 
@@ -149,7 +149,7 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
           </div>
 
           {user ? (
-            <Link href={myProfileHref()} className="m-drawer-user" onClick={onClose}>
+            <Link href="/profile" className="m-drawer-user" onClick={onClose}>
               <img
                 className="m-drawer-avatar"
                 src={user.profilePic || DEFAULT_AVATAR}

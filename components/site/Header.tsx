@@ -154,10 +154,10 @@ export function Header() {
                   <div className="user-greeting">
                     ✨ नमस्ते, {user.firstName}
                   </div>
-                  <Link href={myProfileHref()} className="dropdown-item">
+                  <Link href="/profile" className="dropdown-item">
                     <i className="fas fa-user-circle" /> मेरी प्रोफ़ाइल
                   </Link>
-                  <Link href="/profile#my-poems" className="dropdown-item">
+                  <Link href={myProfileHref()} className="dropdown-item">
                     <i className="fas fa-book-open" /> मेरी रचनाएँ
                   </Link>
                   <div className="dropdown-divider" />

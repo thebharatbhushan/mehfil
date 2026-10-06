@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { API_BASE_URL, DEFAULT_AVATAR, Writer, Poem, formatDate, authorHref } from '@/lib/mehfil';
 import { fetchOwnProfile, getCurrentUserId, getStoredUser, getToken, myProfileHref, resolveCurrentUserId, updateStoredUser } from '@/lib/auth';
 import { useToast } from '@/components/site/ToastProvider';
+import { useScrollToTop } from '@/lib/useScrollToTop';
 
 function getLanguageLabel(langPref?: string): string {
   if (!langPref) return 'हिंदी / उर्दू';
@@ -262,6 +263,8 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
     if (ok) showToast('प्रोफ़ाइल तस्वीर अपडेट हुई!');
   };
 
+  useScrollToTop(!loading);
+
   if (loading) return <AuthorLoader />;
 
   if (!author) {
@@ -349,7 +352,7 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
                 <button type="button" className="ap-btn ap-btn-ghost" onClick={openEdit}>
                   <i className="fas fa-edit" aria-hidden="true" /> संपादित करें
                 </button>
-                <Link href="/profile#my-poems" className="ap-btn ap-btn-ghost">
+                <Link href="/profile" className="ap-btn ap-btn-ghost">
                   <i className="fas fa-book-open" aria-hidden="true" /> रचनाएँ प्रबंधित करें
                 </Link>
               </>
