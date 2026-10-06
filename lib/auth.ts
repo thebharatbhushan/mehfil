@@ -16,6 +16,9 @@ export interface StoredUser {
   profilePic?: string;
   bio?: string;
   email?: string;
+  /** Only ever present on the logged-in user's OWN profile (used for the private birthday greeting). */
+  dob?: string;
+  socialLinks?: Record<string, string>;
   [key: string]: unknown;
 }
 

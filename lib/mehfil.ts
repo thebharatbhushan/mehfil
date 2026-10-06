@@ -1,3 +1,5 @@
+import type { SocialLinks } from '@/lib/socialLinks';
+
 // Set NEXT_PUBLIC_API_URL=http://localhost:5000 in .env.local to talk to a local backend.
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mehfilbackend.onrender.com';
 // export const API_BASE_URL = 'http://192.168.0.79:5000';
@@ -19,6 +21,7 @@ export interface Poem {
     firstName?: string;
     lastName?: string;
     profilePic?: string;
+    socialLinks?: SocialLinks;
   };
   createdAt?: string;
 }
@@ -35,6 +38,8 @@ export interface Writer {
   email?: string;
   createdAt?: string;
   poemsCount?: number;
+  /** Optional social / website links (public data; safe to render after validation). */
+  socialLinks?: SocialLinks;
 }
 
 /** Public profile URL: /u/<username> when known, otherwise the id-based fallback. */
