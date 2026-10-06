@@ -92,6 +92,7 @@ export function Header() {
     { href: '/poems', label: 'कविताएँ', active: pathname.startsWith('/poems') || pathname.startsWith('/poem/') },
     { href: '/poets', label: 'रचनाकार', active: pathname.startsWith('/poets') || pathname.startsWith('/author') || pathname.startsWith('/u/') },
     { href: '/category', label: 'श्रेणियाँ', active: pathname.startsWith('/category') },
+    { href: '/about-contact', label: 'संपर्क करें', active: pathname.startsWith('/about-contact') || pathname.startsWith('/feedback') },
   ];
 
   return (

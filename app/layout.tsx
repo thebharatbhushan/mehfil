@@ -7,6 +7,7 @@ import { Orbs } from '@/components/site/Orbs';
 import { ScrollIndicator } from '@/components/site/ScrollIndicator';
 import { ToastProvider } from '@/components/site/ToastProvider';
 import { BottomNav } from '@/components/site/BottomNav';
+import { BirthdayCard } from '@/components/birthday/BirthdayCard';
 
 export const metadata: Metadata = {
   title: {
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <Footer />
           <BottomNav />
+          <BirthdayCard />
         </ToastProvider>
       </body>
     </html>

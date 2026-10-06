@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BecomeMemberLink } from '@/components/site/BecomeMemberLink';
 
 export function Footer() {
   return (
@@ -36,9 +37,9 @@ export function Footer() {
             <h4>Community</h4>
             <div className="footer-links">
               <Link href="/publish"><i className="fas fa-chevron-right" /> Write a Poem</Link>
-              <a href="#"><i className="fas fa-chevron-right" /> Join Events</a>
-              <a href="#"><i className="fas fa-chevron-right" /> Feedback</a>
-              <Link href="/signup"><i className="fas fa-chevron-right" /> Become a Member</Link>
+              <Link href="/about-contact"><i className="fas fa-chevron-right" /> About Us / Contact Us</Link>
+              <Link href="/feedback"><i className="fas fa-chevron-right" /> Feedback</Link>
+              <BecomeMemberLink><i className="fas fa-chevron-right" /> Become a Member</BecomeMemberLink>
             </div>
           </div>
 
@@ -61,9 +62,9 @@ export function Footer() {
             poetry lovers.
           </span>
           <div className="footer-bottom-links">
-            <a href="#">गोपनीयता नीति</a>
-            <a href="#">नियम एवं शर्तें</a>
-            <a href="#">संपर्क</a>
+            <span className="footer-link-soon" aria-disabled="true">गोपनीयता नीति</span>
+            <span className="footer-link-soon" aria-disabled="true">नियम एवं शर्तें</span>
+            <Link href="/about-contact">संपर्क</Link>
           </div>
         </div>
       </div>

@@ -8,19 +8,16 @@ import { API_BASE_URL, Poem, formatDate, getLanguageLabel } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
 import { getCurrentUserId, myProfileHref, updateStoredUser } from '@/lib/auth';
 import { useScrollToTop } from '@/lib/useScrollToTop';
+import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
+import { BirthdayAvatarDecor } from '@/components/birthday/BirthdayAvatarDecor';
+import { useOwnBirthday } from '@/lib/useOwnBirthday';
+import { SOCIAL_PLATFORMS, SocialKey, SocialLinks, hasSocialLinks, toSocialForm, validateSocialForm } from '@/lib/socialLinks';
 import {
   calculateProfileCompletion,
   getCompletionMessage,
   getProfileCompletionItems,
   ProfileCompletionUser,
 } from '@/lib/profileCompletion';
-
-interface SocialLinks {
-  instagram?: string;
-  x?: string;
-  website?: string;
-  linkedin?: string;
-}
 
 interface Profile extends ProfileCompletionUser {
   _id?: string;
@@ -91,6 +88,7 @@ export default function ProfilePage() {
   const [poemModal, setPoemModal] = useState<Poem | null>(null);
   const picInputRef = useRef<HTMLInputElement>(null);
   useScrollToTop(!loading);
+  const { isBirthday } = useOwnBirthday();
 
   const [basicForm, setBasicForm] = useState({ firstName: '', lastName: '', gender: 'prefer-not', dob: '' });
   const [accountForm, setAccountForm] = useState({ username: '', email: '', currentPassword: '' });
@@ -99,7 +97,8 @@ export default function ProfilePage() {
   const [bioForm, setBioForm] = useState('');
   const [interestsForm, setInterestsForm] = useState<string[]>([]);
   const [languagesForm, setLanguagesForm] = useState<string[]>([]);
-  const [socialForm, setSocialForm] = useState({ instagram: '', x: '', website: '', linkedin: '' });
+  const [socialForm, setSocialForm] = useState<Record<SocialKey, string>>(() => toSocialForm(undefined));
+  const [socialErrors, setSocialErrors] = useState<Partial<Record<SocialKey, string>>>({});
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
   const completion = useMemo(() => profile ? calculateProfileCompletion(profile) : 0, [profile]);
@@ -119,12 +118,8 @@ export default function ProfilePage() {
     setBioForm(user.bio || '');
     setInterestsForm(user.literaryInterests || []);
     setLanguagesForm(user.languages || []);
-    setSocialForm({
-      instagram: user.socialLinks?.instagram || '',
-      x: user.socialLinks?.x || '',
-      website: user.socialLinks?.website || '',
-      linkedin: user.socialLinks?.linkedin || '',
-    });
+    setSocialForm(toSocialForm(user.socialLinks));
+    setSocialErrors({});
     setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
   };
 
@@ -282,7 +277,14 @@ export default function ProfilePage() {
       return;
     }
     if (activeEdit === 'social') {
-      if (await sendProfileUpdate({ socialLinks: socialForm })) setActiveEdit(null);
+      const checked = validateSocialForm(socialForm);
+      setSocialErrors(checked.errors);
+      if (!checked.ok) {
+        showToast('कृपया लाल निशान वाले लिंक ठीक करें।', true);
+        return;
+      }
+      // Empty string = link removed. The backend deletes empty entries.
+      if (await sendProfileUpdate({ socialLinks: checked.values })) setActiveEdit(null);
       return;
     }
     if (activeEdit === 'password') {
@@ -370,7 +372,7 @@ export default function ProfilePage() {
   return (
     <section className="profile-page-wrap">
       <div className="mehfil-container profile-dashboard">
-        <div className="profile-premium-header fade-up visible">
+        <div className={`profile-premium-header fade-up visible${isBirthday ? ' has-bday' : ''}`}>
           <div className="profile-cover-premium">
             <div className="profile-cover-pattern">अ  क  म  ह  र  स</div>
             <span className="profile-cover-quote">हर शब्द, आपकी पहचान का एक हिस्सा।</span>
@@ -382,6 +384,7 @@ export default function ProfilePage() {
               <button className="profile-avatar-ring profile-avatar-action" onClick={() => !uploadingPic && picInputRef.current?.click()} disabled={uploadingPic} aria-label="प्रोफ़ाइल तस्वीर बदलें">
                 {profile.profilePic ? <img src={profile.profilePic} alt={fullName} className="profile-avatar-img" /> : <span className="profile-avatar-placeholder">{initials}</span>}
                 <span className="profile-avatar-camera"><i className={uploadingPic ? 'fas fa-spinner fa-spin' : 'fas fa-camera'} /></span>
+                <BirthdayAvatarDecor />
               </button>
               <input ref={picInputRef} type="file" accept="image/jpeg,image/png,image/jpg,image/webp" style={{ display: 'none' }} onChange={handleAvatarChange} />
             </div>
@@ -395,6 +398,7 @@ export default function ProfilePage() {
                 {profile.city && <span><i className="fas fa-map-marker-alt" /> {profile.city}{profile.state ? `, ${profile.state}` : ''}</span>}
               </div>
               <p className="profile-header-bio">{profile.bio ? `“${profile.bio}”` : 'अपने बारे में एक छोटा-सा परिचय जोड़ें और अपनी साहित्यिक पहचान को और बेहतर बनाएं।'}</p>
+              <ProfileSocialLinks socialLinks={profile.socialLinks} ownerName={fullName} />
               <div className="profile-header-actions">
                 <button className="profile-primary-btn" onClick={() => missingItems[0] ? handleMissingItem(missingItems[0].key) : setActiveEdit('basic')}>
                   <i className="fas fa-sparkles" /> {completion < 100 ? 'प्रोफ़ाइल पूरी करें' : 'प्रोफ़ाइल संपादित करें'}
@@ -462,12 +466,9 @@ export default function ProfilePage() {
             </SectionCard>
 
             <SectionCard title="सोशल / प्रोफ़ेशनल लिंक" icon="fa-link" section="social" onEdit={openSection} hint="वैकल्पिक — केवल वही लिंक जोड़ें जिन्हें आप साझा करना चाहते हैं">
-              {Object.values(profile.socialLinks || {}).some(Boolean) ? <div className="profile-social-list">
-                {profile.socialLinks?.instagram && <a href={profile.socialLinks.instagram} target="_blank" rel="noreferrer"><i className="fab fa-instagram" /> Instagram</a>}
-                {profile.socialLinks?.x && <a href={profile.socialLinks.x} target="_blank" rel="noreferrer"><i className="fab fa-x-twitter" /> X</a>}
-                {profile.socialLinks?.website && <a href={profile.socialLinks.website} target="_blank" rel="noreferrer"><i className="fas fa-globe" /> Website</a>}
-                {profile.socialLinks?.linkedin && <a href={profile.socialLinks.linkedin} target="_blank" rel="noreferrer"><i className="fab fa-linkedin" /> LinkedIn</a>}
-              </div> : <div className="profile-optional-note"><i className="fas fa-info-circle" /> ये लिंक optional हैं और Profile Completion में शामिल नहीं हैं।</div>}
+              {hasSocialLinks(profile.socialLinks)
+                ? <ProfileSocialLinks socialLinks={profile.socialLinks} variant="chips" />
+                : <div className="profile-optional-note"><i className="fas fa-info-circle" /> ये लिंक optional हैं और Profile Completion में शामिल नहीं हैं।</div>}
             </SectionCard>
           </main>
 
@@ -512,7 +513,37 @@ export default function ProfilePage() {
 
             {activeEdit === 'languages' && <div className="profile-modal-fields"><p className="profile-choice-help">जिन भाषाओं में आप पढ़ते या लिखते हैं, उन्हें चुनें।</p><div className="profile-choice-grid">{LANGUAGE_OPTIONS.map((item) => <button type="button" key={item} className={`profile-choice-pill ${languagesForm.includes(item) ? 'selected' : ''}`} onClick={() => toggleValue(item, setLanguagesForm)}>{languagesForm.includes(item) && <i className="fas fa-check" />} {item}</button>)}</div></div>}
 
-            {activeEdit === 'social' && <div className="profile-modal-fields"><label className="modal-field"><span className="modal-label">Instagram</span><input className="form-input" value={socialForm.instagram} onChange={(e) => setSocialForm({ ...socialForm, instagram: e.target.value })} placeholder="https://instagram.com/..." /></label><label className="modal-field"><span className="modal-label">X / Twitter</span><input className="form-input" value={socialForm.x} onChange={(e) => setSocialForm({ ...socialForm, x: e.target.value })} placeholder="https://x.com/..." /></label><label className="modal-field"><span className="modal-label">Website</span><input className="form-input" value={socialForm.website} onChange={(e) => setSocialForm({ ...socialForm, website: e.target.value })} placeholder="https://example.com" /></label><label className="modal-field"><span className="modal-label">LinkedIn</span><input className="form-input" value={socialForm.linkedin} onChange={(e) => setSocialForm({ ...socialForm, linkedin: e.target.value })} placeholder="https://linkedin.com/in/..." /></label></div>}
+            {activeEdit === 'social' && (
+              <div className="profile-modal-fields">
+                <p className="social-form-note">सभी लिंक वैकल्पिक हैं। केवल वही जोड़ें जो आप साझा करना चाहते हैं — किसी लिंक को हटाने के लिए खाना खाली छोड़कर सहेजें। केवल http/https लिंक मान्य हैं।</p>
+                <div className="profile-social-grid">
+                  {SOCIAL_PLATFORMS.map((platform) => (
+                    <label className="modal-field" key={platform.key} htmlFor={`social-${platform.key}`}>
+                      <span className="modal-label">{platform.label}</span>
+                      <input
+                        id={`social-${platform.key}`}
+                        className={`form-input${socialErrors[platform.key] ? ' is-invalid' : ''}`}
+                        type="url"
+                        inputMode="url"
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
+                        maxLength={300}
+                        value={socialForm[platform.key]}
+                        onChange={(e) => {
+                          setSocialForm({ ...socialForm, [platform.key]: e.target.value });
+                          if (socialErrors[platform.key]) setSocialErrors({ ...socialErrors, [platform.key]: undefined });
+                        }}
+                        placeholder={platform.placeholder}
+                        aria-invalid={!!socialErrors[platform.key]}
+                        aria-describedby={socialErrors[platform.key] ? `social-${platform.key}-err` : undefined}
+                      />
+                      {socialErrors[platform.key] && <span id={`social-${platform.key}-err`} className="social-field-error" role="alert">{socialErrors[platform.key]}</span>}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {activeEdit === 'password' && <div className="profile-modal-fields"><div className="profile-security-callout"><i className="fas fa-lock" /><div><strong>पासवर्ड सुरक्षित रहेगा</strong><p>पासवर्ड कभी प्रोफ़ाइल डेटा के साथ वापस नहीं भेजा जाता।</p></div></div><label className="modal-field"><span className="modal-label">वर्तमान पासवर्ड</span><input className="form-input" type="password" value={passwordForm.currentPassword} onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })} autoComplete="current-password" /></label><label className="modal-field"><span className="modal-label">नया पासवर्ड</span><input className="form-input" type="password" value={passwordForm.newPassword} onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} autoComplete="new-password" /></label><label className="modal-field"><span className="modal-label">नया पासवर्ड पुष्टि करें</span><input className="form-input" type="password" value={passwordForm.confirmPassword} onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })} autoComplete="new-password" /></label></div>}
 

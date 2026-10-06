@@ -9,6 +9,7 @@ import { useToast } from '@/components/site/ToastProvider';
 import { SharePoemButton } from '@/components/share/SharePoemButton';
 import { ReadingToolbar } from '@/components/reading/ReadingToolbar';
 import { useReadingPrefs } from '@/hooks/use-reading-prefs';
+import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 
 function PoemContent() {
   const params = useParams();
@@ -189,11 +190,11 @@ function PoemContent() {
 
         {/* Author Card */}
         {poem.author?._id && (
-          <Link
-            href={authorHref(poem.author)}
-            className="author-card fade-up"
+          <div
+            className="author-card card-shell fade-up"
             style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}
           >
+            <Link href={authorHref(poem.author)} className="card-overlay-link" aria-label={`${authorName} की प्रोफ़ाइल देखें`} />
             <img
               className="author-avatar"
               src={authorPic}
@@ -210,8 +211,9 @@ function PoemContent() {
               <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                 <i className="fas fa-quote-left" /> कलम के सिपाही, शब्दों के संगीतकार
               </div>
+              <ProfileSocialLinks socialLinks={author?.socialLinks ?? poem.author?.socialLinks} ownerName={authorName} />
             </div>
-          </Link>
+          </div>
         )}
 
         {/* More Poems by Same Writer */}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { API_BASE_URL, Writer, authorHref } from '@/lib/mehfil';
 
 import { matchesSearch } from '@/lib/search';
+import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 
 const STYLE_FILTERS = [
   { key: 'all', label: 'सभी रचनाकार' },
@@ -98,7 +99,9 @@ export default function PoetsPage() {
               const d = await res.json();
               const poemCount = (d.poems || []).length;
               const styleVal = (u.languagePref || 'shayari').toLowerCase();
-              return { ...u, poemCount, style: styleVal } as WriterWithPoems;
+              // The public profile lookup is the source of truth for socialLinks (same data as the author page).
+              const socialLinks = d.user?.socialLinks ?? u.socialLinks;
+              return { ...u, socialLinks, poemCount, style: styleVal } as WriterWithPoems;
             } catch {
               return { ...u, poemCount: 0, style: (u.languagePref || 'shayari').toLowerCase() } as WriterWithPoems;
             }
@@ -273,10 +276,9 @@ export default function PoetsPage() {
       ) : (
         <div className="poets-grid">
           {filtered.map((writer) => (
-            <Link
-              href={authorHref(writer)}
+            <div
               key={writer._id}
-              className="writer-card-premium poet-card fade-up"
+              className="writer-card-premium poet-card card-shell fade-up"
               style={{
                 background: 'white',
                 borderRadius: '2rem',
@@ -291,6 +293,11 @@ export default function PoetsPage() {
                 display: 'block',
               }}
             >
+              <Link
+                href={authorHref(writer)}
+                className="card-overlay-link"
+                aria-label={`${writer.firstName} ${writer.lastName || ''} की प्रोफ़ाइल देखें`}
+              />
               <div className="poet-card-avatar" style={{
                 width: 'clamp(78px, 10vw, 120px)', height: 'clamp(78px, 10vw, 120px)',
                 margin: '0 auto clamp(0.7rem, 1.5vw, 1.2rem)',
@@ -323,7 +330,8 @@ export default function PoetsPage() {
                   </span>
                 </div>
               </div>
-            </Link>
+              <ProfileSocialLinks socialLinks={writer.socialLinks} ownerName={`${writer.firstName} ${writer.lastName || ''}`.trim()} />
+            </div>
           ))}
         </div>
       )}

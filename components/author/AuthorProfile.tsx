@@ -7,6 +7,9 @@ import { API_BASE_URL, DEFAULT_AVATAR, Writer, Poem, formatDate, authorHref } fr
 import { fetchOwnProfile, getCurrentUserId, getStoredUser, getToken, myProfileHref, resolveCurrentUserId, updateStoredUser } from '@/lib/auth';
 import { useToast } from '@/components/site/ToastProvider';
 import { useScrollToTop } from '@/lib/useScrollToTop';
+import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
+import { BirthdayAvatarDecor } from '@/components/birthday/BirthdayAvatarDecor';
+import { hasSocialLinks } from '@/lib/socialLinks';
 
 function getLanguageLabel(langPref?: string): string {
   if (!langPref) return 'हिंदी / उर्दू';
@@ -308,6 +311,7 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
             <img src={profilePic} alt={fullName} className="ap-avatar" />
             {isOwner && (
               <>
+                <BirthdayAvatarDecor />
                 <button
                   type="button"
                   aria-label="प्रोफ़ाइल तस्वीर बदलें"
@@ -341,6 +345,7 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
               <li><i className="fas fa-language" aria-hidden="true" /> {langPref}</li>
               {author.city && <li><i className="fas fa-map-marker-alt" aria-hidden="true" /> {author.city}</li>}
             </ul>
+            <ProfileSocialLinks socialLinks={author.socialLinks} ownerName={fullName} />
           </div>
 
           <div className="ap-actions">
@@ -377,6 +382,17 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
           )}
         </dl>
       </header>
+
+      {/* Connect with me — only the platforms this author has configured */}
+      <div className="fade-up">
+        <ProfileSocialLinks socialLinks={author.socialLinks} variant="connect" ownerName={fullName} />
+        {isOwner && !hasSocialLinks(author.socialLinks) && (
+          <p className="ps-owner-hint">
+            <i className="fas fa-link" aria-hidden="true" /> अपने सोशल लिंक जोड़ें —{' '}
+            <Link href="/profile">प्रोफ़ाइल सेटिंग्स में जाएँ</Link>
+          </p>
+        )}
+      </div>
 
       {/* Featured work */}
       {featured && (

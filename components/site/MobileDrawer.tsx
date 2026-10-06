@@ -101,6 +101,8 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
     { href: '/poems', label: 'कविताएँ', sub: 'Poems', icon: 'fa-book-open', active: pathname.startsWith('/poems') || pathname.startsWith('/poem/') },
     { href: '/poets', label: 'रचनाकार', sub: 'Authors', icon: 'fa-feather-alt', active: pathname.startsWith('/poets') || pathname.startsWith('/author') || pathname.startsWith('/u/') },
     { href: '/category', label: 'श्रेणियाँ', sub: 'Categories', icon: 'fa-th-large', active: pathname.startsWith('/category') },
+    { href: '/about-contact', label: 'संपर्क करें', sub: 'About / Contact', icon: 'fa-envelope', active: pathname.startsWith('/about-contact') },
+    { href: '/feedback', label: 'अपनी राय दें', sub: 'Feedback', icon: 'fa-comment-dots', active: pathname.startsWith('/feedback') },
   ];
   const mine: NavItem[] = user
     ? [

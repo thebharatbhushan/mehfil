@@ -7,6 +7,7 @@ import { API_BASE_URL, DEFAULT_AVATAR, Poem, Writer, authorHref } from '@/lib/me
 
 type SelectedPoem = Poem & { selectedImage?: string };
 import { useToast } from '@/components/site/ToastProvider';
+import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 import { SherOfTheDay } from '@/components/home/SherOfTheDay';
 import { LafzOfTheDay } from '@/components/home/LafzOfTheDay';
 
@@ -327,11 +328,15 @@ export default function Home() {
               ✨ इस सप्ताह के रचनाकार का चयन अभी उपलब्ध नहीं है।
             </p>
           ) : (
-            <Link
-              href={authorHref(weeklyWriter)}
-              className="wotw-card fade-up"
+            <div
+              className="wotw-card card-shell fade-up"
               style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
             >
+              <Link
+                href={authorHref(weeklyWriter)}
+                className="card-overlay-link"
+                aria-label={`${weeklyWriter.firstName} ${weeklyWriter.lastName || ''} की प्रोफ़ाइल पढ़ें`}
+              />
               <div className="wotw-image-side">
                 {weeklyWriter.profilePic ? (
                   <img src={weeklyWriter.profilePic} alt={`${weeklyWriter.firstName} ${weeklyWriter.lastName || ''}`} />
@@ -371,8 +376,12 @@ export default function Home() {
                   <i className="fas fa-user-circle" /> इनकी प्रोफ़ाइल पढ़ें
                   <i className="fas fa-arrow-right" style={{ fontSize: '0.85rem' }} />
                 </div>
+                <ProfileSocialLinks
+                  socialLinks={weeklyWriter.socialLinks}
+                  ownerName={`${weeklyWriter.firstName} ${weeklyWriter.lastName || ''}`.trim()}
+                />
               </div>
-            </Link>
+            </div>
           )}
         </div>
       </section>
@@ -405,7 +414,8 @@ export default function Home() {
               writers.map((writer) => {
                 const fullName = `${writer.firstName || ''} ${writer.lastName || ''}`.trim() || 'मेहफ़िल रचनाकार';
                 return (
-                  <Link href={authorHref(writer)} key={writer._id} className="writer-card fade-up">
+                  <div key={writer._id} className="writer-card card-shell fade-up">
+                    <Link href={authorHref(writer)} className="card-overlay-link" aria-label={`${fullName} की प्रोफ़ाइल देखें`} />
                     <div className="writer-img">
                       <img
                         src={writer.profilePic || DEFAULT_AVATAR}
@@ -426,7 +436,8 @@ export default function Home() {
                       </p>
                     )}
                     <span className="follow-btn">प्रोफ़ाइल देखें</span>
-                  </Link>
+                    <ProfileSocialLinks socialLinks={writer.socialLinks} ownerName={fullName} />
+                  </div>
                 );
               })
             )}
