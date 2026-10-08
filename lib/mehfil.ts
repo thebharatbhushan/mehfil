@@ -87,3 +87,14 @@ export function getLanguageLabel(lang?: string): string {
   };
   return map[lang || ''] || 'हिंदी';
 }
+
+/** Language of a text from its dominant script: Devanagari -> hi, Arabic/Nastaliq -> ur, Latin -> en. */
+export function detectScriptLang(text?: string): 'hi' | 'ur' | 'en' {
+  const t = text || '';
+  const dev = (t.match(/[\u0900-\u097F]/g) || []).length;
+  const ar = (t.match(/[\u0600-\u06FF\u0750-\u077F]/g) || []).length;
+  const lat = (t.match(/[A-Za-z]/g) || []).length;
+  if (ar > dev && ar >= lat) return 'ur';
+  if (lat > dev && lat > ar) return 'en';
+  return 'hi';
+}
