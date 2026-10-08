@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGE } from '@/lib/seo';
 import Link from 'next/link';
 import { ContactForm } from '@/components/forms/ContactForm';
 
@@ -6,7 +7,8 @@ export const metadata: Metadata = {
   title: { absolute: 'About Us & Contact Us | Mehfil' },
   description: 'Learn about Mehfil, a community for Hindi & Urdu poetry, shayari and literature, and get in touch with the team for queries, suggestions or collaboration.',
   alternates: { canonical: '/about-contact' },
-  openGraph: { title: 'About Us & Contact Us | Mehfil', description: 'Know Mehfil and contact the team.', url: '/about-contact' },
+  openGraph: { title: 'About Us & Contact Us | Mehfil', description: 'Know Mehfil and contact the team.', url: '/about-contact', type: 'website', siteName: 'Mehfil', locale: 'hi_IN', images: [DEFAULT_OG_IMAGE] },
+  twitter: { card: 'summary_large_image', title: 'About Us & Contact Us | Mehfil', description: 'Know Mehfil and contact the team.', images: [DEFAULT_OG_IMAGE.url] },
 };
 
 export default function AboutContactPage() {

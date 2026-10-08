@@ -1,45 +1,28 @@
-'use client';
-
-import { useState, Suspense } from 'react';
+import type { Metadata } from 'next';
+import { DEFAULT_OG_IMAGE } from '@/lib/seo';
 import Link from 'next/link';
-import { CATEGORIES } from '@/lib/mehfil';
+import { Breadcrumbs } from '@/components/site/Breadcrumbs';
+import { SEO_CATEGORIES, categoryHref, poemsForCategory } from '@/lib/categories';
+import { fetchAllPoems } from '@/lib/seo';
 
-const POEMS_BY_CATEGORY: Record<string, { title: string; excerpt: string; author: string }[]> = {
-  love: [
-    { title: 'मोहब्बत का सफ़र', excerpt: 'तुम्हारी याद में बीती हर रात...', author: 'Ayaan' },
-    { title: 'दिल की आवाज़', excerpt: 'सुनो तो मेरे दिल की...', author: 'Meera' },
-  ],
-  sad: [
-    { title: 'तन्हाई', excerpt: 'रात की ख़ामोशी में...', author: 'Kabir' },
-    { title: 'अधूरा सपना', excerpt: 'कुछ बातें अधूरी रह गईं...', author: 'Sara' },
-  ],
-  motivation: [
-    { title: 'उठो और चलो', excerpt: 'हर गिरावट एक शुरुआत है...', author: 'Rahul' },
-  ],
-  nature: [
-    { title: 'बारिश', excerpt: 'बूँदों में छुपा है संगीत...', author: 'Priya' },
-  ],
-  life: [
-    { title: 'ज़िंदगी', excerpt: 'हर पल एक नई कहानी...', author: 'Vikram' },
-  ],
-  sufi: [
-    { title: 'रूहानी राह', excerpt: 'इबादत में खुदा मिले...', author: 'Farid' },
-  ],
-  shayari: [
-    { title: 'शाम-ए-शायरी', excerpt: 'अल्फ़ाज़ दिल से निकले...', author: 'Noor' },
-  ],
-  friendship: [
-    { title: 'दोस्ती', excerpt: 'हाथ थामे रहना हर मुश्किल में...', author: 'Arjun' },
-  ],
+export const revalidate = 3600;
+
+const DESCRIPTION =
+  'अपने मिज़ाज के हिसाब से हिंदी कविताएँ खोजिए — प्रेम, दर्द, शायरी, प्रेरणा, सूफ़ी, रोमांटिक, प्रकृति, ज़िंदगी और दोस्ती की श्रेणियाँ।';
+
+export const metadata: Metadata = {
+  title: { absolute: 'कविता श्रेणियाँ — प्रेम, दर्द, शायरी, सूफ़ी, प्रेरणा | Mehfil' },
+  description: DESCRIPTION,
+  alternates: { canonical: '/category' },
+  openGraph: { title: 'कविता श्रेणियाँ | Mehfil', description: DESCRIPTION, url: '/category', type: 'website', siteName: 'Mehfil', locale: 'hi_IN', images: [DEFAULT_OG_IMAGE] },
+  twitter: { card: 'summary_large_image', title: 'कविता श्रेणियाँ | Mehfil', description: DESCRIPTION, images: [DEFAULT_OG_IMAGE.url] },
 };
 
-function CategoryContent() {
-  const [selected, setSelected] = useState<string | null>(null);
-
-  const featured = selected ? POEMS_BY_CATEGORY[selected] || [] : [];
-
+export default async function CategoryIndexPage() {
+  const poems = await fetchAllPoems();
   return (
     <>
+      <Breadcrumbs items={[{ name: 'होम', path: '/' }, { name: 'श्रेणियाँ', path: '/category' }]} />
       <div className="page-header">
         <h1>श्रेणियाँ</h1>
         <p>भावना, विषय और कला के अनुसार कविताएँ खोजें</p>
@@ -48,60 +31,31 @@ function CategoryContent() {
       <section style={{ paddingTop: 0 }}>
         <div className="mehfil-container">
           <div className="category-grid">
-            {CATEGORIES.map((cat) => (
-              <div
-                key={cat.id}
+            {SEO_CATEGORIES.map((cat) => (
+              <Link
+                key={cat.slug}
+                href={categoryHref(cat.slug)}
                 className="category-card"
-                onClick={() => setSelected(cat.id)}
-                style={selected === cat.id ? { borderColor: 'var(--accent)' } : {}}
+                style={{ display: 'block', textDecoration: 'none' }}
+                aria-label={`${cat.h1} पढ़ें`}
               >
                 <div className="category-icon-circle">{cat.icon}</div>
-                <h3 style={{ fontSize: '1.5rem', fontFamily: 'var(--font-display)', color: 'var(--accent-dark)', marginBottom: '0.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontFamily: 'var(--font-display)', color: 'var(--accent-dark)', marginBottom: '0.5rem' }}>
                   {cat.label}
-                </h3>
+                </h2>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                  {(POEMS_BY_CATEGORY[cat.id] || []).length} रचनाएँ
+                  {poemsForCategory(cat, poems).length} रचनाएँ
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
-
-          {selected && (
-            <div style={{ marginTop: '3rem' }}>
-              <h2 className="section-title" style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>
-                {CATEGORIES.find((c) => c.id === selected)?.label} रचनाएँ
-              </h2>
-              {featured.length === 0 ? (
-                <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
-                  ✨ इस श्रेणी में अभी कोई रचनाएँ नहीं हैं।
-                </p>
-              ) : (
-                <div className="poems-list-grid">
-                  {featured.map((poem, i) => (
-                    <div className="poem-card" key={i}>
-                      <span className="mood">{CATEGORIES.find((c) => c.id === selected)?.label}</span>
-                      <h3>{poem.title}</h3>
-                      <p>{poem.excerpt}</p>
-                      <div className="poem-footer">
-                        <span>By {poem.author}</span>
-                        <span>3 min read</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+          <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '2.5rem', lineHeight: 1.8 }}>
+            मेहफ़िल पर कविताएँ भावना के हिसाब से बाँटी गई हैं। किसी श्रेणी को खोलिए और उसमें लिखी गई असली रचनाएँ पढ़िए, या सभी{' '}
+            <Link href="/poems" style={{ color: 'var(--accent)' }}>हिंदी कविताएँ</Link> और{' '}
+            <Link href="/poets" style={{ color: 'var(--accent)' }}>कवियों व शायरों</Link> के पन्ने देखिए।
+          </p>
         </div>
       </section>
     </>
-  );
-}
-
-export default function CategoryPage() {
-  return (
-    <Suspense fallback={<div className="loader-wrapper"><div className="spinner" /></div>}>
-      <CategoryContent />
-    </Suspense>
   );
 }

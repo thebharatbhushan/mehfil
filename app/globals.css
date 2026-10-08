@@ -3381,3 +3381,18 @@ a.ap-btn { text-decoration: none; }
 /* One extra desktop nav link (संपर्क करें): tighten the gap on narrower desktops so the bar never overflows. */
 @media (min-width: 881px) and (max-width: 1200px) { .nav-links { gap: 1.35rem; } }
 @media (min-width: 881px) and (max-width: 1000px) { .nav-links { gap: .9rem; } .nav-links a { font-size: .85rem; } }
+
+/* ===== Profile: collapsible (dropdown) section cards ===== */
+.profile-detail-toggle { all: unset; box-sizing: border-box; flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: .75rem; cursor: pointer; border-radius: 12px; }
+.profile-detail-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.profile-detail-title-wrap { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.profile-detail-title-text { display: block; min-width: 0; }
+.profile-detail-summary { color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.profile-detail-chevron { color: var(--accent); font-size: .8rem; transition: transform .3s ease; flex-shrink: 0; margin-right: .35rem; }
+.profile-collapsible.is-open .profile-detail-chevron { transform: rotate(90deg); }
+.profile-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease, opacity .25s ease; opacity: 0; visibility: hidden; }
+.profile-collapsible.is-open .profile-collapse { grid-template-rows: 1fr; opacity: 1; visibility: visible; }
+.profile-collapse-inner { overflow: hidden; min-height: 0; }
+.profile-collapsible.is-open .profile-collapse-inner { padding-top: .25rem; }
+.profile-collapsible:not(.is-open) .profile-detail-head { margin-bottom: 0; }
+@media (prefers-reduced-motion: reduce) { .profile-collapse, .profile-detail-chevron { transition: none; } }

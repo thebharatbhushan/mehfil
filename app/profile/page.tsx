@@ -45,6 +45,8 @@ function SectionCard({
   onEdit,
   children,
   hint,
+  summary,
+  defaultOpen = false,
 }: {
   title: string;
   icon: string;
@@ -52,22 +54,43 @@ function SectionCard({
   onEdit: (section: EditSection) => void;
   children: ReactNode;
   hint?: string;
+  summary?: string;
+  defaultOpen?: boolean;
 }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const bodyId = `profile-body-${section}`;
   return (
-    <article className="profile-detail-card">
+    <article className={`profile-detail-card profile-collapsible${open ? ' is-open' : ''}`}>
       <div className="profile-detail-head">
-        <div className="profile-detail-title-wrap">
-          <span className="profile-detail-icon"><i className={`fas ${icon}`} /></span>
-          <div>
-            <h3>{title}</h3>
-            {hint && <p>{hint}</p>}
-          </div>
-        </div>
-        <button className="profile-section-edit" onClick={() => onEdit(section)}>
+        <button
+          type="button"
+          className="profile-detail-toggle"
+          aria-expanded={open}
+          aria-controls={bodyId}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span className="profile-detail-title-wrap">
+            <span className="profile-detail-icon"><i className={`fas ${icon}`} /></span>
+            <span className="profile-detail-title-text">
+              <h3>{title}</h3>
+              {open ? (hint && <p>{hint}</p>) : (summary || hint) && <p className="profile-detail-summary">{summary || hint}</p>}
+            </span>
+          </span>
+          <i className="fas fa-chevron-right profile-detail-chevron" aria-hidden="true" />
+        </button>
+        <button
+          className="profile-section-edit"
+          onClick={() => {
+            setOpen(true);
+            onEdit(section);
+          }}
+        >
           <i className="fas fa-pen" /> <span>संपादित करें</span>
         </button>
       </div>
-      {children}
+      <div className="profile-collapse" id={bodyId} role="region" aria-hidden={!open}>
+        <div className="profile-collapse-inner">{children}</div>
+      </div>
     </article>
   );
 }
@@ -423,7 +446,7 @@ export default function ProfilePage() {
           <main className="profile-sections-column">
             <div className="profile-section-heading"><span className="profile-section-kicker">YOUR PROFILE</span><h2>आपकी साहित्यिक पहचान</h2><p>महत्वपूर्ण जानकारी पहले से भरी हुई है। बाकी जानकारी आप अपनी सुविधा से जोड़ सकते हैं।</p></div>
 
-            <SectionCard title="व्यक्तिगत जानकारी" icon="fa-user-circle" section="basic" onEdit={openSection} hint="आपके खाते की मूल पहचान">
+            <SectionCard title="व्यक्तिगत जानकारी" icon="fa-user-circle" section="basic" onEdit={openSection} defaultOpen hint="आपके खाते की मूल पहचान" summary={[fullName, profile.username ? `@${profile.username}` : ''].filter(Boolean).join(' · ')}>
               <div className="profile-field-grid" id="profile-basic">
                 <div><span>नाम</span><strong>{fullName}</strong></div>
                 <div><span>यूज़रनेम</span><strong>{profile.username ? `@${profile.username}` : <EmptyValue />}</strong></div>
@@ -432,14 +455,14 @@ export default function ProfilePage() {
               </div>
             </SectionCard>
 
-            <SectionCard title="अकाउंट और सुरक्षा" icon="fa-shield-alt" section="account" onEdit={openSection} hint="ईमेल, यूज़रनेम और सुरक्षित पासवर्ड">
+            <SectionCard title="अकाउंट और सुरक्षा" icon="fa-shield-alt" section="account" onEdit={openSection} hint="ईमेल, यूज़रनेम और सुरक्षित पासवर्ड" summary={profile.email || undefined}>
               <div className="profile-account-grid">
                 <div><span>ईमेल</span><strong className="break-anywhere">{profile.email || <EmptyValue />}</strong></div>
                 <div><span>पासवर्ड</span><strong className="password-mask">••••••••••</strong><button className="inline-change-btn" onClick={() => setActiveEdit('password')}>पासवर्ड बदलें</button></div>
               </div>
             </SectionCard>
 
-            <SectionCard title="स्थान" icon="fa-map-marker-alt" section="location" onEdit={openSection} hint="आप कहाँ से हैं, यह आपकी प्रोफ़ाइल को अधिक व्यक्तिगत बनाता है">
+            <SectionCard title="स्थान" icon="fa-map-marker-alt" section="location" onEdit={openSection} summary={[profile.city, profile.state, profile.country].filter(Boolean).join(', ') || undefined} hint="आप कहाँ से हैं, यह आपकी प्रोफ़ाइल को अधिक व्यक्तिगत बनाता है">
               <div className="profile-field-grid profile-three-grid">
                 <div><span>शहर</span><strong>{profile.city || <EmptyValue text="शहर जोड़ें" />}</strong></div>
                 <div><span>राज्य</span><strong>{profile.state || <EmptyValue text="राज्य जोड़ें" />}</strong></div>
@@ -447,7 +470,7 @@ export default function ProfilePage() {
               </div>
             </SectionCard>
 
-            <SectionCard title="शिक्षा" icon="fa-graduation-cap" section="education" onEdit={openSection} hint="आपकी शैक्षणिक पृष्ठभूमि">
+            <SectionCard title="शिक्षा" icon="fa-graduation-cap" section="education" onEdit={openSection} summary={[profile.highestEducation, profile.fieldOfStudy].filter(Boolean).join(' · ') || undefined} hint="आपकी शैक्षणिक पृष्ठभूमि">
               {profile.highestEducation || profile.institution || profile.fieldOfStudy ? (
                 <div className="education-display"><strong>{profile.highestEducation || 'शिक्षा'}</strong><span>{profile.fieldOfStudy || 'अध्ययन क्षेत्र नहीं जोड़ा गया'}</span><small>{profile.institution || 'संस्थान नहीं जोड़ा गया'}</small></div>
               ) : <div className="profile-empty-block"><i className="fas fa-graduation-cap" /><div><strong>अपनी शिक्षा जोड़ें</strong><p>पाठकों और रचनाकारों को आपकी पृष्ठभूमि जानने में मदद मिलेगी।</p></div></div>}
@@ -457,11 +480,11 @@ export default function ProfilePage() {
               <div className={profile.bio ? 'profile-bio-display' : 'profile-empty-block'}>{profile.bio ? profile.bio : <><i className="fas fa-quote-left" /><div><strong>एक छोटा परिचय लिखें</strong><p>आप क्या लिखते हैं, क्या पढ़ते हैं या साहित्य आपके लिए क्या मायने रखता है—बताइए।</p></div></>}</div>
             </SectionCard>
 
-            <SectionCard title="साहित्यिक रुचियाँ" icon="fa-book-open" section="interests" onEdit={openSection} hint="आप किन विधाओं और विषयों से जुड़े हैं">
+            <SectionCard title="साहित्यिक रुचियाँ" icon="fa-book-open" section="interests" onEdit={openSection} summary={profile.literaryInterests?.length ? `${profile.literaryInterests.length} रुचियाँ` : undefined} hint="आप किन विधाओं और विषयों से जुड़े हैं">
               {profile.literaryInterests?.length ? <div className="profile-chip-list">{profile.literaryInterests.map((item) => <span className="profile-chip" key={item}>{item}</span>)}</div> : <div className="profile-empty-block"><i className="fas fa-book-open" /><div><strong>अपनी रुचियाँ चुनें</strong><p>कविता, ग़ज़ल, शायरी, कहानी और अपनी पसंद की दूसरी विधाएँ चुनें।</p></div></div>}
             </SectionCard>
 
-            <SectionCard title="भाषाएँ" icon="fa-language" section="languages" onEdit={openSection} hint="जिन भाषाओं में आप पढ़ते या लिखते हैं">
+            <SectionCard title="भाषाएँ" icon="fa-language" section="languages" onEdit={openSection} summary={profile.languages?.length ? profile.languages.join(', ') : undefined} hint="जिन भाषाओं में आप पढ़ते या लिखते हैं">
               {profile.languages?.length ? <div className="profile-chip-list">{profile.languages.map((item) => <span className="profile-chip profile-chip-language" key={item}>{item}</span>)}</div> : <div className="profile-empty-block"><i className="fas fa-language" /><div><strong>भाषाएँ जोड़ें</strong><p>अपनी साहित्यिक भाषाओं को चुनें।</p></div></div>}
             </SectionCard>
 

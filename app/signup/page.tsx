@@ -164,6 +164,9 @@ export default function SignupPage() {
                     className="profile-preview"
                     src={profilePic || `https://ui-avatars.com/api/?name=U&background=C16A4B&color=fff&size=90&rounded=true`}
                     alt="Profile"
+                    width={90}
+                    height={90}
+                    decoding="async"
                   />
                   <div className="signup-pic-hint">
                     <i className="fas fa-camera" /> फ़ोटो चुनें
