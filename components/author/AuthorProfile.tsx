@@ -45,13 +45,15 @@ function excerpt(body: string | undefined, max: number): string {
 }
 
 /** ident = Mongo id or username of the author to show; null = "my profile". */
-export function AuthorProfile({ ident }: { ident: string | null }) {
+export function AuthorProfile({ ident, initial }: { ident: string | null; initial?: { author: Writer; poems: Poem[] } | null }) {
   const router = useRouter();
   const authorId = ident;
   const { showToast } = useToast();
-  const [author, setAuthor] = useState<Writer | null>(null);
-  const [poems, setPoems] = useState<Poem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [author, setAuthor] = useState<Writer | null>(initial?.author ?? null);
+  const [poems, setPoems] = useState<Poem[]>(initial?.poems ?? []);
+  const [loading, setLoading] = useState(!initial);
+  // Server-provided data is shown immediately; the first client fetch then refreshes it silently.
+  const useInitialOnce = useRef(!!initial);
   const [search, setSearch] = useState('');
   const [viewerId, setViewerId] = useState<string | null>(null);
   const [editOpen, setEditOpen] = useState(false);
@@ -91,11 +93,15 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
   useEffect(() => {
     if (!authorId) return;
     const controller = new AbortController();
-    // Reset so navigating between two profiles never shows the previous author's data.
-    setLoading(true);
-    setAuthor(null);
-    setPoems([]);
-    setSearch('');
+    const silent = useInitialOnce.current;
+    useInitialOnce.current = false;
+    if (!silent) {
+      // Reset so navigating between two profiles never shows the previous author's data.
+      setLoading(true);
+      setAuthor(null);
+      setPoems([]);
+      setSearch('');
+    }
 
     (async () => {
       let user: Writer | null = null;
@@ -130,6 +136,8 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
       }
 
       if (controller.signal.aborted) return;
+      // Silent refresh of server-provided data: if the lookup failed, keep what is already shown.
+      if (silent && !user) return;
       // Old id-based links (and /author?id=...) are switched to the username URL.
       const uname = (user as (Writer & { username?: string }) | null)?.username;
       if (uname && uname !== authorId) {
@@ -308,7 +316,7 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
 
         <div className="ap-hero-body">
           <div className="ap-avatar-ring" style={{ position: 'relative' }}>
-            <img src={profilePic} alt={fullName} className="ap-avatar" />
+            <img src={profilePic} alt={fullName} className="ap-avatar" width={160} height={160} decoding="async" />
             {isOwner && (
               <>
                 <BirthdayAvatarDecor />
@@ -377,7 +385,7 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
           {memberSince && (
             <div className="ap-stat">
               <dt>सदस्यता</dt>
-              <dd className="ap-stat-text">{memberSince}</dd>
+              <dd className="ap-stat-text" suppressHydrationWarning>{memberSince}</dd>
             </div>
           )}
         </dl>
@@ -404,7 +412,7 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
             <span className="ap-featured-mark" aria-hidden="true">&ldquo;</span>
             <div className="ap-featured-meta">
               <span className="ap-tag">{featured.category || 'कविता'}</span>
-              <span className="ap-date">{formatDate(featured.createdAt)}</span>
+              <span className="ap-date" suppressHydrationWarning>{formatDate(featured.createdAt)}</span>
             </div>
             <h3 className="ap-featured-title">{featured.title || 'अनामिका'}</h3>
             <p className="ap-featured-text">{excerpt(featured.body, 220)}</p>
@@ -441,7 +449,7 @@ export function AuthorProfile({ ident }: { ident: string | null }) {
               <Link href={`/poem/${poem.slug}`} key={poem._id} className="ap-card fade-up">
                 <div className="ap-card-meta">
                   <span className="ap-tag">{poem.category || 'कविता'}</span>
-                  <span className="ap-date">{formatDate(poem.createdAt)}</span>
+                  <span className="ap-date" suppressHydrationWarning>{formatDate(poem.createdAt)}</span>
                 </div>
                 <h3 className="ap-card-title">{poem.title || 'अनामिका'}</h3>
                 <p className="ap-card-text">{excerpt(poem.body, 120)}</p>

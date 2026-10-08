@@ -145,6 +145,9 @@ export function Header() {
                     className="avatar-img"
                     src={user.profilePic}
                     alt={`${user.firstName || 'User'} profile`}
+                    width={40}
+                    height={40}
+                    decoding="async"
                   />
                 ) : (
                   <span className="avatar-initial">

@@ -155,7 +155,10 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
               <img
                 className="m-drawer-avatar"
                 src={user.profilePic || DEFAULT_AVATAR}
-                alt=""
+                alt={user.firstName ? `${user.firstName} profile` : 'Profile'}
+                width={48}
+                height={48}
+                decoding="async"
                 onError={(e) => {
                   if (e.currentTarget.src !== DEFAULT_AVATAR) e.currentTarget.src = DEFAULT_AVATAR;
                 }}
