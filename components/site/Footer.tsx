@@ -39,6 +39,8 @@ export function Footer() {
               <Link href="/publish"><i className="fas fa-chevron-right" /> Write a Poem</Link>
               <Link href="/about-contact"><i className="fas fa-chevron-right" /> About Us / Contact Us</Link>
               <Link href="/feedback"><i className="fas fa-chevron-right" /> Feedback</Link>
+              <Link href="/faq"><i className="fas fa-chevron-right" /> FAQ</Link>
+              <Link href="/submission-guidelines"><i className="fas fa-chevron-right" /> Submission Guidelines</Link>
               <BecomeMemberLink><i className="fas fa-chevron-right" /> Become a Member</BecomeMemberLink>
             </div>
           </div>
@@ -62,8 +64,13 @@ export function Footer() {
             poetry lovers.
           </span>
           <div className="footer-bottom-links">
-            <span className="footer-link-soon" aria-disabled="true">गोपनीयता नीति</span>
-            <span className="footer-link-soon" aria-disabled="true">नियम एवं शर्तें</span>
+            <Link href="/privacy-policy">गोपनीयता नीति</Link>
+            <Link href="/terms-and-conditions">नियम एवं शर्तें</Link>
+            <Link href="/disclaimer">अस्वीकरण</Link>
+            <Link href="/copyright-policy">कॉपीराइट नीति</Link>
+            <Link href="/community-guidelines">समुदाय दिशानिर्देश</Link>
+            <Link href="/cookie-policy">कुकी नीति</Link>
+            <Link href="/report-content">रिपोर्ट करें</Link>
             <Link href="/about-contact">संपर्क</Link>
           </div>
         </div>
