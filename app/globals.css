@@ -3396,3 +3396,13 @@ a.ap-btn { text-decoration: none; }
 .profile-collapsible.is-open .profile-collapse-inner { padding-top: .25rem; }
 .profile-collapsible:not(.is-open) .profile-detail-head { margin-bottom: 0; }
 @media (prefers-reduced-motion: reduce) { .profile-collapse, .profile-detail-chevron { transition: none; } }
+/* Account deletion */
+.delete-account-zone { margin-top: 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 1rem 1.2rem; border: 1px solid #e3b4ab; border-radius: 1rem; background: #fff6f4; }
+.delete-account-zone strong { display: block; color: #a8321f; font-size: .85rem; }
+.delete-account-zone p { margin: .25rem 0 0; font-size: .75rem; color: var(--text-muted); max-width: 46ch; }
+.delete-account-btn { border: 1px solid #c0392b; color: #c0392b; background: #fff; border-radius: 999px; padding: .6rem 1.1rem; font-weight: 700; font-size: .8rem; cursor: pointer; }
+.delete-account-btn:hover { background: #fdecea; }
+.delete-account-btn.solid { background: #c0392b; color: #fff; }
+.delete-account-btn.solid:hover { background: #a8321f; }
+.delete-account-btn:disabled { opacity: .6; cursor: not-allowed; }
+.delete-account-error { color: #c0392b; font-size: .78rem; margin: 0; }

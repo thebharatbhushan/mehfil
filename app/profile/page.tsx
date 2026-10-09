@@ -9,6 +9,7 @@ import { useToast } from '@/components/site/ToastProvider';
 import { getCurrentUserId, myProfileHref, updateStoredUser } from '@/lib/auth';
 import { useScrollToTop } from '@/lib/useScrollToTop';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
+import { DeleteAccountSection } from '@/components/profile/DeleteAccountSection';
 import { BirthdayAvatarDecor } from '@/components/birthday/BirthdayAvatarDecor';
 import { useOwnBirthday } from '@/lib/useOwnBirthday';
 import { SOCIAL_PLATFORMS, SocialKey, SocialLinks, hasSocialLinks, toSocialForm, validateSocialForm } from '@/lib/socialLinks';
@@ -460,6 +461,7 @@ export default function ProfilePage() {
                 <div><span>ईमेल</span><strong className="break-anywhere">{profile.email || <EmptyValue />}</strong></div>
                 <div><span>पासवर्ड</span><strong className="password-mask">••••••••••</strong><button className="inline-change-btn" onClick={() => setActiveEdit('password')}>पासवर्ड बदलें</button></div>
               </div>
+              <DeleteAccountSection />
             </SectionCard>
 
             <SectionCard title="स्थान" icon="fa-map-marker-alt" section="location" onEdit={openSection} summary={[profile.city, profile.state, profile.country].filter(Boolean).join(', ') || undefined} hint="आप कहाँ से हैं, यह आपकी प्रोफ़ाइल को अधिक व्यक्तिगत बनाता है">
