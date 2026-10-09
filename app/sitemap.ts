@@ -24,6 +24,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/poets`, lastModified: newest, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${base}/category`, lastModified: newest, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${base}/about-contact`, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${base}/faq`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${base}/submission-guidelines`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${base}/privacy-policy`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${base}/terms-and-conditions`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${base}/disclaimer`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${base}/copyright-policy`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${base}/community-guidelines`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${base}/cookie-policy`, changeFrequency: 'yearly', priority: 0.3 },
   ];
 
   // Category pages: skip thin ones (same threshold that sets them to noindex).
