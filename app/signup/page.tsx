@@ -14,10 +14,23 @@ export default function SignupPage() {
     gender: 'male', dob: '', languagePref: 'hi',
   });
   const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [profileFile, setProfileFile] = useState<File | null>(null);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
+  const [resendSeconds, setResendSeconds] = useState(0);
   const [loading, setLoading] = useState(false);
   const [strength, setStrength] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
   const [usernameStatus, setUsernameStatus] = useState<{ state: 'idle' | 'checking' | 'ok' | 'bad'; msg: string }>({ state: 'idle', msg: '' });
+
+  // Resend countdown for email OTP. The backend independently enforces the cooldown.
+  useEffect(() => {
+    if (!otpSent || resendSeconds <= 0) return;
+    const timer = window.setTimeout(() => {
+      setResendSeconds((seconds) => Math.max(0, seconds - 1));
+    }, 1000);
+    return () => window.clearTimeout(timer);
+  }, [otpSent, resendSeconds]);
 
   // Live username availability check (debounced).
   useEffect(() => {
@@ -66,52 +79,140 @@ export default function SignupPage() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setProfilePic(reader.result as string);
-      reader.readAsDataURL(file);
+    if (!file) {
+      setProfileFile(null);
+      setProfilePic(null);
+      return;
+    }
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      showToast('❌ केवल JPG, PNG या WebP फ़ोटो चुनें।', true);
+      e.target.value = '';
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('❌ फ़ोटो 5 MB या उससे छोटी होनी चाहिए।', true);
+      e.target.value = '';
+      return;
+    }
+    setProfileFile(file);
+    const reader = new FileReader();
+    reader.onload = () => setProfilePic(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const requestSignupOtp = async () => {
+    const payload = {
+      username: formData.username.trim(),
+      firstName: formData.firstName.trim(),
+      lastName: formData.lastName.trim(),
+      email: formData.email.trim().toLowerCase(),
+      password: formData.password,
+      gender: formData.gender,
+      dob: formData.dob,
+      languagePref: formData.languagePref,
+    };
+    const res = await fetch(`${API_BASE_URL}/api/auth/send-signup-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) {
+      if (Number(data.retryAfterSeconds) > 0) setResendSeconds(Number(data.retryAfterSeconds));
+      throw new Error(data.message || 'ईमेल OTP नहीं भेजा जा सका।');
+    }
+    return data;
+  };
+
+  const verifySignupOtp = async () => {
+    if (!/^\d{6}$/.test(otpCode)) {
+      showToast('❌ कृपया ईमेल पर आया 6 अंकों का OTP दर्ज करें।', true);
+      return;
+    }
+    setLoading(true);
+    try {
+      const fd = new FormData();
+      fd.append('email', formData.email.trim().toLowerCase());
+      fd.append('otp', otpCode.trim());
+      if (profileFile) fd.append('profilePic', profileFile);
+
+      const res = await fetch(`${API_BASE_URL}/api/auth/verify-signup-otp`, {
+        method: 'POST',
+        body: fd,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) {
+        showToast(data.message || '❌ OTP सत्यापित नहीं हो सका।', true);
+        return;
+      }
+
+      localStorage.setItem('mehfil_user', JSON.stringify({ ...data.user, id: data.user?._id ?? data.user?.id }));
+      localStorage.setItem('token', data.token);
+      window.dispatchEvent(new Event('mehfil-auth-change'));
+      showToast('✨ ईमेल सत्यापित! मेहफ़िल में आपका स्वागत है।');
+      setTimeout(() => router.push('/'), 800);
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : '❌ सर्वर से कनेक्ट नहीं हो सका।', true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (loading || resendSeconds > 0) return;
+    setLoading(true);
+    try {
+      const data = await requestSignupOtp();
+      setOtpCode('');
+      setResendSeconds(Number(data.resendAfter) || 60);
+      showToast('✉️ नया OTP भेज दिया गया है। अपना inbox और spam folder देखें।');
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : '❌ OTP दोबारा नहीं भेजा जा सका।', true);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (otpSent) {
+      await verifySignupOtp();
+      return;
+    }
     if (formData.password !== formData.confirmPassword) {
       showToast('❌ पासवर्ड मेल नहीं खाते।', true);
+      return;
+    }
+    if (formData.password.length < 6) {
+      showToast('❌ पासवर्ड कम से कम 6 अक्षरों का होना चाहिए।', true);
       return;
     }
     if (usernameStatus.state === 'bad' || !formData.username) {
       showToast('❌ कृपया सही और उपलब्ध यूज़रनेम चुनें।', true);
       return;
     }
-    const age = new Date().getFullYear() - new Date(formData.dob).getFullYear();
-    if (age < 13) {
-      showToast('❌ आपकी आयु 13 वर्ष से कम है।', true);
+    const birthDate = new Date(formData.dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    if (today.getMonth() < birthDate.getMonth() || (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())) age--;
+    if (!formData.dob || Number.isNaN(birthDate.getTime()) || age < 13) {
+      showToast('❌ सही जन्मतिथि दर्ज करें। आपकी आयु कम से कम 13 वर्ष होनी चाहिए।', true);
       return;
     }
+
     setLoading(true);
     try {
-      const fd = new FormData();
-      Object.entries(formData).forEach(([k, v]) => fd.append(k, v));
-      if (profilePic) fd.append('profilePic', profilePic);
-
-      const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
-        method: 'POST',
-        body: fd,
-      });
-      const data = await res.json();
-      if (data.success) {
-        localStorage.setItem('mehfil_user', JSON.stringify({ ...data.user, id: data.user?._id ?? data.user?.id }));
-        localStorage.setItem('token', data.token);
-        window.dispatchEvent(new Event('mehfil-auth-change'));
-        showToast('✨ मेहफ़िल में आपका स्वागत है!');
-        setTimeout(() => router.push('/'), 800);
-      } else {
-        showToast(data.message || '❌ पंजीकरण विफल।', true);
-      }
-    } catch {
-      showToast('❌ सर्वर से कनेक्ट नहीं हो सका।', true);
+      const data = await requestSignupOtp();
+      setOtpSent(true);
+      setOtpCode('');
+      setResendSeconds(Number(data.resendAfter) || 60);
+      showToast('✉️ आपके ईमेल पर OTP भेज दिया गया है। कृपया 5 मिनट में सत्यापित करें।');
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : '❌ OTP भेजने में समस्या आई।', true);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -158,6 +259,8 @@ export default function SignupPage() {
             </p>
 
             <form onSubmit={handleSubmit}>
+              {!otpSent ? (
+                <>
               <div className="signup-pic-wrap">
                 <label style={{ cursor: 'pointer' }}>
                   <img
@@ -171,7 +274,7 @@ export default function SignupPage() {
                   <div className="signup-pic-hint">
                     <i className="fas fa-camera" /> फ़ोटो चुनें
                   </div>
-                  <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
+                  <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>
               </div>
 
@@ -254,8 +357,57 @@ export default function SignupPage() {
               </div>
 
               <button className="primary-btn auth-submit-btn" type="submit" disabled={loading}>
-                {loading ? <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} /> : <><i className="fas fa-feather" /> पंजीकरण करें</>}
+                {loading ? <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} /> : <><i className="fas fa-envelope" /> ईमेल OTP भेजें</>}
               </button>
+                </>
+              ) : (
+                <div className="signup-otp-step">
+                  <div style={{ textAlign: 'center', padding: '10px 0 18px' }}>
+                    <div style={{ fontSize: 38, marginBottom: 8, color: 'var(--accent, #C16A4B)' }}>
+                      <i className="fas fa-envelope-open-text" />
+                    </div>
+                    <h3 style={{ margin: '0 0 8px', fontSize: 22 }}>ईमेल सत्यापित करें</h3>
+                    <p style={{ margin: 0, lineHeight: 1.7, color: 'var(--text-muted, #766d66)' }}>
+                      हमने <strong>{formData.email.trim()}</strong> पर 6 अंकों का OTP भेजा है। यह 5 मिनट में समाप्त हो जाएगा।
+                    </p>
+                  </div>
+                  <div className="auth-input-group">
+                    <i className="fas fa-shield-alt auth-input-icon" />
+                    <input
+                      className="auth-input"
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      pattern="[0-9]{6}"
+                      maxLength={6}
+                      placeholder="6 अंकों का OTP"
+                      value={otpCode}
+                      onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      required
+                    />
+                  </div>
+                  <button className="primary-btn auth-submit-btn" type="submit" disabled={loading}>
+                    {loading ? <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} /> : <><i className="fas fa-check-circle" /> OTP सत्यापित करें और अकाउंट बनाएँ</>}
+                  </button>
+                  <button
+                    type="button"
+                    className="primary-btn auth-submit-btn"
+                    style={{ marginTop: 10, background: 'transparent', color: 'var(--text-primary, #382b24)', border: '1px solid rgba(193,106,75,0.35)' }}
+                    onClick={handleResendOtp}
+                    disabled={loading || resendSeconds > 0}
+                  >
+                    {resendSeconds > 0 ? `नया OTP ${resendSeconds} सेकंड बाद भेजें` : 'OTP दोबारा भेजें'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setOtpSent(false); setOtpCode(''); }}
+                    disabled={loading}
+                    style={{ display: 'block', margin: '16px auto 0', background: 'none', border: 0, color: 'var(--text-muted, #766d66)', cursor: 'pointer', textDecoration: 'underline' }}
+                  >
+                    साइनअप विवरण पर वापस जाएँ
+                  </button>
+                </div>
+              )}
             </form>
 
             <div className="auth-signup-prompt">
