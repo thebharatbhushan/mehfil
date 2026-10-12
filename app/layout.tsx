@@ -12,6 +12,7 @@ import { JsonLd } from '@/components/site/JsonLd';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '@/lib/seo';
 import { API_BASE_URL } from '@/lib/mehfil';
 import { DeferredStylesheet } from '@/components/site/DeferredStylesheet';
+import { MehfilLoader } from '@/components/site/MehfilLoader';
 
 const SITE_DESCRIPTION =
   'मेहफ़िल — हिंदी और उर्दू कविता, शायरी और साहित्य का मंच। दिल को छू लेने वाली कविताएँ पढ़ें, रचनाकारों से मिलें और अपनी रचनाएँ साझा करें। Hindi & Urdu poetry community.';
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <DeferredStylesheet href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
       </head>
       <body>
+        <MehfilLoader />
         <JsonLd
           data={{
             '@context': 'https://schema.org',

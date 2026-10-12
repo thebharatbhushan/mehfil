@@ -4,13 +4,17 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ChangeEvent, Dispatch, ReactNode, SetStateAction } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { API_BASE_URL, Poem, formatDate, getLanguageLabel } from '@/lib/mehfil';
+import { API_BASE_URL, POEM_CATEGORIES, Poem, formatDate, getLanguageLabel } from '@/lib/mehfil';
+import { extractYouTubeId, YOUTUBE_INVALID_MESSAGE } from '@/lib/youtube';
 import { useToast } from '@/components/site/ToastProvider';
 import { getCurrentUserId, myProfileHref, updateStoredUser } from '@/lib/auth';
 import { useScrollToTop } from '@/lib/useScrollToTop';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 import { DeleteAccountSection } from '@/components/profile/DeleteAccountSection';
 import { BirthdayAvatarDecor } from '@/components/birthday/BirthdayAvatarDecor';
+import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
+import ShareBadgeModal from '@/components/share/ShareBadgeModal';
+import { ProfileBadge, ProfileFrameInfo, frameClassName, frameLabel } from '@/lib/recognition';
 import { useOwnBirthday } from '@/lib/useOwnBirthday';
 import { SOCIAL_PLATFORMS, SocialKey, SocialLinks, hasSocialLinks, toSocialForm, validateSocialForm } from '@/lib/socialLinks';
 import {
@@ -25,6 +29,8 @@ interface Profile extends ProfileCompletionUser {
   languagePref?: string;
   createdAt?: string;
   socialLinks?: SocialLinks;
+  badges?: ProfileBadge[];
+  profileFrame?: ProfileFrameInfo;
 }
 
 type EditSection = 'basic' | 'account' | 'location' | 'education' | 'about' | 'interests' | 'languages' | 'social' | 'password' | null;
@@ -110,6 +116,14 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [uploadingPic, setUploadingPic] = useState(false);
   const [poemModal, setPoemModal] = useState<Poem | null>(null);
+  const [shareBadge, setShareBadge] = useState<ProfileBadge | null>(null);
+  const [editPoem, setEditPoem] = useState<Poem | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editCategory, setEditCategory] = useState('');
+  const [editBody, setEditBody] = useState('');
+  const [editYoutube, setEditYoutube] = useState('');
+  const [editYoutubeError, setEditYoutubeError] = useState('');
+  const [savingPoem, setSavingPoem] = useState(false);
   const picInputRef = useRef<HTMLInputElement>(null);
   useScrollToTop(!loading);
   const { isBirthday } = useOwnBirthday();
@@ -207,7 +221,8 @@ export default function ProfilePage() {
   }, [router]);
 
   const applyUser = (user: Profile) => {
-    setProfile(user);
+    // Merge: update responses may omit read-only recognition data (badges / frame) — keep what we have.
+    setProfile((prev) => (prev ? { ...prev, ...user } : user));
     hydrateForms(user);
     updateStoredUser(user as Record<string, unknown>);
   };
@@ -377,6 +392,48 @@ export default function ProfilePage() {
     } catch { showToast('हटाने में विफल।', true); }
   };
 
+  const openEditPoem = (poem: Poem) => {
+    setEditPoem(poem);
+    setEditTitle(poem.title || '');
+    setEditCategory(poem.category || '');
+    setEditBody(poem.body || '');
+    setEditYoutube(poem.youtubeVideoId ? `https://www.youtube.com/watch?v=${poem.youtubeVideoId}` : '');
+    setEditYoutubeError('');
+  };
+
+  const handleSavePoem = async () => {
+    if (!editPoem) return;
+    if (!editTitle.trim() || !editCategory || editBody.trim().length < 20) {
+      showToast('❌ कृपया सभी आवश्यक फ़ील्ड भरें।', true);
+      return;
+    }
+    if (editYoutube.trim() && !extractYouTubeId(editYoutube)) {
+      setEditYoutubeError(YOUTUBE_INVALID_MESSAGE);
+      return;
+    }
+    setSavingPoem(true);
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/poems/${editPoem._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        // category/tags are always sent because the update API overwrites them; youtubeUrl '' removes the video.
+        body: JSON.stringify({ title: editTitle.trim(), category: editCategory, body: editBody, tags: editPoem.tags || [], youtubeUrl: editYoutube.trim() }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok && data.success) {
+        // Re-fetch: changing the title regenerates the slug on the backend, so the list must not keep the old one.
+        try {
+          const fresh = await fetch(`${API_BASE_URL}/api/poems/my-poems`, { headers: { Authorization: `Bearer ${token}` } }).then((r) => r.json());
+          if (Array.isArray(fresh.poems)) setPoems(fresh.poems);
+        } catch {}
+        setEditPoem(null);
+        showToast('✨ रचना अपडेट हो गई।');
+      } else showToast(data.message || '❌ अपडेट विफल।', true);
+    } catch { showToast('❌ सर्वर त्रुटि।', true); }
+    setSavingPoem(false);
+  };
+
   if (loading) {
     return <section className="profile-loading-wrap"><div className="profile-loader-content"><div className="spinner" /><p className="loader-text">प्रोफ़ाइल लोड हो रही है...</p></div></section>;
   }
@@ -405,7 +462,7 @@ export default function ProfilePage() {
           </div>
           <div className="profile-header-content">
             <div className="profile-avatar-column">
-              <button className="profile-avatar-ring profile-avatar-action" onClick={() => !uploadingPic && picInputRef.current?.click()} disabled={uploadingPic} aria-label="प्रोफ़ाइल तस्वीर बदलें">
+              <button className={`profile-avatar-ring profile-avatar-action${frameClassName(profile.profileFrame)}`} title={frameLabel(profile.profileFrame) || undefined} onClick={() => !uploadingPic && picInputRef.current?.click()} disabled={uploadingPic} aria-label="प्रोफ़ाइल तस्वीर बदलें">
                 {profile.profilePic ? <img src={profile.profilePic} alt={fullName} className="profile-avatar-img" /> : <span className="profile-avatar-placeholder">{initials}</span>}
                 <span className="profile-avatar-camera"><i className={uploadingPic ? 'fas fa-spinner fa-spin' : 'fas fa-camera'} /></span>
                 <BirthdayAvatarDecor />
@@ -416,6 +473,7 @@ export default function ProfilePage() {
               <div className="profile-eyebrow"><span>मेहफ़िल सदस्य</span><span className="profile-eyebrow-dot" /> <span>{memberSince} से</span></div>
               <h1>{fullName}</h1>
               {profile.username && <div className="profile-username">@{profile.username}</div>}
+              <BadgeMedals badges={profile.badges} onShare={setShareBadge} />
               <div className="profile-header-tags">
                 <span><i className="fas fa-user" /> {genderLabel}</span>
                 <span><i className="fas fa-language" /> {getLanguageLabel(profile.languagePref)}</span>
@@ -509,15 +567,23 @@ export default function ProfilePage() {
               </div>
               {completion < 100 && <button className="profile-primary-btn profile-sidebar-cta" onClick={() => handleMissingItem(missingItems[0]?.key || 'profilePic')}><i className="fas fa-magic" /> अगला कदम पूरा करें</button>}
             </div>
+            {profile.badges && profile.badges.length > 0 && <div className="profile-badges-panel"><ProfileBadges badges={profile.badges} onShare={setShareBadge} /></div>}
             <div className="profile-side-note"><i className="fas fa-quote-right" /><p>“शब्दों से बनी पहचान, समय से भी लंबी चलती है।”</p><span>— मेहफ़िल</span></div>
           </aside>
         </div>
 
         <div className="glass-panel profile-poems-panel" id="my-poems">
           <div className="poem-panel-header"><h2 className="poem-panel-title"><span className="poem-panel-icon"><i className="fas fa-feather-alt" /></span>मेरी रचनाएँ</h2><Link href="/publish" className="primary-btn profile-new-poem-btn"><i className="fas fa-plus" /> नई रचना</Link></div>
-          {poems.length === 0 ? <div className="profile-empty-state"><div className="profile-empty-icon-wrap"><i className="fas fa-pen-fancy" /></div><h3 className="profile-empty-title">अभी कोई रचना नहीं है</h3><p className="profile-empty-text">अपनी पहली रचना प्रकाशित करें और अपनी कला को दुनिया के साथ साझा करें।</p><Link href="/publish" className="primary-btn profile-empty-cta"><i className="fas fa-feather" /> लेखन प्रारम्भ करें</Link></div> : <div className="profile-poem-list">{poems.map((poem) => <div className="poem-card-item" key={poem._id}><div className="poem-card-info"><h3 className="profile-poem-title">{poem.title}</h3><p className="profile-poem-meta"><span className="profile-poem-cat">{poem.category || 'अन्य'}</span><span className="profile-poem-dot">·</span><span>{formatDate(poem.createdAt)}</span></p></div><div className="poem-card-actions"><Link href={`/poem/${poem.slug}`} className="action" aria-label={`${poem.title} देखें`} title="रचना देखें"><i className="far fa-eye" /></Link><button className="action" onClick={() => setPoemModal(poem)} aria-label={`${poem.title} देखें`} title="रचना देखें"><i className="fas fa-book-open" /></button><button className="action profile-delete-btn" onClick={() => handleDeletePoem(poem._id)} aria-label={`${poem.title} हटाएँ`} title="रचना हटाएँ"><i className="fas fa-trash" /></button></div></div>)}</div>}
+          {poems.length === 0 ? <div className="profile-empty-state"><div className="profile-empty-icon-wrap"><i className="fas fa-pen-fancy" /></div><h3 className="profile-empty-title">अभी कोई रचना नहीं है</h3><p className="profile-empty-text">अपनी पहली रचना प्रकाशित करें और अपनी कला को दुनिया के साथ साझा करें।</p><Link href="/publish" className="primary-btn profile-empty-cta"><i className="fas fa-feather" /> लेखन प्रारम्भ करें</Link></div> : <div className="profile-poem-list">{poems.map((poem) => <div className="poem-card-item" key={poem._id}><div className="poem-card-info"><h3 className="profile-poem-title">{poem.title}</h3><p className="profile-poem-meta"><span className="profile-poem-cat">{poem.category || 'अन्य'}</span><span className="profile-poem-dot">·</span><span>{formatDate(poem.createdAt)}</span></p></div><div className="poem-card-actions"><Link href={`/poem/${poem.slug}`} className="action" aria-label={`${poem.title} देखें`} title="रचना देखें"><i className="far fa-eye" /></Link><button className="action" onClick={() => setPoemModal(poem)} aria-label={`${poem.title} देखें`} title="रचना देखें"><i className="fas fa-book-open" /></button><button className="action" onClick={() => openEditPoem(poem)} aria-label={`${poem.title} संपादित करें`} title="रचना संपादित करें"><i className="fas fa-pen" /></button><button className="action profile-delete-btn" onClick={() => handleDeletePoem(poem._id)} aria-label={`${poem.title} हटाएँ`} title="रचना हटाएँ"><i className="fas fa-trash" /></button></div></div>)}</div>}
         </div>
       </div>
+
+      {shareBadge && (
+        <ShareBadgeModal
+          data={{ badgeKey: shareBadge.key, badgeName: shareBadge.name, badgeDescription: shareBadge.description, badgeIcon: shareBadge.icon, userName: fullName, username: profile.username, profilePic: profile.profilePic }}
+          onClose={() => setShareBadge(null)}
+        />
+      )}
 
       {activeEdit && (
         <div className="modal-mask profile-modal-mask" onClick={() => !saving && setActiveEdit(null)}>
@@ -577,6 +643,20 @@ export default function ProfilePage() {
         </div>
       )}
 
+      {editPoem && <div className="modal-mask" onClick={() => setEditPoem(null)}><div className="modal-dialog" onClick={(event) => event.stopPropagation()}><div className="modal-header-row"><h2 className="modal-title">रचना संपादित करें</h2><button className="modal-close-x" onClick={() => setEditPoem(null)} aria-label="बंद करें"><i className="fas fa-times" /></button></div>
+        <div className="modal-field"><label className="modal-label" htmlFor="editPoemTitle">शीर्षक</label><input id="editPoemTitle" className="form-input" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} /></div>
+        <div className="modal-field"><label className="modal-label" htmlFor="editPoemCategory">श्रेणी</label><select id="editPoemCategory" className="form-input" style={{ appearance: 'none' }} value={editCategory} onChange={(e) => setEditCategory(e.target.value)}><option value="">श्रेणी चुनें...</option>{editCategory && !(POEM_CATEGORIES as readonly string[]).includes(editCategory) && <option value={editCategory}>{editCategory}</option>}{POEM_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}</select></div>
+        <div className="modal-field"><label className="modal-label" htmlFor="editPoemBody">रचना</label><textarea id="editPoemBody" className="form-input modal-textarea modal-textarea-lg" value={editBody} onChange={(e) => setEditBody(e.target.value)} /></div>
+        <div className="yt-field" style={{ marginBottom: '1rem' }}>
+          <label htmlFor="editPoemYoutube" className="yt-field-title"><i className="fas fa-microphone-alt" aria-hidden="true" /> अपनी आवाज़ में सुनाएँ <span>(वैकल्पिक)</span></label>
+          <p className="yt-field-hint">अपनी कविता का YouTube वीडियो जोड़ें या बदलें। हटाने के लिए लिंक मिटा दें।</p>
+          <input id="editPoemYoutube" type="url" inputMode="url" className={`form-input ${editYoutubeError ? 'yt-field-invalid' : ''}`} placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX" value={editYoutube} autoComplete="off" aria-invalid={!!editYoutubeError}
+            onChange={(e) => { setEditYoutube(e.target.value); if (editYoutubeError) setEditYoutubeError(''); }}
+            onBlur={() => setEditYoutubeError(editYoutube.trim() && !extractYouTubeId(editYoutube) ? YOUTUBE_INVALID_MESSAGE : '')} />
+          {editYoutubeError && <p className="yt-field-error" role="alert">{editYoutubeError}</p>}
+          {editYoutube.trim() && <button type="button" className="secondary-btn" style={{ marginTop: '0.6rem', fontSize: '0.8rem' }} onClick={() => { setEditYoutube(''); setEditYoutubeError(''); }}><i className="fas fa-times" /> YouTube वीडियो हटाएँ</button>}
+        </div>
+        <div className="modal-actions"><button className="secondary-btn" onClick={() => setEditPoem(null)}>रद्द करें</button><button className="primary-btn" onClick={handleSavePoem} disabled={savingPoem}>{savingPoem ? 'सहेजा जा रहा है...' : 'सहेजें'}</button></div></div></div>}
       {poemModal && <div className="modal-mask" onClick={() => setPoemModal(null)}><div className="modal-dialog" onClick={(event) => event.stopPropagation()}><div className="modal-header-row"><h2 className="modal-title">रचना देखें</h2><button className="modal-close-x" onClick={() => setPoemModal(null)}><i className="fas fa-times" /></button></div><div className="modal-field"><label className="modal-label">शीर्षक</label><input className="form-input" value={poemModal.title} readOnly /></div><div className="modal-field"><label className="modal-label">रचना</label><textarea className="form-input modal-textarea modal-textarea-lg" value={poemModal.body} readOnly /></div><div className="modal-actions"><button className="secondary-btn" onClick={() => setPoemModal(null)}>बंद करें</button></div></div></div>}
     </section>
   );

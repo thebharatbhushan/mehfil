@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL, POEM_CATEGORIES, POEM_TAGS } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
+import { extractYouTubeId, YOUTUBE_INVALID_MESSAGE } from '@/lib/youtube';
 
 export default function PublishPage() {
   const router = useRouter();
@@ -12,6 +13,8 @@ export default function PublishPage() {
   const [category, setCategory] = useState('');
   const [body, setBody] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [youtubeError, setYoutubeError] = useState('');
   const [copyright, setCopyright] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -29,6 +32,7 @@ export default function PublishPage() {
         setCategory(d.category || '');
         setBody(d.body || '');
         setTags(d.tags || []);
+        setYoutubeUrl(d.youtubeUrl || '');
       } catch {}
     }
   }, [router, showToast]);
@@ -43,6 +47,11 @@ export default function PublishPage() {
       showToast('❌ कृपया सभी आवश्यक फ़ील्ड भरें।', true);
       return;
     }
+    if (youtubeUrl.trim() && !extractYouTubeId(youtubeUrl)) {
+      setYoutubeError(YOUTUBE_INVALID_MESSAGE);
+      showToast(`❌ ${YOUTUBE_INVALID_MESSAGE}`, true);
+      return;
+    }
     if (!copyright) {
       showToast('❌ कृपया कॉपीराइट घोषणा स्वीकार करें।', true);
       return;
@@ -53,7 +62,7 @@ export default function PublishPage() {
       const res = await fetch(`${API_BASE_URL}/api/poems/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ title, category, body, tags, copyrightDeclaration: copyright }),
+        body: JSON.stringify({ title, category, body, tags, copyrightDeclaration: copyright, ...(youtubeUrl.trim() ? { youtubeUrl: youtubeUrl.trim() } : {}) }),
       });
       const data = await res.json();
       if (data.success) {
@@ -70,7 +79,7 @@ export default function PublishPage() {
   };
 
   const handleDraft = () => {
-    localStorage.setItem('mehfil_draft', JSON.stringify({ title, category, body, tags }));
+    localStorage.setItem('mehfil_draft', JSON.stringify({ title, category, body, tags, youtubeUrl }));
     showToast('📝 ड्राफ़्ट सहेजा गया।');
   };
 
@@ -122,6 +131,28 @@ export default function PublishPage() {
                     </button>
                   ))}
                 </div>
+              </div>
+              <div className="yt-field">
+                <label htmlFor="youtubeUrl" className="yt-field-title">
+                  <i className="fas fa-microphone-alt" aria-hidden="true" /> अपनी आवाज़ में सुनाएँ <span>(वैकल्पिक)</span>
+                </label>
+                <p className="yt-field-hint">
+                  अपनी कविता का YouTube वीडियो जोड़ें, ताकि पाठक आपकी रचना को पढ़ने के साथ-साथ आपकी आवाज़ में सुन भी सकें।
+                </p>
+                <input
+                  id="youtubeUrl"
+                  type="url"
+                  inputMode="url"
+                  className={`form-input ${youtubeError ? 'yt-field-invalid' : ''}`}
+                  placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX"
+                  value={youtubeUrl}
+                  onChange={(e) => { setYoutubeUrl(e.target.value); if (youtubeError) setYoutubeError(''); }}
+                  onBlur={() => setYoutubeError(youtubeUrl.trim() && !extractYouTubeId(youtubeUrl) ? YOUTUBE_INVALID_MESSAGE : '')}
+                  aria-invalid={!!youtubeError}
+                  aria-describedby={youtubeError ? 'youtubeUrlError' : undefined}
+                  autoComplete="off"
+                />
+                {youtubeError && <p id="youtubeUrlError" className="yt-field-error" role="alert">{youtubeError}</p>}
               </div>
               <div style={{ marginBottom: '1.5rem' }}>
                 <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', cursor: 'pointer' }}>
