@@ -10,6 +10,10 @@ import { useScrollToTop } from '@/lib/useScrollToTop';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 import { BirthdayAvatarDecor } from '@/components/birthday/BirthdayAvatarDecor';
 import { hasSocialLinks } from '@/lib/socialLinks';
+import { frameClassName, frameLabel } from '@/lib/recognition';
+import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
+import ShareBadgeModal from '@/components/share/ShareBadgeModal';
+import type { ProfileBadge } from '@/lib/recognition';
 
 function getLanguageLabel(langPref?: string): string {
   if (!langPref) return 'हिंदी / उर्दू';
@@ -62,6 +66,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
   const [editUsername, setEditUsername] = useState('');
   const [saving, setSaving] = useState(false);
   const [uploadingPic, setUploadingPic] = useState(false);
+  const [shareBadge, setShareBadge] = useState<ProfileBadge | null>(null);
   const picInputRef = useRef<HTMLInputElement>(null);
 
   // Who is looking at this page? (Used to recognise the user's own profile.)
@@ -315,7 +320,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
         </div>
 
         <div className="ap-hero-body">
-          <div className="ap-avatar-ring" style={{ position: 'relative' }}>
+          <div className={`ap-avatar-ring${frameClassName(author.profileFrame)}`} style={{ position: 'relative' }} data-frame={author.profileFrame?.key || undefined} title={frameLabel(author.profileFrame) || undefined}>
             <img src={profilePic} alt={fullName} className="ap-avatar" width={160} height={160} decoding="async" />
             {isOwner && (
               <>
@@ -348,6 +353,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
           <div className="ap-identity">
             <h1 className="ap-name">{fullName}</h1>
             {username && <div className="ap-username">@{username}</div>}
+            <BadgeMedals badges={author.badges} onShare={isOwner ? setShareBadge : undefined} />
             <p className="ap-bio">{bioText}</p>
             <ul className="ap-chips">
               <li><i className="fas fa-language" aria-hidden="true" /> {langPref}</li>
@@ -390,6 +396,15 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
           )}
         </dl>
       </header>
+
+      {/* Badges — names/icons only; locked ones are grayscale. No XP is ever shown. */}
+      <ProfileBadges badges={author.badges} onShare={isOwner ? setShareBadge : undefined} />
+      {isOwner && shareBadge && (
+        <ShareBadgeModal
+          data={{ badgeKey: shareBadge.key, badgeName: shareBadge.name, badgeDescription: shareBadge.description, badgeIcon: shareBadge.icon, userName: fullName, username, profilePic: author.profilePic }}
+          onClose={() => setShareBadge(null)}
+        />
+      )}
 
       {/* Connect with me — only the platforms this author has configured */}
       <div className="fade-up">

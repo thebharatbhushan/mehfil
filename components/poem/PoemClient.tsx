@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { API_BASE_URL, Poem, Writer, formatDate, authorHref, detectScriptLang } from '@/lib/mehfil';
 import { sharePoemImage } from '@/lib/shareImage';
@@ -9,6 +9,7 @@ import { SharePoemButton } from '@/components/share/SharePoemButton';
 import { ReadingToolbar } from '@/components/reading/ReadingToolbar';
 import { useReadingPrefs } from '@/hooks/use-reading-prefs';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
+import { YouTubePoemPlayer } from '@/components/poem/YouTubePoemPlayer';
 
 interface PoemContentProps {
   slug: string;
@@ -45,6 +46,18 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
       })
       .catch(() => setLoading(false));
   }, [slug]);
+
+  // Private view counter: ping the backend once per poem page visit. Never shown to readers, never blocks
+  // rendering, and any failure is silently ignored. The ref keeps StrictMode/re-renders/refetches from double counting.
+  const viewCountedFor = useRef<string | null>(null);
+  const poemId = poem?._id;
+  useEffect(() => {
+    if (!poemId || viewCountedFor.current === poemId) return;
+    viewCountedFor.current = poemId;
+    try {
+      fetch(`${API_BASE_URL}/api/poems/${encodeURIComponent(poemId)}/view`, { method: 'POST', keepalive: true }).catch(() => {});
+    } catch {}
+  }, [poemId]);
 
   useEffect(() => {
     if (loading) return;
@@ -155,6 +168,7 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
               ),
             )}
           </div>
+          <YouTubePoemPlayer videoId={poem.youtubeVideoId} poemTitle={poem.title} />
         </div>
 
         {/* Share Button */}
