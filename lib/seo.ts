@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '@/lib/mehfil';
+import { normalizeFrameKey, sanitizeBadges } from '@/lib/recognition';
 import type { Poem, Writer } from '@/lib/mehfil';
 
 /**
@@ -136,6 +137,9 @@ export function publicWriter(w: Writer): Writer {
     createdAt: w.createdAt,
     poemsCount: w.poemsCount,
     socialLinks: w.socialLinks,
+    // Only present on the single-author endpoint; list/poem pages are unchanged.
+    ...(w.badges?.length ? { badges: sanitizeBadges(w.badges) } : {}),
+    ...(normalizeFrameKey(w.profileFrame) !== 'default' ? { profileFrame: { key: normalizeFrameKey(w.profileFrame) } } : {}),
   };
 }
 
@@ -147,6 +151,7 @@ export function publicPoem(p: Poem): Poem {
     body: p.body,
     category: p.category,
     tags: p.tags,
+    ...(p.youtubeVideoId ? { youtubeVideoId: p.youtubeVideoId } : {}),
     createdAt: p.createdAt,
     author: p.author
       ? {

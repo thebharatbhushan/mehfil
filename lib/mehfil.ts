@@ -1,4 +1,5 @@
 import type { SocialLinks } from '@/lib/socialLinks';
+import type { ProfileBadge, ProfileFrameInfo } from '@/lib/recognition';
 
 // Set NEXT_PUBLIC_API_URL=http://localhost:5000 in .env.local to talk to a local backend.
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mehfilbackend.onrender.com';
@@ -15,6 +16,8 @@ export interface Poem {
   body: string;
   category?: string;
   tags?: string[];
+  /** Optional YouTube recitation (11-char video ID, validated by the backend). */
+  youtubeVideoId?: string | null;
   author?: {
     _id: string;
     username?: string;
@@ -40,6 +43,9 @@ export interface Writer {
   poemsCount?: number;
   /** Optional social / website links (public data; safe to render after validation). */
   socialLinks?: SocialLinks;
+  /** Public recognition from the API: badge shelf + profile frame. Never contains XP. */
+  badges?: ProfileBadge[];
+  profileFrame?: ProfileFrameInfo;
 }
 
 /** Public profile URL: /u/<username> when known, otherwise the id-based fallback. */
