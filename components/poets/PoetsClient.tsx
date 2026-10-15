@@ -1,11 +1,14 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { API_BASE_URL, Writer, authorHref } from '@/lib/mehfil';
 
 import { matchesSearch } from '@/lib/search';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
+import { Pagination } from '@/components/site/Pagination';
+import { POETS_PER_PAGE } from '@/lib/categories';
+import { usePageParam } from '@/lib/usePageParam';
 
 const STYLE_FILTERS = [
   { key: 'all', label: 'सभी रचनाकार' },
@@ -81,13 +84,15 @@ function PoetsLoader() {
   );
 }
 
-export function PoetsClient({ initialWriters = [] }: { initialWriters?: WriterWithPoems[] }) {
+export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialWriters?: WriterWithPoems[]; initialPage?: number }) {
   // initialWriters come from the server render so the poet directory is present in the first HTML;
   // the effect below still refreshes (and enriches) the list exactly as before.
   const [writers, setWriters] = useState<WriterWithPoems[]>(initialWriters);
   const [loading, setLoading] = useState(initialWriters.length === 0);
   const [search, setSearch] = useState('');
   const [style, setStyle] = useState('all');
+  const { page: rawPage, setPage, hrefFor } = usePageParam(initialPage, '/poets');
+  const filterBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/admin/users`)
@@ -133,7 +138,7 @@ export function PoetsClient({ initialWriters = [] }: { initialWriters?: WriterWi
       document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
     }, 100);
     return () => { clearTimeout(timer); observer.disconnect(); };
-  }, [loading, writers, search, style]);
+  }, [loading, writers, search, style, rawPage]);
 
   const filtered = useMemo(() => {
     let result = writers;
@@ -155,6 +160,21 @@ export function PoetsClient({ initialWriters = [] }: { initialWriters?: WriterWi
     }
     return result;
   }, [writers, style, search]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / POETS_PER_PAGE));
+  // Never show an empty page: an out-of-range page (e.g. the live list is shorter than the server render) clamps.
+  const page = Math.min(rawPage, totalPages);
+  const pageWriters = filtered.slice((page - 1) * POETS_PER_PAGE, page * POETS_PER_PAGE);
+
+  useEffect(() => {
+    if (!loading && rawPage > totalPages) setPage(totalPages, { replace: true });
+  }, [loading, rawPage, totalPages, setPage]);
+
+  const resetPage = () => setPage(1, { replace: true });
+  const goToPage = (p: number) => {
+    setPage(p);
+    filterBarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   if (loading) {
     return (
@@ -219,7 +239,7 @@ export function PoetsClient({ initialWriters = [] }: { initialWriters?: WriterWi
       </div>
 
       {/* Filter Bar */}
-      <div className="filter-bar fade-up" style={{
+      <div className="filter-bar fade-up" ref={filterBarRef} style={{
         background: 'white',
         borderRadius: 60,
         padding: '0.8rem 1.2rem',
@@ -236,7 +256,7 @@ export function PoetsClient({ initialWriters = [] }: { initialWriters?: WriterWi
           {STYLE_FILTERS.map((s) => (
             <button
               key={s.key}
-              onClick={() => setStyle(s.key)}
+              onClick={() => { setStyle(s.key); resetPage(); }}
               style={{
                 padding: '0.5rem 1.2rem',
                 borderRadius: 50,
@@ -259,7 +279,7 @@ export function PoetsClient({ initialWriters = [] }: { initialWriters?: WriterWi
             type="text"
             placeholder="नाम, @यूज़रनेम या शहर खोजें..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); resetPage(); }}
             style={{ border: 'none', background: 'transparent', outline: 'none', width: 180, fontFamily: 'inherit' }}
           />
         </div>
@@ -277,7 +297,7 @@ export function PoetsClient({ initialWriters = [] }: { initialWriters?: WriterWi
         </div>
       ) : (
         <div className="poets-grid">
-          {filtered.map((writer) => (
+          {pageWriters.map((writer) => (
             <div
               key={writer._id}
               className="writer-card-premium poet-card card-shell fade-up"
@@ -337,6 +357,8 @@ export function PoetsClient({ initialWriters = [] }: { initialWriters?: WriterWi
           ))}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} hrefFor={hrefFor} onChange={goToPage} label="रचनाकारों के पृष्ठ" />
     </main>
   );
 }

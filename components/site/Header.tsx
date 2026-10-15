@@ -81,6 +81,7 @@ export function Header() {
     localStorage.removeItem('mehfil_user');
     localStorage.removeItem('mehfil_remember');
     localStorage.removeItem('token');
+    localStorage.removeItem('mehfil_draft'); // legacy browser-only draft must not carry over to the next account
     sessionStorage.removeItem('mehfil_user');
     setUser(null);
     window.dispatchEvent(new Event('mehfil-auth-change'));

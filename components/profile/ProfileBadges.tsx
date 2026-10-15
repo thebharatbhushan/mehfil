@@ -1,4 +1,4 @@
-import { ProfileBadge, sanitizeBadges } from '@/lib/recognition';
+import { ProfileBadge, sanitizeBadges, badgeTone } from '@/lib/recognition';
 
 const FA_ICON = /^fa-[a-z0-9-]{1,40}$/;
 const HTTPS_URL = /^https:\/\/[^\s"'<>]{1,300}$/;
@@ -12,7 +12,7 @@ function BadgeIcon({ icon, name }: { icon?: string; name: string }) {
 
 /**
  * Round medals for the badges a writer has earned, shown under the name like the social icons.
- * Only unlocked badges appear. With onShare (own profile) a medal opens the share card.
+ * Only unlocked badges appear, each with its name underneath. With onShare (own profile) a medal opens the share card.
  */
 export function BadgeMedals({ badges, onShare }: { badges?: ProfileBadge[]; onShare?: (badge: ProfileBadge) => void }) {
   const earned = sanitizeBadges(badges).filter((b) => b.unlocked);
@@ -22,14 +22,15 @@ export function BadgeMedals({ badges, onShare }: { badges?: ProfileBadge[]; onSh
       {earned.map((b) => (
         <li key={b.key}>
           {onShare ? (
-            <button type="button" className="mf-medal" title={`${b.name} — साझा करें`} aria-label={`${b.name} साझा करें`} onClick={() => onShare(b)}>
+            <button type="button" className="mf-medal" data-tone={badgeTone(b.key)} title={`${b.name} — साझा करें`} aria-label={`${b.name} साझा करें`} onClick={() => onShare(b)}>
               <BadgeIcon icon={b.icon} name={b.name} />
             </button>
           ) : (
-            <span className="mf-medal" title={b.description ? `${b.name} — ${b.description}` : b.name} role="img" aria-label={b.name}>
+            <span className="mf-medal" data-tone={badgeTone(b.key)} title={b.description ? `${b.name} — ${b.description}` : b.name} role="img" aria-label={b.name}>
               <BadgeIcon icon={b.icon} name={b.name} />
             </span>
           )}
+          <span className="mf-medal-name">{b.name}</span>
         </li>
       ))}
     </ul>
@@ -54,8 +55,8 @@ export function ProfileBadges({ badges, title = 'उपलब्धियाँ'
       </summary>
       <ul className="mf-badge-grid">
         {list.map((b) => (
-          <li key={b.key} className={`mf-badge ${b.unlocked ? 'is-unlocked' : 'is-locked'}`} title={b.description || b.name}>
-            <span className="mf-badge-icon"><BadgeIcon icon={b.icon} name={b.name} /></span>
+          <li key={b.key} className={`mf-badge ${b.unlocked ? 'is-unlocked' : 'is-locked'}`} title={b.description || b.name} data-tone={badgeTone(b.key)}>
+            <span className="mf-badge-icon" data-tone={badgeTone(b.key)}><BadgeIcon icon={b.icon} name={b.name} /></span>
             <span className="mf-badge-name">{b.name}</span>
             {b.description && <span className="mf-badge-desc">{b.description}</span>}
             {b.unlocked && onShare ? (

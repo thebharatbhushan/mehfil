@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 /**
  * Mehfil premium splash loader.
  *
- * - Rendered on the server too, so the very first paint is already the loader (no flash of the page behind it).
+ * - Rendered on the server too and fully opaque from the first paint, so the very first frame is already the loader
+ *   (no flash of the page behind it, no fade-in delay).
  * - Pure CSS animation (see the "Mehfil loader" block in globals.css). The only JS is one timer-based dismiss effect.
  * - Shown once per browser session: an inline script marks it skipped before first paint on later hard loads,
  *   so in-app navigation and refreshes in the same session never replay it.
@@ -27,7 +28,10 @@ interface MehfilLoaderProps {
 }
 
 // Runs during HTML parsing, before first paint, to skip the splash for repeat loads in the same session.
-const SKIP_SCRIPT = `try{if(sessionStorage.getItem('${SEEN_KEY}')){var e=document.currentScript.nextElementSibling;if(e)e.setAttribute('data-skip','')}}catch(_){}`;
+// It flags <html> (always present at this point) and a CSS rule hides the loader. The old version tried to flag the
+// loader's "next sibling", which was the <noscript> tag, so the skip never worked and the splash replayed
+// (then vanished after hydration) on every hard load.
+const SKIP_SCRIPT = `try{if(sessionStorage.getItem('${SEEN_KEY}'))document.documentElement.setAttribute('data-mfl-seen','')}catch(_){}`;
 
 export function MehfilLoader({
   tagline = 'शब्दों की एक ख़ूबसूरत महफ़िल',

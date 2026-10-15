@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { API_BASE_URL, Poem, formatDate } from '@/lib/mehfil';
 import { matchesSearch } from '@/lib/search';
 import { POEMS_LIST_PER_PAGE } from '@/lib/categories';
+import { Pagination } from '@/components/site/Pagination';
+import { usePageParam } from '@/lib/usePageParam';
 
 const MOODS = ['all', 'love', 'sad', 'motivation', 'nature', 'shayari'];
 const MOOD_ICONS: Record<string, string> = {
@@ -17,7 +19,8 @@ export function PoemsClient({ initialPoems = [], initialPage = 1 }: { initialPoe
   const [loading, setLoading] = useState(initialPoems.length === 0);
   const [search, setSearch] = useState('');
   const [mood, setMood] = useState('all');
-  const [page, setPage] = useState(initialPage);
+  const { page: rawPage, setPage, hrefFor } = usePageParam(initialPage, '/poems');
+  const filterBarRef = useRef<HTMLDivElement>(null);
   const perPage = POEMS_LIST_PER_PAGE;
   const wotwRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +51,7 @@ export function PoemsClient({ initialPoems = [], initialPage = 1 }: { initialPoe
       document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
     }, 100);
     return () => { clearTimeout(timer); observer.disconnect(); };
-  }, [loading, search, mood, page]);
+  }, [loading, search, mood, rawPage]);
 
   const poemOfTheWeek = useMemo(() => {
     if (!poems.length) return null;
@@ -76,8 +79,22 @@ export function PoemsClient({ initialPoems = [], initialPage = 1 }: { initialPoe
     return result;
   }, [poems, mood, search]);
 
-  const totalPages = Math.ceil(filtered.length / perPage);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+  // Never show an empty page: a stale/out-of-range page (e.g. after the live list shrank) clamps to the last page.
+  const page = Math.min(rawPage, totalPages);
   const pageItems = filtered.slice((page - 1) * perPage, page * perPage);
+
+  useEffect(() => {
+    if (!loading && rawPage > totalPages) setPage(totalPages, { replace: true });
+  }, [loading, rawPage, totalPages, setPage]);
+
+  // Any filter change returns to page 1 (and resets ?page= in the URL).
+  const resetPage = () => setPage(1, { replace: true });
+
+  const goToPage = (p: number) => {
+    setPage(p);
+    filterBarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <>
@@ -155,14 +172,14 @@ export function PoemsClient({ initialPoems = [], initialPage = 1 }: { initialPoe
             </div>
           )}
 
-          <div className="filter-bar">
+          <div className="filter-bar" ref={filterBarRef}>
             <div className="filter-search">
               <i className="fas fa-search" style={{ marginRight: '10px', color: '#b8a092' }} />
               <input
                 type="text"
                 placeholder="कविता, कवि या शब्द खोजें..."
                 value={search}
-                onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                onChange={(e) => { setSearch(e.target.value); resetPage(); }}
               />
             </div>
             <div className="filter-chips">
@@ -170,7 +187,7 @@ export function PoemsClient({ initialPoems = [], initialPage = 1 }: { initialPoe
                 <button
                   key={m}
                   className={`filter-chip ${mood === m ? 'active' : ''}`}
-                  onClick={() => { setMood(m); setPage(1); }}
+                  onClick={() => { setMood(m); resetPage(); }}
                 >
                   {m === 'all' ? 'सभी' : m.charAt(0).toUpperCase() + m.slice(1)}
                 </button>
@@ -206,23 +223,8 @@ export function PoemsClient({ initialPoems = [], initialPage = 1 }: { initialPoe
             </div>
           )}
 
-          {totalPages > 1 && (
-            <div className="pagination-bar">
-              {Array.from({ length: totalPages }, (_, i) => (
-                // Real links so every page of poems is crawlable; JS users still paginate instantly in place.
-                <Link
-                  key={i}
-                  href={i === 0 ? '/poems' : `/poems?page=${i + 1}`}
-                  className={`filter-chip ${page === i + 1 ? 'active' : ''}`}
-                  style={{ textDecoration: 'none' }}
-                  scroll={false}
-                  aria-current={page === i + 1 ? 'page' : undefined}
-                  onClick={(e) => { e.preventDefault(); setPage(i + 1); }}
-                >
-                  {i + 1}
-                </Link>
-              ))}
-            </div>
+          {!loading && (
+            <Pagination page={page} totalPages={totalPages} hrefFor={hrefFor} onChange={goToPage} label="कविताओं के पृष्ठ" />
           )}
         </div>
       </section>

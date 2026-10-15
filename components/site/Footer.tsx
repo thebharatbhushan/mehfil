@@ -21,6 +21,21 @@ export function Footer() {
               <a href="#" aria-label="YouTube"><i className="fab fa-youtube" /></a>
               <a href="#" aria-label="GitHub"><i className="fab fa-github" /></a>
             </div>
+            {/* Android app: official APKPure listing for in.mehfil.app (opens in a new tab, current session untouched). */}
+            <a
+              className="app-download"
+              href="https://apkpure.net/mehfil-poetry/in.mehfil.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Download the Mehfil Poetry Android app from APKPure (opens in a new tab)"
+            >
+              <img src="/mehfil-app-icon.png" alt="Mehfil Android app icon" width={44} height={44} loading="lazy" decoding="async" />
+              <span className="app-download-text">
+                <small>APKPure पर उपलब्ध</small>
+                <strong>Download Android App</strong>
+              </span>
+              <i className="fab fa-android app-download-android" aria-hidden="true" />
+            </a>
           </div>
 
           <div className="footer-col">
