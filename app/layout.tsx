@@ -13,6 +13,7 @@ import { DEFAULT_OG_IMAGE, SITE_URL } from '@/lib/seo';
 import { API_BASE_URL } from '@/lib/mehfil';
 import { DeferredStylesheet } from '@/components/site/DeferredStylesheet';
 import { MehfilLoader } from '@/components/site/MehfilLoader';
+import { RouteLoader } from '@/components/site/RouteLoader';
 
 const SITE_DESCRIPTION =
   'मेहफ़िल — हिंदी और उर्दू कविता, शायरी और साहित्य का मंच। दिल को छू लेने वाली कविताएँ पढ़ें, रचनाकारों से मिलें और अपनी रचनाएँ साझा करें। Hindi & Urdu poetry community.';
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="hi">
+    <html lang="hi" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <link rel="preconnect" href={API_BASE_URL} crossOrigin="anonymous" />
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <MehfilLoader />
+        <RouteLoader />
         <JsonLd
           data={{
             '@context': 'https://schema.org',

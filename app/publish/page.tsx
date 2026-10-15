@@ -17,13 +17,53 @@ export default function PublishPage() {
   const [youtubeError, setYoutubeError] = useState('');
   const [copyright, setCopyright] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [savingDraft, setSavingDraft] = useState(false);
+  const [loadingDraft, setLoadingDraft] = useState(false);
+  // Id of the server-side draft being edited (set after the first save, or when opened from ?draft=<id>).
+  const [draftId, setDraftId] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       showToast('✍️ कृपया पहले प्रवेश करें।', true);
       setTimeout(() => router.push('/login'), 1200);
+      return;
     }
+
+    // Continue editing a saved draft: /publish?draft=<id>. Drafts are private and stored in the database,
+    // so they follow the author across browsers and devices.
+    const id = new URLSearchParams(window.location.search).get('draft');
+    if (id) {
+      let cancelled = false;
+      setLoadingDraft(true);
+      fetch(`${API_BASE_URL}/api/drafts/${encodeURIComponent(id)}`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(async (res) => ({ res, data: await res.json().catch(() => ({})) }))
+        .then(({ res, data }) => {
+          if (cancelled) return;
+          if (res.status === 401) {
+            showToast('❌ सत्र समाप्त हो गया है, कृपया दोबारा प्रवेश करें।', true);
+            return;
+          }
+          if (!res.ok || !data.draft) {
+            showToast('❌ यह ड्राफ़्ट नहीं मिला।', true);
+            return;
+          }
+          const d = data.draft;
+          setDraftId(d._id);
+          setTitle(d.title || '');
+          setCategory(d.category || '');
+          setBody(d.body || '');
+          setTags(Array.isArray(d.tags) ? d.tags : []);
+          setYoutubeUrl(d.youtubeVideoId ? `https://www.youtube.com/watch?v=${d.youtubeVideoId}` : '');
+          setCopyright(!!d.copyrightDeclaration);
+        })
+        .catch(() => { if (!cancelled) showToast('❌ सर्वर त्रुटि।', true); })
+        .finally(() => { if (!cancelled) setLoadingDraft(false); });
+      return () => { cancelled = true; };
+    }
+
+    // Older versions kept one draft in this browser only. Restore it once so nothing is lost; it moves to the
+    // database the next time "ड्राफ़्ट सहेजें" is pressed.
     const draft = localStorage.getItem('mehfil_draft');
     if (draft) {
       try {
@@ -62,7 +102,7 @@ export default function PublishPage() {
       const res = await fetch(`${API_BASE_URL}/api/poems/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ title, category, body, tags, copyrightDeclaration: copyright, ...(youtubeUrl.trim() ? { youtubeUrl: youtubeUrl.trim() } : {}) }),
+        body: JSON.stringify({ title, category, body, tags, copyrightDeclaration: copyright, ...(youtubeUrl.trim() ? { youtubeUrl: youtubeUrl.trim() } : {}), ...(draftId ? { draftId } : {}) }),
       });
       const data = await res.json();
       if (data.success) {
@@ -78,9 +118,53 @@ export default function PublishPage() {
     setLoading(false);
   };
 
-  const handleDraft = () => {
-    localStorage.setItem('mehfil_draft', JSON.stringify({ title, category, body, tags, youtubeUrl }));
-    showToast('📝 ड्राफ़्ट सहेजा गया।');
+  const handleDraft = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      showToast('✍️ कृपया पहले प्रवेश करें।', true);
+      router.push('/login');
+      return;
+    }
+    if (!title.trim() && !body.trim()) {
+      showToast('❌ ड्राफ़्ट सहेजने के लिए शीर्षक या कुछ पाठ लिखें।', true);
+      return;
+    }
+    if (youtubeUrl.trim() && !extractYouTubeId(youtubeUrl)) {
+      setYoutubeError(YOUTUBE_INVALID_MESSAGE);
+      showToast(`❌ ${YOUTUBE_INVALID_MESSAGE}`, true);
+      return;
+    }
+    setSavingDraft(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/drafts${draftId ? `/${draftId}` : ''}`, {
+        method: draftId ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        // youtubeUrl '' clears a previously saved link; the draft keeps every field the poem form has.
+        body: JSON.stringify({ title, category, body, tags, copyrightDeclaration: copyright, youtubeUrl: youtubeUrl.trim() }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success && data.draft) {
+        if (!draftId) {
+          setDraftId(data.draft._id);
+          // Keep the address bar pointing at this draft so a refresh reopens it (no navigation, form state is kept).
+          window.history.replaceState(window.history.state, '', `/publish?draft=${encodeURIComponent(data.draft._id)}`);
+        }
+        localStorage.removeItem('mehfil_draft'); // the old browser-only copy now lives in the database
+        showToast('📝 ड्राफ़्ट सहेजा गया।');
+      } else if (res.status === 404 && draftId) {
+        // The draft was deleted elsewhere: the next save creates a fresh one.
+        setDraftId(null);
+        window.history.replaceState(window.history.state, '', '/publish');
+        showToast('❌ पुराना ड्राफ़्ट नहीं मिला; दोबारा सहेजें।', true);
+      } else if (res.status === 401) {
+        showToast('❌ सत्र समाप्त हो गया है, कृपया दोबारा प्रवेश करें।', true);
+      } else {
+        showToast(data.message || '❌ ड्राफ़्ट सहेजा नहीं जा सका।', true);
+      }
+    } catch {
+      showToast('❌ सर्वर त्रुटि।', true);
+    }
+    setSavingDraft(false);
   };
 
   return (
@@ -161,11 +245,11 @@ export default function PublishPage() {
                 </label>
               </div>
               <div className="publish-btn-row">
-                <button className="primary-btn publish-submit-btn" type="submit" disabled={loading}>
+                <button className="primary-btn publish-submit-btn" type="submit" disabled={loading || savingDraft || loadingDraft}>
                   {loading ? <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} /> : <><i className="fas fa-paper-plane" /> प्रकाशित करें</>}
                 </button>
-                <button className="secondary-btn publish-draft-btn" type="button" onClick={handleDraft}>
-                  <i className="fas fa-save" /> ड्राफ़्ट सहेजें
+                <button className="secondary-btn publish-draft-btn" type="button" onClick={handleDraft} disabled={savingDraft || loading || loadingDraft}>
+                  {savingDraft ? <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} /> : <><i className="fas fa-save" /> ड्राफ़्ट सहेजें</>}
                 </button>
               </div>
             </form>
