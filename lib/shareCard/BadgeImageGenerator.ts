@@ -8,6 +8,7 @@ import { loadAuthorImage } from './avatar';
 import { drawBrandLockup, drawFeather } from './logo';
 import { BRAND_DEVA_FONT } from './fonts';
 import { THEMES } from './themes';
+import { BADGE_TONES, badgeTone } from '../recognition';
 
 export const BADGE_CARD_W = 1080;
 export const BADGE_CARD_H = 1350;
@@ -33,7 +34,7 @@ const stack = (px: number, weight = 700) => `${weight} ${px}px ${DEVA}, ${LATIN}
 const FA_ICON = /^fa-[a-z0-9-]{1,40}$/;
 const HTTPS_URL = /^https:\/\/[^\s"'<>]{1,300}$/;
 
-type IconSpec = { kind: 'glyph'; char: string; font: string } | { kind: 'img'; img: HTMLImageElement } | null;
+type IconSpec = { kind: 'glyph'; char: string; font: (px: number) => string } | { kind: 'img'; img: HTMLImageElement } | null;
 
 function loadPlainImage(url: string, timeoutMs = 6000): Promise<HTMLImageElement | null> {
   return new Promise((resolve) => {
@@ -66,7 +67,7 @@ async function resolveIcon(icon?: string): Promise<IconSpec> {
       if (raw && raw !== 'none' && raw !== 'normal' && family) {
         const font = `${weight} 150px ${family}`;
         try { await document.fonts.load(font, raw); } catch { /* use whatever is loaded */ }
-        return { kind: 'glyph', char: raw, font };
+        return { kind: 'glyph', char: raw, font: (px: number) => `${weight} ${px}px ${family}` };
       }
     } finally {
       el.remove();
@@ -129,6 +130,7 @@ export async function renderBadgeCardToBlob(d: ShareBadgeData): Promise<Blob> {
   if (!ctx) throw new Error('Canvas unavailable');
   const theme = THEMES.classic;
   const cx = W / 2;
+  const tone = BADGE_TONES[badgeTone(d.badgeKey)];
 
   // Paper background (same warm palette as the poem card)
   const bg = ctx.createLinearGradient(0, 0, W * 0.4, H);
@@ -185,27 +187,51 @@ export async function renderBadgeCardToBlob(d: ShareBadgeData): Promise<Blob> {
     ctx.fillText(`@${d.username}`, cx, 540);
   }
 
-  // Badge medallion
+  // Badge medallion — same per-badge metallic tone as on the site
   const my = 760, mr = 140;
   ctx.save();
-  ctx.shadowColor = 'rgba(193,106,75,0.45)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 12;
-  const gold = ctx.createLinearGradient(cx - mr, my - mr, cx + mr, my + mr);
-  gold.addColorStop(0, '#f1cf8a'); gold.addColorStop(0.5, '#c9953f'); gold.addColorStop(1, '#8f6320');
-  ctx.beginPath(); ctx.arc(cx, my, mr + 14, 0, Math.PI * 2); ctx.fillStyle = gold; ctx.fill();
+  ctx.shadowColor = `rgba(${tone.glow},0.55)`; ctx.shadowBlur = 50; ctx.shadowOffsetY = 14;
+  const ring = ctx.createLinearGradient(cx - mr, my - mr, cx + mr, my + mr);
+  ring.addColorStop(0, '#ffffff'); ring.addColorStop(0.35, tone.light); ring.addColorStop(0.7, tone.mid); ring.addColorStop(1, tone.dark);
+  ctx.beginPath(); ctx.arc(cx, my, mr + 16, 0, Math.PI * 2); ctx.fillStyle = ring; ctx.fill();
   ctx.restore();
-  const body = ctx.createLinearGradient(cx - mr, my - mr, cx + mr, my + mr);
-  body.addColorStop(0, '#C16A4B'); body.addColorStop(1, '#9e4f36');
-  ctx.beginPath(); ctx.arc(cx, my, mr, 0, Math.PI * 2); ctx.fillStyle = body; ctx.fill();
-  ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 3;
-  ctx.beginPath(); ctx.arc(cx, my, mr - 14, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, my, mr + 4, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill();
+  const body = ctx.createRadialGradient(cx - mr * 0.4, my - mr * 0.5, mr * 0.05, cx, my, mr * 1.1);
+  body.addColorStop(0, tone.light); body.addColorStop(0.45, tone.mid); body.addColorStop(1, tone.dark);
+  ctx.beginPath(); ctx.arc(cx, my, mr - 4, 0, Math.PI * 2); ctx.fillStyle = body; ctx.fill();
+  // glossy highlight
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, my, mr - 4, 0, Math.PI * 2); ctx.clip();
+  const gloss = ctx.createLinearGradient(cx, my - mr, cx, my + mr * 0.2);
+  gloss.addColorStop(0, 'rgba(255,255,255,0.45)'); gloss.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.beginPath(); ctx.ellipse(cx, my - mr * 0.45, mr * 0.8, mr * 0.5, 0, 0, Math.PI * 2); ctx.fillStyle = gloss; ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(cx, my, mr - 22, 0, Math.PI * 2); ctx.stroke();
 
   ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 3;
   if (icon?.kind === 'glyph') {
-    ctx.font = icon.font;
-    const m = ctx.measureText(icon.char);
-    const asc = m.actualBoundingBoxAscent ?? 75, desc = m.actualBoundingBoxDescent ?? 0;
+    // Measure and draw with the SAME alphabetic baseline. (The old code measured while the baseline was "middle",
+    // where ascent ~= descent, so the vertical correction came out as ~0 and the glyph was drawn with its bottom on the
+    // medallion's centre line, i.e. shifted up.) The glyph's real ink box is centred both ways and scaled to fit.
+    const box = (mr - 30) * 2 * 0.62; // ink area available inside the inner ring
+    ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText(icon.char, cx, my + (asc - desc) / 2);
+    ctx.font = icon.font(150);
+    const m0 = ctx.measureText(icon.char);
+    const w0 = (m0.actualBoundingBoxLeft ?? 0) + (m0.actualBoundingBoxRight ?? m0.width);
+    const h0 = (m0.actualBoundingBoxAscent ?? 120) + (m0.actualBoundingBoxDescent ?? 0);
+    const size = Math.max(40, Math.min(150, 150 * (box / Math.max(w0, h0, 1))));
+    ctx.font = icon.font(size);
+    const m = ctx.measureText(icon.char);
+    const left = m.actualBoundingBoxLeft ?? 0;
+    const right = m.actualBoundingBoxRight ?? m.width;
+    const asc = m.actualBoundingBoxAscent ?? size * 0.8;
+    const desc = m.actualBoundingBoxDescent ?? 0;
+    ctx.fillText(icon.char, cx - (right - left) / 2, my + (asc - desc) / 2);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
   } else if (icon?.kind === 'img') {
     ctx.save(); ctx.beginPath(); ctx.arc(cx, my, mr - 36, 0, Math.PI * 2); ctx.clip();
     const s = Math.min((mr * 2 - 72) / icon.img.naturalWidth, (mr * 2 - 72) / icon.img.naturalHeight);
@@ -216,9 +242,10 @@ export async function renderBadgeCardToBlob(d: ShareBadgeData): Promise<Blob> {
   }
 
   // Badge name + description
-  ctx.textBaseline = 'middle'; ctx.textAlign = 'center'; ctx.fillStyle = '#9e4f36';
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+  ctx.textBaseline = 'middle'; ctx.textAlign = 'center'; ctx.fillStyle = tone.dark;
   ctx.fillText(fit(ctx, d.badgeName, 76, 40, W - 200), cx, 985);
-  ctx.fillStyle = '#C16A4B'; ctx.font = `600 26px ${LATIN}, serif`;
+  ctx.fillStyle = tone.mid; ctx.font = `600 26px ${LATIN}, serif`;
   ctx.fillText('✦  BADGE EARNED ON MEHFIL  ✦', cx, 1042);
   if (d.badgeDescription) {
     ctx.fillStyle = '#6a3f2a'; ctx.font = stack(32, 400);

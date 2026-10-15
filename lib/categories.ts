@@ -5,6 +5,8 @@ export const MIN_POEMS_TO_INDEX = 3;
 export const POEMS_PER_PAGE = 24;
 /** Page size of the /poems listing (same value the listing component always used). */
 export const POEMS_LIST_PER_PAGE = 16;
+/** Page size of the /poets directory (the grid is 3 columns on desktop, 2 on tablet: 12 fills whole rows). */
+export const POETS_PER_PAGE = 12;
 
 export interface SeoCategory {
   slug: string;

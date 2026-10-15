@@ -27,6 +27,8 @@ export interface Poem {
     socialLinks?: SocialLinks;
   };
   createdAt?: string;
+  /** Set on the author's own private drafts. */
+  updatedAt?: string;
 }
 
 export interface Writer {
