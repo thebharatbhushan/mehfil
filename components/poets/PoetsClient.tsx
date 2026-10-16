@@ -93,6 +93,17 @@ export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialW
   const [style, setStyle] = useState('all');
   const { page: rawPage, setPage, hrefFor } = usePageParam(initialPage, '/poets');
   const filterBarRef = useRef<HTMLDivElement>(null);
+  // Admin-selected "गुरुवार का विशेष रचनाकार"; null keeps the default card below.
+  const [thursdayWriter, setThursdayWriter] = useState<Writer | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${API_BASE_URL}/api/auth/thursday-writer`, { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((d) => { if (!cancelled && d?.success) setThursdayWriter(d.writer || null); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/admin/users`)
@@ -214,27 +225,55 @@ export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialW
           background: 'linear-gradient(135deg, #d6a98a, #bc7a58)',
           borderRadius: '50%',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '3.5rem', color: 'white', flexShrink: 0,
+          fontSize: '3.5rem', color: 'white', flexShrink: 0, overflow: 'hidden',
         }}>
-          <i className="fas fa-crown" />
+          {thursdayWriter?.profilePic ? (
+            <img src={thursdayWriter.profilePic} alt={`${thursdayWriter.firstName} ${thursdayWriter.lastName || ''}`.trim()} width={140} height={140} decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+          ) : (
+            <i className="fas fa-crown" />
+          )}
         </div>
         <div style={{ flex: 1, minWidth: '200px' }}>
           <div style={{ display: 'inline-block', background: 'var(--accent)', color: 'white', padding: '0.3rem 1rem', borderRadius: 50, fontSize: '0.7rem', marginBottom: '0.8rem' }}>
             <i className="fas fa-star" /> गुरुवार का विशेष रचनाकार
           </div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', color: 'var(--accent-dark)' }}>
-            मन्नत काज़मी
-          </h2>
-          <p style={{ color: 'var(--accent)', margin: '0.3rem 0' }}>
-            उर्दू शायरी &amp; ग़ज़ल विशेषज्ञ | 15+ वर्ष का सफर
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '1.5rem', margin: '0.5rem 0', fontSize: '0.8rem', color: 'var(--accent)' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="fas fa-heart" /> 28.4K प्रशंसक</span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="fas fa-book" /> 245 रचनाएँ</span>
-          </div>
-          <div style={{ fontStyle: 'italic', fontSize: '1rem', lineHeight: 1.7, color: 'var(--text-dark)', borderLeft: '3px solid var(--accent)', paddingLeft: '1rem', marginTop: '1rem' }}>
-            &ldquo;शब्द वह दरिया हैं जिनमें तैरना सीख लिया तो साहित्य की गहराईयाँ अपने आप मिल जाती हैं।&rdquo;
-          </div>
+          {thursdayWriter ? (
+            <>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', color: 'var(--accent-dark)' }}>
+                <Link href={authorHref(thursdayWriter)} style={{ color: 'inherit', textDecoration: 'none' }}>
+                  {thursdayWriter.firstName} {thursdayWriter.lastName || ''}
+                </Link>
+              </h2>
+              <p style={{ color: 'var(--accent)', margin: '0.3rem 0' }}>
+                {STYLE_LABELS[(thursdayWriter.languagePref || 'shayari').toLowerCase()] || 'शायरी'}
+                {thursdayWriter.city ? ` | ${thursdayWriter.city}` : ''}
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '1.5rem', margin: '0.5rem 0', fontSize: '0.8rem', color: 'var(--accent)' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="fas fa-book" /> {thursdayWriter.poemsCount || 0} रचनाएँ</span>
+              </div>
+              {thursdayWriter.bio && (
+                <div style={{ fontStyle: 'italic', fontSize: '1rem', lineHeight: 1.7, color: 'var(--text-dark)', borderLeft: '3px solid var(--accent)', paddingLeft: '1rem', marginTop: '1rem' }}>
+                  &ldquo;{thursdayWriter.bio}&rdquo;
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', color: 'var(--accent-dark)' }}>
+              मन्नत काज़मी
+            </h2>
+            <p style={{ color: 'var(--accent)', margin: '0.3rem 0' }}>
+              उर्दू शायरी &amp; ग़ज़ल विशेषज्ञ | 15+ वर्ष का सफर
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '1.5rem', margin: '0.5rem 0', fontSize: '0.8rem', color: 'var(--accent)' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="fas fa-heart" /> 28.4K प्रशंसक</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="fas fa-book" /> 245 रचनाएँ</span>
+            </div>
+            <div style={{ fontStyle: 'italic', fontSize: '1rem', lineHeight: 1.7, color: 'var(--text-dark)', borderLeft: '3px solid var(--accent)', paddingLeft: '1rem', marginTop: '1rem' }}>
+              &ldquo;शब्द वह दरिया हैं जिनमें तैरना सीख लिया तो साहित्य की गहराईयाँ अपने आप मिल जाती हैं।&rdquo;
+            </div>
+            </>
+          )}
         </div>
       </div>
 
