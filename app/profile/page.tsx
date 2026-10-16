@@ -113,6 +113,9 @@ export default function ProfilePage() {
   const [poems, setPoems] = useState<Poem[]>([]);
   // Private drafts saved to the database (never shown on public pages).
   const [drafts, setDrafts] = useState<Poem[]>([]);
+  const [poemTab, setPoemTab] = useState<'poems' | 'drafts' | 'saved'>('poems');
+  // The member's own saved (bookmarked) poems, newest first. Private; loaded from the server.
+  const [savedPoems, setSavedPoems] = useState<Poem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeEdit, setActiveEdit] = useState<EditSection>(null);
   const [saving, setSaving] = useState(false);
@@ -213,7 +216,10 @@ export default function ProfilePage() {
       fetch(`${API_BASE_URL}/api/drafts/my`, { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => response.ok ? response.json() : { drafts: [] })
         .catch(() => ({ drafts: [] })),
-    ]).then(([remote, poemData, draftData]) => {
+      fetch(`${API_BASE_URL}/api/engagement/bookmarks`, { headers: { Authorization: `Bearer ${token}` } })
+        .then((response) => response.ok ? response.json() : { poems: [] })
+        .catch(() => ({ poems: [] })),
+    ]).then(([remote, poemData, draftData, savedData]) => {
       const merged = remote ? { ...(localUser || {}), ...remote } as Profile : localUser;
       if (merged) {
         setProfile(merged);
@@ -222,6 +228,7 @@ export default function ProfilePage() {
       }
       setPoems(poemData.poems || []);
       setDrafts(draftData.drafts || []);
+      setSavedPoems(savedData.poems || []);
       setLoading(false);
     });
   }, [router]);
@@ -398,6 +405,15 @@ export default function ProfilePage() {
     } catch { showToast('हटाने में विफल।', true); }
   };
 
+  const handleRemoveSaved = async (id: string) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/engagement/bookmarks/${encodeURIComponent(id)}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+      if (response.ok) setSavedPoems((current) => current.filter((poem) => poem._id !== id));
+    } catch { /* keep the list as it is */ }
+  };
+
   const handleDeleteDraft = async (id: string) => {
     if (!confirm('क्या आप इस ड्राफ़्ट को हटाना चाहते हैं?')) return;
     const token = localStorage.getItem('token');
@@ -467,6 +483,8 @@ export default function ProfilePage() {
   const radius = 45;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference - (completion / 100) * circumference;
+
+  const activeTab: 'poems' | 'drafts' | 'saved' = poemTab === 'saved' ? 'saved' : drafts.length > 0 && poemTab === 'drafts' ? 'drafts' : 'poems';
 
   return (
     <section className="profile-page-wrap">
@@ -592,17 +610,41 @@ export default function ProfilePage() {
 
         <div className="glass-panel profile-poems-panel" id="my-poems">
           <div className="poem-panel-header"><h2 className="poem-panel-title"><span className="poem-panel-icon"><i className="fas fa-feather-alt" /></span>मेरी रचनाएँ</h2><Link href="/publish" className="primary-btn profile-new-poem-btn"><i className="fas fa-plus" /> नई रचना</Link></div>
-          {poems.length === 0 ? <div className="profile-empty-state"><div className="profile-empty-icon-wrap"><i className="fas fa-pen-fancy" /></div><h3 className="profile-empty-title">अभी कोई रचना नहीं है</h3><p className="profile-empty-text">अपनी पहली रचना प्रकाशित करें और अपनी कला को दुनिया के साथ साझा करें।</p><Link href="/publish" className="primary-btn profile-empty-cta"><i className="fas fa-feather" /> लेखन प्रारम्भ करें</Link></div> : <div className="profile-poem-list">{poems.map((poem) => <div className="poem-card-item" key={poem._id}><div className="poem-card-info"><h3 className="profile-poem-title">{poem.title}</h3><p className="profile-poem-meta"><span className="profile-poem-cat">{poem.category || 'अन्य'}</span><span className="profile-poem-dot">·</span><span>{formatDate(poem.createdAt)}</span></p></div><div className="poem-card-actions"><Link href={`/poem/${poem.slug}`} className="action" aria-label={`${poem.title} देखें`} title="रचना देखें"><i className="far fa-eye" /></Link><button className="action" onClick={() => setPoemModal(poem)} aria-label={`${poem.title} देखें`} title="रचना देखें"><i className="fas fa-book-open" /></button><button className="action" onClick={() => openEditPoem(poem)} aria-label={`${poem.title} संपादित करें`} title="रचना संपादित करें"><i className="fas fa-pen" /></button><button className="action profile-delete-btn" onClick={() => handleDeletePoem(poem._id)} aria-label={`${poem.title} हटाएँ`} title="रचना हटाएँ"><i className="fas fa-trash" /></button></div></div>)}</div>}
-        </div>
-
-        {drafts.length > 0 && (
-          <div className="glass-panel profile-poems-panel" id="my-drafts">
-            <div className="poem-panel-header"><h2 className="poem-panel-title"><span className="poem-panel-icon"><i className="fas fa-save" /></span>मेरे ड्राफ़्ट</h2></div>
-            <div className="profile-poem-list">
+          {(drafts.length > 0 || savedPoems.length > 0) && (
+            <div className="profile-poem-tabs" role="tablist" aria-label="रचनाएँ, ड्राफ़्ट और सहेजी हुई">
+              <button type="button" role="tab" aria-selected={activeTab === 'poems'} className={activeTab === 'poems' ? 'active' : ''} onClick={() => setPoemTab('poems')}><i className="fas fa-feather-alt" /> प्रकाशित <span className="profile-poem-tab-count">{poems.length}</span></button>
+              {drafts.length > 0 && <button type="button" role="tab" aria-selected={activeTab === 'drafts'} className={activeTab === 'drafts' ? 'active' : ''} onClick={() => setPoemTab('drafts')}><i className="fas fa-save" /> ड्राफ़्ट <span className="profile-poem-tab-count">{drafts.length}</span></button>}
+              <button type="button" role="tab" aria-selected={activeTab === 'saved'} className={activeTab === 'saved' ? 'active' : ''} onClick={() => setPoemTab('saved')}><i className="fas fa-bookmark" /> सहेजी हुई <span className="profile-poem-tab-count">{savedPoems.length}</span></button>
+            </div>
+          )}
+          {activeTab === 'saved' ? (
+            savedPoems.length === 0 ? (
+              <div className="profile-empty-state"><div className="profile-empty-icon-wrap"><i className="far fa-bookmark" /></div><h3 className="profile-empty-title">अभी कोई रचना सहेजी नहीं गई</h3><p className="profile-empty-text">किसी रचना के पन्ने पर "सहेजें" दबाएँ, वह यहाँ मिलेगी।</p><Link href="/poems" className="primary-btn profile-empty-cta"><i className="fas fa-book-open" /> रचनाएँ पढ़ें</Link></div>
+            ) : (
+              <div className="profile-poem-list" id="my-saved">
+                {savedPoems.map((poem) => {
+                  const authorLabel = `${poem.author?.firstName || ''} ${poem.author?.lastName || ''}`.trim() || (poem.author?.username ? `@${poem.author.username}` : 'अनामिका');
+                  return (
+                    <div className="poem-card-item" key={poem._id}>
+                      <div className="poem-card-info">
+                        <h3 className="profile-poem-title">{poem.title || 'बिना शीर्षक'}</h3>
+                        <p className="profile-poem-meta"><span className="profile-poem-cat">{poem.category || 'अन्य'}</span><span className="profile-poem-dot">·</span><span>{authorLabel}</span></p>
+                      </div>
+                      <div className="poem-card-actions">
+                        <Link href={`/poem/${poem.slug}`} className="action" aria-label={`${poem.title} पढ़ें`} title="रचना पढ़ें"><i className="far fa-eye" /></Link>
+                        <button className="action profile-delete-btn" onClick={() => handleRemoveSaved(poem._id)} aria-label={`${poem.title} संग्रह से हटाएँ`} title="संग्रह से हटाएँ"><i className="fas fa-bookmark" /></button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )
+          ) : activeTab === 'drafts' ? (
+            <div className="profile-poem-list" id="my-drafts">
               {drafts.map((draft) => (
-                <div className="poem-card-item" key={draft._id}>
+                <div className="poem-card-item profile-draft-item" key={draft._id}>
                   <div className="poem-card-info">
-                    <h3 className="profile-poem-title">{draft.title || 'बिना शीर्षक'}</h3>
+                    <h3 className="profile-poem-title">{draft.title || 'बिना शीर्षक'} <span className="profile-draft-pill">ड्राफ़्ट</span></h3>
                     <p className="profile-poem-meta"><span className="profile-poem-cat">{draft.category || 'अन्य'}</span><span className="profile-poem-dot">·</span><span>अंतिम बदलाव: {formatDate(draft.updatedAt || draft.createdAt)}</span></p>
                   </div>
                   <div className="poem-card-actions">
@@ -612,8 +654,10 @@ export default function ProfilePage() {
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+          poems.length === 0 ? <div className="profile-empty-state"><div className="profile-empty-icon-wrap"><i className="fas fa-pen-fancy" /></div><h3 className="profile-empty-title">अभी कोई रचना नहीं है</h3><p className="profile-empty-text">अपनी पहली रचना प्रकाशित करें और अपनी कला को दुनिया के साथ साझा करें।</p><Link href="/publish" className="primary-btn profile-empty-cta"><i className="fas fa-feather" /> लेखन प्रारम्भ करें</Link></div> : <div className="profile-poem-list">{poems.map((poem) => <div className="poem-card-item" key={poem._id}><div className="poem-card-info"><h3 className="profile-poem-title">{poem.title}</h3><p className="profile-poem-meta"><span className="profile-poem-cat">{poem.category || 'अन्य'}</span><span className="profile-poem-dot">·</span><span>{formatDate(poem.createdAt)}</span></p></div><div className="poem-card-actions"><Link href={`/poem/${poem.slug}`} className="action" aria-label={`${poem.title} देखें`} title="रचना देखें"><i className="far fa-eye" /></Link><button className="action" onClick={() => setPoemModal(poem)} aria-label={`${poem.title} देखें`} title="रचना देखें"><i className="fas fa-book-open" /></button><button className="action" onClick={() => openEditPoem(poem)} aria-label={`${poem.title} संपादित करें`} title="रचना संपादित करें"><i className="fas fa-pen" /></button><button className="action profile-delete-btn" onClick={() => handleDeletePoem(poem._id)} aria-label={`${poem.title} हटाएँ`} title="रचना हटाएँ"><i className="fas fa-trash" /></button></div></div>)}</div>
+          )}
+        </div>
       </div>
 
       {shareBadge && (
