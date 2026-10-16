@@ -10,6 +10,8 @@ import { ReadingToolbar } from '@/components/reading/ReadingToolbar';
 import { useReadingPrefs } from '@/hooks/use-reading-prefs';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 import { YouTubePoemPlayer } from '@/components/poem/YouTubePoemPlayer';
+import { PoemMarks } from '@/components/poem/PoemMarks';
+import { useReadingActivity } from '@/hooks/use-reading-activity';
 
 interface PoemContentProps {
   slug: string;
@@ -58,6 +60,9 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
       fetch(`${API_BASE_URL}/api/poems/${encodeURIComponent(poemId)}/view`, { method: 'POST', keepalive: true }).catch(() => {});
     } catch {}
   }, [poemId]);
+
+  // Reader badges: signed-in members only, visible + active page only; the server measures the time. Silent.
+  useReadingActivity(poemId);
 
   useEffect(() => {
     if (loading) return;
@@ -173,6 +178,7 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
 
         {/* Share Button */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2rem' }}>
+          <PoemMarks poemId={poem._id} />
           <SharePoemButton
             poem={{
               id: poem._id || poem.slug,

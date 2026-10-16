@@ -332,7 +332,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
                   disabled={uploadingPic}
                   onClick={() => picInputRef.current?.click()}
                   style={{
-                    position: 'absolute', right: 2, bottom: 2, width: 34, height: 34, borderRadius: '50%',
+                    position: 'absolute', zIndex: 20, right: -6, bottom: -6, width: 36, height: 36, borderRadius: '50%', boxShadow: '0 4px 12px rgba(0,0,0,.25)',
                     border: '2px solid #fff', background: 'var(--accent)', color: '#fff', cursor: uploadingPic ? 'wait' : 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem',
                   }}
