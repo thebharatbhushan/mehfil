@@ -3877,9 +3877,9 @@ html[data-mfl-seen] .mfl { display: none; }
 
 /* ===== Badges: round medals under the name + collapsible shelf ===== */
 .mf-medals { list-style: none; display: flex; flex-wrap: wrap; gap: 0.6rem 0.9rem; margin: 0.75rem 0 0; padding: 0; }
-.mf-medals > li { display: flex; flex-direction: column; align-items: center; gap: 0.45rem; width: 78px; min-width: 0; }
+.mf-medals > li { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; width: 78px; min-width: 0; }
 .mf-medal-name {
-  max-width: 100%; text-align: center; font-family: var(--font-deva); font-size: 0.72rem; font-weight: 600; line-height: 1.3;
+  position: relative; z-index: 2; max-width: 100%; text-align: center; font-family: var(--font-deva); font-size: 0.72rem; font-weight: 600; line-height: 1.7; padding-top: 0.2em; margin-top: 0.15rem;
   color: var(--accent-dark); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .mf-medal {
