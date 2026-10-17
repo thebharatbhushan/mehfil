@@ -4,7 +4,7 @@ import type { WriterWithPoems } from '@/components/poets/PoetsClient';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { POETS_PER_PAGE } from '@/lib/categories';
-import { fetchAllPoems, fetchAllWriters, parsePage, publicWriter } from '@/lib/seo';
+import { fetchWritersPage, parsePage, publicWriter } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -18,29 +18,23 @@ export function generateMetadata({ searchParams }: Props): Metadata {
   return { title: { absolute: title }, alternates: { canonical: `/poets?page=${page}` }, openGraph: { title, url: `/poets?page=${page}` } };
 }
 
-// Server wrapper: the poet directory is rendered into the initial HTML from the same public API the client uses.
+// Server wrapper: only ONE page of writers (POETS_PER_PAGE) is fetched and rendered into the initial HTML.
 export default async function PoetsPage({ searchParams }: Props) {
-  const [users, poems] = await Promise.all([fetchAllWriters(), fetchAllPoems()]);
   const page = parsePage(searchParams?.page);
+  const data = await fetchWritersPage(page, POETS_PER_PAGE);
   // A page beyond the last one is a real 404 (never a thin empty page). Skipped if the API returned nothing.
-  if (users.length > 0 && page > Math.ceil(users.length / POETS_PER_PAGE)) notFound();
+  if (data && data.total > 0 && page > data.totalPages) notFound();
 
-  const counts = new Map<string, number>();
-  for (const p of poems) {
-    const id = p.author?._id;
-    if (id) counts.set(id, (counts.get(id) || 0) + 1);
-  }
-
-  const initialWriters: WriterWithPoems[] = users.map((u) => ({
+  const initialWriters: WriterWithPoems[] = (data?.writers || []).map((u) => ({
     ...publicWriter(u),
-    poemCount: counts.get(u._id) || 0,
-    style: (u.languagePref || 'shayari').toLowerCase(),
+    poemCount: u.poemCount || 0,
+    style: (u.style || u.languagePref || 'shayari').toLowerCase(),
   }));
 
   return (
     <>
       <Breadcrumbs items={[{ name: 'होम', path: '/' }, { name: 'रचनाकार', path: '/poets' }]} />
-      <PoetsClient initialWriters={initialWriters} initialPage={page} />
+      <PoetsClient initialWriters={initialWriters} initialPage={page} initialTotal={data?.total ?? initialWriters.length} />
     </>
   );
 }
