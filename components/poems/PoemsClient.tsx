@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { API_BASE_URL, Poem, formatDate } from '@/lib/mehfil';
-import { matchesSearch } from '@/lib/search';
 import { POEMS_LIST_PER_PAGE } from '@/lib/categories';
 import { Pagination } from '@/components/site/Pagination';
 import { usePageParam } from '@/lib/usePageParam';
@@ -13,26 +12,61 @@ const MOOD_ICONS: Record<string, string> = {
   Love: '❤️', Sad: '🌧', Motivation: '✨', Nature: '🍃', Life: '🌙', Sufi: '☪', Friendship: '🤝', Shayari: '🖋',
 };
 
-export function PoemsClient({ initialPoems = [], initialPage = 1 }: { initialPoems?: Poem[]; initialPage?: number }) {
-  // initialPoems come from the server render so the poems are present in the first HTML.
+export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal = 0 }: { initialPoems?: Poem[]; initialPage?: number; initialTotal?: number }) {
+  // initialPoems = just the current page, rendered on the server so it is present in the first HTML.
   const [poems, setPoems] = useState<Poem[]>(initialPoems);
+  const [total, setTotal] = useState(initialTotal);
   const [loading, setLoading] = useState(initialPoems.length === 0);
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [mood, setMood] = useState('all');
   const { page: rawPage, setPage, hrefFor } = usePageParam(initialPage, '/poems');
   const filterBarRef = useRef<HTMLDivElement>(null);
   const perPage = POEMS_LIST_PER_PAGE;
   const wotwRef = useRef<HTMLDivElement>(null);
+  const firstLoad = useRef(true);
+  // Poem of the week = the newest poem overall; kept separately so it survives paging/filtering.
+  const [poemOfTheWeek, setPoemOfTheWeek] = useState<Poem | null>(initialPage === 1 ? initialPoems[0] || null : null);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/poems`)
+    const t = setTimeout(() => setDebouncedSearch(search.trim()), 350);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  useEffect(() => {
+    if (poemOfTheWeek) return;
+    fetch(`${API_BASE_URL}/api/poems?page=1&limit=1`)
+      .then((r) => r.json())
+      .then((d) => setPoemOfTheWeek((d.poems || [])[0] || null))
+      .catch(() => {});
+  }, [poemOfTheWeek]);
+
+  // Each page / filter change asks the API for just that page (never the full list).
+  useEffect(() => {
+    const noFilters = mood === 'all' && !debouncedSearch;
+    // The server already rendered the initial page; skip the duplicate request on first mount.
+    if (firstLoad.current && noFilters && initialPoems.length > 0 && rawPage === initialPage) {
+      firstLoad.current = false;
+      return;
+    }
+    firstLoad.current = false;
+    const ctrl = new AbortController();
+    const params = new URLSearchParams({ page: String(rawPage), limit: String(perPage) });
+    if (mood !== 'all') params.set('category', mood);
+    if (debouncedSearch) params.set('q', debouncedSearch);
+    setLoading(true);
+    fetch(`${API_BASE_URL}/api/poems?${params}`, { signal: ctrl.signal })
       .then((r) => r.json())
       .then((data) => {
-        setPoems(data.poems || data || []);
+        const list: Poem[] = data.poems || (Array.isArray(data) ? data : []);
+        setPoems(list);
+        setTotal(typeof data.total === 'number' ? data.total : list.length);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
-  }, []);
+      .catch((e) => { if (e?.name !== 'AbortError') setLoading(false); });
+    return () => ctrl.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rawPage, mood, debouncedSearch]);
 
   useEffect(() => {
     if (loading) return;
@@ -51,38 +85,12 @@ export function PoemsClient({ initialPoems = [], initialPage = 1 }: { initialPoe
       document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
     }, 100);
     return () => { clearTimeout(timer); observer.disconnect(); };
-  }, [loading, search, mood, rawPage]);
+  }, [loading, debouncedSearch, mood, rawPage]);
 
-  const poemOfTheWeek = useMemo(() => {
-    if (!poems.length) return null;
-    return poems[0];
-  }, [poems]);
-
-  const filtered = useMemo(() => {
-    let result = poems;
-    if (mood !== 'all') {
-      result = result.filter((p) => (p.category || '').toLowerCase() === mood);
-    }
-    if (search.trim()) {
-      result = result.filter(
-        (p) =>
-          matchesSearch(
-            search,
-            p.title,
-            p.body || '',
-            p.author?.firstName || '',
-            p.author?.lastName || '',
-            `${p.author?.firstName || ''} ${p.author?.lastName || ''}`,
-          )
-      );
-    }
-    return result;
-  }, [poems, mood, search]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
   // Never show an empty page: a stale/out-of-range page (e.g. after the live list shrank) clamps to the last page.
   const page = Math.min(rawPage, totalPages);
-  const pageItems = filtered.slice((page - 1) * perPage, page * perPage);
+  const pageItems = poems;
 
   useEffect(() => {
     if (!loading && rawPage > totalPages) setPage(totalPages, { replace: true });
