@@ -4059,3 +4059,10 @@ button.mf-medal { cursor: pointer; }
   .profile-draft-pill { margin-left: 0.25rem; }
   .profile-poem-list .poem-card-actions { flex-wrap: wrap; }
 }
+
+/* Poets page: loading placeholder for "गुरुवार का विशेष रचनाकार" (shown instead of the default card) */
+.thursday-skeleton { min-height: 7rem; align-items: flex-start; }
+.thursday-skeleton span { margin: 0; width: 55%; height: 1.6rem; }
+.thursday-skeleton span:nth-child(2) { width: 40%; height: 1rem; }
+.thursday-skeleton span:nth-child(3) { width: 85%; height: 3.2rem; }
+.thursday-skeleton-avatar { display: block; width: 100%; height: 100%; border-radius: 50%; background: rgba(255, 255, 255, 0.35); animation: dailyPulse 1.4s ease-in-out infinite; }
