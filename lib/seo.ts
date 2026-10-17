@@ -63,11 +63,11 @@ export async function fetchPoemBySlug(slug: string): Promise<{ poem: Poem | null
 }
 
 /** Same endpoint the author page already uses (accepts id or username). */
-export async function fetchAuthor(ident: string): Promise<{ author: { user: Writer; poems: Poem[] } | null; missing: boolean }> {
-  const { status, data } = await getApi<{ user?: Writer; poems?: Poem[] }>(`/api/auth/user/${encodeURIComponent(ident)}`);
+export async function fetchAuthor(ident: string): Promise<{ author: { user: Writer; poems: Poem[]; hasMore: boolean } | null; missing: boolean }> {
+  const { status, data } = await getApi<{ user?: Writer; poems?: Poem[]; hasMore?: boolean }>(`/api/auth/user/${encodeURIComponent(ident)}?page=1&limit=12`);
   if (!data?.user) return { author: null, missing: status === 404 };
   return {
-    author: { user: data.user, poems: data.poems || (data.user as Writer & { poems?: Poem[] }).poems || [] },
+    author: { user: data.user, poems: data.poems || (data.user as Writer & { poems?: Poem[] }).poems || [], hasMore: !!data.hasMore },
     missing: false,
   };
 }
