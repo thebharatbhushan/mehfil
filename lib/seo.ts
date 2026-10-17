@@ -72,11 +72,35 @@ export async function fetchAuthor(ident: string): Promise<{ author: { user: Writ
   };
 }
 
-/** null = the API could not be reached (unknown), as opposed to [] = reachable but no poems. */
-export async function fetchAllPoemsOrNull(): Promise<Poem[] | null> {
-  const { data } = await getApi<{ poems?: Poem[] } | Poem[]>('/api/poems');
+export type PoemsPage = { poems: Poem[]; page: number; limit: number; total: number; totalPages: number };
+
+/** One page of poems from the paginated API (null = API unreachable). */
+export async function fetchPoemsPage(page = 1, limit = 16): Promise<PoemsPage | null> {
+  const { data } = await getApi<{ poems?: Poem[]; page?: number; limit?: number; total?: number; totalPages?: number } | Poem[]>(
+    `/api/poems?page=${page}&limit=${limit}`,
+  );
   if (!data) return null;
-  return ((Array.isArray(data) ? data : data.poems) || []).filter((p) => p && p.slug && p.title);
+  const list = (Array.isArray(data) ? data : data.poems) || [];
+  const poems = list.filter((p) => p && p.slug && p.title);
+  const meta = Array.isArray(data) ? {} : data;
+  const total = meta.total ?? poems.length;
+  return { poems, page: meta.page ?? page, limit: meta.limit ?? limit, total, totalPages: meta.totalPages ?? Math.max(1, Math.ceil(total / limit)) };
+}
+
+/**
+ * Every poem (sitemap, category counts, poets...), gathered in several small requests of 100 instead of one huge one.
+ * null = the API could not be reached (unknown), as opposed to [] = reachable but no poems.
+ */
+export async function fetchAllPoemsOrNull(): Promise<Poem[] | null> {
+  const first = await fetchPoemsPage(1, 100);
+  if (!first) return null;
+  const all = [...first.poems];
+  const pages = Array.from({ length: Math.min(first.totalPages, 100) - 1 }, (_, i) => i + 2);
+  for (let i = 0; i < pages.length; i += 5) {
+    const batch = await Promise.all(pages.slice(i, i + 5).map((n) => fetchPoemsPage(n, 100)));
+    batch.forEach((b) => b && all.push(...b.poems));
+  }
+  return all;
 }
 
 export async function fetchAllPoems(): Promise<Poem[]> {
