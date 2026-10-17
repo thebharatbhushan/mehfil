@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next';
 import { MIN_POEMS_TO_INDEX, SEO_CATEGORIES, categoryHref, poemsForCategory } from '@/lib/categories';
 import { SITE_URL, authorPath, fetchAllPoems, fetchAllWriters } from '@/lib/seo';
 import type { Poem } from '@/lib/mehfil';
+import { DICTIONARY_PATH, fetchDictionarySlugs, wordPath } from '@/lib/dictionary';
 
 // Only valuable, canonical, indexable URLs. Rebuilt at most hourly from the existing public API.
 // <lastmod> is only emitted when it is real (taken from poem dates); it is never "now".
@@ -15,7 +16,7 @@ const latest = (poems: Poem[]): Date | undefined => {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE_URL;
-  const [poems, writers] = await Promise.all([fetchAllPoems(), fetchAllWriters()]);
+  const [poems, writers, dictionarySlugs] = await Promise.all([fetchAllPoems(), fetchAllWriters(), fetchDictionarySlugs().catch(() => [])]);
   const newest = latest(poems);
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -65,5 +66,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   writers.forEach(add);
   poems.forEach((p) => add(p.author));
 
-  return [...staticPages, ...categoryPages, ...poemPages, ...authorPages];
+  // Dictionary: only PUBLISHED words (the API never returns drafts), one canonical URL per word. The index page is listed
+  // only once at least one word exists, so an empty dictionary never advertises a thin page.
+  const dictionaryPages: MetadataRoute.Sitemap = dictionarySlugs.length
+    ? [
+        { url: `${base}${DICTIONARY_PATH}`, changeFrequency: 'weekly', priority: 0.7 },
+        ...dictionarySlugs.map((w) => ({
+          url: `${base}${wordPath(w.slug)}`,
+          lastModified: w.updatedAt && !Number.isNaN(Date.parse(w.updatedAt)) ? new Date(w.updatedAt) : undefined,
+          changeFrequency: 'monthly' as const,
+          priority: 0.6,
+        })),
+      ]
+    : [];
+
+  return [...staticPages, ...categoryPages, ...poemPages, ...authorPages, ...dictionaryPages];
 }
