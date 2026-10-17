@@ -44,6 +44,7 @@ export function Footer() {
               <Link href="/"><i className="fas fa-chevron-right" /> विशेष रचनाएँ</Link>
               <Link href="/poets"><i className="fas fa-chevron-right" /> लोकप्रिय रचनाकार</Link>
               <Link href="/category"><i className="fas fa-chevron-right" /> Poetry Moods</Link>
+              <Link href="/dictionary"><i className="fas fa-chevron-right" /> शब्दकोश</Link>
               <Link href="/poems"><i className="fas fa-chevron-right" /> Community Hub</Link>
             </div>
           </div>
