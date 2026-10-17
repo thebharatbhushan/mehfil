@@ -112,6 +112,19 @@ export async function fetchFeaturedPoems(): Promise<Poem[]> {
   return ((Array.isArray(data) ? data : data?.poems) || []).filter((p) => p && p.slug && p.title);
 }
 
+export type WritersPage = { writers: Array<Writer & { poemCount?: number; style?: string }>; page: number; limit: number; total: number; totalPages: number };
+
+/** One page of the public writers directory (null = API unreachable). Never loads the whole user list. */
+export async function fetchWritersPage(page = 1, limit = 12): Promise<WritersPage | null> {
+  const { data } = await getApi<{ writers?: WritersPage['writers']; page?: number; limit?: number; total?: number; totalPages?: number }>(
+    `/api/auth/writers?page=${page}&limit=${limit}`,
+  );
+  if (!data) return null;
+  const writers = data.writers || [];
+  const total = data.total ?? writers.length;
+  return { writers, page: data.page ?? page, limit: data.limit ?? limit, total, totalPages: data.totalPages ?? Math.max(1, Math.ceil(total / limit)) };
+}
+
 export async function fetchAllWriters(): Promise<Writer[]> {
   const { data } = await getApi<{ users?: Writer[] }>('/api/admin/users');
   return data?.users || [];
