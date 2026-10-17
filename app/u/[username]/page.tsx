@@ -12,7 +12,7 @@ export default async function UserProfilePage({ params }: { params: { username: 
   const ident = name.replace(/^@/, '').toLowerCase();
 
   const { author } = await fetchAuthor(ident);
-  const initial = author ? { author: publicWriter(author.user), poems: author.poems.map(publicPoem) } : null;
+  const initial = author ? { author: publicWriter(author.user), poems: author.poems.map(publicPoem), hasMore: author.hasMore } : null;
 
   return <AuthorProfile ident={ident} initial={initial} />;
 }
