@@ -1,10 +1,8 @@
 'use client';
 
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { API_BASE_URL, Writer, authorHref } from '@/lib/mehfil';
-
-import { matchesSearch } from '@/lib/search';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 import { Pagination } from '@/components/site/Pagination';
 import { POETS_PER_PAGE } from '@/lib/categories';
@@ -84,12 +82,15 @@ function PoetsLoader() {
   );
 }
 
-export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialWriters?: WriterWithPoems[]; initialPage?: number }) {
+export function PoetsClient({ initialWriters = [], initialPage = 1, initialTotal }: { initialWriters?: WriterWithPoems[]; initialPage?: number; initialTotal?: number }) {
   // initialWriters come from the server render so the poet directory is present in the first HTML;
   // the effect below still refreshes (and enriches) the list exactly as before.
   const [writers, setWriters] = useState<WriterWithPoems[]>(initialWriters);
+  const [total, setTotal] = useState(initialTotal ?? initialWriters.length);
   const [loading, setLoading] = useState(initialWriters.length === 0);
+  const [fetching, setFetching] = useState(false);
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [style, setStyle] = useState('all');
   const { page: rawPage, setPage, hrefFor } = usePageParam(initialPage, '/poets');
   const filterBarRef = useRef<HTMLDivElement>(null);
@@ -108,31 +109,36 @@ export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialW
     return () => { cancelled = true; };
   }, []);
 
+  // Debounce the search box so every keystroke does not hit the server.
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/admin/users`)
+    const t = setTimeout(() => setDebouncedSearch(search.trim()), 400);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  // Only the current page of writers (POETS_PER_PAGE) is requested; paging, style filter and search all run on the server.
+  const fetchSeq = useRef(0);
+  const firstFetch = useRef(initialWriters.length > 0);
+  useEffect(() => {
+    const seq = ++fetchSeq.current;
+    const silent = firstFetch.current; // server-rendered data is already shown: refresh it quietly
+    firstFetch.current = false;
+    if (!silent) setFetching(true);
+    const qs = new URLSearchParams({ page: String(rawPage), limit: String(POETS_PER_PAGE), style });
+    if (debouncedSearch) qs.set('q', debouncedSearch);
+    fetch(`${API_BASE_URL}/api/auth/writers?${qs.toString()}`)
       .then((r) => r.json())
-      .then(async (data) => {
-        const users: Writer[] = data.users || [];
-        const enriched = await Promise.all(
-          users.map(async (u) => {
-            try {
-              const res = await fetch(`${API_BASE_URL}/api/auth/user/${u._id}`);
-              const d = await res.json();
-              const poemCount = (d.poems || []).length;
-              const styleVal = (u.languagePref || 'shayari').toLowerCase();
-              // The public profile lookup is the source of truth for socialLinks (same data as the author page).
-              const socialLinks = d.user?.socialLinks ?? u.socialLinks;
-              return { ...u, socialLinks, poemCount, style: styleVal } as WriterWithPoems;
-            } catch {
-              return { ...u, poemCount: 0, style: (u.languagePref || 'shayari').toLowerCase() } as WriterWithPoems;
-            }
-          })
-        );
-        setWriters(enriched);
-        setLoading(false);
+      .then((data) => {
+        if (seq !== fetchSeq.current || !data?.success) return;
+        setWriters((data.writers || []) as WriterWithPoems[]);
+        setTotal(data.total ?? (data.writers || []).length);
       })
-      .catch(() => setLoading(false));
-  }, []);
+      .catch(() => {})
+      .finally(() => {
+        if (seq !== fetchSeq.current) return;
+        setLoading(false);
+        setFetching(false);
+      });
+  }, [rawPage, style, debouncedSearch]);
 
   // Fade-up observer — only runs after content is loaded
   useEffect(() => {
@@ -152,37 +158,16 @@ export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialW
       document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
     }, 100);
     return () => { clearTimeout(timer); observer.disconnect(); };
-  }, [loading, writers, search, style, rawPage]);
+  }, [loading, writers]);
 
-  const filtered = useMemo(() => {
-    let result = writers;
-    if (style !== 'all') {
-      result = result.filter((w) => w.style === style);
-    }
-    if (search.trim()) {
-      result = result.filter((w) =>
-        matchesSearch(
-          search.trim().replace(/^@/, ''),
-          w.username || '',
-          `${w.firstName} ${w.lastName || ''}`,
-          w.firstName,
-          w.lastName || '',
-          w.city || '',
-          w.bio || '',
-        )
-      );
-    }
-    return result;
-  }, [writers, style, search]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / POETS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(total / POETS_PER_PAGE));
   // Never show an empty page: an out-of-range page (e.g. the live list is shorter than the server render) clamps.
   const page = Math.min(rawPage, totalPages);
-  const pageWriters = filtered.slice((page - 1) * POETS_PER_PAGE, page * POETS_PER_PAGE);
+  const pageWriters = writers;
 
   useEffect(() => {
-    if (!loading && rawPage > totalPages) setPage(totalPages, { replace: true });
-  }, [loading, rawPage, totalPages, setPage]);
+    if (!loading && !fetching && total > 0 && rawPage > totalPages) setPage(totalPages, { replace: true });
+  }, [loading, fetching, total, rawPage, totalPages, setPage]);
 
   const resetPage = () => setPage(1, { replace: true });
   const goToPage = (p: number) => {
@@ -335,16 +320,16 @@ export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialW
 
       {/* Writers Count */}
       <div className="fade-up" style={{ margin: '1rem 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-        🌟 {filtered.length} प्रतिष्ठित रचनाकार मिले
+        🌟 {total} प्रतिष्ठित रचनाकार मिले
       </div>
 
       {/* Writers Grid */}
-      {filtered.length === 0 ? (
+      {writers.length === 0 && !fetching ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
           😢 कोई रचनाकार नहीं मिला...
         </div>
       ) : (
-        <div className="poets-grid">
+        <div className="poets-grid" style={{ opacity: fetching ? 0.55 : 1, transition: 'opacity 0.2s' }} aria-busy={fetching}>
           {pageWriters.map((writer) => (
             <div
               key={writer._id}
