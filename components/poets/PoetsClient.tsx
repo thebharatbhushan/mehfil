@@ -95,13 +95,16 @@ export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialW
   const filterBarRef = useRef<HTMLDivElement>(null);
   // Admin-selected "गुरुवार का विशेष रचनाकार"; null keeps the default card below.
   const [thursdayWriter, setThursdayWriter] = useState<Writer | null>(null);
+  // True until the request finishes, so the static default card is never flashed before the real writer arrives.
+  const [thursdayLoading, setThursdayLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
     fetch(`${API_BASE_URL}/api/auth/thursday-writer`, { cache: 'no-store' })
       .then((r) => r.json())
       .then((d) => { if (!cancelled && d?.success) setThursdayWriter(d.writer || null); })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setThursdayLoading(false); });
     return () => { cancelled = true; };
   }, []);
 
@@ -227,7 +230,9 @@ export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialW
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '3.5rem', color: 'white', flexShrink: 0, overflow: 'hidden',
         }}>
-          {thursdayWriter?.profilePic ? (
+          {thursdayLoading ? (
+            <span className="thursday-skeleton-avatar" aria-hidden="true" />
+          ) : thursdayWriter?.profilePic ? (
             <img src={thursdayWriter.profilePic} alt={`${thursdayWriter.firstName} ${thursdayWriter.lastName || ''}`.trim()} width={140} height={140} decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
           ) : (
             <i className="fas fa-crown" />
@@ -237,7 +242,11 @@ export function PoetsClient({ initialWriters = [], initialPage = 1 }: { initialW
           <div style={{ display: 'inline-block', background: 'var(--accent)', color: 'white', padding: '0.3rem 1rem', borderRadius: 50, fontSize: '0.7rem', marginBottom: '0.8rem' }}>
             <i className="fas fa-star" /> गुरुवार का विशेष रचनाकार
           </div>
-          {thursdayWriter ? (
+          {thursdayLoading ? (
+            <div className="sher-skeleton thursday-skeleton" role="status" aria-live="polite" aria-label="लोड हो रहा है">
+              <span /><span /><span />
+            </div>
+          ) : thursdayWriter ? (
             <>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', color: 'var(--accent-dark)' }}>
                 <Link href={authorHref(thursdayWriter)} style={{ color: 'inherit', textDecoration: 'none' }}>
