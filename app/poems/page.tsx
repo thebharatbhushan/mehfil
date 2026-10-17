@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Breadcrumbs } from '@/components/site/Breadcrumbs';
 import { PoemsClient } from '@/components/poems/PoemsClient';
 import { POEMS_LIST_PER_PAGE, SEO_CATEGORIES, categoryHref } from '@/lib/categories';
-import { fetchAllPoems, parsePage } from '@/lib/seo';
+import { fetchPoemsPage, parsePage } from '@/lib/seo';
 
 export const revalidate = 3600; // ISR: poems are in the initial HTML, refreshed hourly (client also refreshes live).
 
@@ -29,14 +29,16 @@ export function generateMetadata({ searchParams }: Props): Metadata {
 }
 
 export default async function PoemsPage({ searchParams }: Props) {
-  const poems = await fetchAllPoems();
   const page = pageOf(searchParams);
+  // Only the requested page is fetched (never the whole library).
+  const data = await fetchPoemsPage(page, POEMS_LIST_PER_PAGE);
+  const poems = data?.poems || [];
   // A page number beyond the last page is a real 404 (never a thin empty page). Skipped if the API returned nothing.
-  if (poems.length > 0 && page > Math.ceil(poems.length / POEMS_LIST_PER_PAGE)) notFound();
+  if (data && data.total > 0 && page > data.totalPages) notFound();
   return (
     <>
       <Breadcrumbs items={[{ name: 'होम', path: '/' }, { name: 'कविताएँ', path: '/poems' }]} />
-      <PoemsClient initialPoems={poems} initialPage={page} />
+      <PoemsClient initialPoems={poems} initialPage={page} initialTotal={data?.total ?? poems.length} />
       <section style={{ paddingTop: 0 }}>
         <div className="mehfil-container" style={{ paddingBottom: '3rem', lineHeight: 2 }}>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: 'var(--accent-dark)', marginBottom: '0.8rem' }}>
