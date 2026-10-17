@@ -198,7 +198,7 @@ export default function ProfilePage() {
       const id = getCurrentUserId();
       if (id) {
         try {
-          const response = await fetch(`${API_BASE_URL}/api/auth/user/${encodeURIComponent(id)}`);
+          const response = await fetch(`${API_BASE_URL}/api/auth/user/${encodeURIComponent(id)}?limit=1`);
           if (response.ok) {
             const data = await response.json();
             if (data.user) return data.user as Profile;
