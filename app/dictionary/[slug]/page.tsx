@@ -14,6 +14,9 @@ export const revalidate = 3600;
 
 type Props = { params: { slug: string } };
 
+// Array.from/indexOf instead of spreading a Set: the project's tsconfig targets ES5.
+const uniq = (a: string[]): string[] => a.filter((x, i) => a.indexOf(x) === i);
+
 const decode = (s: string) => { try { return decodeURIComponent(s); } catch { return s; } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -52,7 +55,7 @@ function WordChips({ words, links }: { words: string[]; links: DictWord['links']
 
 /** Published Mehfil poems that really contain this word (Hindi/Urdu spellings only). Never invented; [] on any failure. */
 async function poemsUsing(e: DictEntry): Promise<Array<{ poem: Poem; line: string }>> {
-  const needles = [...new Set([e.canonicalWord, ...e.variants.hindi, ...e.variants.urdu].map((s) => s.trim()).filter((s) => [...s].length >= 3))];
+  const needles = uniq([e.canonicalWord, ...e.variants.hindi, ...e.variants.urdu].map((s) => s.trim()).filter((s) => s.length >= 3));
   if (!needles.length) return [];
   try {
     const all = await Promise.race([fetchAllPoems(), new Promise<Poem[]>((r) => setTimeout(() => r([]), 3500))]);
@@ -107,9 +110,9 @@ export default async function WordPage({ params }: Props) {
           <section className="dict-panel" aria-labelledby="forms">
             <h2 id="forms">वर्तनी <small>Spellings</small></h2>
             <div className="dict-chips">
-              {[...new Set([...e.variants.hindi, ...e.variants.aliases.filter((a) => /[ऀ-ॿ]/.test(a))])].map((v) => <span key={`h${v}`} className="dict-chip">{v}</span>)}
-              {[...new Set([...e.variants.urdu, ...e.variants.aliases.filter((a) => /[؀-ۿ]/.test(a))])].map((v) => <span key={`u${v}`} className="dict-chip" lang="ur" dir="rtl">{v}</span>)}
-              {[...new Set([...e.variants.roman, ...e.variants.aliases.filter((a) => !/[ऀ-ॿ؀-ۿ]/.test(a))])].map((v) => <span key={`r${v}`} className="dict-chip is-roman" lang="en">{v}</span>)}
+              {uniq([...e.variants.hindi, ...e.variants.aliases.filter((a) => /[ऀ-ॿ]/.test(a))]).map((v) => <span key={`h${v}`} className="dict-chip">{v}</span>)}
+              {uniq([...e.variants.urdu, ...e.variants.aliases.filter((a) => /[؀-ۿ]/.test(a))]).map((v) => <span key={`u${v}`} className="dict-chip" lang="ur" dir="rtl">{v}</span>)}
+              {uniq([...e.variants.roman, ...e.variants.aliases.filter((a) => !/[ऀ-ॿ؀-ۿ]/.test(a))]).map((v) => <span key={`r${v}`} className="dict-chip is-roman" lang="en">{v}</span>)}
             </div>
           </section>
 
