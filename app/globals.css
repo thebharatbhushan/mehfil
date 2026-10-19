@@ -4066,3 +4066,8 @@ button.mf-medal { cursor: pointer; }
 .thursday-skeleton span:nth-child(2) { width: 40%; height: 1rem; }
 .thursday-skeleton span:nth-child(3) { width: 85%; height: 3.2rem; }
 .thursday-skeleton-avatar { display: block; width: 100%; height: 100%; border-radius: 50%; background: rgba(255, 255, 255, 0.35); animation: dailyPulse 1.4s ease-in-out infinite; }
+
+/* Homepage "Save" chip is now a real button (PoemMarks variant="card") */
+button.action { border: 1px solid transparent; font-family: inherit; color: inherit; }
+button.action[aria-pressed="true"]:hover { background: var(--accent-dark, var(--accent)); }
+button.action[aria-busy="true"] { opacity: 0.85; pointer-events: none; }
