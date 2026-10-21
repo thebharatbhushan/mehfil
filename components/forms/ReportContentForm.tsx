@@ -26,7 +26,7 @@ export function ReportContentForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [link, setLink] = useState('');
-  const [reason, setReason] = useState(REASONS[0]);
+  const [reason, setReason] = useState<string>(REASONS[0]);
   const [details, setDetails] = useState('');
   const [website, setWebsite] = useState('');
   const [errors, setErrors] = useState<Errors>({});
