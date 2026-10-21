@@ -2,8 +2,8 @@ import type { SocialLinks } from '@/lib/socialLinks';
 import type { ProfileBadge, ProfileFrameInfo } from '@/lib/recognition';
 
 // Set NEXT_PUBLIC_API_URL=http://localhost:5000 in .env.local to talk to a local backend.
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mehfilbackend.onrender.com';
-// export const API_BASE_URL = 'http://192.168.0.79:5000';
+// export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mehfilbackend.onrender.com';
+export const API_BASE_URL = 'http://192.168.0.79:5000';
 
 /** Default profile picture used when a user has not uploaded one. */
 export const DEFAULT_AVATAR =
@@ -27,6 +27,9 @@ export interface Poem {
     socialLinks?: SocialLinks;
   };
   createdAt?: string;
+  /** Moderation state, only ever sent on the author's own poems (hidden poems are never public). */
+  status?: 'published' | 'unpublished' | 'rejected';
+  moderationReason?: string;
   /** Set on the author's own private drafts. */
   updatedAt?: string;
 }
