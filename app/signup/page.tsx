@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { API_BASE_URL } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
+import { deviceHeaders } from '@/lib/notifications';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -139,6 +140,7 @@ export default function SignupPage() {
 
       const res = await fetch(`${API_BASE_URL}/api/auth/verify-signup-otp`, {
         method: 'POST',
+        headers: deviceHeaders(), // lets the server recognise this browser as the member's first device
         body: fd,
       });
       const data = await res.json().catch(() => ({}));

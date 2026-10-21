@@ -8,6 +8,7 @@ import { ScrollIndicator } from '@/components/site/ScrollIndicator';
 import { ToastProvider } from '@/components/site/ToastProvider';
 import { BottomNav } from '@/components/site/BottomNav';
 import { BirthdayCard } from '@/components/birthday/BirthdayCard';
+import { SpotlightPopup } from '@/components/spotlight/SpotlightPopup';
 import { JsonLd } from '@/components/site/JsonLd';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '@/lib/seo';
 import { API_BASE_URL } from '@/lib/mehfil';
@@ -93,6 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Footer />
           <BottomNav />
           <BirthdayCard />
+          <SpotlightPopup />
         </ToastProvider>
       </body>
     </html>

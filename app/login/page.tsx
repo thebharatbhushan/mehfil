@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { API_BASE_URL } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
+import { deviceHeaders } from '@/lib/notifications';
 
 type RecoveryStep = 'email' | 'otp' | 'password';
 
@@ -227,7 +228,7 @@ export default function LoginPage() {
     try {
       const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...deviceHeaders() },
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
