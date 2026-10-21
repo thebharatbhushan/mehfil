@@ -10,7 +10,6 @@ import { useToast } from '@/components/site/ToastProvider';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 import { SherOfTheDay } from '@/components/home/SherOfTheDay';
 import { LafzOfTheDay } from '@/components/home/LafzOfTheDay';
-import { PoemMarks } from '@/components/poem/PoemMarks';
 
 const formatDate = (date: string | Date | undefined | null) => {
   if (!date) return '';
@@ -497,7 +496,7 @@ export function HomeClient() {
                         {poemLines.length > 8 && <span>...</span>}
                       </div>
                       <div className="poem-actions">
-                        <PoemMarks poemId={selectedPoem._id} variant="card" />
+                        <div className="action"><i className="far fa-bookmark" /> Save</div>
                       </div>
                       {hasMoreContent && (
                         <Link href={`/poem/${selectedPoem.slug}`} className="primary-btn" aria-label={`${selectedPoem.title} — पूरा पढ़ें`} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '1rem', textDecoration: 'none' }}>

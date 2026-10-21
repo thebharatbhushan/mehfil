@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { myProfileHref } from '@/lib/auth';
 import { MobileDrawer } from './MobileDrawer';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
+import { useUnreadCount } from '@/hooks/use-unread-count';
 
 interface UserData {
   firstName?: string;
@@ -22,6 +24,7 @@ export function Header() {
   const pathname = usePathname();
   const avatarRef = useRef<HTMLDivElement>(null);
   const menuBtnRef = useRef<HTMLButtonElement>(null);
+  const { count: unreadCount, setCount: setUnreadCount } = useUnreadCount(!!user);
 
   useEffect(() => {
     const readUser = () => {
@@ -106,6 +109,7 @@ export function Header() {
         pathname={pathname}
         onPublish={handlePublish}
         onLogout={handleLogout}
+        unreadCount={unreadCount}
         returnFocusTo={menuBtnRef}
       />
       <nav>
@@ -133,6 +137,7 @@ export function Header() {
               <i className="fas fa-pen-fancy" />
               <span>लेखन प्रारम्भ करें</span>
             </button>
+            {user && <NotificationBell unreadCount={unreadCount} onUnreadChange={setUnreadCount} />}
             {user && (
               <div
                 ref={avatarRef}
@@ -165,6 +170,9 @@ export function Header() {
                   </Link>
                   <Link href={myProfileHref()} className="dropdown-item">
                     <i className="fas fa-book-open" /> मेरी रचनाएँ
+                  </Link>
+                  <Link href="/notifications" className="dropdown-item">
+                    <i className="fas fa-bell" /> सूचनाएँ{unreadCount > 0 ? ` (${unreadCount > 99 ? '99+' : unreadCount})` : ''}
                   </Link>
                   <div className="dropdown-divider" />
                   <a

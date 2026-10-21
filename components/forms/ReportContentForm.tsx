@@ -5,7 +5,17 @@ import type { FormEvent } from 'react';
 import { useToast } from '@/components/site/ToastProvider';
 import { EMAIL_RE, postJson, useAccountPrefill } from './shared';
 
-const REASONS = ['कॉपीराइट उल्लंघन / चोरी की रचना', 'उत्पीड़न या धमकी', 'घृणा फैलाने वाली सामग्री', 'अश्लील या अवैध सामग्री', 'स्पैम', 'किसी का रूप धरना', 'अन्य'];
+// `key` is what the server stores (a copyright report also lets the poem's author know); `label` is shown to the reader.
+const REASON_OPTIONS = [
+  { key: 'copyright', label: 'कॉपीराइट उल्लंघन / चोरी की रचना' },
+  { key: 'harassment', label: 'उत्पीड़न या धमकी' },
+  { key: 'hate', label: 'घृणा फैलाने वाली सामग्री' },
+  { key: 'obscene', label: 'अश्लील या अवैध सामग्री' },
+  { key: 'spam', label: 'स्पैम' },
+  { key: 'impersonation', label: 'किसी का रूप धरना' },
+  { key: 'other', label: 'अन्य' },
+] as const;
+const REASONS = REASON_OPTIONS.map((r) => r.label);
 
 type Errors = Partial<Record<'name' | 'email' | 'link' | 'details', string>>;
 
@@ -52,8 +62,10 @@ export function ReportContentForm() {
     lock.current = true;
     setSubmitting(true);
     const message = `सामग्री का लिंक: ${link.trim().slice(0, 300)}\nकारण: ${reason}\n\n${details.trim()}`.slice(0, 2000);
+    const reasonKey = REASON_OPTIONS.find((r) => r.label === reason)?.key ?? 'other';
     const result = await postJson('/api/contact', {
       name: name.trim(), email: email.trim(), subject: `Content report: ${reason}`.slice(0, 150), message, website,
+      kind: 'content_report', reportReason: reasonKey, link: link.trim().slice(0, 300),
     });
     setSubmitting(false);
     if (result.ok) {

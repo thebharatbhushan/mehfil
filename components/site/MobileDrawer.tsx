@@ -19,6 +19,8 @@ interface Props {
   pathname: string;
   onPublish: () => void;
   onLogout: () => void;
+  /** Unread notifications (shown as a badge on the Notifications link). */
+  unreadCount?: number;
   /** The hamburger button; focus returns to it when the drawer closes. */
   returnFocusTo?: React.RefObject<HTMLElement>;
 }
@@ -29,6 +31,7 @@ interface NavItem {
   sub: string;
   icon: string;
   active: boolean;
+  badge?: number;
 }
 
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -40,7 +43,7 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
  * It is rendered outside the sticky <nav>: that element has a backdrop-filter, which would otherwise
  * become the containing block of this fixed-position panel.
  */
-export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogout, returnFocusTo }: Props) {
+export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogout, unreadCount = 0, returnFocusTo }: Props) {
   const panelRef = useRef<HTMLElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
@@ -108,6 +111,7 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
   const mine: NavItem[] = user
     ? [
         { href: '/profile', label: 'मेरी प्रोफ़ाइल', sub: 'Profile', icon: 'fa-user-circle', active: pathname.startsWith('/profile') },
+        { href: '/notifications', label: 'सूचनाएँ', sub: 'Notifications', icon: 'fa-bell', active: pathname.startsWith('/notifications'), badge: unreadCount },
         { href: myProfileHref(), label: 'मेरी रचनाएँ', sub: 'My Rachna', icon: 'fa-pen-nib', active: false },
       ]
     : [];
@@ -125,6 +129,9 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
           {item.label}
           <small>{item.sub}</small>
         </span>
+        {!!item.badge && item.badge > 0 && (
+          <span className="m-drawer-badge" aria-label={`${item.badge} अपठित`}>{item.badge > 99 ? '99+' : item.badge}</span>
+        )}
       </Link>
     </li>
   );
