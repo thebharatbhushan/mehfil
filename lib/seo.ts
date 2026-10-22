@@ -125,9 +125,18 @@ export async function fetchWritersPage(page = 1, limit = 12): Promise<WritersPag
   return { writers, page: data.page ?? page, limit: data.limit ?? limit, total, totalPages: data.totalPages ?? Math.max(1, Math.ceil(total / limit)) };
 }
 
+/** Every public writer (for the sitemap). Reads the paginated PUBLIC directory - never an admin endpoint. */
 export async function fetchAllWriters(): Promise<Writer[]> {
-  const { data } = await getApi<{ users?: Writer[] }>('/api/admin/users');
-  return data?.users || [];
+  const first = await fetchWritersPage(1, 50);
+  if (!first) return [];
+  const all: Writer[] = [...first.writers];
+  const lastPage = Math.min(first.totalPages, 200);
+  for (let page = 2; page <= lastPage; page++) {
+    const next = await fetchWritersPage(page, 50);
+    if (!next) break;
+    all.push(...next.writers);
+  }
+  return all;
 }
 
 /** Public author URL built the same way as the existing `authorHref`, but only for usernames. */
