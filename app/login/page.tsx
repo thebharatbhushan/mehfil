@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { API_BASE_URL } from '@/lib/mehfil';
+import { BrandLogo } from '@/components/site/BrandLogo';
 import { useToast } from '@/components/site/ToastProvider';
 import { deviceHeaders } from '@/lib/notifications';
 import GoogleAuthButton from '@/components/auth/GoogleAuthButton';
@@ -452,7 +453,7 @@ export default function LoginPage() {
             ) : (
               <>
                 <div className="auth-brand-tag">
-                  <i className="fas fa-feather-alt" />
+                  <BrandLogo alt="मेहफ़िल" priority />
                 </div>
                 <h2 className="auth-form-title">स्वागत है</h2>
                 <p className="auth-form-sub">
