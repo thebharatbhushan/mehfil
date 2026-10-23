@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { BrandLogo } from '@/components/site/BrandLogo';
 import { DEFAULT_AVATAR } from '@/lib/mehfil';
 import { myProfileHref } from '@/lib/auth';
 
@@ -150,8 +151,8 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
       >
         <div className="m-drawer-head">
           <div className="m-drawer-top">
-            <Link href="/" className="logo m-drawer-logo" onClick={onClose}>
-              <i className="fas fa-feather-alt" aria-hidden="true" /> मेहफ़िल
+            <Link href="/" className="logo logo-img m-drawer-logo" onClick={onClose} aria-label="मेहफ़िल — होम">
+              <BrandLogo className="logo-img-el" />
             </Link>
             <button ref={closeRef} type="button" className="m-drawer-close" onClick={onClose} aria-label="मेन्यू बंद करें">
               <i className="fas fa-times" aria-hidden="true" />

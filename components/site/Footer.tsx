@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BrandLogo } from '@/components/site/BrandLogo';
 import { BecomeMemberLink } from '@/components/site/BecomeMemberLink';
 
 export function Footer() {
@@ -7,8 +8,8 @@ export function Footer() {
       <div className="mehfil-container footer-main">
         <div className="footer-grid">
           <div className="footer-brand">
-            <div className="footer-logo">
-              <i className="fas fa-feather-alt" /> मेहफ़िल
+            <div className="footer-logo footer-logo-img">
+              <BrandLogo tone="light" alt="मेहफ़िल — Mehfil" />
             </div>
             <p className="footer-desc">
               A sanctuary for Hindi &amp; Urdu poetry — where words find wings

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { BrandLogo } from '@/components/site/BrandLogo';
 
 /**
  * Mehfil premium splash loader.
@@ -130,12 +131,9 @@ export function MehfilLoader({
                 <circle className="mfl-ring-dot" cx="100" cy="8" r="2.6" />
               </g>
             </svg>
-            <div className="mfl-word" lang="hi">
-              मेहफ़िल
-            </div>
+            <BrandLogo tone="light" className="mfl-logo" alt="" priority />
           </div>
 
-          <div className="mfl-latin">MEHFIL</div>
           <div className="mfl-rule" />
           <div className="mfl-tagline" lang="hi">
             {tagline}

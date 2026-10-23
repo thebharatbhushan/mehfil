@@ -3,6 +3,7 @@
 import type { CSSProperties } from 'react';
 import { Ref, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { BrandLogo } from '@/components/site/BrandLogo';
 import { usePathname } from 'next/navigation';
 import { getStoredUser, getToken } from '@/lib/auth';
 import { getTurningAge } from '@/lib/birthday';
@@ -194,7 +195,7 @@ export function BirthdayGreeting({
 
         <div className="bday-body">
           <div className="bday-brand" aria-hidden="true">
-            <span>❦</span> मेहफ़िल <span>❦</span>
+            <BrandLogo className="bday-brand-logo" />
           </div>
 
           <svg className="bday-cake" viewBox="0 0 120 110" aria-hidden="true" focusable="false">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { BrandLogo } from '@/components/site/BrandLogo';
 import { usePathname, useRouter } from 'next/navigation';
 import { myProfileHref } from '@/lib/auth';
 import { MobileDrawer } from './MobileDrawer';
@@ -114,8 +115,8 @@ export function Header() {
       />
       <nav>
         <div className="mehfil-container nav-inner">
-          <Link href="/" className="logo">
-            <i className="fas fa-feather-alt" /> मेहफ़िल
+          <Link href="/" className="logo logo-img" aria-label="मेहफ़िल — होम">
+            <BrandLogo className="logo-img-el" priority />
           </Link>
           <div className="nav-links">
             {navLinks.map((link) => (
