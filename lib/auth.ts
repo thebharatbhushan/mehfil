@@ -138,3 +138,19 @@ export function myProfileHref(id: string | null | undefined = getCurrentUserId()
   if (typeof username === 'string' && username) return `/u/${encodeURIComponent(username)}`;
   return id ? `/author?id=${encodeURIComponent(id)}` : '/author';
 }
+
+export const SESSION_EXPIRED_MESSAGE = 'आपका सेशन समाप्त हो गया है। कृपया दोबारा लॉगिन करें।';
+
+/** Clears every piece of stored login state (used when the session is found to be invalid). */
+export function clearStoredSession(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem(USER_KEY);
+    window.localStorage.removeItem('mehfil_remember');
+    window.sessionStorage.removeItem(USER_KEY);
+  } catch {
+    /* storage unavailable — ignore */
+  }
+  window.dispatchEvent(new Event('mehfil-auth-change'));
+}

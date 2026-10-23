@@ -7,7 +7,8 @@ import Link from 'next/link';
 import { API_BASE_URL, POEM_CATEGORIES, Poem, formatDate, getLanguageLabel } from '@/lib/mehfil';
 import { extractYouTubeId, YOUTUBE_INVALID_MESSAGE } from '@/lib/youtube';
 import { useToast } from '@/components/site/ToastProvider';
-import { getCurrentUserId, myProfileHref, updateStoredUser } from '@/lib/auth';
+import { SESSION_EXPIRED_MESSAGE, clearStoredSession, getCurrentUserId, myProfileHref, updateStoredUser } from '@/lib/auth';
+import { useSessionWatcher } from '@/lib/useSessionWatcher';
 import { useScrollToTop } from '@/lib/useScrollToTop';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 import { DeleteAccountSection } from '@/components/profile/DeleteAccountSection';
@@ -109,6 +110,16 @@ function EmptyValue({ text = 'जानकारी नहीं जोड़ी
 export default function ProfilePage() {
   const router = useRouter();
   const { showToast } = useToast();
+  // Session ended (logged out in another tab, token expired/revoked): clear state, tell the member, go to login.
+  const sessionEndedRef = useRef(false);
+  const expireSession = () => {
+    if (sessionEndedRef.current) return;
+    sessionEndedRef.current = true;
+    clearStoredSession();
+    showToast(SESSION_EXPIRED_MESSAGE, true);
+    router.replace('/login');
+  };
+  useSessionWatcher(expireSession);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [poems, setPoems] = useState<Poem[]>([]);
   // Private drafts saved to the database (never shown on public pages).
@@ -184,9 +195,8 @@ export default function ProfilePage() {
         const response = await fetch(`${API_BASE_URL}/api/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (response.status === 401) {
-          localStorage.removeItem('token');
-          router.push('/login');
+        if (response.status === 401 || response.status === 403) {
+          expireSession();
           return null;
         }
         if (response.ok) {
@@ -242,7 +252,10 @@ export default function ProfilePage() {
 
   const sendProfileUpdate = async (body: FormData | Record<string, unknown>, endpoint = '/api/auth/profile') => {
     const token = localStorage.getItem('token');
-    if (!token) return false;
+    if (!token) {
+      expireSession();
+      return false;
+    }
     setSaving(true);
     try {
       const isFormData = body instanceof FormData;
@@ -254,6 +267,10 @@ export default function ProfilePage() {
         },
         body: isFormData ? body : JSON.stringify(body),
       });
+      if (response.status === 401) {
+        expireSession();
+        return false;
+      }
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.success) {
         showToast(data.message || 'अपडेट विफल हुआ।', true);
@@ -396,8 +413,10 @@ export default function ProfilePage() {
   const handleDeletePoem = async (id: string) => {
     if (!confirm('क्या आप इस रचना को हटाना चाहते हैं?')) return;
     const token = localStorage.getItem('token');
+    if (!token) return expireSession();
     try {
       const response = await fetch(`${API_BASE_URL}/api/poems/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+      if (response.status === 401) return expireSession();
       if (response.ok) {
         setPoems((current) => current.filter((poem) => poem._id !== id));
         showToast('रचना हटा दी गई।');
@@ -407,9 +426,10 @@ export default function ProfilePage() {
 
   const handleRemoveSaved = async (id: string) => {
     const token = localStorage.getItem('token');
-    if (!token) return;
+    if (!token) return expireSession();
     try {
       const response = await fetch(`${API_BASE_URL}/api/engagement/bookmarks/${encodeURIComponent(id)}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+      if (response.status === 401) return expireSession();
       if (response.ok) setSavedPoems((current) => current.filter((poem) => poem._id !== id));
     } catch { /* keep the list as it is */ }
   };
@@ -417,8 +437,10 @@ export default function ProfilePage() {
   const handleDeleteDraft = async (id: string) => {
     if (!confirm('क्या आप इस ड्राफ़्ट को हटाना चाहते हैं?')) return;
     const token = localStorage.getItem('token');
+    if (!token) return expireSession();
     try {
       const response = await fetch(`${API_BASE_URL}/api/drafts/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+      if (response.status === 401) return expireSession();
       if (response.ok) {
         setDrafts((current) => current.filter((draft) => draft._id !== id));
         showToast('ड्राफ़्ट हटा दिया गया।');
@@ -445,8 +467,9 @@ export default function ProfilePage() {
       setEditYoutubeError(YOUTUBE_INVALID_MESSAGE);
       return;
     }
-    setSavingPoem(true);
     const token = localStorage.getItem('token');
+    if (!token) return expireSession();
+    setSavingPoem(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/poems/${editPoem._id}`, {
         method: 'PUT',
@@ -454,6 +477,10 @@ export default function ProfilePage() {
         // category/tags are always sent because the update API overwrites them; youtubeUrl '' removes the video.
         body: JSON.stringify({ title: editTitle.trim(), category: editCategory, body: editBody, tags: editPoem.tags || [], youtubeUrl: editYoutube.trim() }),
       });
+      if (response.status === 401) {
+        setSavingPoem(false);
+        return expireSession();
+      }
       const data = await response.json().catch(() => ({}));
       if (response.ok && data.success) {
         // Re-fetch: changing the title regenerates the slug on the backend, so the list must not keep the old one.

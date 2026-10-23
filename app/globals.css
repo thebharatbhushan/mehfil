@@ -493,7 +493,7 @@ nav {
 /* Official logo image in the header / drawer (replaces the old feather icon + text) */
 .brand-logo { display: block; max-width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
 .logo.logo-img { padding-bottom: 0; background: none; line-height: 0; }
-.logo-img .logo-img-el { height: 60px; width: auto; }
+.logo-img .logo-img-el { height: 46px; width: auto; }
 .nav-links { display: flex; gap: 2.5rem; align-items: center; }
 .nav-links a {
   text-decoration: none; font-weight: 500; color: var(--text-dark);
