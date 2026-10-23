@@ -30,7 +30,7 @@ export const GEOMETRY = {
   bodyWidth: CARD_WIDTH - 280,
   bodyTop: 376,
   bodyHeight: 656,
-  footerLogoY: 1112,
+  footerLogoY: 1124,
   footerUrlY: 1210,
 };
 
@@ -232,7 +232,7 @@ function drawPoem(ctx: CanvasRenderingContext2D, layout: PoemLayout, page: numbe
 
 function drawFooter(ctx: CanvasRenderingContext2D, options: ShareCardOptions, page: number, pageCount: number) {
   const theme = THEMES[options.background];
-  drawDivider(ctx, theme, CARD_WIDTH / 2, GEOMETRY.footerLogoY - 62, 70);
+  drawDivider(ctx, theme, CARD_WIDTH / 2, GEOMETRY.footerLogoY - 66, 70);
   drawBrandLockup(ctx, theme, CARD_WIDTH / 2, GEOMETRY.footerLogoY);
 
   ctx.save();

@@ -5,7 +5,7 @@
  * Only presentation lives here: whether a badge is unlocked always comes from the backend.
  */
 import { loadAuthorImage } from './avatar';
-import { drawBrandLockup, drawFeather } from './logo';
+import { drawBrandLockup, drawFeather, preloadBrandLogo } from './logo';
 import { BRAND_DEVA_FONT } from './fonts';
 import { THEMES } from './themes';
 import { BADGE_TONES, badgeTone } from '../recognition';
@@ -113,6 +113,7 @@ export async function prepareBadgeCard(d: ShareBadgeData) {
         document.fonts.load(stack(40), sample).catch(() => []),
         document.fonts.load(`700 40px ${LATIN}`, 'Mehfil mehfil.in').catch(() => []),
         document.fonts.load(BRAND_DEVA_FONT, 'मेहफ़िल').catch(() => []),
+        preloadBrandLogo(),
       ]),
       new Promise((r) => setTimeout(r, 6000)),
     ]);
@@ -152,7 +153,7 @@ export async function renderBadgeCardToBlob(d: ShareBadgeData): Promise<Blob> {
   ctx.beginPath(); ctx.roundRect(58, 58, W - 116, H - 116, 28); ctx.stroke();
 
   // Brand lock-up (top)
-  drawBrandLockup(ctx, theme, cx, 140);
+  drawBrandLockup(ctx, theme, cx, 144, 124);
 
   // Avatar
   const ay = 330, ar = 92;

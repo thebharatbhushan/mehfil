@@ -13,6 +13,7 @@
  *   Urdu        Noto Nastaliq Urdu
  */
 import type { FontStyleId } from './types';
+import { preloadBrandLogo } from './brandImage';
 
 export type Script = 'latin' | 'deva' | 'arab';
 
@@ -156,6 +157,8 @@ export async function ensureCardFonts(style: FontStyleId, text: string, timeoutM
   add(`${def.nameWeight} 40px ${def.families.deva}`, 'मेहफ़िल');
   add(BRAND_DEVA_FONT, 'मेहफ़िल');
   add(URL_FONT, 'mehfil.in');
+
+  jobs.push(preloadBrandLogo());
 
   await Promise.race([Promise.all(jobs), new Promise((r) => setTimeout(r, timeoutMs))]);
   epoch++;

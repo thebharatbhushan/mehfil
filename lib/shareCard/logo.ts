@@ -1,12 +1,13 @@
 /**
  * Mehfil brand mark for canvas.
  *
- * The project ships no logo image: the brand mark used by the site header and footer is the Font Awesome
- * "feather" icon followed by the "मेहफ़िल" wordmark in the terracotta gradient (see .logo in globals.css).
- * The same feather glyph is drawn here as a vector path (Font Awesome Free, CC BY 4.0) so the share card
- * carries the identical logo, stays sharp at any scale and needs no network request.
+ * Share cards use the official logo image (public/mehfil-logo.png, plus a cream/gold variant for dark themes).
+ * The Font Awesome feather glyph (Free, CC BY 4.0) is still drawn as a vector path for the faint watermark and
+ * as the fallback lock-up if the image is unavailable.
  */
 import { BRAND_DEVA_FONT } from './fonts';
+import { getLogoImage } from './brandImage';
+export { preloadBrandLogo } from './brandImage';
 import type { CardTheme } from './themes';
 
 const FEATHER_PATH =
@@ -55,8 +56,33 @@ export function centreToBaseline(ctx: CanvasRenderingContext2D, fallbackSize: nu
   return fallbackSize * 0.3;
 }
 
-/** Feather + "मेहफ़िल" wordmark, centred horizontally on cx. Returns the lock-up width. */
-export function drawBrandLockup(ctx: CanvasRenderingContext2D, theme: CardTheme, cx: number, cy: number): number {
+/**
+ * Official Mehfil logo (public/mehfil-logo*.png), centred on (cx, cy) and `height` px tall. Dark card themes get the
+ * cream/gold variant so it stays readable. If the image has not loaded (yet) the old feather + wordmark lock-up is
+ * drawn instead, so a card can never come out without branding. Returns the drawn width.
+ */
+export function drawBrandLockup(
+  ctx: CanvasRenderingContext2D,
+  theme: CardTheme,
+  cx: number,
+  cy: number,
+  height = 104,
+): number {
+  const img = getLogoImage(theme.isDark ? 'light' : 'dark');
+  if (img && img.naturalWidth > 0) {
+    const w = (img.naturalWidth / img.naturalHeight) * height;
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, cx - w / 2, cy - height / 2, w, height);
+    ctx.restore();
+    return w;
+  }
+  return drawTextLockup(ctx, theme, cx, cy);
+}
+
+/** Fallback: feather + "मेहफ़िल" wordmark, centred horizontally on cx. Returns the lock-up width. */
+function drawTextLockup(ctx: CanvasRenderingContext2D, theme: CardTheme, cx: number, cy: number): number {
   const featherSize = 70;
   const gap = 18;
 
