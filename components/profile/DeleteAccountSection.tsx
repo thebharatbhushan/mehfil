@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
+import { SESSION_EXPIRED_MESSAGE, clearStoredSession } from '@/lib/auth';
 
 export function DeleteAccountSection() {
   const router = useRouter();
@@ -27,7 +28,12 @@ export function DeleteAccountSection() {
     if (!password) return setError('कृपया अपना पासवर्ड दर्ज करें।');
     if (confirmText.trim().toUpperCase() !== 'DELETE') return setError('पुष्टि के लिए DELETE टाइप करें।');
     const token = localStorage.getItem('token');
-    if (!token) return router.push('/login');
+    if (!token) {
+      // Logged out in another tab: don't fail silently.
+      clearStoredSession();
+      showToast(SESSION_EXPIRED_MESSAGE, true);
+      return router.replace('/login');
+    }
 
     setDeleting(true);
     try {
