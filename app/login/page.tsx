@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { API_BASE_URL } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
 import { deviceHeaders } from '@/lib/notifications';
+import GoogleAuthButton from '@/components/auth/GoogleAuthButton';
 
 type RecoveryStep = 'email' | 'otp' | 'password';
 
@@ -216,10 +217,6 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleSocialLogin = (provider: string) => {
-    showToast(`${provider} से जुड़ने की सुविधा जल्द आ रही है।`);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -498,21 +495,7 @@ export default function LoginPage() {
                     {loading ? <><div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} /> कृपया प्रतीक्षा करें...</> : <><i className="fas fa-pen-fancy" /> प्रवेश करें</>}
                   </button>
 
-                  <div className="auth-divider">
-                    <span></span> या <span></span>
-                  </div>
-
-                  <div className="auth-social-row">
-                    <button type="button" className="auth-social-btn" onClick={() => handleSocialLogin('गूगल')}>
-                      <i className="fab fa-google" />
-                    </button>
-                    <button type="button" className="auth-social-btn" onClick={() => handleSocialLogin('गिटहब')}>
-                      <i className="fab fa-github" />
-                    </button>
-                    <button type="button" className="auth-social-btn" onClick={() => handleSocialLogin('ट्विटर')}>
-                      <i className="fab fa-twitter" />
-                    </button>
-                  </div>
+                  <GoogleAuthButton mode="login" />
                 </form>
 
                 <div className="auth-signup-prompt">

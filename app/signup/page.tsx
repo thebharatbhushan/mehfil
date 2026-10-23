@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { API_BASE_URL } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
 import { deviceHeaders } from '@/lib/notifications';
+import GoogleAuthButton from '@/components/auth/GoogleAuthButton';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -361,6 +362,7 @@ export default function SignupPage() {
               <button className="primary-btn auth-submit-btn" type="submit" disabled={loading}>
                 {loading ? <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} /> : <><i className="fas fa-envelope" /> ईमेल OTP भेजें</>}
               </button>
+              <GoogleAuthButton mode="signup" />
                 </>
               ) : (
                 <div className="signup-otp-step">

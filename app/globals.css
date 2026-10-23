@@ -1801,6 +1801,16 @@ footer::after {
   border-color: var(--accent);
   color: var(--accent);
 }
+.auth-google-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  min-height: 44px;
+}
+.auth-google-btn {
+  display: flex;
+  justify-content: center;
+}
 .auth-signup-prompt {
   text-align: center;
   font-size: 0.9rem;
