@@ -75,9 +75,9 @@ export async function fetchAuthor(ident: string): Promise<{ author: { user: Writ
 export type PoemsPage = { poems: Poem[]; page: number; limit: number; total: number; totalPages: number };
 
 /** One page of poems from the paginated API (null = API unreachable). */
-export async function fetchPoemsPage(page = 1, limit = 16): Promise<PoemsPage | null> {
+export async function fetchPoemsPage(page = 1, limit = 16, slim = false, q = ''): Promise<PoemsPage | null> {
   const { data } = await getApi<{ poems?: Poem[]; page?: number; limit?: number; total?: number; totalPages?: number } | Poem[]>(
-    `/api/poems?page=${page}&limit=${limit}`,
+    `/api/poems?page=${page}&limit=${limit}${slim ? '&slim=1' : ''}${q ? `&q=${encodeURIComponent(q)}` : ''}`,
   );
   if (!data) return null;
   const list = (Array.isArray(data) ? data : data.poems) || [];
@@ -92,12 +92,13 @@ export async function fetchPoemsPage(page = 1, limit = 16): Promise<PoemsPage | 
  * null = the API could not be reached (unknown), as opposed to [] = reachable but no poems.
  */
 export async function fetchAllPoemsOrNull(): Promise<Poem[] | null> {
-  const first = await fetchPoemsPage(1, 100);
+  // slim=1: excerpt-only rows (no full poem bodies) so these site-wide lists stay small as the library grows.
+  const first = await fetchPoemsPage(1, 100, true);
   if (!first) return null;
   const all = [...first.poems];
   const pages = Array.from({ length: Math.min(first.totalPages, 100) - 1 }, (_, i) => i + 2);
   for (let i = 0; i < pages.length; i += 5) {
-    const batch = await Promise.all(pages.slice(i, i + 5).map((n) => fetchPoemsPage(n, 100)));
+    const batch = await Promise.all(pages.slice(i, i + 5).map((n) => fetchPoemsPage(n, 100, true)));
     batch.forEach((b) => b && all.push(...b.poems));
   }
   return all;

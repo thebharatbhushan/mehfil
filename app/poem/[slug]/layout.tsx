@@ -119,7 +119,7 @@ export default async function PoemLayout({ params, children }: Props) {
                     <p>{truncate(p.body, 110)}</p>
                     <div className="poem-footer">
                       <span>{fullNameOf(p.author) || 'अज्ञात'}</span>
-                      <span>{readingMinutes(p.body)} min read</span>
+                      <span>{(p as { readingMinutes?: number }).readingMinutes ?? readingMinutes(p.body)} min read</span>
                     </div>
                   </Link>
                 ))}

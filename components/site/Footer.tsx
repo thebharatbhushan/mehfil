@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BrandLogo } from '@/components/site/BrandLogo';
+import { NewsletterForm } from '@/components/site/NewsletterForm';
 import { BecomeMemberLink } from '@/components/site/BecomeMemberLink';
 
 export function Footer() {
@@ -18,9 +19,6 @@ export function Footer() {
             </p>
             <div className="social-icons">
               <a href="#" aria-label="Instagram"><i className="fab fa-instagram" /></a>
-              <a href="#" aria-label="Twitter"><i className="fab fa-twitter" /></a>
-              <a href="#" aria-label="YouTube"><i className="fab fa-youtube" /></a>
-              <a href="#" aria-label="GitHub"><i className="fab fa-github" /></a>
             </div>
             {/* Android app: official APKPure listing for in.mehfil.app (opens in a new tab, current session untouched). */}
             <a
@@ -68,10 +66,7 @@ export function Footer() {
               Subscribe to receive poetic musings &amp; latest verses in your
               inbox.
             </p>
-            <div className="newsletter-form">
-              <input type="email" placeholder="your@email.com" />
-              <button><i className="fas fa-paper-plane" /> Subscribe</button>
-            </div>
+            <NewsletterForm />
           </div>
         </div>
 

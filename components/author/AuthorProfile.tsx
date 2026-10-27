@@ -486,7 +486,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
             </div>
             <div className="modal-field">
               <label className="modal-label" htmlFor="ap-edit-username">यूज़रनेम</label>
-              <input id="ap-edit-username" className="form-input" value={editUsername} onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._@]/g, '').slice(0, 21))} placeholder="rahul_sharma" autoCapitalize="none" spellCheck={false} />
+              <input id="ap-edit-username" className="form-input" value={editUsername} onChange={(e) => setEditUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._@]/g, '').slice(0, 21))} placeholder="kartik_verma" autoCapitalize="none" spellCheck={false} />
             </div>
             <div className="modal-field">
               <label className="modal-label" htmlFor="ap-edit-name">नाम</label>

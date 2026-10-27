@@ -23,6 +23,8 @@ export default function SignupPage() {
   const [resendSeconds, setResendSeconds] = useState(0);
   const [loading, setLoading] = useState(false);
   const [strength, setStrength] = useState(0);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
   const cardRef = useRef<HTMLDivElement>(null);
   const [usernameStatus, setUsernameStatus] = useState<{ state: 'idle' | 'checking' | 'ok' | 'bad'; msg: string }>({ state: 'idle', msg: '' });
 
@@ -114,6 +116,7 @@ export default function SignupPage() {
       gender: formData.gender,
       dob: formData.dob,
       languagePref: formData.languagePref,
+      acceptedTerms,
     };
     const res = await fetch(`${API_BASE_URL}/api/auth/send-signup-otp`, {
       method: 'POST',
@@ -194,6 +197,10 @@ export default function SignupPage() {
     }
     if (usernameStatus.state === 'bad' || !formData.username) {
       showToast('❌ कृपया सही और उपलब्ध यूज़रनेम चुनें।', true);
+      return;
+    }
+    if (!acceptedTerms) {
+      showToast('❌ अकाउंट बनाने के लिए नियम एवं शर्तें और गोपनीयता नीति स्वीकार करें।', true);
       return;
     }
     const birthDate = new Date(formData.dob);
@@ -297,7 +304,7 @@ export default function SignupPage() {
                 <i className="fas fa-at auth-input-icon" />
                 <input
                   className="auth-input"
-                  placeholder="यूज़रनेम (जैसे rahul_sharma)"
+                  placeholder="यूज़रनेम (जैसे kartik_verma)"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, '').slice(0, 20) })}
                   autoCapitalize="none"
@@ -359,6 +366,15 @@ export default function SignupPage() {
                   <option value="bilingual">Bilingual</option>
                 </select>
               </div>
+
+              <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', margin: '4px 0 14px', fontSize: 13.5, lineHeight: 1.6, cursor: 'pointer' }}>
+                <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} style={{ marginTop: 4 }} required />
+                <span>
+                  मैं <Link href="/terms-and-conditions" target="_blank" style={{ textDecoration: 'underline' }}>नियम एवं शर्तें</Link>,{' '}
+                  <Link href="/privacy-policy" target="_blank" style={{ textDecoration: 'underline' }}>गोपनीयता नीति</Link> और{' '}
+                  <Link href="/community-guidelines" target="_blank" style={{ textDecoration: 'underline' }}>समुदाय दिशानिर्देश</Link> से सहमत हूँ।
+                </span>
+              </label>
 
               <button className="primary-btn auth-submit-btn" type="submit" disabled={loading}>
                 {loading ? <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} /> : <><i className="fas fa-envelope" /> ईमेल OTP भेजें</>}

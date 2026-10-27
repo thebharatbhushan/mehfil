@@ -5,7 +5,7 @@ import { Breadcrumbs } from '@/components/site/Breadcrumbs';
 import { JsonLd } from '@/components/site/JsonLd';
 import { BackToSearch } from '@/components/dictionary/BackToSearch';
 import { DICTIONARY_PATH, fetchWord, wordDescription, wordJsonLd, wordPath, wordTitle, type DictEntry, type DictWord } from '@/lib/dictionary';
-import { DEFAULT_OG_IMAGE, fetchAllPoems, fullNameOf, oneLine, truncate } from '@/lib/seo';
+import { DEFAULT_OG_IMAGE, fetchPoemsPage, fullNameOf, oneLine, truncate } from '@/lib/seo';
 import type { Poem } from '@/lib/mehfil';
 import '@/components/dictionary/dictionary.css';
 
@@ -58,7 +58,13 @@ async function poemsUsing(e: DictEntry): Promise<Array<{ poem: Poem; line: strin
   const needles = uniq([e.canonicalWord, ...e.variants.hindi, ...e.variants.urdu].map((s) => s.trim()).filter((s) => s.length >= 3));
   if (!needles.length) return [];
   try {
-    const all = await Promise.race([fetchAllPoems(), new Promise<Poem[]>((r) => setTimeout(() => r([]), 3500))]);
+    // Ask the API to search each spelling (a few full poems at most) instead of downloading every poem.
+    const found = await Promise.race([
+      Promise.all(needles.slice(0, 4).map(async (n) => (await fetchPoemsPage(1, 3, false, n))?.poems || [])),
+      new Promise<Poem[][]>((r) => setTimeout(() => r([]), 3500)),
+    ]);
+    const seen = new Set<string>();
+    const all = found.flat().filter((p) => p?._id && !seen.has(p._id) && !!seen.add(p._id));
     const out: Array<{ poem: Poem; line: string }> = [];
     for (const poem of all) {
       const hit = needles.find((n) => poem.body?.includes(n));
