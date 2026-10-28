@@ -86,6 +86,8 @@ export default async function PoemLayout({ params, children }: Props) {
           url: absoluteUrl(path),
           mainEntityOfPage: { '@type': 'WebPage', '@id': absoluteUrl(path) },
           inLanguage: detectScriptLang(poem.body),
+          // Same image the page already shares on social (author photo, else the brand share image).
+          image: [pickImage(poem.author?.profilePic) || absoluteUrl(DEFAULT_OG_IMAGE.url)],
           ...(poem.category ? { articleSection: poem.category } : {}),
           ...(keywords ? { keywords } : {}),
           ...(poem.createdAt ? { datePublished: poem.createdAt } : {}),
@@ -93,7 +95,7 @@ export default async function PoemLayout({ params, children }: Props) {
           ...(poem.author
             ? { author: { '@type': 'Person', name: authorName, ...(aPath ? { url: absoluteUrl(aPath) } : {}) } }
             : {}),
-          publisher: { '@type': 'Organization', name: 'Mehfil', url: SITE_URL },
+          publisher: { '@type': 'Organization', name: 'Mehfil', url: SITE_URL, logo: { '@type': 'ImageObject', url: absoluteUrl('/mehfil-logo.png'), width: 1200, height: 536 } },
         }}
       />
       {children}

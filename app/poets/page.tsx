@@ -15,7 +15,14 @@ export function generateMetadata({ searchParams }: Props): Metadata {
   const page = parsePage(searchParams?.page);
   if (page <= 1) return {};
   const title = `हिंदी कवि और शायर — रचनाकारों की सूची — पृष्ठ ${page} | Mehfil`;
-  return { title: { absolute: title }, alternates: { canonical: `/poets?page=${page}` }, openGraph: { title, url: `/poets?page=${page}` } };
+  const description = 'मेहफ़िल के कवियों और शायरों से मिलिए — उनकी प्रोफ़ाइल, परिचय और रचनाएँ पढ़ें।';
+  return {
+    title: { absolute: title },
+    description,
+    alternates: { canonical: `/poets?page=${page}` },
+    openGraph: { title, description, url: `/poets?page=${page}` },
+    twitter: { card: 'summary_large_image', title, description },
+  };
 }
 
 // Server wrapper: only ONE page of writers (POETS_PER_PAGE) is fetched and rendered into the initial HTML.

@@ -86,6 +86,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             description: SITE_DESCRIPTION,
           }}
         />
+        <JsonLd
+          data={{
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            '@id': `${SITE_URL}/#organization`,
+            name: 'Mehfil',
+            alternateName: 'मेहफ़िल',
+            url: SITE_URL,
+            logo: { '@type': 'ImageObject', url: `${SITE_URL}/mehfil-logo.png`, width: 1200, height: 536 },
+          }}
+        />
         <ToastProvider>
           <Orbs />
           <ScrollIndicator />
