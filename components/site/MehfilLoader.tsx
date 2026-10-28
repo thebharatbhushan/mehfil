@@ -131,7 +131,7 @@ export function MehfilLoader({
                 <circle className="mfl-ring-dot" cx="100" cy="8" r="2.6" />
               </g>
             </svg>
-            <BrandLogo tone="light" className="mfl-logo" alt="" priority />
+            <BrandLogo tone="light" className="mfl-logo" priority />
           </div>
 
           <div className="mfl-rule" />

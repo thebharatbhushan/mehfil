@@ -177,14 +177,14 @@ export function PoetsClient({ initialWriters = [], initialPage = 1, initialTotal
 
   if (loading) {
     return (
-      <main className="mehfil-container" style={{ padding: '2rem 0 4rem' }}>
+      <div className="mehfil-container" style={{ padding: '2rem 0 4rem' }}>
         <PoetsLoader />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="mehfil-container" style={{ padding: '2rem 0 4rem' }}>
+    <div className="mehfil-container" style={{ padding: '2rem 0 4rem' }}>
       {/* Page Header */}
       <div className="page-header fade-up" style={{ textAlign: 'center', padding: '2.5rem 0 1.5rem' }}>
         <h1 style={{ fontSize: '3.8rem', fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--accent-dark)' }}>
@@ -392,6 +392,6 @@ export function PoetsClient({ initialWriters = [], initialPage = 1, initialTotal
       )}
 
       <Pagination page={page} totalPages={totalPages} hrefFor={hrefFor} onChange={goToPage} label="रचनाकारों के पृष्ठ" />
-    </main>
+    </div>
   );
 }

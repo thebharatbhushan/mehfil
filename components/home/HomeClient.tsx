@@ -230,17 +230,17 @@ export function HomeClient() {
           <div className="hero-cards">
             <div className="float-card">
               <div className="card-icon">❤️</div>
-              <h3>मोहब्बत</h3>
+              <h2>मोहब्बत</h2>
               <p>&ldquo;तुम्हें पढ़ना किसी पुरानी किताब की तरह है, हर दफ़ा नया एहसास मिलता है...&rdquo;</p>
             </div>
             <div className="float-card">
               <div className="card-icon">🌙</div>
-              <h3>तन्हाई</h3>
+              <h2>तन्हाई</h2>
               <p>&ldquo;रात की ख़ामोशी में कुछ अधूरे ख़्वाब अब भी जागते हैं...&rdquo;</p>
             </div>
             <div className="float-card">
               <div className="card-icon">🪶</div>
-              <h3>सफ़र</h3>
+              <h2>सफ़र</h2>
               <p>&ldquo;कुछ रास्ते मंज़िल से ज़्यादा ख़ुद से मिलाते हैं...&rdquo;</p>
             </div>
           </div>

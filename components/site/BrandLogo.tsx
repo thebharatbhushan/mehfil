@@ -20,7 +20,7 @@ interface BrandLogoProps {
   priority?: boolean;
 }
 
-export function BrandLogo({ variant = 'full', tone = 'dark', className = '', alt = '', priority = false }: BrandLogoProps) {
+export function BrandLogo({ variant = 'full', tone = 'dark', className = '', alt = 'मेहफ़िल', priority = false }: BrandLogoProps) {
   const s = SRC[variant];
   return (
     // eslint-disable-next-line @next/next/no-img-element

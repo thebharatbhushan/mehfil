@@ -139,7 +139,7 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
   const bodyLines = (poem.body || '').split(/\r?\n/);
 
   return (
-    <main className="poem-main" style={{ padding: '2rem 0 4rem' }}>
+    <div className="poem-main" style={{ padding: '2rem 0 4rem' }}>
       <div className="mehfil-container">
         <Link href="/poems" className="back-link">
           <i className="fas fa-arrow-left" /> सभी कविताएँ
@@ -312,6 +312,6 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }

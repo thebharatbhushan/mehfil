@@ -29,7 +29,7 @@ function getLanguageLabel(langPref?: string): string {
 
 export function AuthorLoader() {
   return (
-    <main className="mehfil-container ap-page">
+    <div className="mehfil-container ap-page">
       <div className="ap-loader">
         <div className="ap-loader-card">
           <div className="ap-loader-dots" aria-hidden="true"><span /><span /><span /></div>
@@ -39,7 +39,7 @@ export function AuthorLoader() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -285,7 +285,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
 
   if (!author) {
     return (
-      <main className="mehfil-container ap-page">
+      <div className="mehfil-container ap-page">
         <div className="ap-empty">
           <i className="fas fa-user-slash" aria-hidden="true" />
           <h3>😢 रचनाकार नहीं मिला | यह कलम अब यहाँ विराजमान नहीं है</h3>
@@ -293,7 +293,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
             <i className="fas fa-arrow-left" /> वापस कविताओं पर जाएँ
           </Link>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -307,7 +307,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
   const featured = query === '' ? sortedPoems[0] : undefined;
 
   return (
-    <main className="mehfil-container ap-page">
+    <div className="mehfil-container ap-page">
       <Link href="/poems" className="back-link fade-up">
         <i className="fas fa-arrow-left" /> सभी कविताएँ
       </Link>
@@ -503,6 +503,6 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }

@@ -161,7 +161,7 @@ export function SpotlightPopup() {
     const img = (
       // Plain <img>: the poster keeps its own aspect ratio (width/height attributes reserve the space, CSS caps the size).
       // eslint-disable-next-line @next/next/no-img-element
-      <img className="sp-img" src={c.image.url} alt={c.imageAlt || c.title || ''} width={c.image.width || undefined} height={c.image.height || undefined} decoding="async" />
+      <img className="sp-img" src={c.image.url} alt={c.imageAlt || c.title || 'Announcement'} width={c.image.width || undefined} height={c.image.height || undefined} decoding="async" />
     );
     const wholeImageLink = c.ctaUrl && !c.ctaLabel;
     card = (
