@@ -216,7 +216,7 @@ export function HomeClient() {
             <div className="hero-divider"><span></span>❦<span></span></div>
             <div className="hero-search">
               <i className="fas fa-search" style={{ marginRight: '12px', color: '#b8a092' }} />
-              <input type="text" placeholder="कविता, कवि, विषय या शब्द खोजें..." />
+              <input type="text" aria-label="कविता, कवि, विषय या शब्द खोजें" placeholder="कविता, कवि, विषय या शब्द खोजें..." />
             </div>
             <div className="hero-buttons">
               <button className="primary-btn" onClick={handleExplore}>
