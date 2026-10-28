@@ -24,7 +24,7 @@ export default async function HomePage() {
   }
   const poets = Array.from(counts.values()).sort((a, b) => b.n - a.n).slice(0, 8);
 
-  const link = { color: 'var(--accent)' } as const;
+  const link = { color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: '3px' } as const;
   const h2 = { fontFamily: 'var(--font-display)', fontSize: '1.7rem', color: 'var(--accent-dark)', margin: '1.8rem 0 0.6rem' } as const;
 
   return (

@@ -18,7 +18,7 @@
 
   --bg: #fef9f2;
   --card-bg: rgba(255, 253, 248, 0.92);
-  --accent: #c16a4b;
+  --accent: #a85a3f; /* was #c16a4b (3.7:1 on cream); darkened to pass WCAG AA 4.5:1 for text */
   --accent-soft: #e8c8ba;
   --accent-dark: #9e4f36;
   --text-dark: #2c241f;
@@ -241,7 +241,7 @@ section { padding: 4rem 0; }
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(193, 106, 75, 0.15);
 }
-.float-card h3 { font-size: 1.7rem; font-family: var(--font-display); color: var(--accent-dark); margin-bottom: 0.8rem; line-height: var(--lh-heading); position: relative; z-index: 2; }
+.float-card h2, .float-card h3 { font-size: 1.7rem; font-family: var(--font-display); color: var(--accent-dark); margin-bottom: 0.8rem; line-height: var(--lh-heading); position: relative; z-index: 2; }
 .float-card p { font-size: 0.85rem; color: #6b5a4f; line-height: 1.7; position: relative; z-index: 2; }
 
 .float-card:nth-child(1) { background: linear-gradient(135deg, #fff8f8, #fff2f4) !important; }
@@ -262,7 +262,7 @@ section { padding: 4rem 0; }
 @media (max-width: 1024px) {
   .hero-cards { gap: 0.75rem; }
   .float-card { padding: 1.2rem; }
-  .float-card h3 { font-size: 1.3rem; }
+  .float-card h2, .float-card h3 { font-size: 1.3rem; }
   .float-card p { font-size: 0.75rem; line-height: 1.5; }
   .float-card .card-icon { width: 42px; height: 42px; font-size: 18px; margin-bottom: 10px; }
   .float-card:nth-child(1)::after,
@@ -1236,7 +1236,7 @@ footer::after {
   .hero h1 { font-size: 3rem; }
   .hero-cards { gap: 0.5rem; }
   .float-card { padding: 0.7rem 0.6rem; border-radius: 1rem; }
-  .float-card h3 { font-size: 1.15rem; margin-bottom: 0.3rem; }
+  .float-card h2, .float-card h3 { font-size: 1.15rem; margin-bottom: 0.3rem; }
   .float-card p { font-size: 0.72rem; line-height: 1.35; }
   .float-card .card-icon { width: 36px; height: 36px; font-size: 16px; margin-bottom: 6px; }
   .float-card:nth-child(1)::after,

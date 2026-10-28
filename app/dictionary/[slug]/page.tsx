@@ -93,7 +93,7 @@ export default async function WordPage({ params }: Props) {
     <>
       <JsonLd data={wordJsonLd(e)} />
       <Breadcrumbs items={[{ name: 'मुखपृष्ठ', path: '/' }, { name: 'शब्दकोश', path: DICTIONARY_PATH }, { name: e.canonicalWord, path: wordPath(e.slug) }]} />
-      <main className="dict-page">
+      <div className="dict-page">
         <article className="dict-wrap" lang="hi">
           <BackToSearch />
 
@@ -200,7 +200,7 @@ export default async function WordPage({ params }: Props) {
             <Link href={DICTIONARY_PATH} className="dict-link">शब्दकोश में और शब्द खोजें</Link>
           </p>
         </article>
-      </main>
+      </div>
     </>
   );
 }

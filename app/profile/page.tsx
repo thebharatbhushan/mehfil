@@ -565,7 +565,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="profile-main-grid">
-          <main className="profile-sections-column">
+          <div className="profile-sections-column">
             <div className="profile-section-heading"><span className="profile-section-kicker">YOUR PROFILE</span><h2>आपकी साहित्यिक पहचान</h2><p>महत्वपूर्ण जानकारी पहले से भरी हुई है। बाकी जानकारी आप अपनी सुविधा से जोड़ सकते हैं।</p></div>
 
             <SectionCard title="व्यक्तिगत जानकारी" icon="fa-user-circle" section="basic" onEdit={openSection} defaultOpen hint="आपके खाते की मूल पहचान" summary={[fullName, profile.username ? `@${profile.username}` : ''].filter(Boolean).join(' · ')}>
@@ -616,7 +616,7 @@ export default function ProfilePage() {
                 ? <ProfileSocialLinks socialLinks={profile.socialLinks} variant="chips" />
                 : <div className="profile-optional-note"><i className="fas fa-info-circle" /> ये लिंक optional हैं और Profile Completion में शामिल नहीं हैं।</div>}
             </SectionCard>
-          </main>
+          </div>
 
           <aside className="profile-sidebar">
             <div className="profile-complete-panel">

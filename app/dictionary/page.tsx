@@ -37,7 +37,7 @@ export default async function DictionaryPage() {
         }}
       />
       <Breadcrumbs items={[{ name: 'मुखपृष्ठ', path: '/' }, { name: 'शब्दकोश', path: DICTIONARY_PATH }]} />
-      <main className="dict-page">
+      <div className="dict-page">
         <div className="dict-wrap">
           <header className="dict-hero">
             <span className="dict-eyebrow"><i className="fas fa-book" aria-hidden="true" /> हिंदी · اردو · Roman · English</span>
@@ -52,7 +52,7 @@ export default async function DictionaryPage() {
           </header>
           <DictionarySearch featured={featured} />
         </div>
-      </main>
+      </div>
     </>
   );
 }

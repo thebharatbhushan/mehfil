@@ -17,7 +17,7 @@ import { MehfilLoader } from '@/components/site/MehfilLoader';
 import { RouteLoader } from '@/components/site/RouteLoader';
 
 const SITE_DESCRIPTION =
-  'मेहफ़िल — हिंदी और उर्दू कविता, शायरी और साहित्य का मंच। दिल को छू लेने वाली कविताएँ पढ़ें, रचनाकारों से मिलें और अपनी रचनाएँ साझा करें। Hindi & Urdu poetry community.';
+  'मेहफ़िल — हिंदी और उर्दू कविता, शायरी और साहित्य का मंच। दिल को छू लेने वाली कविताएँ पढ़ें, रचनाकारों से मिलें और अपनी रचनाएँ साझा करें।';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -101,7 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Orbs />
           <ScrollIndicator />
           <Header />
-          {children}
+          <main id="main-content">{children}</main>
           <Footer />
           <BottomNav />
           <BirthdayCard />
