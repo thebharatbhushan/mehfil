@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGE } from '@/lib/seo';
 import Link from 'next/link';
+import { CategoryCount } from '@/components/category/CategoryLive';
 import { Breadcrumbs } from '@/components/site/Breadcrumbs';
 import { SEO_CATEGORIES, categoryHref, poemsForCategory } from '@/lib/categories';
 import { fetchAllPoems } from '@/lib/seo';
@@ -44,7 +45,7 @@ export default async function CategoryIndexPage() {
                   {cat.label}
                 </h2>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                  {poemsForCategory(cat, poems).length} रचनाएँ
+                  <CategoryCount slug={cat.slug} serverCount={poemsForCategory(cat, poems).length} />
                 </p>
               </Link>
             ))}

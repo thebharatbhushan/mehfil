@@ -45,14 +45,21 @@ export function pickImage(...candidates: Array<string | undefined | null>): stri
 type ApiResult<T> = { status: number; data: T | null };
 
 async function getApi<T>(path: string): Promise<ApiResult<T>> {
-  try {
-    const res = await fetch(`${API_BASE_URL}${path}`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(10000) });
-    if (!res.ok) return { status: res.status, data: null };
-    return { status: res.status, data: (await res.json()) as T };
-  } catch {
-    // Network error / timeout (e.g. a sleeping free-tier backend): status 0 = "unknown", never treated as "missing".
-    return { status: 0, data: null };
+  // A sleeping free-tier backend can need 30s+ to wake: retry once with a longer timeout on network errors / 5xx
+  // so a cold start does not get cached as "no poems" for the revalidate window.
+  let last: ApiResult<T> = { status: 0, data: null };
+  for (const timeout of [10000, 30000]) {
+    try {
+      const res = await fetch(`${API_BASE_URL}${path}`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(timeout) });
+      if (res.ok) return { status: res.status, data: (await res.json()) as T };
+      last = { status: res.status, data: null };
+      if (res.status < 500) return last;
+    } catch {
+      // Network error / timeout: status 0 = "unknown", never treated as "missing".
+      last = { status: 0, data: null };
+    }
   }
+  return last;
 }
 
 /** Same endpoint the poem page already uses. `missing` is true only when the API answers 404. */

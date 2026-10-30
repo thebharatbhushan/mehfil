@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '@/lib/mehfil';
 import type { Poem } from '@/lib/mehfil';
 
 /** A category page needs at least this many poems to be indexable / listed in the sitemap (thin-content guard). */
@@ -140,4 +141,21 @@ export function poemsForCategory(cat: SeoCategory, poems: Poem[]): Poem[] {
 export function categoryForPoem(poem: { category?: string }): SeoCategory | undefined {
   const c = (poem.category || '').toLowerCase();
   return SEO_CATEGORIES.find((x) => !x.tag && x.apiCategory === c);
+}
+
+/**
+ * Browser-side fallback: loads a category's poems straight from the API (filtered by the server) so a page whose
+ * server-side data came back empty (e.g. backend was asleep) still shows the real poems.
+ */
+export async function fetchCategoryPoemsClient(cat: SeoCategory): Promise<Poem[]> {
+  const out: Poem[] = [];
+  for (let page = 1; page <= 20; page++) {
+    const res = await fetch(`${API_BASE_URL}/api/poems?page=${page}&limit=100&slim=1&category=${encodeURIComponent(cat.apiCategory)}`);
+    if (!res.ok) break;
+    const data = await res.json();
+    const list: Poem[] = (Array.isArray(data) ? data : data.poems) || [];
+    out.push(...list.filter((p) => p && p.slug && p.title));
+    if (Array.isArray(data) || !data.hasMore) break;
+  }
+  return cat.tag ? out.filter((p) => (p.tags || []).includes(cat.tag as string)) : out;
 }

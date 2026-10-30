@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { CategoryCount, CategoryPoemsFallback } from '@/components/category/CategoryLive';
 import { Breadcrumbs } from '@/components/site/Breadcrumbs';
 import { JsonLd } from '@/components/site/JsonLd';
 import { MIN_POEMS_TO_INDEX, POEMS_PER_PAGE, SEO_CATEGORIES, categoryHref, getSeoCategory, poemsForCategory } from '@/lib/categories';
@@ -87,7 +88,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
       <div className="page-header">
         <h1>{cat.h1}</h1>
-        <p>{cat.icon} {poems.length} रचनाएँ</p>
+        <p>{cat.icon} <CategoryCount slug={cat.slug} serverCount={poems.length} /></p>
       </div>
 
       <section style={{ paddingTop: 0 }}>
@@ -101,9 +102,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           )}
 
           {items.length === 0 ? (
-            <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
-              ✨ इस श्रेणी में अभी कोई रचनाएँ नहीं हैं। <Link href="/poems" style={linkStyle}>सभी हिंदी कविताएँ पढ़ें</Link>।
-            </p>
+            <CategoryPoemsFallback slug={cat.slug}>
+              <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
+                ✨ इस श्रेणी में अभी कोई रचनाएँ नहीं हैं। <Link href="/poems" style={linkStyle}>सभी हिंदी कविताएँ पढ़ें</Link>।
+              </p>
+            </CategoryPoemsFallback>
           ) : (
             <div className="poems-list-grid">
               {items.map((poem) => (

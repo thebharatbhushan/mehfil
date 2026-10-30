@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { categoryHref } from '@/lib/categories';
 import { API_BASE_URL, DEFAULT_AVATAR, Poem, Writer, authorHref } from '@/lib/mehfil';
 
 type SelectedPoem = Poem & { selectedImage?: string };
@@ -26,6 +27,12 @@ const formatDate = (date: string | Date | undefined | null) => {
 
 const MOOD_ICONS: Record<string, string> = {
   Love: '❤️', Sad: '🌧', Motivation: '✨', Nature: '🍃', Life: '🌙', Sufi: '☪', Shayari: '🖋', Friendship: '🤝',
+};
+
+// Home "भावनाएँ" chip label -> /category/[slug] page.
+const CATEGORY_SLUGS: Record<string, string> = {
+  Love: 'prem', Sad: 'dard', Motivation: 'motivational', Nature: 'prakriti',
+  Life: 'zindagi', Sufi: 'sufi', Shayari: 'shayari', Friendship: 'dosti',
 };
 
 const CATEGORIES = [
@@ -195,7 +202,9 @@ export function HomeClient() {
   };
 
   const handleCategoryClick = (label: string) => {
-    showToast(`✨ Explore ${label} poetry!`);
+    const slug = CATEGORY_SLUGS[label];
+    if (slug) router.push(categoryHref(slug));
+    else router.push('/category');
   };
 
   return (
