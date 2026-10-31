@@ -1,0 +1,95 @@
+diff --git a/app/poem/[slug]/layout.tsx b/app/poem/[slug]/layout.tsx
+index 19e3437..84da5d9 100644
+--- a/app/poem/[slug]/layout.tsx
++++ b/app/poem/[slug]/layout.tsx
+@@ -17,6 +17,8 @@ export async function generateMetadata({ params }: Pick<Props, 'params'>): Promi
+   const slug = decodeSlug(params.slug);
+   const { poem, missing } = await fetchPoemBySlug(slug);
+   const path = `/poem/${encodeURIComponent(slug)}`;
++  // API unreachable: throw so ISR keeps the last good page instead of caching an empty one.
++  if (!poem && !missing) throw new Error('Mehfil API unreachable');
+   if (!poem) {
+     // noindex only when the API definitively says the poem does not exist; an unreachable API must never de-index a valid poem.
+     return { title: 'कविता', alternates: { canonical: path }, ...(missing ? { robots: { index: false, follow: true } } : {}) };
+@@ -47,7 +49,7 @@ export default async function PoemLayout({ params, children }: Props) {
+   const { poem, missing } = await fetchPoemBySlug(slug);
+   // Only a definite 404 from the API becomes a real 404 (a slow/unreachable API must not 404 valid poems).
+   if (!poem && missing) notFound();
+-  if (!poem) return <>{children}</>;
++  if (!poem) throw new Error('Mehfil API unreachable');
+ 
+   const path = `/poem/${encodeURIComponent(slug)}`;
+   const category = categoryForPoem(poem);
+diff --git a/app/poem/[slug]/page.tsx b/app/poem/[slug]/page.tsx
+index 322e2ed..d6c38e1 100644
+--- a/app/poem/[slug]/page.tsx
++++ b/app/poem/[slug]/page.tsx
+@@ -12,7 +12,8 @@ function decodeSlug(slug: string): string {
+ // The client component keeps all interactivity and silently refreshes the data after mount.
+ export default async function PoemPage({ params }: { params: { slug: string } }) {
+   const slug = decodeSlug(params.slug);
+-  const { poem } = await fetchPoemBySlug(slug);
++  const { poem, missing } = await fetchPoemBySlug(slug);
++  if (!poem && !missing) throw new Error('Mehfil API unreachable');
+ 
+   let author: ReturnType<typeof publicWriter> | null = null;
+   let authorPoems: ReturnType<typeof publicPoem>[] = [];
+diff --git a/app/sitemap.ts b/app/sitemap.ts
+index 0f844c3..688a00b 100644
+--- a/app/sitemap.ts
++++ b/app/sitemap.ts
+@@ -1,6 +1,6 @@
+ import { MetadataRoute } from 'next';
+ import { MIN_POEMS_TO_INDEX, SEO_CATEGORIES, categoryHref, poemsForCategory } from '@/lib/categories';
+-import { SITE_URL, authorPath, fetchAllPoems, fetchAllWriters } from '@/lib/seo';
++import { SITE_URL, authorPath, fetchAllPoemsOrNull, fetchAllWriters } from '@/lib/seo';
+ import type { Poem } from '@/lib/mehfil';
+ import { DICTIONARY_PATH, fetchDictionarySlugs, wordPath } from '@/lib/dictionary';
+ 
+@@ -16,7 +16,10 @@ const latest = (poems: Poem[]): Date | undefined => {
+ 
+ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+   const base = SITE_URL;
+-  const [poems, writers, dictionarySlugs] = await Promise.all([fetchAllPoems(), fetchAllWriters(), fetchDictionarySlugs().catch(() => [])]);
++  const [poemsOrNull, writers, dictionarySlugs] = await Promise.all([fetchAllPoemsOrNull(), fetchAllWriters(), fetchDictionarySlugs().catch(() => [])]);
++  // API unreachable: fail the request so the previous sitemap stays in place instead of publishing a near-empty one.
++  if (!poemsOrNull) throw new Error('Mehfil API unreachable');
++  const poems = poemsOrNull;
+   const newest = latest(poems);
+ 
+   const staticPages: MetadataRoute.Sitemap = [
+diff --git a/app/u/[username]/layout.tsx b/app/u/[username]/layout.tsx
+index 5dbc16b..5009475 100644
+--- a/app/u/[username]/layout.tsx
++++ b/app/u/[username]/layout.tsx
+@@ -20,6 +20,7 @@ export async function generateMetadata({ params }: Pick<Props, 'params'>): Promi
+   const ident = identOf(params.username);
+   const { author, missing } = await fetchAuthor(ident);
+   const fallbackPath = `/u/${encodeURIComponent(ident)}`;
++  if (!author && !missing) throw new Error('Mehfil API unreachable');
+   if (!author) {
+     // noindex only on a definite 404 from the API (an unreachable API must not de-index real profiles).
+     return { title: 'रचनाकार', alternates: { canonical: fallbackPath }, ...(missing ? { robots: { index: false, follow: true } } : {}) };
+@@ -49,7 +50,7 @@ export default async function AuthorLayout({ params, children }: Props) {
+   const ident = identOf(params.username);
+   const { author, missing } = await fetchAuthor(ident);
+   if (!author && missing) notFound();
+-  if (!author) return <>{children}</>;
++  if (!author) throw new Error('Mehfil API unreachable');
+ 
+   const { user, poems } = author;
+   const path = `/u/${encodeURIComponent((user.username || ident).toLowerCase())}`;
+diff --git a/app/u/[username]/page.tsx b/app/u/[username]/page.tsx
+index a6932a8..199c141 100644
+--- a/app/u/[username]/page.tsx
++++ b/app/u/[username]/page.tsx
+@@ -11,7 +11,8 @@ export default async function UserProfilePage({ params }: { params: { username:
+   try { name = decodeURIComponent(name); } catch { /* keep raw */ }
+   const ident = name.replace(/^@/, '').toLowerCase();
+ 
+-  const { author } = await fetchAuthor(ident);
++  const { author, missing } = await fetchAuthor(ident);
++  if (!author && !missing) throw new Error('Mehfil API unreachable');
+   const initial = author ? { author: publicWriter(author.user), poems: author.poems.map(publicPoem), hasMore: author.hasMore } : null;
+ 
+   return <AuthorProfile ident={ident} initial={initial} />;
