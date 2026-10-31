@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGE } from '@/lib/seo';
 import Link from 'next/link';
 import { ContactForm } from '@/components/forms/ContactForm';
+<<<<<<< HEAD
+import { FeedbackInvite } from '@/components/site/FeedbackInvite';
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
 
 export const metadata: Metadata = {
   title: { absolute: 'About Us & Contact Us | Mehfil' },
@@ -38,6 +42,10 @@ export default function AboutContactPage() {
             <h2>संपर्क करें</h2>
             <p>सामान्य प्रश्न, सुझाव, सहयोग, तकनीकी समस्या, सामग्री से जुड़ी चिंता या कोई और बात — हमें लिखिए, हम जल्द उत्तर देंगे।</p>
           </div>
+<<<<<<< HEAD
+          <FeedbackInvite variant="card" />
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
           <ContactForm />
           <p className="mf-note">कृपया रचनाओं पर सामान्य राय के लिए <Link href="/feedback">Feedback पृष्ठ</Link> का उपयोग करें।</p>
         </div>

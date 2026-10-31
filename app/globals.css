@@ -4253,3 +4253,26 @@ button.mf-medal { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   .ntf-panel, .ntf-skeleton { animation: none; }
 }
+<<<<<<< HEAD
+
+/* ===== Feedback invitation (Hindi + English, support email) ===== */
+.fbi { display: flex; gap: 1.1rem; align-items: flex-start; border-radius: 18px; padding: 1.3rem 1.5rem; }
+.fbi-icon { flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 1.15rem; background: rgba(214, 111, 78, .16); color: var(--accent); }
+.fbi-body { min-width: 0; }
+.fbi-lang + .fbi-lang { margin-top: .7rem; }
+.fbi h3 { font-family: var(--font-display); font-size: 1.05rem; margin: 0 0 .15rem; }
+.fbi p { margin: 0; font-size: .88rem; line-height: 1.6; }
+.fbi-mail { display: inline-flex; align-items: center; gap: .5rem; margin-top: .85rem; font-weight: 700; font-size: .95rem; color: var(--accent); text-decoration: none; word-break: break-all; border-bottom: 1px dashed currentColor; padding-bottom: 1px; }
+.fbi-mail:hover { color: var(--accent-soft, var(--accent)); }
+.fbi-card { background: rgba(255, 255, 255, .55); border: 1px solid rgba(214, 111, 78, .25); margin: 1.6rem 0 0; }
+.fbi-card h3 { color: var(--accent-dark); }
+.fbi-card p { color: var(--text-muted); }
+.fbi-footer { background: rgba(230, 205, 185, .07); border: 1px solid rgba(230, 205, 185, .18); margin: 2.2rem 0 0; }
+.fbi-footer h3 { color: #F3E6DA; }
+.fbi-footer p { color: #CBBBAE; }
+.fbi-footer .fbi-mail { color: var(--accent-soft, #F0A98C); }
+.fbi-inline { margin: 1rem 0 0; text-align: center; font-size: .82rem; color: var(--text-muted); line-height: 1.7; }
+.fbi-inline .fbi-mail { margin: 0; font-size: inherit; }
+@media (max-width: 560px) { .fbi { flex-direction: column; padding: 1.1rem; } }
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1

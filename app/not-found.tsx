@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+<<<<<<< HEAD
+import { FeedbackInvite } from '@/components/site/FeedbackInvite';
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
 
 export const metadata: Metadata = {
   title: { absolute: 'पृष्ठ नहीं मिला | Mehfil' },
@@ -19,6 +23,10 @@ export default function NotFound() {
           <Link href="/poems" className="secondary-btn">हिंदी कविताएँ पढ़ें</Link>{' '}
           <Link href="/category" className="secondary-btn">श्रेणियाँ देखें</Link>
         </p>
+<<<<<<< HEAD
+        <FeedbackInvite variant="inline" />
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
       </div>
     </section>
   );
