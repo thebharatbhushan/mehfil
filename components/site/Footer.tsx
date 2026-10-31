@@ -2,6 +2,10 @@ import Link from 'next/link';
 import { BrandLogo } from '@/components/site/BrandLogo';
 import { NewsletterForm } from '@/components/site/NewsletterForm';
 import { BecomeMemberLink } from '@/components/site/BecomeMemberLink';
+<<<<<<< HEAD
+import { FeedbackInvite } from '@/components/site/FeedbackInvite';
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
 
 export function Footer() {
   return (
@@ -70,6 +74,11 @@ export function Footer() {
           </div>
         </div>
 
+<<<<<<< HEAD
+        <FeedbackInvite variant="footer" />
+
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
         <div className="footer-bottom">
           <span>
             © 2026 Mehfil — Crafted with <span className="heart-beat">❤️</span> for

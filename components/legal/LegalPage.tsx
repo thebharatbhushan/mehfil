@@ -3,6 +3,10 @@ import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGE } from '@/lib/seo';
 import { LegalBody } from '@/components/legal/LegalBody';
 import type { LegalSection } from '@/components/legal/LegalBody';
+<<<<<<< HEAD
+import { FeedbackInvite } from '@/components/site/FeedbackInvite';
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
 
 export type { LegalSection };
 
@@ -52,6 +56,10 @@ export function LegalHero({ icon, title, intro, chips = [] }: { icon: string; ti
 
 export function LegalCta() {
   return (
+<<<<<<< HEAD
+    <>
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
     <div className="lg-cta">
       <div>
         <h3>कोई सवाल या शिकायत है?</h3>
@@ -62,6 +70,11 @@ export function LegalCta() {
         <Link href="/report-content" className="lg-cta-btn"><i className="fas fa-flag" /> रिपोर्ट करें</Link>
       </div>
     </div>
+<<<<<<< HEAD
+    <FeedbackInvite variant="card" />
+    </>
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
   );
 }
 

@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useToast } from '@/components/site/ToastProvider';
 import { EMAIL_RE, postJson, useAccountPrefill } from './shared';
+<<<<<<< HEAD
+import { FeedbackInvite } from '@/components/site/FeedbackInvite';
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
 
 export const FEEDBACK_TYPES = [
   { value: 'general', label: 'General Feedback' },
@@ -83,6 +87,10 @@ export function FeedbackForm() {
         <div className="mf-success-icon"><i className="fas fa-check" /></div>
         <h2>धन्यवाद!</h2>
         <p>आपकी राय हमारे लिए बहुत मायने रखती है। हम इसे ध्यान से पढ़ेंगे।</p>
+<<<<<<< HEAD
+        <FeedbackInvite variant="inline" />
+=======
+>>>>>>> 4a4b2ff98135a8dce1f72f74192df2fc48d01ff1
         <button type="button" className="secondary-btn" onClick={() => setDone(false)}>एक और राय दें</button>
       </div>
     );
