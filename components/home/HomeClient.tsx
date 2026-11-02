@@ -9,6 +9,7 @@ import { API_BASE_URL, DEFAULT_AVATAR, Poem, Writer, authorHref } from '@/lib/me
 type SelectedPoem = Poem & { selectedImage?: string };
 import { useToast } from '@/components/site/ToastProvider';
 import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
+import { PoemSaveAction } from '@/components/poem/PoemMarks';
 import { SherOfTheDay } from '@/components/home/SherOfTheDay';
 import { LafzOfTheDay } from '@/components/home/LafzOfTheDay';
 
@@ -505,7 +506,7 @@ export function HomeClient() {
                         {poemLines.length > 8 && <span>...</span>}
                       </div>
                       <div className="poem-actions">
-                        <div className="action"><i className="far fa-bookmark" /> Save</div>
+                        <PoemSaveAction poemId={selectedPoem._id} />
                       </div>
                       {hasMoreContent && (
                         <Link href={`/poem/${selectedPoem.slug}`} className="primary-btn" aria-label={`${selectedPoem.title} — पूरा पढ़ें`} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '1rem', textDecoration: 'none' }}>

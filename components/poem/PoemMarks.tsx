@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, type CSSProperties } from 'react';
+import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
 
@@ -22,18 +23,35 @@ const pill: CSSProperties = {
 const activePill: CSSProperties = { ...pill, background: 'var(--accent)', color: 'white', borderColor: 'var(--accent)' };
 
 type Kind = 'bookmarks' | 'likes';
+type MarkState = { bookmarked: boolean; liked: boolean };
+
+const INITIAL: MarkState = { bookmarked: false, liked: false };
+
+const KEY_OF: Record<Kind, keyof MarkState> = { bookmarks: 'bookmarked', likes: 'liked' };
+
+const PENDING_LABEL: Record<Kind, { on: string; off: string }> = {
+  bookmarks: { on: 'सहेजा जा रहा है...', off: 'हटाया जा रहा है...' },
+  likes: { on: 'पसंद की जा रही है...', off: 'पसंद हटाई जा रही है...' },
+};
+
+const DONE_TOAST: Record<Kind, { on: string; off: string }> = {
+  bookmarks: { on: 'रचना सहेज ली गई', off: 'संग्रह से हटाई गई' },
+  likes: { on: 'पसंद दर्ज हुई', off: 'पसंद हटाई गई' },
+};
 
 /**
- * Save / Like toggles for a signed-in member (they feed the reader badges). Shows nothing for guests and never any counts.
+ * Shared save / like logic. A click flips the button into its "in progress" state at once (so it never looks
+ * stuck while the request is in flight) and the server's answer then confirms it or rolls it back.
  * The server decides everything: it is idempotent and refuses saving/liking your own poem.
  */
-export function PoemMarks({ poemId }: { poemId?: string }) {
+export function usePoemMarks(poemId?: string) {
   const { showToast } = useToast();
   const [token, setToken] = useState<string | null>(null);
-  const [state, setState] = useState({ bookmarked: false, liked: false });
-  const [busy, setBusy] = useState(false);
+  const [state, setState] = useState<MarkState>(INITIAL);
+  const [pending, setPending] = useState<{ kind: Kind; turnOn: boolean } | null>(null);
 
   useEffect(() => {
+    setState(INITIAL);
     if (!poemId) return;
     let t: string | null = null;
     try {
@@ -53,13 +71,11 @@ export function PoemMarks({ poemId }: { poemId?: string }) {
     };
   }, [poemId]);
 
-  if (!poemId || !token) return null;
-
   const toggle = async (kind: Kind) => {
-    if (busy) return;
-    const key = kind === 'bookmarks' ? 'bookmarked' : 'liked';
+    if (!poemId || !token || pending) return;
+    const key = KEY_OF[kind];
     const turnOn = !state[key];
-    setBusy(true);
+    setPending({ kind, turnOn });
     try {
       const res = await fetch(`${API_BASE_URL}/api/engagement/${kind}/${encodeURIComponent(poemId)}`, {
         method: turnOn ? 'PUT' : 'DELETE',
@@ -68,25 +84,89 @@ export function PoemMarks({ poemId }: { poemId?: string }) {
       const data = await res.json().catch(() => ({}));
       if (res.ok && data?.success) {
         setState((s) => ({ ...s, [key]: turnOn }));
-        showToast(kind === 'bookmarks' ? (turnOn ? 'रचना सहेज ली गई' : 'संग्रह से हटाई गई') : turnOn ? 'पसंद दर्ज हुई' : 'पसंद हटाई गई');
+        showToast(turnOn ? DONE_TOAST[kind].on : DONE_TOAST[kind].off);
       } else {
         showToast(data?.message || 'कुछ गड़बड़ हुई, फिर कोशिश करें', true);
       }
     } catch {
       showToast('कुछ गड़बड़ हुई, फिर कोशिश करें', true);
     } finally {
-      setBusy(false);
+      setPending(null);
     }
+  };
+
+  return { token, state, pending, toggle, showToast };
+}
+
+const Spinner = () => <i className="fas fa-circle-notch fa-spin" aria-hidden="true" />;
+
+/**
+ * Save / Like toggles for a signed-in member (they feed the reader badges). Shows nothing for guests and never any counts.
+ */
+export function PoemMarks({ poemId }: { poemId?: string }) {
+  const { token, state, pending, toggle } = usePoemMarks(poemId);
+  if (!poemId || !token) return null;
+
+  const renderPill = (kind: Kind, label: { off: string; on: string }, icon: string) => {
+    const key = KEY_OF[kind];
+    const active = state[key];
+    const isPending = pending?.kind === kind;
+    const text = isPending ? (pending!.turnOn ? PENDING_LABEL[kind].on : PENDING_LABEL[kind].off) : active ? label.on : label.off;
+    // While pending, preview the target look so the click gives instant visual feedback.
+    const looksActive = isPending ? pending!.turnOn : active;
+    return (
+      <button
+        type="button"
+        onClick={() => toggle(kind)}
+        disabled={!!pending}
+        aria-pressed={active}
+        aria-busy={isPending}
+        style={{ ...(looksActive ? activePill : pill), ...(pending && !isPending ? { opacity: 0.6 } : null), cursor: pending ? 'progress' : 'pointer' }}
+      >
+        {isPending ? <Spinner /> : <i className={`${active ? 'fas' : 'far'} ${icon}`} />} {text}
+      </button>
+    );
   };
 
   return (
     <>
-      <button type="button" onClick={() => toggle('bookmarks')} disabled={busy} aria-pressed={state.bookmarked} style={state.bookmarked ? activePill : pill}>
-        <i className={`${state.bookmarked ? 'fas' : 'far'} fa-bookmark`} /> {state.bookmarked ? 'सहेजी गई' : 'सहेजें'}
-      </button>
-      <button type="button" onClick={() => toggle('likes')} disabled={busy} aria-pressed={state.liked} style={state.liked ? activePill : pill}>
-        <i className={`${state.liked ? 'fas' : 'far'} fa-heart`} /> {state.liked ? 'पसंद की' : 'पसंद करें'}
-      </button>
+      {renderPill('bookmarks', { off: 'सहेजें', on: 'सहेजी गई' }, 'fa-bookmark')}
+      {renderPill('likes', { off: 'पसंद करें', on: 'पसंद की' }, 'fa-heart')}
     </>
+  );
+}
+
+/**
+ * Save button for list/home cards (uses the site's `.action` pill). Unlike PoemMarks it is also shown to guests:
+ * tapping it sends them to the login page instead of silently doing nothing.
+ */
+export function PoemSaveAction({ poemId }: { poemId?: string }) {
+  const { token, state, pending, toggle, showToast } = usePoemMarks(poemId);
+  const router = useRouter();
+  const isPending = pending?.kind === 'bookmarks';
+  const saved = isPending ? pending!.turnOn : state.bookmarked;
+
+  const onClick = () => {
+    if (!token) {
+      showToast('रचना सहेजने के लिए पहले लॉगिन करें');
+      router.push('/login');
+      return;
+    }
+    toggle('bookmarks');
+  };
+
+  return (
+    <button
+      type="button"
+      className="action"
+      onClick={onClick}
+      disabled={!!pending}
+      aria-pressed={state.bookmarked}
+      aria-busy={isPending}
+      style={{ border: 'none', font: 'inherit', cursor: pending ? 'progress' : 'pointer', ...(saved ? { background: 'var(--accent)', color: 'white' } : null) }}
+    >
+      {isPending ? <Spinner /> : <i className={`${state.bookmarked ? 'fas' : 'far'} fa-bookmark`} />}{' '}
+      {isPending ? PENDING_LABEL.bookmarks[pending!.turnOn ? 'on' : 'off'] : state.bookmarked ? 'सहेजी गई' : 'सहेजें'}
+    </button>
   );
 }

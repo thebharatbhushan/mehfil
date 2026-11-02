@@ -72,7 +72,9 @@ function toCouplet(poem: Poem): [string, string] | null {
  * short poems), otherwise falls back to the classical list. Deterministic per local day.
  */
 export function pickSherOfTheDay(poems: Poem[], day: number = localDayNumber()): Sher {
-  const community: Sher[] = [];
+  // Group couplets by writer, then pick a writer and one of their poems - so a single prolific
+  // poet can't dominate and the card isn't stuck on one default poem.
+  const byWriter = new Map<string, Sher[]>();
   for (const poem of poems) {
     const isShayari = (poem.category || '').toLowerCase() === 'shayari';
     const shortPoem = (poem.body || '').split('\n').filter((l) => l.trim()).length <= 4;
@@ -80,15 +82,21 @@ export function pickSherOfTheDay(poems: Poem[], day: number = localDayNumber()):
     const couplet = toCouplet(poem);
     if (!couplet) continue;
     const author = poem.author;
-    community.push({
+    const poet = author ? `${author.firstName || ''} ${author.lastName || ''}`.trim() || 'अज्ञात शायर' : 'अज्ञात शायर';
+    const key = author?._id || poet;
+    const list = byWriter.get(key) || [];
+    list.push({
       lines: couplet,
-      poet: author ? `${author.firstName || ''} ${author.lastName || ''}`.trim() || 'अज्ञात शायर' : 'अज्ञात शायर',
+      poet,
       tag: poem.category || undefined,
       href: poem.slug ? `/poem/${poem.slug}` : undefined,
     });
+    byWriter.set(key, list);
   }
-  const pool = community.length > 0 ? community : CLASSICAL_SHER;
-  return pool[day % pool.length];
+  const writers = Array.from(byWriter.values());
+  if (writers.length === 0) return CLASSICAL_SHER[day % CLASSICAL_SHER.length];
+  const writerPoems = writers[day % writers.length];
+  return writerPoems[Math.floor(day / writers.length) % writerPoems.length];
 }
 
 /* ------------------------------------------------------------------ */
