@@ -22,17 +22,28 @@ interface BrandLogoProps {
 
 export function BrandLogo({ variant = 'full', tone = 'dark', className = '', alt = 'मेहफ़िल', priority = false }: BrandLogoProps) {
   const s = SRC[variant];
-  return (
+  const img = (src: string, extra: string, lazy: boolean, decorative = false) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={s[tone]}
+      src={src}
       width={s.w}
       height={s.h}
-      alt={alt}
-      className={`brand-logo brand-logo-${variant} ${className}`.trim()}
+      alt={decorative ? '' : alt}
+      aria-hidden={decorative || undefined}
+      className={`brand-logo brand-logo-${variant} ${extra} ${className}`.trim()}
       decoding="async"
-      loading={priority ? 'eager' : 'lazy'}
+      loading={lazy ? 'lazy' : 'eager'}
       draggable={false}
     />
   );
+  // On a light background the full logo has a cream "dark mode" twin (shown only when the site theme is dark).
+  if (variant === 'full' && tone === 'dark') {
+    return (
+      <>
+        {img(s.dark, 'brand-logo-on-light', !priority)}
+        {img(s.light, 'brand-logo-on-dark', true, true)}
+      </>
+    );
+  }
+  return img(s[tone], '', !priority);
 }

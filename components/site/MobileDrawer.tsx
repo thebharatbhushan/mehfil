@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { BrandLogo } from '@/components/site/BrandLogo';
 import { DEFAULT_AVATAR } from '@/lib/mehfil';
 import { myProfileHref } from '@/lib/auth';
+import { LanguageSwitcher, ThemeSwitcher } from '@/components/site/SiteControls';
 
 export interface DrawerUser {
   firstName?: string;
@@ -211,6 +212,11 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
             </li>
             {mine.map(renderItem)}
           </ul>
+          <div className="m-drawer-sep" role="separator" />
+          <div className="m-prefs">
+            <LanguageSwitcher variant="drawer" />
+            <ThemeSwitcher variant="drawer" />
+          </div>
         </nav>
 
         {user && (

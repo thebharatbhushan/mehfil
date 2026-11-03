@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import '@/components/dictionary/dictionary.css';
+import '@/components/dictionary/dictionary.dark.css';
 
 export default function DictionaryWordError({ reset }: { error: Error; reset: () => void }) {
   return (

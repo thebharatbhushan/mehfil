@@ -8,6 +8,7 @@ import { myProfileHref } from '@/lib/auth';
 import { MobileDrawer } from './MobileDrawer';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
 import { useUnreadCount } from '@/hooks/use-unread-count';
+import { LanguageSwitcher, ThemeSwitcher } from '@/components/site/SiteControls';
 
 interface UserData {
   firstName?: string;
@@ -134,6 +135,10 @@ export function Header() {
             )}
           </div>
           <div className="nav-actions">
+            <div className="nav-prefs">
+              <LanguageSwitcher />
+              <ThemeSwitcher />
+            </div>
             <button className="nav-btn write-btn" onClick={handlePublish}>
               <i className="fas fa-pen-fancy" />
               <span>लेखन प्रारम्भ करें</span>

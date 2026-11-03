@@ -1,4 +1,6 @@
 import './globals.css';
+import './dark-theme.css';
+import './site-controls.css';
 import type { Metadata } from 'next';
 import './fonts';
 import { Header } from '@/components/site/Header';
@@ -67,6 +69,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="hi" suppressHydrationWarning>
       <head>
+        {/* Apply the saved theme before first paint (no light flash). Default stays light. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('mehfil_theme');if(t==='dark'||(t==='system'&&matchMedia('(prefers-color-scheme: dark)').matches)){var r=document.documentElement;r.setAttribute('data-theme','dark');r.style.colorScheme='dark';}}catch(e){}",
+          }}
+        />
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <link rel="preconnect" href={API_BASE_URL} crossOrigin="anonymous" />
         <DeferredStylesheet href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />

@@ -8,6 +8,7 @@ import { DICTIONARY_PATH, fetchWord, wordDescription, wordJsonLd, wordPath, word
 import { DEFAULT_OG_IMAGE, fetchPoemsPage, fullNameOf, oneLine, truncate } from '@/lib/seo';
 import type { Poem } from '@/lib/mehfil';
 import '@/components/dictionary/dictionary.css';
+import '@/components/dictionary/dictionary.dark.css';
 
 // Server-rendered + cached (ISR): crawlers receive the complete entry in the initial HTML.
 export const revalidate = 3600;

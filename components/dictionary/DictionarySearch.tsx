@@ -6,6 +6,7 @@ import { Fragment, useCallback, useEffect, useId, useMemo, useRef, useState } fr
 import { API_BASE_URL } from '@/lib/mehfil';
 import { MATCH_LABEL, wordPath, type DictCard } from '@/lib/dictionary';
 import './dictionary.css';
+import './dictionary.dark.css';
 
 const RECENT_KEY = 'mehfil_dict_recent';
 const LAST_KEY = 'mehfil_dict_last';

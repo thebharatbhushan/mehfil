@@ -5,6 +5,7 @@ import { DictionarySearch } from '@/components/dictionary/DictionarySearch';
 import { DICTIONARY_PATH, fetchFeatured } from '@/lib/dictionary';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '@/lib/seo';
 import '@/components/dictionary/dictionary.css';
+import '@/components/dictionary/dictionary.dark.css';
 
 // Static shell + featured words, rebuilt hourly. Searching happens in the browser against the public API.
 export const revalidate = 3600;

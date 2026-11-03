@@ -6,13 +6,13 @@
 const isDev = process.env.NODE_ENV !== 'production';
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://accounts.google.com`,
-  "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://accounts.google.com",
-  "font-src 'self' data: https://cdnjs.cloudflare.com",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://accounts.google.com https://translate.google.com https://translate.googleapis.com https://www.gstatic.com`,
+  "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://accounts.google.com https://translate.googleapis.com https://www.gstatic.com https://fonts.googleapis.com",
+  "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com",
   "img-src 'self' data: blob: https:",
   "media-src 'self' data: blob: https:",
   "connect-src 'self' https:",
-  "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://accounts.google.com",
+  "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://accounts.google.com https://translate.google.com",
   "frame-ancestors 'self'",
   "object-src 'none'",
   "base-uri 'self'",
