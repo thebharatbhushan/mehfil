@@ -6,7 +6,7 @@
 const isDev = process.env.NODE_ENV !== 'production';
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://accounts.google.com https://translate.google.com https://translate.googleapis.com https://www.gstatic.com`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://accounts.google.com https://translate.google.com https://translate.googleapis.com https://translate-pa.googleapis.com https://www.gstatic.com`,
   "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://accounts.google.com https://translate.googleapis.com https://www.gstatic.com https://fonts.googleapis.com",
   "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com",
   "img-src 'self' data: blob: https:",
