@@ -40,7 +40,7 @@ function PoetsLoader() {
     }}>
       <div style={{
         textAlign: 'center',
-        background: 'rgba(255, 253, 248, 0.9)',
+        background: 'var(--surface-glass)',
         backdropFilter: 'blur(8px)',
         padding: '3rem 3.5rem',
         borderRadius: '3rem',
@@ -273,7 +273,7 @@ export function PoetsClient({ initialWriters = [], initialPage = 1, initialTotal
 
       {/* Filter Bar */}
       <div className="filter-bar fade-up" ref={filterBarRef} style={{
-        background: 'white',
+        background: 'var(--surface-solid)',
         borderRadius: 60,
         padding: '0.8rem 1.2rem',
         margin: '1.5rem 0 2rem',
@@ -306,7 +306,7 @@ export function PoetsClient({ initialWriters = [], initialPage = 1, initialTotal
             </button>
           ))}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#fef9f2', padding: '0.4rem 1.2rem', borderRadius: 50, border: '1px solid var(--border-light)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'var(--surface-warm)', padding: '0.4rem 1.2rem', borderRadius: 50, border: '1px solid var(--border-light)' }}>
           <i className="fas fa-search" style={{ color: 'var(--accent)' }} />
           <input
             type="text"
@@ -335,7 +335,7 @@ export function PoetsClient({ initialWriters = [], initialPage = 1, initialTotal
               key={writer._id}
               className="writer-card-premium poet-card card-shell fade-up"
               style={{
-                background: 'white',
+                background: 'var(--surface-solid)',
                 borderRadius: '2rem',
                 padding: 'clamp(1rem, 2.5vw, 2rem)',
                 textAlign: 'center',
@@ -370,7 +370,7 @@ export function PoetsClient({ initialWriters = [], initialPage = 1, initialTotal
                 )}
               </div>
               <div className="poet-card-info">
-                <div className="poet-card-style-badge" style={{ display: 'inline-block', background: '#e8c8ba', color: 'var(--accent-dark)', borderRadius: 30, padding: '0.2rem 0.8rem', fontSize: '0.65rem', marginBottom: '0.5rem', fontWeight: 600 }}>
+                <div className="poet-card-style-badge" style={{ display: 'inline-block', background: 'var(--chip-bg-strong)', color: 'var(--chip-fg)', borderRadius: 30, padding: '0.2rem 0.8rem', fontSize: '0.65rem', marginBottom: '0.5rem', fontWeight: 600 }}>
                   🎭 {STYLE_LABELS[writer.style || 'shayari'] || 'शायरी'}
                 </div>
                 <h3 className="poet-card-name" style={{ fontSize: 'clamp(1.15rem, 2vw, 1.6rem)', fontFamily: 'var(--font-display)', margin: '0.5rem 0', color: 'var(--accent-dark)' }}>

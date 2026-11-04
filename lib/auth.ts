@@ -38,6 +38,30 @@ export function getToken(): string | null {
   return safeGet(window.localStorage, TOKEN_KEY);
 }
 
+/**
+ * The token of a member who is REALLY signed in right now: a token only counts together with the stored user.
+ * Without "remember me" the user lives in sessionStorage (gone when the browser closes) while the token stays in
+ * localStorage, so a returning visitor looked logged out but could still like / save poems. Such an orphan token
+ * is ignored here and removed by purgeOrphanToken().
+ */
+export function getActiveToken(): string | null {
+  const token = getToken();
+  return token && getStoredUser() ? token : null;
+}
+
+/** Removes a leftover token when no user is stored any more (the session ended). Returns true if one was removed. */
+export function purgeOrphanToken(): boolean {
+  if (typeof window === 'undefined') return false;
+  if (!getToken() || getStoredUser()) return false;
+  try {
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('mehfil_remember');
+  } catch {
+    /* storage unavailable — ignore */
+  }
+  return true;
+}
+
 export function getStoredUser(): StoredUser | null {
   if (typeof window === 'undefined') return null;
   const raw = safeGet(window.localStorage, USER_KEY) || safeGet(window.sessionStorage, USER_KEY);

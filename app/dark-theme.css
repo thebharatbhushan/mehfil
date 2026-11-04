@@ -864,3 +864,30 @@
 :where(html[data-theme="dark"]) .fbi-footer p { color: hsl(27 22% 73.9%); }
 :where(html[data-theme="dark"]) .fbi-footer .fbi-mail { color: var(--accent-soft, hsl(17 77% 74.5%)); }
 :where(html[data-theme="dark"]) .fbi-inline { color: var(--text-muted); }
+
+/* ===== Dark-mode fixes: surfaces that stayed light ===== */
+html[data-theme="dark"] {
+  color-scheme: dark; /* native date pickers, select lists, scrollbars, autofill follow the theme */
+  --surface-solid: hsl(24 18% 8.5%);
+  --surface-glass: hsl(24 18% 8.5% / 0.92);
+  --surface-warm: hsl(24 18% 11.5%);
+  --surface-tint: hsl(24 18% 12% / 0.7);
+  --chip-bg: hsl(28 32% 14%);
+  --chip-bg-strong: hsl(28 32% 17%);
+  --chip-fg: var(--accent-fg);
+}
+/* Browser autofill paints inputs pale yellow / white; keep them in the dark palette. */
+html[data-theme="dark"] input:-webkit-autofill,
+html[data-theme="dark"] input:-webkit-autofill:hover,
+html[data-theme="dark"] input:-webkit-autofill:focus,
+html[data-theme="dark"] textarea:-webkit-autofill,
+html[data-theme="dark"] select:-webkit-autofill {
+  -webkit-text-fill-color: hsl(30 20% 90%);
+  caret-color: hsl(30 20% 90%);
+  box-shadow: 0 0 0 1000px hsl(24 18% 11.5%) inset;
+  transition: background-color 9999s ease-out 0s;
+}
+html[data-theme="dark"] select option,
+html[data-theme="dark"] select optgroup { background: hsl(24 18% 10%); color: hsl(30 20% 90%); }
+html[data-theme="dark"] .skip-link { background: hsl(16 49% 40%); }
+html[data-theme="dark"] .hero-search:focus-within { box-shadow: 0 0 0 3px hsl(16 49% 52.5% / 0.45); }

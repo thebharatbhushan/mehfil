@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { BrandLogo } from '@/components/site/BrandLogo';
 import { usePathname, useRouter } from 'next/navigation';
-import { myProfileHref } from '@/lib/auth';
+import { myProfileHref, purgeOrphanToken } from '@/lib/auth';
 import { MobileDrawer } from './MobileDrawer';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
 import { useUnreadCount } from '@/hooks/use-unread-count';
@@ -33,6 +33,9 @@ export function Header() {
       const stored =
         localStorage.getItem('mehfil_user') || sessionStorage.getItem('mehfil_user');
       if (!stored) {
+        // Session ended (e.g. browser closed without "remember me"): drop the leftover token so the visitor
+        // is a real guest and cannot like / save poems any more.
+        purgeOrphanToken();
         setUser(null);
         return;
       }

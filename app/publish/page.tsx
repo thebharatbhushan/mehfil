@@ -263,7 +263,7 @@ export default function PublishPage() {
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.7, position: 'relative', zIndex: 2 }}>
                   &ldquo;शब्दों से ही तो है पहचान हमारी, जो दिल से निकले वही रचना हमारी...&rdquo;
                 </p>
-                <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.6)', borderRadius: '1rem', position: 'relative', zIndex: 2 }}>
+                <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--surface-tint)', borderRadius: '1rem', position: 'relative', zIndex: 2 }}>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                     <i className="fas fa-lightbulb" style={{ color: 'var(--accent)' }} /> टिप: अपनी रचना को हृदय से लिखें। अल्फ़ाज़ ख़ुद-ब-ख़ुद संवाद करेंगे।
                   </p>

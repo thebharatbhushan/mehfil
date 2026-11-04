@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { API_BASE_URL } from '@/lib/mehfil';
+import { getActiveToken } from '@/lib/auth';
 
 const BEAT_MS = 15000; // how often a "still reading" heartbeat is sent
 const IDLE_MS = 30000; // no scroll / mouse / key / touch for this long = not reading
@@ -15,10 +16,7 @@ const IDLE_MS = 30000; // no scroll / mouse / key / touch for this long = not re
 export function useReadingActivity(poemId?: string) {
   useEffect(() => {
     if (!poemId) return;
-    let token: string | null = null;
-    try {
-      token = localStorage.getItem('token');
-    } catch {}
+    const token = getActiveToken();
     if (!token) return; // guests are not tracked
 
     let lastActivity = Date.now();

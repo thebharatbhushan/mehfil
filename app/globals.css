@@ -29,6 +29,15 @@
   --gradient-gold: linear-gradient(135deg, #f3e7da 0%, #f1e2d2 100%);
   --glass-bg: rgba(255, 252, 245, 0.75);
 
+  /* Surfaces used by inline styles (inline styles beat the zero-specificity dark rules, so they must use variables) */
+  --surface-solid: #ffffff;
+  --surface-glass: rgba(255, 253, 248, 0.9);
+  --surface-warm: #fef9f2;
+  --surface-tint: rgba(255, 255, 255, 0.6);
+  --chip-bg: #f5e6dd;
+  --chip-bg-strong: #e8c8ba;
+  --chip-fg: var(--accent-dark);
+
   --background: 30 33% 98%;
   --foreground: 20 14% 15%;
   --card: 40 50% 99%;

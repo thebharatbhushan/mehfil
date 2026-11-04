@@ -114,7 +114,7 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
 
   if (!poem) {
     return (
-      <div style={{ textAlign: 'center', padding: '4rem 1rem', background: 'rgba(255, 250, 240, 0.8)', borderRadius: '2rem', margin: '2rem auto', maxWidth: '600px' }}>
+      <div style={{ textAlign: 'center', padding: '4rem 1rem', background: 'var(--surface-glass)', borderRadius: '2rem', margin: '2rem auto', maxWidth: '600px' }}>
         <i className="fas fa-leaf" style={{ fontSize: '3.5rem', color: 'var(--accent)', opacity: 0.6, marginBottom: '1rem' }} />
         <h3 style={{ fontFamily: 'var(--font-display)', margin: '1rem 0', fontSize: '1.8rem', color: 'var(--accent-dark)' }}>
           😢 कविता नहीं मिली | यह रचना संसार से विदा हो चुकी है
@@ -269,7 +269,7 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
                   key={p._id}
                   className="poem-mini-card fade-up"
                   style={{
-                    background: 'white',
+                    background: 'var(--surface-solid)',
                     borderRadius: '1.5rem',
                     padding: '1.5rem',
                     transition: '0.25s',
@@ -293,7 +293,7 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
                     textTransform: 'capitalize',
                     marginBottom: '0.6rem',
                     display: 'inline-block',
-                    background: '#f5e6dd',
+                    background: 'var(--chip-bg)',
                     padding: '0.2rem 0.8rem',
                     borderRadius: '40px',
                   }}>

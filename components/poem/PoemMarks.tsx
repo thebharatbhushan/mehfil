@@ -3,6 +3,7 @@
 import { useEffect, useState, type CSSProperties } from 'react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/mehfil';
+import { clearStoredSession, getActiveToken } from '@/lib/auth';
 import { useToast } from '@/components/site/ToastProvider';
 
 const pill: CSSProperties = {
@@ -51,12 +52,20 @@ export function usePoemMarks(poemId?: string) {
   const [pending, setPending] = useState<{ kind: Kind; turnOn: boolean } | null>(null);
 
   useEffect(() => {
+    const sync = () => setToken(getActiveToken());
+    window.addEventListener('mehfil-auth-change', sync);
+    window.addEventListener('storage', sync);
+    return () => {
+      window.removeEventListener('mehfil-auth-change', sync);
+      window.removeEventListener('storage', sync);
+    };
+  }, []);
+
+  useEffect(() => {
     setState(INITIAL);
     if (!poemId) return;
-    let t: string | null = null;
-    try {
-      t = localStorage.getItem('token');
-    } catch {}
+    // Only a really signed-in member (token + stored user) may like / save.
+    const t = getActiveToken();
     setToken(t);
     if (!t) return;
     let cancelled = false;
@@ -82,6 +91,14 @@ export function usePoemMarks(poemId?: string) {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        // Expired / invalid login: sign out locally instead of leaving buttons that cannot work.
+        clearStoredSession();
+        setToken(null);
+        setState(INITIAL);
+        showToast('सेशन समाप्त हो गया है, कृपया दोबारा लॉगिन करें', true);
+        return;
+      }
       if (res.ok && data?.success) {
         setState((s) => ({ ...s, [key]: turnOn }));
         showToast(turnOn ? DONE_TOAST[kind].on : DONE_TOAST[kind].off);
