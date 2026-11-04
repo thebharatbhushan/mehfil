@@ -198,7 +198,7 @@ export function PoetsClient({ initialWriters = [], initialPage = 1, initialTotal
 
       {/* Featured Poet */}
       <div className="featured-poet fade-up" style={{
-        background: 'linear-gradient(135deg, #fff8f0, #fff0e5)',
+        background: 'var(--surface-featured)',
         borderRadius: '2rem',
         padding: '2rem',
         margin: '2rem 0',
@@ -293,7 +293,7 @@ export function PoetsClient({ initialWriters = [], initialPage = 1, initialTotal
               style={{
                 padding: '0.5rem 1.2rem',
                 borderRadius: 50,
-                background: style === s.key ? 'var(--accent)' : '#fef9f2',
+                background: style === s.key ? 'var(--accent)' : 'var(--surface-warm)',
                 color: style === s.key ? 'white' : 'inherit',
                 border: '1px solid ' + (style === s.key ? 'var(--accent)' : 'var(--border-light)'),
                 cursor: 'pointer',

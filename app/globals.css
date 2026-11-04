@@ -37,6 +37,8 @@
   --chip-bg: #f5e6dd;
   --chip-bg-strong: #e8c8ba;
   --chip-fg: var(--accent-dark);
+  --surface-featured: linear-gradient(135deg, #fff8f0, #fff0e5);
+  --surface-inspire: linear-gradient(135deg, #fdf6ef, #f8e8d8);
 
   --background: 30 33% 98%;
   --foreground: 20 14% 15%;

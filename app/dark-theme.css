@@ -875,6 +875,8 @@ html[data-theme="dark"] {
   --chip-bg: hsl(28 32% 14%);
   --chip-bg-strong: hsl(28 32% 17%);
   --chip-fg: var(--accent-fg);
+  --surface-featured: linear-gradient(135deg, hsl(24 18% 9.5%), hsl(22 20% 12%));
+  --surface-inspire: linear-gradient(135deg, hsl(24 18% 9.5%), hsl(24 22% 12.5%));
 }
 /* Browser autofill paints inputs pale yellow / white; keep them in the dark palette. */
 html[data-theme="dark"] input:-webkit-autofill,

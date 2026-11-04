@@ -255,7 +255,7 @@ export default function PublishPage() {
             </form>
 
             <div>
-              <div className="form-inspiration" style={{ background: 'linear-gradient(135deg, #fdf6ef, #f8e8d8)', borderRadius: '1.5rem', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
+              <div className="form-inspiration" style={{ background: 'var(--surface-inspire)', borderRadius: '1.5rem', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '5rem', opacity: 0.08 }}>❦</div>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', color: 'var(--accent-dark)', marginBottom: '1rem', position: 'relative', zIndex: 2 }}>
                   लेखन प्रेरणा
