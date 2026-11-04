@@ -155,7 +155,7 @@
 :where(html[data-theme="dark"]) .footer-col h4 { color: hsl(26 57% 88.2%); }
 :where(html[data-theme="dark"]) .footer-col h4::after { background: var(--accent); }
 :where(html[data-theme="dark"]) .footer-links a { color: hsl(27 22% 73.9%); }
-:where(html[data-theme="dark"]) .footer-links a:hover { color: var(--accent-soft); }
+:where(html[data-theme="dark"]) .footer-links a:hover { color: hsl(20 75% 82%); }
 :where(html[data-theme="dark"]) .newsletter-text { color: hsl(27 22% 73.9%); }
 :where(html[data-theme="dark"]) .newsletter-form { background: hsl(32 32% 10.0% / 0.08); border: 1px solid hsl(27 30% 27.5% / 0.2); }
 :where(html[data-theme="dark"]) .newsletter-form input { background: transparent; border: none; color: hsl(24 56% 91.2%); outline: none; }
@@ -164,7 +164,7 @@
 :where(html[data-theme="dark"]) .newsletter-form button:hover { background: hsl(14 52% 45.9%); }
 :where(html[data-theme="dark"]) .footer-bottom { border-top: 1px solid hsl(27 30% 27.5% / 0.15); color: hsl(26 19% 54.9%); }
 :where(html[data-theme="dark"]) .footer-bottom-links a { color: hsl(26 19% 54.9%); }
-:where(html[data-theme="dark"]) .footer-bottom-links a:hover { color: var(--accent-soft); }
+:where(html[data-theme="dark"]) .footer-bottom-links a:hover { color: hsl(20 75% 82%); }
 :where(html[data-theme="dark"]) .footer-links .footer-link-soon { color: hsl(27 22% 73.9%); }
 :where(html[data-theme="dark"]) .footer-bottom-links .footer-link-soon { color: hsl(26 19% 54.9%); }
 :where(html[data-theme="dark"]) .heart-beat { color: var(--accent-fg); }
@@ -536,7 +536,7 @@
 :where(html[data-theme="dark"]) .profile-check-arrow { color: hsl(24 18% 66.7%) !important; }
 :where(html[data-theme="dark"]) .profile-check-list button:not(:disabled):hover { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .profile-side-note { border: 1px solid var(--border-light); background: hsl(24 18% 8.5%); }
-:where(html[data-theme="dark"]) .profile-side-note > i { color: var(--accent-soft); }
+:where(html[data-theme="dark"]) .profile-side-note > i { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .profile-side-note p { color: var(--text-muted); }
 :where(html[data-theme="dark"]) .profile-side-note span { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .profile-modal-subtitle { color: var(--text-muted); }
@@ -596,7 +596,7 @@
 :where(html[data-theme="dark"]) .bday-orn span { background: linear-gradient(90deg, transparent, hsl(39 67% 55.3%)); }
 :where(html[data-theme="dark"]) .bday-sher { color: hsl(20 43% 79.0%); }
 :where(html[data-theme="dark"]) .bday-spark { color: hsl(39 67% 55.3%); }
-:where(html[data-theme="dark"]) .mf-orn { color: var(--accent-soft); }
+:where(html[data-theme="dark"]) .mf-orn { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .mf-head h1,
 :where(html[data-theme="dark"]) .mf-head h2 { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .mf-head p { color: var(--text-muted); }
@@ -636,7 +636,7 @@
 :where(html[data-theme="dark"]) .mf-legal-nav a { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .lg-hero { background: linear-gradient(160deg, hsl(24 18% 8.5% / 0.85), hsl(22 32% 11.5% / 0.75)); }
 :where(html[data-theme="dark"]) .lg-hero::after { background: radial-gradient(closest-side, hsl(16 49% 52.5% / 0.12), transparent); }
-:where(html[data-theme="dark"]) .lg-hero-orn { color: var(--accent-soft); }
+:where(html[data-theme="dark"]) .lg-hero-orn { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .lg-badge { color: hsl(0 0% 100.0%); background: linear-gradient(135deg, var(--accent), var(--accent-dark)); }
 :where(html[data-theme="dark"]) .lg-hero h1 { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .lg-hero p { color: var(--text-muted); }
@@ -651,7 +651,7 @@
 :where(html[data-theme="dark"]) .lg-toc a,
 :where(html[data-theme="dark"]) .lg-toc-m a { color: var(--text-muted); border-left: 3px solid transparent; }
 :where(html[data-theme="dark"]) .lg-toc a span,
-:where(html[data-theme="dark"]) .lg-toc-m a span { color: var(--accent-soft); }
+:where(html[data-theme="dark"]) .lg-toc-m a span { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .lg-toc a:hover,
 :where(html[data-theme="dark"]) .lg-toc-m a:hover { background: hsl(16 49% 52.5% / 0.07); color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .lg-toc a.on,
@@ -688,7 +688,7 @@
 :where(html[data-theme="dark"]) .lg-rel-icon { color: var(--accent-fg); background: hsl(16 49% 52.5% / 0.12); }
 :where(html[data-theme="dark"]) .lg-rel-text strong { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .lg-rel-text small { color: var(--text-muted); }
-:where(html[data-theme="dark"]) .lg-rel-arrow { color: var(--accent-soft); }
+:where(html[data-theme="dark"]) .lg-rel-arrow { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .lg-rel-card:hover .lg-rel-arrow { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .lg-search i { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .lg-search input { border: 1px solid var(--border-light); background: hsl(24 18% 8.5% / 0.9); color: var(--text-dark); }
@@ -803,7 +803,7 @@
 :where(html[data-theme="dark"]) .ntf-link-btn { background: none; border: 0; color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .ntf-link-btn:disabled { color: var(--text-muted); }
 :where(html[data-theme="dark"]) .ntf-empty { color: var(--text-muted); }
-:where(html[data-theme="dark"]) .ntf-empty i { color: var(--accent-soft); }
+:where(html[data-theme="dark"]) .ntf-empty i { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .ntf-item { border-bottom: 1px solid var(--border-light); background: hsl(24 18% 8.5%); }
 :where(html[data-theme="dark"]) .ntf-item:last-child { border-bottom: 0; }
 :where(html[data-theme="dark"]) .ntf-item.unread { background: hsl(30 32% 9.9%); }
@@ -847,7 +847,7 @@
 :where(html[data-theme="dark"]) .ntf-page .ntf-item.unread { border-color: hsl(16 49% 52.5% / 0.4); }
 :where(html[data-theme="dark"]) .ntf-skeleton { background: linear-gradient(90deg, hsl(30 32% 11.6%) 25%, hsl(30 32% 10.1%) 50%, hsl(30 32% 11.6%) 75%); }
 :where(html[data-theme="dark"]) .ntf-state { color: var(--text-muted); background: hsl(24 18% 8.5%); border: 1px dashed var(--border-light); }
-:where(html[data-theme="dark"]) .ntf-state > i { color: var(--accent-soft); }
+:where(html[data-theme="dark"]) .ntf-state > i { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .ntf-state p { color: var(--text-dark); }
 :where(html[data-theme="dark"]) .ntf-note { color: hsl(24 22% 50.0%); }
 :where(html[data-theme="dark"]) .profile-poem-status { background: hsl(37 32% 11.5%); color: hsl(36 60% 80.1%); }
@@ -855,14 +855,14 @@
 :where(html[data-theme="dark"]) .profile-poem-reason { color: hsl(6 55% 72.4%); }
 :where(html[data-theme="dark"]) .fbi-icon { background: hsl(15 62% 57.3% / 0.16); color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .fbi-mail { color: var(--accent-fg); border-bottom: 1px dashed currentColor; }
-:where(html[data-theme="dark"]) .fbi-mail:hover { color: var(--accent-soft, var(--accent-fg)); }
+:where(html[data-theme="dark"]) .fbi-mail:hover { color: hsl(20 75% 82%); }
 :where(html[data-theme="dark"]) .fbi-card { background: hsl(24 18% 8.5% / 0.55); border: 1px solid hsl(15 62% 57.3% / 0.25); }
 :where(html[data-theme="dark"]) .fbi-card h3 { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .fbi-card p { color: var(--text-muted); }
 :where(html[data-theme="dark"]) .fbi-footer { background: hsl(27 32% 17.8% / 0.07); border: 1px solid hsl(27 30% 27.5% / 0.18); }
 :where(html[data-theme="dark"]) .fbi-footer h3 { color: hsl(29 51% 90.4%); }
 :where(html[data-theme="dark"]) .fbi-footer p { color: hsl(27 22% 73.9%); }
-:where(html[data-theme="dark"]) .fbi-footer .fbi-mail { color: var(--accent-soft, hsl(17 77% 74.5%)); }
+:where(html[data-theme="dark"]) .fbi-footer .fbi-mail { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .fbi-inline { color: var(--text-muted); }
 
 /* ===== Dark-mode fixes: surfaces that stayed light ===== */
@@ -893,3 +893,10 @@ html[data-theme="dark"] select option,
 html[data-theme="dark"] select optgroup { background: hsl(24 18% 10%); color: hsl(30 20% 90%); }
 html[data-theme="dark"] .skip-link { background: hsl(16 49% 40%); }
 html[data-theme="dark"] .hero-search:focus-within { box-shadow: 0 0 0 3px hsl(16 49% 52.5% / 0.45); }
+
+/* --accent-soft is a dark brown in dark mode (borders / surfaces), so it must never be used as TEXT there:
+   footer hover links and the support e-mail were nearly invisible. Footer stays dark in both themes. */
+html[data-theme="dark"] .footer-links a:hover,
+html[data-theme="dark"] .footer-bottom-links a:hover,
+html[data-theme="dark"] .fbi-footer .fbi-mail:hover { color: hsl(20 75% 82%); }
+html[data-theme="dark"] .footer-links a:hover i { color: hsl(20 75% 82%); }
