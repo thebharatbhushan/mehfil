@@ -81,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <DeferredStylesheet href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">मुख्य सामग्री पर जाएँ</a>
         <MehfilLoader />
         <RouteLoader />
         <JsonLd
@@ -109,7 +110,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Orbs />
           <ScrollIndicator />
           <Header />
-          <main id="main-content">{children}</main>
+          <main id="main-content" tabIndex={-1}>{children}</main>
           <Footer />
           <BottomNav />
           <BirthdayCard />

@@ -28,6 +28,12 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
   // Poem of the week = the newest poem overall; kept separately so it survives paging/filtering.
   const [poemOfTheWeek, setPoemOfTheWeek] = useState<Poem | null>(initialPage === 1 ? initialPoems[0] || null : null);
 
+  // Home-page hero search sends people here as /poems?q=...
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('q');
+    if (q) setSearch(q.slice(0, 100));
+  }, []);
+
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search.trim()), 350);
     return () => clearTimeout(t);

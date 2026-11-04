@@ -114,7 +114,7 @@ export function Header() {
         unreadCount={unreadCount}
         returnFocusTo={menuBtnRef}
       />
-      <nav>
+      <nav aria-label="शीर्ष नेविगेशन">
         <div className="mehfil-container nav-inner">
           <Link href="/" className="logo logo-img" aria-label="मेहफ़िल — होम">
             <BrandLogo className="logo-img-el" priority />
@@ -148,16 +148,37 @@ export function Header() {
               <div
                 ref={avatarRef}
                 className={`profile-avatar ${avatarOpen ? 'active' : ''}`}
+                role="button"
+                tabIndex={0}
+                aria-haspopup="menu"
+                aria-expanded={avatarOpen}
+                aria-label="खाता मेन्यू"
                 onClick={(e) => {
                   e.stopPropagation();
                   setAvatarOpen(!avatarOpen);
+                }}
+                onKeyDown={(e) => {
+                  if (e.target !== e.currentTarget) {
+                    if (e.key === 'Escape') {
+                      setAvatarOpen(false);
+                      avatarRef.current?.focus();
+                    }
+                    return;
+                  }
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setAvatarOpen((o) => !o);
+                  } else if (e.key === 'Escape') {
+                    setAvatarOpen(false);
+                  }
                 }}
               >
                 {user.profilePic ? (
                   <img
                     className="avatar-img"
                     src={user.profilePic}
-                    alt={`${user.firstName || 'User'} profile`}
+                    alt=""
+                    aria-hidden="true"
                     width={40}
                     height={40}
                     decoding="async"

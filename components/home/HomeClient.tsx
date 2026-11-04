@@ -26,6 +26,9 @@ const formatDate = (date: string | Date | undefined | null) => {
   });
 };
 
+// ~200 words per minute, never below 1 (replaces the hard-coded "3 min read" on every card).
+const readMinutes = (body?: string) => Math.max(1, Math.round((body || '').trim().split(/\s+/).filter(Boolean).length / 200));
+
 const MOOD_ICONS: Record<string, string> = {
   Love: '❤️', Sad: '🌧', Motivation: '✨', Nature: '🍃', Life: '🌙', Sufi: '☪', Shayari: '🖋', Friendship: '🤝',
 };
@@ -59,7 +62,7 @@ export function HomeClient() {
   const [loadingWriters, setLoadingWriters] = useState(true);
   const [loadingWeeklyWriter, setLoadingWeeklyWriter] = useState(true);
   const sliderRef = useRef<HTMLDivElement>(null);
-  const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [heroQuery, setHeroQuery] = useState('');
 
   // Fade-up intersection observer
   useEffect(() => {
@@ -137,42 +140,54 @@ export function HomeClient() {
     return () => { cancelled = true; };
   }, []);
 
-  // Auto-slider for featured poems
+  // Auto-slider for featured poems.
+  // - never stacks intervals (mouseleave/touchend used to start a new one without clearing the old one)
+  // - steps by one card width instead of a fixed 340px
+  // - stays off for people who prefer reduced motion, and pauses while a card has keyboard focus
   useEffect(() => {
     if (loadingPoems || poems.length === 0) return;
-    const startTimer = setTimeout(() => {
-      const slider = sliderRef.current;
-      if (!slider) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const slider = sliderRef.current;
+    if (!slider) return;
 
-      const start = () => {
-        autoScrollRef.current = setInterval(() => {
-          slider.scrollBy({ left: 340, behavior: 'smooth' });
-          const maxScroll = slider.scrollWidth - slider.clientWidth;
-          if (slider.scrollLeft >= maxScroll - 20) {
-            setTimeout(() => slider.scrollTo({ left: 0, behavior: 'smooth' }), 500);
-          }
-        }, 1800);
-      };
-      const stop = () => {
-        if (autoScrollRef.current) clearInterval(autoScrollRef.current);
-      };
+    let timer: ReturnType<typeof setInterval> | null = null;
 
-      start();
-      slider.addEventListener('mouseenter', stop);
-      slider.addEventListener('mouseleave', start);
-      slider.addEventListener('touchstart', stop);
-      slider.addEventListener('touchend', start);
+    const stop = () => {
+      if (timer) clearInterval(timer);
+      timer = null;
+    };
+    const start = () => {
+      stop();
+      timer = setInterval(() => {
+        const first = slider.firstElementChild as HTMLElement | null;
+        const step = first ? first.getBoundingClientRect().width + 20 : 340;
+        const maxScroll = slider.scrollWidth - slider.clientWidth;
+        if (slider.scrollLeft >= maxScroll - 20) {
+          slider.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          slider.scrollBy({ left: step, behavior: 'smooth' });
+        }
+      }, 3500);
+    };
 
-      return () => {
-        stop();
-        slider.removeEventListener('mouseenter', stop);
-        slider.removeEventListener('mouseleave', start);
-        slider.removeEventListener('touchstart', stop);
-        slider.removeEventListener('touchend', start);
-      };
-    }, 2000);
+    const startTimer = setTimeout(start, 2000);
+    slider.addEventListener('mouseenter', stop);
+    slider.addEventListener('mouseleave', start);
+    slider.addEventListener('touchstart', stop, { passive: true });
+    slider.addEventListener('touchend', start);
+    slider.addEventListener('focusin', stop);
+    slider.addEventListener('focusout', start);
 
-    return () => clearTimeout(startTimer);
+    return () => {
+      clearTimeout(startTimer);
+      stop();
+      slider.removeEventListener('mouseenter', stop);
+      slider.removeEventListener('mouseleave', start);
+      slider.removeEventListener('touchstart', stop);
+      slider.removeEventListener('touchend', start);
+      slider.removeEventListener('focusin', stop);
+      slider.removeEventListener('focusout', start);
+    };
   }, [loadingPoems, poems.length]);
 
   const getCurrentUser = () => {
@@ -202,10 +217,11 @@ export function HomeClient() {
     router.push('/poems');
   };
 
-  const handleCategoryClick = (label: string) => {
-    const slug = CATEGORY_SLUGS[label];
-    if (slug) router.push(categoryHref(slug));
-    else router.push('/category');
+  // The hero search box used to be a plain <input> that did nothing. It now opens the poems page with the query.
+  const handleHeroSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = heroQuery.trim();
+    router.push(q ? `/poems?q=${encodeURIComponent(q)}` : '/poems');
   };
 
   return (
@@ -224,10 +240,22 @@ export function HomeClient() {
               and let your emotions bloom.
             </p>
             <div className="hero-divider"><span></span>❦<span></span></div>
-            <div className="hero-search">
-              <i className="fas fa-search" style={{ marginRight: '12px', color: '#b8a092' }} />
-              <input type="text" aria-label="कविता, कवि, विषय या शब्द खोजें" placeholder="कविता, कवि, विषय या शब्द खोजें..." />
-            </div>
+            <form className="hero-search" role="search" onSubmit={handleHeroSearch}>
+              <i className="fas fa-search" aria-hidden="true" style={{ marginRight: '12px', color: '#8f7a6b' }} />
+              <input
+                type="search"
+                name="q"
+                value={heroQuery}
+                onChange={(e) => setHeroQuery(e.target.value)}
+                enterKeyHint="search"
+                autoComplete="off"
+                aria-label="कविता, कवि, विषय या शब्द खोजें"
+                placeholder="कविता, कवि, विषय या शब्द खोजें..."
+              />
+              <button type="submit" className="hero-search-btn" aria-label="खोजें">
+                <i className="fas fa-arrow-right" aria-hidden="true" />
+              </button>
+            </form>
             <div className="hero-buttons">
               <button className="primary-btn" onClick={handleExplore}>
                 <i className="fas fa-book-open" /> Explore Poetry
@@ -305,8 +333,8 @@ export function HomeClient() {
                   <h3>{poem.title}</h3>
                   <p>{(poem.body || '').substring(0, 120)}...</p>
                   <div className="poem-footer">
-                    <span>By {poem.author?.firstName || 'अज्ञात'}</span>
-                    <span>3 min read</span>
+                    <span>{poem.author?.firstName || 'अज्ञात'} द्वारा</span>
+                    <span>{readMinutes(poem.body)} मिनट पढ़ें</span>
                   </div>
                 </Link>
               ))
@@ -465,9 +493,13 @@ export function HomeClient() {
           <p className="section-subtitle">Read poetry by emotion, feeling, and artistic expression.</p>
           <div className="categories">
             {CATEGORIES.map((cat) => (
-              <div key={cat.label} className="category" onClick={() => handleCategoryClick(cat.label)}>
-                {cat.icon} {cat.label}
-              </div>
+              <Link
+                key={cat.label}
+                href={CATEGORY_SLUGS[cat.label] ? categoryHref(CATEGORY_SLUGS[cat.label]) : '/category'}
+                className="category"
+              >
+                <span aria-hidden="true">{cat.icon}</span> {cat.label}
+              </Link>
             ))}
           </div>
         </div>
@@ -538,7 +570,7 @@ export function HomeClient() {
               stories, and timeless words through beautiful literature.
             </p>
             <button className="primary-btn" onClick={handlePublish} style={{ background: '#9e4f36' }}>
-              <i className="fas fa-palette" /> लेखन प्रारम्भ करें Today
+              <i className="fas fa-palette" /> लेखन प्रारम्भ करें
             </button>
           </div>
         </div>

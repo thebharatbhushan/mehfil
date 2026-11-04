@@ -4,6 +4,10 @@ import { NewsletterForm } from '@/components/site/NewsletterForm';
 import { BecomeMemberLink } from '@/components/site/BecomeMemberLink';
 import { FeedbackInvite } from '@/components/site/FeedbackInvite';
 
+// Set this to the real Instagram page. The icon used to link to "#" (a dead link that jumped to the top of the
+// page), so it is hidden until a real URL is provided.
+const INSTAGRAM_URL = '';
+
 export function Footer() {
   return (
     <footer>
@@ -19,7 +23,11 @@ export function Footer() {
               storytellers.
             </p>
             <div className="social-icons">
-              <a href="#" aria-label="Instagram"><i className="fab fa-instagram" /></a>
+              {INSTAGRAM_URL && (
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Mehfil on Instagram (opens in a new tab)">
+                  <i className="fab fa-instagram" aria-hidden="true" />
+                </a>
+              )}
             </div>
             {/* Android app: official APKPure listing for in.mehfil.app (opens in a new tab, current session untouched). */}
             <a
