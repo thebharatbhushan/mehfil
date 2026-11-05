@@ -1,7 +1,7 @@
 import './globals.css';
 import './dark-theme.css';
 import './site-controls.css';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './fonts';
 import { Header } from '@/components/site/Header';
 import { Footer } from '@/components/site/Footer';
@@ -58,12 +58,12 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [DEFAULT_OG_IMAGE.url],
   },
-  // viewport-fit=cover lets the mobile bottom navigation respect device safe areas.
-  viewport: { width: 'device-width', initialScale: 1, viewportFit: 'cover' },
-  themeColor: '#C16A4B',
   formatDetection: { telephone: false },
   robots: { index: true, follow: true },
 };
+
+// Next 14 moved viewport / themeColor out of `metadata`. viewport-fit=cover lets the mobile bottom navigation respect device safe areas.
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#C16A4B' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
