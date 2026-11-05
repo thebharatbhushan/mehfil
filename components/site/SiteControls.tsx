@@ -19,7 +19,7 @@ const THEME_OPTIONS: { key: ThemePref; label: string; sub: string; icon: string 
 ];
 
 /** Closes a popover on outside click / Escape. */
-function useDismiss(open: boolean, close: () => void, ref: React.RefObject<HTMLElement>) {
+function useDismiss(open: boolean, close: () => void, ref: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {

@@ -24,7 +24,7 @@ interface Props {
   /** Unread notifications (shown as a badge on the Notifications link). */
   unreadCount?: number;
   /** The hamburger button; focus returns to it when the drawer closes. */
-  returnFocusTo?: React.RefObject<HTMLElement>;
+  returnFocusTo?: React.RefObject<HTMLElement | null>;
 }
 
 interface NavItem {
