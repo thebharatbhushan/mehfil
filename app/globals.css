@@ -159,9 +159,11 @@ button:focus-visible {
   left: 0;
   height: 4px;
   background: var(--accent);
-  width: 0%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  will-change: transform;
   z-index: 10000;
-  transition: width 0.1s ease;
   border-radius: 0 2px 2px 0;
 }
 
@@ -4335,4 +4337,21 @@ a.category:focus-visible { outline: 3px solid rgba(168, 90, 63, 0.5); outline-of
 /* Honour "reduce motion" for smooth scrolling and the slider. */
 @media (prefers-reduced-motion: reduce) {
   html, .poem-grid { scroll-behavior: auto; }
+}
+
+
+/* Mobile performance: phones re-blur everything behind a backdrop-filter on every scroll frame, and the three big
+   blurred orbs animated forever behind it. Static soft gradients look the same but cost almost nothing. */
+@media (max-width: 880px), (pointer: coarse) {
+  .orb { animation: none; filter: none; opacity: 0.55; }
+  .orb-1 { background: radial-gradient(circle, #ffd7c2 0%, rgba(255, 215, 194, 0) 70%); }
+  .orb-2 { background: radial-gradient(circle, #ddc7b0 0%, rgba(221, 199, 176, 0) 70%); }
+  .orb-3 { background: radial-gradient(circle, #f7e1cf 0%, rgba(247, 225, 207, 0) 70%); }
+  html[data-theme="dark"] .orb-1 { background: radial-gradient(circle, hsl(21 32% 14.5%) 0%, transparent 70%); }
+  html[data-theme="dark"] .orb-2 { background: radial-gradient(circle, hsl(31 32% 19.6%) 0%, transparent 70%); }
+  html[data-theme="dark"] .orb-3 { background: radial-gradient(circle, hsl(27 32% 14%) 0%, transparent 70%); }
+
+  html nav:not(.bottom-nav) { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(254, 249, 242, 0.96); }
+  html[data-theme="dark"] nav:not(.bottom-nav) { background: hsl(35 32% 9.9% / 0.96); }
+  nav.bottom-nav { -webkit-backdrop-filter: none; backdrop-filter: none; }
 }

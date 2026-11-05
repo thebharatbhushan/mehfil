@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:cf": "opennextjs-cloudflare build",
+    "deploy:cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview:cf": "opennextjs-cloudflare build && opennextjs-cloudflare preview"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "^5.0.0",
@@ -36,5 +39,9 @@
   },
   "engines": {
     "node": ">=18.18.0"
+  },
+  "devDependencies": {
+    "@opennextjs/cloudflare": "latest",
+    "wrangler": "latest"
   }
 }
