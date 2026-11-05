@@ -13,14 +13,15 @@ import '@/components/dictionary/dictionary.dark.css';
 // Server-rendered + cached (ISR): crawlers receive the complete entry in the initial HTML.
 export const revalidate = 3600;
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 // Array.from/indexOf instead of spreading a Set: the project's tsconfig targets ES5.
 const uniq = (a: string[]): string[] => a.filter((x, i) => a.indexOf(x) === i);
 
 const decode = (s: string) => { try { return decodeURIComponent(s); } catch { return s; } };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const slug = decode(params.slug);
   const { word, missing } = await fetchWord(slug);
   const path = wordPath(slug);
@@ -80,7 +81,8 @@ async function poemsUsing(e: DictEntry): Promise<Array<{ poem: Poem; line: strin
   }
 }
 
-export default async function WordPage({ params }: Props) {
+export default async function WordPage(props: Props) {
+  const params = await props.params;
   const slug = decode(params.slug);
   const { word, missing } = await fetchWord(slug);
   if (!word && missing) notFound(); // real 404 status, no soft-404

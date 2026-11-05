@@ -6,7 +6,8 @@ export const revalidate = 3600;
 // Public author profile at /u/<username>.
 // Public profile data and poems are fetched on the server (same API call as before) so they are in the
 // initial HTML; AuthorProfile keeps all behaviour and refreshes the data silently after mount.
-export default async function UserProfilePage({ params }: { params: { username: string } }) {
+export default async function UserProfilePage(props: { params: Promise<{ username: string }> }) {
+  const params = await props.params;
   let name = String(params?.username || '');
   try { name = decodeURIComponent(name); } catch { /* keep raw */ }
   const ident = name.replace(/^@/, '').toLowerCase();

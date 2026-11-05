@@ -8,10 +8,11 @@ import { fetchWritersPage, parsePage, publicWriter } from '@/lib/seo';
 
 export const revalidate = 3600;
 
-type Props = { searchParams: { page?: string } };
+type Props = { searchParams: Promise<{ page?: string }> };
 
 // Page 1 keeps the layout's metadata untouched; later pages get their own title and canonical (same scheme as /poems).
-export function generateMetadata({ searchParams }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const searchParams = await props.searchParams;
   const page = parsePage(searchParams?.page);
   if (page <= 1) return {};
   const title = `हिंदी कवि और शायर — रचनाकारों की सूची — पृष्ठ ${page} | Mehfil`;
@@ -26,7 +27,8 @@ export function generateMetadata({ searchParams }: Props): Metadata {
 }
 
 // Server wrapper: only ONE page of writers (POETS_PER_PAGE) is fetched and rendered into the initial HTML.
-export default async function PoetsPage({ searchParams }: Props) {
+export default async function PoetsPage(props: Props) {
+  const searchParams = await props.searchParams;
   const page = parsePage(searchParams?.page);
   const data = await fetchWritersPage(page, POETS_PER_PAGE);
   // A page beyond the last one is a real 404 (never a thin empty page). Skipped if the API returned nothing.

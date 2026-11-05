@@ -7,13 +7,14 @@ import { detectScriptLang } from '@/lib/mehfil';
 import { categoryForPoem, categoryHref, poemsForCategory } from '@/lib/categories';
 import { DEFAULT_OG_IMAGE, SITE_URL, absoluteUrl, authorPath, fetchAllPoems, fetchPoemBySlug, fullNameOf, oneLine, pickImage, readingMinutes, truncate } from '@/lib/seo';
 
-type Props = { params: { slug: string }; children: React.ReactNode };
+type Props = { params: Promise<{ slug: string }>; children: React.ReactNode };
 
 function decodeSlug(slug: string): string {
   try { return decodeURIComponent(slug); } catch { return slug; }
 }
 
-export async function generateMetadata({ params }: Pick<Props, 'params'>): Promise<Metadata> {
+export async function generateMetadata(props: Pick<Props, 'params'>): Promise<Metadata> {
+  const params = await props.params;
   const slug = decodeSlug(params.slug);
   const { poem, missing } = await fetchPoemBySlug(slug);
   const path = `/poem/${encodeURIComponent(slug)}`;
@@ -42,7 +43,8 @@ export async function generateMetadata({ params }: Pick<Props, 'params'>): Promi
   };
 }
 
-export default async function PoemLayout({ params, children }: Props) {
+export default async function PoemLayout({ params: paramsPromise, children }: Props) {
+  const params = await paramsPromise;
   const slug = decodeSlug(params.slug);
   const { poem, missing } = await fetchPoemBySlug(slug);
   // Only a definite 404 from the API becomes a real 404 (a slow/unreachable API must not 404 valid poems).

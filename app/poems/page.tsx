@@ -9,13 +9,14 @@ import { fetchPoemsPage, parsePage } from '@/lib/seo';
 
 export const revalidate = 3600; // ISR: poems are in the initial HTML, refreshed hourly (client also refreshes live).
 
-type Props = { searchParams: { page?: string } };
-const pageOf = (sp: Props['searchParams']) => parsePage(sp?.page);
+type Props = { searchParams: Promise<{ page?: string }> };
+const pageOf = (sp: { page?: string }) => parsePage(sp?.page);
 
 const DESCRIPTION =
   'हिंदी और उर्दू कविताएँ, ग़ज़लें और शायरी पढ़ें — प्रेम, दर्द, प्रेरणा, सूफ़ी और ज़िंदगी पर चुनिंदा रचनाएँ, मेहफ़िल पर।';
 
-export function generateMetadata({ searchParams }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const searchParams = await props.searchParams;
   const page = pageOf(searchParams);
   const title = page > 1 ? `हिंदी कविता और शायरी — पृष्ठ ${page} | Mehfil` : 'हिंदी कविता और शायरी | Mehfil';
   const canonical = page > 1 ? `/poems?page=${page}` : '/poems';
@@ -28,7 +29,8 @@ export function generateMetadata({ searchParams }: Props): Metadata {
   };
 }
 
-export default async function PoemsPage({ searchParams }: Props) {
+export default async function PoemsPage(props: Props) {
+  const searchParams = await props.searchParams;
   const page = pageOf(searchParams);
   // Only the requested page is fetched (never the whole library).
   const data = await fetchPoemsPage(page, POEMS_LIST_PER_PAGE);

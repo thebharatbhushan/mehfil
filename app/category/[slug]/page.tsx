@@ -14,11 +14,13 @@ export function generateStaticParams() {
   return SEO_CATEGORIES.map((c) => ({ slug: c.slug }));
 }
 
-type Props = { params: { slug: string }; searchParams: { page?: string } };
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ page?: string }> };
 
-const pageOf = (sp: Props['searchParams']) => parsePage(sp?.page);
+const pageOf = (sp: { page?: string }) => parsePage(sp?.page);
 
-export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const cat = getSeoCategory(params.slug);
   if (!cat) return { title: 'श्रेणी', robots: { index: false, follow: true } };
   const all = await fetchAllPoemsOrNull();
@@ -39,7 +41,9 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   };
 }
 
-export default async function CategoryPage({ params, searchParams }: Props) {
+export default async function CategoryPage(props: Props) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const cat = getSeoCategory(params.slug);
   if (!cat) notFound();
 

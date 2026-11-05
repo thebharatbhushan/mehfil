@@ -7,7 +7,7 @@ import { categoryForPoem, categoryHref } from '@/lib/categories';
 import { DEFAULT_OG_IMAGE, absoluteUrl, fetchAuthor, fullNameOf, pickImage, truncate } from '@/lib/seo';
 import { getVisibleSocialLinks } from '@/lib/socialLinks';
 
-type Props = { params: { username: string }; children: React.ReactNode };
+type Props = { params: Promise<{ username: string }>; children: React.ReactNode };
 
 // Same normalisation the page applies before calling the API.
 function identOf(raw: string): string {
@@ -16,7 +16,8 @@ function identOf(raw: string): string {
   return name.replace(/^@/, '').toLowerCase();
 }
 
-export async function generateMetadata({ params }: Pick<Props, 'params'>): Promise<Metadata> {
+export async function generateMetadata(props: Pick<Props, 'params'>): Promise<Metadata> {
+  const params = await props.params;
   const ident = identOf(params.username);
   const { author, missing } = await fetchAuthor(ident);
   const fallbackPath = `/u/${encodeURIComponent(ident)}`;
@@ -45,7 +46,8 @@ export async function generateMetadata({ params }: Pick<Props, 'params'>): Promi
   };
 }
 
-export default async function AuthorLayout({ params, children }: Props) {
+export default async function AuthorLayout({ params: paramsPromise, children }: Props) {
+  const params = await paramsPromise;
   const ident = identOf(params.username);
   const { author, missing } = await fetchAuthor(ident);
   if (!author && missing) notFound();

@@ -10,7 +10,8 @@ function decodeSlug(slug: string): string {
 // Server wrapper: fetches the poem (and its author's other poems) on the server with the same API calls the
 // client component makes, so the full poem text, title, author and links are in the initial HTML.
 // The client component keeps all interactivity and silently refreshes the data after mount.
-export default async function PoemPage({ params }: { params: { slug: string } }) {
+export default async function PoemPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const slug = decodeSlug(params.slug);
   const { poem } = await fetchPoemBySlug(slug);
 
