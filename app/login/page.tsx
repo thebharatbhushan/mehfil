@@ -7,7 +7,7 @@ import { API_BASE_URL } from '@/lib/mehfil';
 import { BrandLogo } from '@/components/site/BrandLogo';
 import { useToast } from '@/components/site/ToastProvider';
 import { deviceHeaders } from '@/lib/notifications';
-import { getPostLoginPath } from '@/lib/auth';
+import { getPostLoginPath, saveSession } from '@/lib/auth';
 import GoogleAuthButton from '@/components/auth/GoogleAuthButton';
 
 type RecoveryStep = 'email' | 'otp' | 'password';
@@ -240,16 +240,7 @@ export default function LoginPage() {
         ...data.user,
         id: data.user._id,
       };
-      sessionStorage.removeItem('mehfil_user');
-      localStorage.removeItem('mehfil_user');
-      if (remember) {
-        localStorage.setItem('mehfil_user', JSON.stringify(userData));
-        localStorage.setItem('mehfil_remember', 'true');
-      } else {
-        sessionStorage.setItem('mehfil_user', JSON.stringify(userData));
-        localStorage.removeItem('mehfil_remember');
-      }
-      localStorage.setItem('token', data.token);
+      saveSession(userData, data.token, remember);
       window.dispatchEvent(new Event('mehfil-auth-change'));
       showToast(`✨ स्वागत है ${data.user.firstName}! आपकी कविता यात्रा शुरू होती है।`);
       setTimeout(() => router.push(getPostLoginPath('/profile')), 800);

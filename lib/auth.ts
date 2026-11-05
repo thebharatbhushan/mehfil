@@ -33,8 +33,55 @@ function safeGet(store: Storage | undefined, key: string): string | null {
   }
 }
 
+const SESSION_ONLY_KEY = 'mehfil_session_only';
+const SESSION_COOKIE = 'mehfil_session';
+
+/**
+ * Saves a successful login. The token AND the user are ALWAYS kept in localStorage, so login works whether or not
+ * "remember me" is ticked (sessionStorage is per-tab and vanished on a new tab / reload on mobile, which made the
+ * member look logged out). Without "remember me" the session is marked session-only: a session cookie (shared by all
+ * tabs, dropped when the browser closes) is the "still the same browser session" marker; see enforceSessionOnly().
+ */
+export function saveSession(user: StoredUser, token: string, remember: boolean): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.sessionStorage.removeItem(USER_KEY);
+    window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+    window.localStorage.setItem(TOKEN_KEY, token);
+    if (remember) {
+      window.localStorage.setItem('mehfil_remember', 'true');
+      window.localStorage.removeItem(SESSION_ONLY_KEY);
+    } else {
+      window.localStorage.removeItem('mehfil_remember');
+      window.localStorage.setItem(SESSION_ONLY_KEY, 'true');
+    }
+  } catch {
+    /* storage unavailable — ignore */
+  }
+  try {
+    document.cookie = `${SESSION_COOKIE}=1; path=/; SameSite=Lax`;
+  } catch {
+    /* cookies unavailable — ignore */
+  }
+}
+
+/** For a session-only login (no "remember me"): ends it once the browser was closed (the session cookie is gone). */
+export function enforceSessionOnly(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    if (window.localStorage.getItem(SESSION_ONLY_KEY) !== 'true') return;
+    if (document.cookie.split('; ').some((c) => c.startsWith(`${SESSION_COOKIE}=`))) return;
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.removeItem(USER_KEY);
+    window.localStorage.removeItem(SESSION_ONLY_KEY);
+  } catch {
+    /* storage unavailable — ignore */
+  }
+}
+
 export function getToken(): string | null {
   if (typeof window === 'undefined') return null;
+  enforceSessionOnly();
   return safeGet(window.localStorage, TOKEN_KEY);
 }
 
@@ -172,6 +219,7 @@ export function clearStoredSession(): void {
     window.localStorage.removeItem('token');
     window.localStorage.removeItem(USER_KEY);
     window.localStorage.removeItem('mehfil_remember');
+    window.localStorage.removeItem(SESSION_ONLY_KEY);
     window.sessionStorage.removeItem(USER_KEY);
   } catch {
     /* storage unavailable — ignore */

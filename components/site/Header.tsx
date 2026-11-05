@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { BrandLogo } from '@/components/site/BrandLogo';
 import { usePathname, useRouter } from 'next/navigation';
-import { myProfileHref, purgeOrphanToken } from '@/lib/auth';
+import { enforceSessionOnly, myProfileHref, purgeOrphanToken } from '@/lib/auth';
 import { MobileDrawer } from './MobileDrawer';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
 import { useUnreadCount } from '@/hooks/use-unread-count';
@@ -30,6 +30,7 @@ export function Header() {
 
   useEffect(() => {
     const readUser = () => {
+      enforceSessionOnly();
       const stored =
         localStorage.getItem('mehfil_user') || sessionStorage.getItem('mehfil_user');
       if (!stored) {
