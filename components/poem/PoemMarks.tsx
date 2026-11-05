@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState, type CSSProperties } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/mehfil';
-import { clearStoredSession, getActiveToken } from '@/lib/auth';
+import { clearStoredSession, getActiveToken, loginUrlWithNext } from '@/lib/auth';
 import { useToast } from '@/components/site/ToastProvider';
 
 const pill: CSSProperties = {
@@ -33,6 +33,11 @@ const KEY_OF: Record<Kind, keyof MarkState> = { bookmarks: 'bookmarked', likes: 
 const PENDING_LABEL: Record<Kind, { on: string; off: string }> = {
   bookmarks: { on: 'सहेजा जा रहा है...', off: 'हटाया जा रहा है...' },
   likes: { on: 'पसंद की जा रही है...', off: 'पसंद हटाई जा रही है...' },
+};
+
+const LOGIN_PROMPT: Record<Kind, string> = {
+  bookmarks: 'रचना सहेजने के लिए पहले लॉगिन करें',
+  likes: 'रचना पसंद करने के लिए पहले लॉगिन करें',
 };
 
 const DONE_TOAST: Record<Kind, { on: string; off: string }> = {
@@ -118,11 +123,24 @@ export function usePoemMarks(poemId?: string) {
 const Spinner = () => <i className="fas fa-circle-notch fa-spin" aria-hidden="true" />;
 
 /**
- * Save / Like toggles for a signed-in member (they feed the reader badges). Shows nothing for guests and never any counts.
+ * Save / Like toggles (they feed the reader badges). Never shows counts.
+ * Guests see both buttons too: tapping one sends them to the login page (and back to this poem afterwards),
+ * so they discover the feature and have a reason to sign up.
  */
 export function PoemMarks({ poemId }: { poemId?: string }) {
-  const { token, state, pending, toggle } = usePoemMarks(poemId);
-  if (!poemId || !token) return null;
+  const { token, state, pending, toggle, showToast } = usePoemMarks(poemId);
+  const router = useRouter();
+  const pathname = usePathname();
+  if (!poemId) return null;
+
+  const onPress = (kind: Kind) => {
+    if (!token) {
+      showToast(LOGIN_PROMPT[kind]);
+      router.push(loginUrlWithNext(pathname || undefined));
+      return;
+    }
+    toggle(kind);
+  };
 
   const renderPill = (kind: Kind, label: { off: string; on: string }, icon: string) => {
     const key = KEY_OF[kind];
@@ -134,7 +152,7 @@ export function PoemMarks({ poemId }: { poemId?: string }) {
     return (
       <button
         type="button"
-        onClick={() => toggle(kind)}
+        onClick={() => onPress(kind)}
         disabled={!!pending}
         aria-pressed={active}
         aria-busy={isPending}
@@ -160,13 +178,14 @@ export function PoemMarks({ poemId }: { poemId?: string }) {
 export function PoemSaveAction({ poemId }: { poemId?: string }) {
   const { token, state, pending, toggle, showToast } = usePoemMarks(poemId);
   const router = useRouter();
+  const pathname = usePathname();
   const isPending = pending?.kind === 'bookmarks';
   const saved = isPending ? pending!.turnOn : state.bookmarked;
 
   const onClick = () => {
     if (!token) {
-      showToast('रचना सहेजने के लिए पहले लॉगिन करें');
-      router.push('/login');
+      showToast(LOGIN_PROMPT.bookmarks);
+      router.push(loginUrlWithNext(pathname || undefined));
       return;
     }
     toggle('bookmarks');

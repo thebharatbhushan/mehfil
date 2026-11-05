@@ -7,6 +7,7 @@ import { API_BASE_URL } from '@/lib/mehfil';
 import { BrandLogo } from '@/components/site/BrandLogo';
 import { useToast } from '@/components/site/ToastProvider';
 import { deviceHeaders } from '@/lib/notifications';
+import { getPostLoginPath } from '@/lib/auth';
 import GoogleAuthButton from '@/components/auth/GoogleAuthButton';
 
 type RecoveryStep = 'email' | 'otp' | 'password';
@@ -251,7 +252,7 @@ export default function LoginPage() {
       localStorage.setItem('token', data.token);
       window.dispatchEvent(new Event('mehfil-auth-change'));
       showToast(`✨ स्वागत है ${data.user.firstName}! आपकी कविता यात्रा शुरू होती है।`);
-      setTimeout(() => router.push('/profile'), 800);
+      setTimeout(() => router.push(getPostLoginPath('/profile')), 800);
     } catch {
       showToast('❌ सर्वर से कनेक्ट नहीं हो सका।', true);
     } finally {

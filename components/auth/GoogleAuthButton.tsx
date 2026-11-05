@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/mehfil';
 import { useToast } from '@/components/site/ToastProvider';
 import { deviceHeaders } from '@/lib/notifications';
+import { getPostLoginPath } from '@/lib/auth';
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
 const GSI_SRC = 'https://accounts.google.com/gsi/client';
@@ -74,10 +75,10 @@ export default function GoogleAuthButton({ mode }: { mode: 'login' | 'signup' })
 
       if (data.isNewUser) {
         showToast('✨ गूगल से खाता बन गया! मेहफ़िल में आपका स्वागत है।');
-        setTimeout(() => router.push('/profile'), 800);
+        setTimeout(() => router.push(getPostLoginPath('/profile')), 800);
       } else {
         showToast(`✨ स्वागत है ${data.user.firstName || ''}! आपकी कविता यात्रा शुरू होती है।`);
-        setTimeout(() => router.push(mode === 'signup' ? '/' : '/profile'), 800);
+        setTimeout(() => router.push(getPostLoginPath(mode === 'signup' ? '/' : '/profile')), 800);
       }
     } catch {
       showToast('❌ सर्वर से कनेक्ट नहीं हो सका।', true);

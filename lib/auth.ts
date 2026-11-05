@@ -178,3 +178,26 @@ export function clearStoredSession(): void {
   }
   window.dispatchEvent(new Event('mehfil-auth-change'));
 }
+
+/** Only same-site relative paths are allowed as a post-login target (blocks open redirects like //evil.com). */
+function safeNextPath(raw: string | null | undefined): string | null {
+  if (!raw || !raw.startsWith('/') || raw.startsWith('//') || raw.startsWith('/\\')) return null;
+  if (raw.startsWith('/login') || raw.startsWith('/signup')) return null;
+  return raw;
+}
+
+/** `/login?next=<current page>` — used when a guest taps a members-only action (save / like). */
+export function loginUrlWithNext(next?: string): string {
+  const target = safeNextPath(next);
+  return target ? `/login?next=${encodeURIComponent(target)}` : '/login';
+}
+
+/** Where to go after a successful login: the `?next=` page if present and safe, otherwise `fallback`. */
+export function getPostLoginPath(fallback: string): string {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    return safeNextPath(new URLSearchParams(window.location.search).get('next')) || fallback;
+  } catch {
+    return fallback;
+  }
+}
