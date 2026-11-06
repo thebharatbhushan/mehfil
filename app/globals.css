@@ -2328,6 +2328,8 @@ footer::after {
   font-family: var(--font-poetry); line-height: var(--lh-poetry); color: #3a2a20; overflow-wrap: break-word;
 }
 .adhura-first { font-size: clamp(1.25rem, 1rem + 1.3vw, 1.9rem); }
+.adhura-second { margin-top: 0.4rem; }
+.adhura-mine-line { font-family: var(--font-poetry); font-size: 1.15rem; line-height: 1.7; color: #3a2a20; overflow-wrap: break-word; }
 .adhura-blank { font-family: var(--font-poetry); font-size: 1.4rem; color: rgba(193, 106, 75, 0.45); letter-spacing: 0.05em; margin: 0.1rem 0 1rem; }
 .adhura-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 0.4rem; }
 .adhura-input {

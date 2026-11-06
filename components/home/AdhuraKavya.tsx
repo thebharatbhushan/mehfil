@@ -19,7 +19,10 @@ interface KavyaAuthor {
 interface AdhuraToday {
   dateKey: string;
   firstLine: string;
+  closesAt: string;
   closed: boolean;
+  /** Present only after submissions closed AND the admin picked the best line. */
+  selected: { secondLine: string; author: KavyaAuthor | null } | null;
 }
 
 interface PreviousKavya {
@@ -43,6 +46,18 @@ function nextLocalMidnightDelay(): number {
   return Math.max(1000, next.getTime() - now.getTime());
 }
 
+/** "रात 8:00 बजे" style label for the closing time (23:59:59 is shown as midnight). */
+function closeTimeLabel(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  let h = d.getHours();
+  let m = d.getMinutes();
+  if (h === 23 && m === 59) { h = 24; m = 0; }
+  const period = h >= 19 || h < 4 ? 'रात' : h < 12 ? 'सुबह' : h < 16 ? 'दोपहर' : 'शाम';
+  const h12 = h % 12 === 0 ? 12 : h % 12;
+  return `${period} ${h12}:${String(m).padStart(2, '0')} बजे`;
+}
+
 /** आज का अधूरा काव्य: today's first line + a box for logged-in members, and the previous couplet with its poet. */
 export function AdhuraKavya() {
   const { showToast } = useToast();
@@ -54,7 +69,7 @@ export function AdhuraKavya() {
   const [savedLine, setSavedLine] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const editedRef = useRef(false);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const load = useCallback(async () => {
     const token = getActiveToken();
@@ -70,8 +85,6 @@ export function AdhuraKavya() {
         setPrevious((data.previous as PreviousKavya | null) || null);
         const mine = typeof data.mine?.line === 'string' ? data.mine.line : '';
         setSavedLine(mine);
-        // Don't overwrite what the member is currently typing when the card refreshes in the background.
-        if (!editedRef.current) setLine(mine);
       }
     } catch (error) {
       console.error('Failed to load Adhura Kavya:', error);
@@ -80,12 +93,23 @@ export function AdhuraKavya() {
     }
   }, []);
 
+  // When submissions are open, reload exactly when they close so the card flips without a page refresh.
+  useEffect(() => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    if (!today || today.closed) return;
+    const delay = new Date(today.closesAt).getTime() - Date.now() + 500;
+    if (!Number.isFinite(delay) || delay <= 0 || delay > 2_147_000_000) return;
+    closeTimerRef.current = setTimeout(load, delay);
+    return () => {
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
+  }, [today, load]);
+
   useEffect(() => {
     let cancelled = false;
 
     const refresh = async () => {
       if (cancelled) return;
-      editedRef.current = false;
       await load();
       if (cancelled) return;
       timerRef.current = setTimeout(refresh, nextLocalMidnightDelay());
@@ -134,7 +158,6 @@ export function AdhuraKavya() {
       }
       setSavedLine(text);
       setLine(text);
-      editedRef.current = false;
       showToast('✍️ आपकी पंक्ति भेज दी गई है।');
     } catch {
       showToast('पंक्ति भेजी नहीं जा सकी। कृपया दोबारा प्रयास करें।', true);
@@ -149,7 +172,10 @@ export function AdhuraKavya() {
   const authorName = previous?.author
     ? `${previous.author.firstName || ''} ${previous.author.lastName || ''}`.trim() || previous.author.username || ''
     : '';
-  const unchanged = !!savedLine && line.trim() === savedLine;
+  const closeLabel = today ? closeTimeLabel(today.closesAt) : '';
+  const todayAuthorName = today?.selected?.author
+    ? `${today.selected.author.firstName || ''} ${today.selected.author.lastName || ''}`.trim() || today.selected.author.username || ''
+    : '';
 
   return (
     <section
@@ -165,36 +191,65 @@ export function AdhuraKavya() {
         {today ? (
           <div className="adhura-today">
             <p className="adhura-first">{today.firstLine}</p>
-            <p className="adhura-blank" aria-hidden="true">………………………</p>
-
-            {today.closed ? (
-              <p className="adhura-note">आज की प्रविष्टियाँ बंद हो चुकी हैं। चुनी गई पंक्ति अगले दिन &ldquo;पिछला काव्य&rdquo; में दिखेगी।</p>
-            ) : loggedIn ? (
-              <form className="adhura-form" onSubmit={submit}>
-                <label htmlFor="adhura-input" className="adhura-label">आपकी अगली पंक्ति</label>
-                <textarea
-                  id="adhura-input"
-                  className="adhura-input"
-                  rows={2}
-                  maxLength={MAX_LINE}
-                  value={line}
-                  placeholder="इस पंक्ति को अपने शब्दों में पूरा कीजिए…"
-                  onChange={(e) => { editedRef.current = true; setLine(e.target.value); }}
-                />
-                <div className="adhura-actions">
-                  <span className="adhura-count">{line.length}/{MAX_LINE}</span>
-                  <button type="submit" className="adhura-submit" disabled={submitting || !line.trim() || unchanged}>
-                    {submitting ? 'भेजा जा रहा है…' : savedLine ? 'पंक्ति बदलें' : 'पंक्ति भेजें'}
-                  </button>
-                </div>
-                {savedLine ? <p className="adhura-note">✓ आपकी पंक्ति भेजी जा चुकी है। आप चाहें तो इसे बदल सकते हैं।</p> : null}
-              </form>
+            {today.closed && today.selected ? (
+              <>
+                <p className="adhura-first adhura-second">{today.selected.secondLine}</p>
+                {today.selected.author ? (
+                  <Link href={authorHref(today.selected.author)} className="adhura-poet" aria-label={`${todayAuthorName} की प्रोफ़ाइल देखें`}>
+                    <img
+                      src={today.selected.author.profilePic || DEFAULT_AVATAR}
+                      alt={todayAuthorName}
+                      width={44}
+                      height={44}
+                      decoding="async"
+                      loading="lazy"
+                      onError={(e) => { if (e.currentTarget.src !== DEFAULT_AVATAR) e.currentTarget.src = DEFAULT_AVATAR; }}
+                    />
+                    <span className="adhura-poet-name">{todayAuthorName}</span>
+                  </Link>
+                ) : null}
+              </>
             ) : (
-              <p className="adhura-note">
-                पंक्ति पूरी करने के लिए{' '}
-                <Link href={loginUrlWithNext('/')} className="adhura-login">प्रवेश करें</Link>।
-                सबसे अच्छी पंक्ति रचनाकार के नाम और प्रोफ़ाइल के साथ दिखाई जाएगी।
-              </p>
+              <>
+                <p className="adhura-blank" aria-hidden="true">………………………</p>
+                {today.closed ? (
+                  <p className="adhura-note">आज की प्रविष्टियाँ बंद हो चुकी हैं। चुनी गई पंक्ति और रचनाकार का नाम जल्द यहाँ दिखाया जाएगा।</p>
+                ) : loggedIn ? (
+                  savedLine ? (
+                    <div className="adhura-mine">
+                      <span className="adhura-label">आपकी भेजी हुई पंक्ति</span>
+                      <p className="adhura-mine-line">{savedLine}</p>
+                      <p className="adhura-note">✓ आपकी पंक्ति भेज दी गई है। प्रविष्टियाँ आज {closeLabel} बंद होंगी।</p>
+                    </div>
+                  ) : (
+                    <form className="adhura-form" onSubmit={submit}>
+                      <label htmlFor="adhura-input" className="adhura-label">आपकी अगली पंक्ति (एक बार ही भेजी जा सकती है)</label>
+                      <textarea
+                        id="adhura-input"
+                        className="adhura-input"
+                        rows={2}
+                        maxLength={MAX_LINE}
+                        value={line}
+                        placeholder="इस पंक्ति को अपने शब्दों में पूरा कीजिए…"
+                        onChange={(e) => setLine(e.target.value)}
+                      />
+                      <div className="adhura-actions">
+                        <span className="adhura-count">{line.length}/{MAX_LINE}</span>
+                        <button type="submit" className="adhura-submit" disabled={submitting || !line.trim()}>
+                          {submitting ? 'भेजा जा रहा है…' : 'पंक्ति भेजें'}
+                        </button>
+                      </div>
+                      <p className="adhura-note">प्रविष्टियाँ आज {closeLabel} बंद होंगी।</p>
+                    </form>
+                  )
+                ) : (
+                  <p className="adhura-note">
+                    पंक्ति पूरी करने के लिए{' '}
+                    <Link href={loginUrlWithNext('/')} className="adhura-login">प्रवेश करें</Link>।
+                    सबसे अच्छी पंक्ति रचनाकार के नाम और प्रोफ़ाइल के साथ दिखाई जाएगी। प्रविष्टियाँ आज {closeLabel} बंद होंगी।
+                  </p>
+                )}
+              </>
             )}
           </div>
         ) : null}

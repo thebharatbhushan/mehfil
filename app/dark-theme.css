@@ -355,7 +355,7 @@
 /* आज का अधूरा काव्य */
 :where(html[data-theme="dark"]) .adhura-card { background: linear-gradient(160deg, hsl(43 32% 9.2%) 0%, hsl(34 32% 11.7%) 100%); border: 1px solid var(--border-light); }
 :where(html[data-theme="dark"]) .adhura-card::before { border: 1px solid hsl(16 49% 52.5% / 0.22); }
-:where(html[data-theme="dark"]) .adhura-first, :where(html[data-theme="dark"]) .adhura-prev-line { color: hsl(23 29% 85.3%); }
+:where(html[data-theme="dark"]) .adhura-mine-line, :where(html[data-theme="dark"]) .adhura-first, :where(html[data-theme="dark"]) .adhura-prev-line { color: hsl(23 29% 85.3%); }
 :where(html[data-theme="dark"]) .adhura-label, :where(html[data-theme="dark"]) .adhura-poet-name { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .adhura-input { background: hsl(34 32% 7%); color: hsl(23 29% 85.3%); border: 1px solid var(--border-light); }
 :where(html[data-theme="dark"]) .adhura-prev { border-color: hsl(16 49% 52.5% / 0.25); }
