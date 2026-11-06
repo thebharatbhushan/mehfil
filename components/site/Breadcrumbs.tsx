@@ -7,7 +7,7 @@ export function Breadcrumbs({ items }: { items: Array<{ name: string; path: stri
   return (
     <>
       <JsonLd data={breadcrumbLd(items)} />
-      <nav aria-label="Breadcrumb" className="mehfil-container" style={{ paddingTop: '1.25rem', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+      <nav aria-label="Breadcrumb" className="mehfil-container mf-breadcrumb" style={{ paddingTop: '1.25rem', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
         <ol style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.45rem', listStyle: 'none', margin: 0, padding: 0 }}>
           {items.map((it, i) => {
             const last = i === items.length - 1;

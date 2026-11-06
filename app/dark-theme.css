@@ -637,7 +637,7 @@
 :where(html[data-theme="dark"]) .delete-account-btn.solid { background: hsl(6 63% 46.1%); color: hsl(0 0% 100.0%); }
 :where(html[data-theme="dark"]) .delete-account-btn.solid:hover { background: hsl(8 69% 39.0%); }
 :where(html[data-theme="dark"]) .delete-account-error { color: hsl(6 60% 69.7%); }
-:where(html[data-theme="dark"]) nav[aria-label="Breadcrumb"] { background: transparent; border-bottom: 0; }
+:where(html[data-theme="dark"]) nav.mf-breadcrumb { background: transparent; border-bottom: 0; }
 :where(html[data-theme="dark"]) .mf-legal-body h2 { color: var(--accent-fg); }
 :where(html[data-theme="dark"]) .mf-legal-body p,
 :where(html[data-theme="dark"]) .mf-legal-body li { color: var(--text-dark); }
