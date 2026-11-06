@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AntakshariGame, ANTAKSHARI, COMPLETE, CompleteGame } from '@/lib/game/engine';
+import { COMPLETE, CompleteGame } from '@/lib/game/engine';
 import { getBestScore, type GameMode } from '@/lib/game/storage';
 import { h } from '../ui';
 import { Backdrop, getCtx } from './common';
@@ -18,15 +18,9 @@ export class MenuScene extends Phaser.Scene {
 
     panel.append(h('p', 'sg-eyebrow', 'मेहफ़िल · खेल'));
     panel.append(h('h2', 'sg-title', 'शेर अंताक्षरी'));
-    panel.append(h('p', 'sg-lead', 'शेर की आख़िरी अक्षर से अगला शेर शुरू कीजिए, या अधूरा शेर पूरा कीजिए।'));
+    panel.append(h('p', 'sg-lead', 'अधूरा शेर पूरा कीजिए।'));
 
     const modes: Array<{ mode: GameMode; title: string; rules: string; ok: boolean }> = [
-      {
-        mode: 'antakshari',
-        title: 'कंप्यूटर के साथ अंताक्षरी',
-        rules: `${ANTAKSHARI.rounds} राउंड · हर बार ${ANTAKSHARI.seconds} सेकंड · सही जवाब पर +${ANTAKSHARI.points}, लगातार ${ANTAKSHARI.streakAfter} पर +${ANTAKSHARI.streakBonus} बोनस`,
-        ok: AntakshariGame.canPlay(ctx.entries),
-      },
       {
         mode: 'complete',
         title: 'शेर पूरा कीजिए',

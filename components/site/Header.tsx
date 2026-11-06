@@ -103,6 +103,7 @@ export function Header() {
     { href: '/poets', label: 'रचनाकार', active: pathname.startsWith('/poets') || pathname.startsWith('/author') || pathname.startsWith('/u/') },
     { href: '/category', label: 'श्रेणियाँ', active: pathname.startsWith('/category') },
     { href: '/dictionary', label: 'शब्दकोश', active: pathname.startsWith('/dictionary') },
+    { href: '/game', label: 'खेल', active: pathname.startsWith('/game') },
     { href: '/about-contact', label: 'संपर्क करें', active: pathname.startsWith('/about-contact') || pathname.startsWith('/feedback') },
   ];
 

@@ -13,7 +13,7 @@ export interface ResultData {
   total: number;
 }
 
-const MODE_NAME: Record<GameMode, string> = { antakshari: 'शेर अंताक्षरी', complete: 'शेर पूरा कीजिए' };
+const MODE_NAME: Record<GameMode, string> = { antakshari: 'शेर पूरा कीजिए', complete: 'शेर पूरा कीजिए' };
 
 async function shareResult(text: string, status: HTMLElement) {
   const url = `${window.location.origin}/game`;

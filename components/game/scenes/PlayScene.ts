@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
-import { AntakshariGame, CompleteGame, type AnswerResult } from '@/lib/game/engine';
-import type { Entry } from '@/lib/game/couplets';
+import { CompleteGame } from '@/lib/game/engine';
 import type { GameMode } from '@/lib/game/storage';
 import { trackGameEvent } from '@/lib/game/analytics';
 import { FONT_UI, GAME_W, THEME_EVENT } from '../types';
@@ -16,13 +15,12 @@ const BAR_W = GAME_W - 56;
 const LOW_TIME = 5;
 
 export class PlayScene extends Phaser.Scene {
-  private mode: GameMode = 'antakshari';
+  private mode: GameMode = 'complete';
   private panel!: HTMLElement;
   private phase: Phase = 'done';
   private remaining = 0;
   private total = 1;
 
-  private antak: AntakshariGame | null = null;
   private complete: CompleteGame | null = null;
 
   private hudRound!: Phaser.GameObjects.Text;
@@ -36,13 +34,11 @@ export class PlayScene extends Phaser.Scene {
     super('Play');
   }
 
-  init(data: { mode: GameMode }) {
+  init(_data?: { mode?: GameMode }) {
     // A Phaser scene instance is reused on every restart, so reset all per-game state here.
-    this.mode = data?.mode === 'complete' ? 'complete' : 'antakshari';
+    this.mode = 'complete';
     this.phase = 'done';
-    this.antak = null;
     this.complete = null;
-    this.optionButtons = new Map();
     this.completeButtons = [];
   }
 
@@ -76,8 +72,7 @@ export class PlayScene extends Phaser.Scene {
     });
 
     trackGameEvent('game_start', { mode: this.mode });
-    if (this.mode === 'antakshari') this.startAntakshari();
-    else this.startComplete();
+    this.startComplete();
   }
 
   update(_time: number, delta: number) {
@@ -90,12 +85,12 @@ export class PlayScene extends Phaser.Scene {
   /* ------------------------------- HUD ------------------------------- */
 
   private score() {
-    return (this.antak ?? this.complete)?.score ?? 0;
+    return this.complete?.score ?? 0;
   }
 
   private paintHud() {
     const pal = getCtx(this).palette();
-    const streak = (this.antak ?? this.complete)?.streak ?? 0;
+    const streak = this.complete?.streak ?? 0;
     this.hudRound.setColor(pal.accentText.css);
     this.hudScore.setColor(pal.accentText.css).setText(`अंक ${this.score()}`);
     this.hudStreak.setColor(pal.muted.css).setText(streak >= 2 ? `लगातार ×${streak}` : '');
@@ -140,12 +135,12 @@ export class PlayScene extends Phaser.Scene {
 
   private finish() {
     this.phase = 'done';
-    const g = this.antak ?? this.complete!;
-    const total = this.antak ? this.antak.rounds : this.complete!.total;
+    const g = this.complete!;
+    const total = g.total;
     this.scene.start('Result', { mode: this.mode, score: g.score, correct: g.correct, total });
   }
 
-  /** "Next" button shared by both modes; focus moves to it so keyboard / screen-reader users continue naturally. */
+  /** "Next" button; focus moves to it so keyboard / screen-reader users continue naturally. */
   private nextButton(label: string, onClick: () => void): HTMLButtonElement {
     const btn = h('button', 'sg-btn', label, { type: 'button' });
     let used = false;
@@ -160,182 +155,7 @@ export class PlayScene extends Phaser.Scene {
 
   private onTimeout() {
     if (this.phase !== 'answering') return;
-    if (this.antak) this.antakFail('समय समाप्त!');
-    else this.completeAnswer(-1);
-  }
-
-  /* --------------------------- Mode 1: Antakshari --------------------------- */
-
-  private startAntakshari() {
-    const ctx = getCtx(this);
-    this.antak = new AntakshariGame(ctx.entries);
-    if (!this.antak.begin()) {
-      this.finish();
-      return;
-    }
-    this.antakRound();
-  }
-
-  private optionButtons = new Map<string, HTMLButtonElement>();
-  private msg!: HTMLElement;
-
-  private antakRound() {
-    const g = this.antak!;
-    this.setRoundLabel(`राउंड ${g.round}/${g.rounds}`);
-    this.startTimer(g.seconds);
-    this.optionButtons.clear();
-
-    const panel = this.panel;
-    panel.replaceChildren();
-    panel.append(h('p', 'sg-label', 'कंप्यूटर का शेर'));
-    panel.append(sherCard(g.current));
-    const need = h('p', 'sg-need');
-    need.append('अगला शेर इस अक्षर से शुरू होना चाहिए: ', h('strong', 'sg-akshar', g.required));
-    panel.append(need);
-
-    const list = h('div', 'sg-options', undefined, { role: 'group', 'aria-label': 'जवाब चुनिए' });
-    for (const opt of g.options()) {
-      const btn = h('button', 'sg-option', undefined, { type: 'button' });
-      btn.append(h('span', 'sg-opt-line', opt.lines[0]), h('span', 'sg-opt-line', opt.lines[1]));
-      btn.addEventListener('click', () => this.antakPick(opt));
-      this.optionButtons.set(opt.id, btn);
-      list.append(btn);
-    }
-    panel.append(list);
-
-    const toggle = h('button', 'sg-link', 'या अपना शेर टाइप कीजिए', { type: 'button', 'aria-expanded': 'false' });
-    const form = h('form', 'sg-type');
-    form.hidden = true;
-    const input = h('input', 'sg-input', undefined, {
-      type: 'text',
-      lang: 'hi',
-      placeholder: `'${g.required}' से शुरू होने वाला शेर`,
-      autocomplete: 'off',
-      autocapitalize: 'off',
-      spellcheck: 'false',
-      'aria-label': 'अपना शेर टाइप कीजिए',
-    });
-    const go = h('button', 'sg-btn', 'जाँचें', { type: 'submit' });
-    form.append(input, go);
-    toggle.addEventListener('click', () => {
-      form.hidden = !form.hidden;
-      toggle.setAttribute('aria-expanded', String(!form.hidden));
-      if (!form.hidden) input.focus();
-    });
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (this.phase !== 'answering' || !input.value.trim()) return;
-      this.antakTyped(input.value);
-    });
-    this.msg = h('p', 'sg-msg', '', { role: 'status', 'aria-live': 'polite' });
-    panel.append(toggle, form, this.msg);
-    panel.scrollTop = 0;
-  }
-
-  /** Disables the options and marks the valid ones green and (when wrong) the picked one red. */
-  private lockOptions(validIds: Set<string>, wrongPickId?: string) {
-    this.optionButtons.forEach((btn, id) => {
-      btn.disabled = true;
-      if (validIds.has(id)) btn.classList.add('is-correct');
-      else if (id === wrongPickId) btn.classList.add('is-wrong');
-    });
-  }
-
-  private antakPick(opt: Entry) {
-    if (this.phase !== 'answering') return;
-    const g = this.antak!;
-    const valid = new Set<string>();
-    this.optionButtons.forEach((_b, id) => {
-      if (g.continuations(g.current).some((e) => e.id === id)) valid.add(id);
-    });
-    const res = g.answerByPick(opt.id);
-    if (res.kind === 'correct') {
-      this.lockOptions(valid);
-      this.antakCorrect(res);
-    } else {
-      this.lockOptions(valid, opt.id);
-      this.antakFail(`ग़लत चुनाव — शेर '${g.required}' से शुरू होना था।`);
-    }
-  }
-
-  private antakTyped(text: string) {
-    const g = this.antak!;
-    const res = g.answerByText(text);
-    switch (res.kind) {
-      case 'correct': {
-        const valid = new Set([res.entry.id]);
-        this.lockOptions(valid);
-        this.panel.querySelector('.sg-type')?.setAttribute('hidden', '');
-        this.antakCorrect(res);
-        break;
-      }
-      case 'wrong_akshar':
-        this.msg.textContent = `यह शेर '${res.entry.first}' से शुरू होता है, '${g.required}' से नहीं। फिर कोशिश कीजिए।`;
-        this.penaltyLight();
-        break;
-      case 'used':
-        this.msg.textContent = 'यह शेर इस खेल में पहले आ चुका है।';
-        break;
-      default:
-        this.msg.textContent = 'यह शेर हमारे संग्रह में नहीं मिला। विकल्पों में से चुनिए या फिर से लिखिए।';
-    }
-  }
-
-  private penaltyLight() {
-    if (!prefersReducedMotion()) this.cameras.main.shake(120, 0.003);
-  }
-
-  private antakCorrect(res: Extract<AnswerResult, { kind: 'correct' }>) {
-    const g = this.antak!;
-    this.phase = 'feedback';
-    this.reward(res);
-    const bonus = res.bonus ? ` + ${res.bonus} लगातार बोनस` : '';
-    this.msg.textContent = `वाह! सही जवाब: +${res.points}${bonus}`;
-    this.msg.className = 'sg-msg is-good';
-
-    const reply = g.computerReply(res.entry);
-    const box = h('div', 'sg-reply');
-    if (reply) {
-      box.append(h('p', 'sg-label', 'कंप्यूटर का जवाब'), sherCard(reply));
-    } else {
-      box.append(h('p', 'sg-msg is-good', `कंप्यूटर के पास '${res.entry.last}' से शुरू होने वाला कोई शेर नहीं बचा — यह राउंड आपका!`));
-    }
-    const last = g.round >= g.rounds;
-    box.append(
-      this.nextButton(last ? 'नतीजा देखिए' : 'अगला राउंड', () => {
-        if (g.nextRound(reply)) this.antakRound();
-        else this.finish();
-      }),
-    );
-    this.panel.append(box);
-    box.scrollIntoView({ block: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-  }
-
-  private antakFail(reason: string) {
-    const g = this.antak!;
-    this.phase = 'feedback';
-    const valid = new Set<string>();
-    this.optionButtons.forEach((_b, id) => {
-      if (g.continuations(g.current).some((e) => e.id === id)) valid.add(id);
-    });
-    this.lockOptions(valid);
-    this.panel.querySelector('.sg-type')?.setAttribute('hidden', '');
-    const hint = g.fail();
-    this.penalty();
-    this.msg.textContent = reason;
-    this.msg.className = 'sg-msg is-bad';
-
-    const box = h('div', 'sg-reply');
-    if (hint) box.append(h('p', 'sg-label', 'सही जवाब, जैसे'), sherCard(hint));
-    const last = g.round >= g.rounds;
-    box.append(
-      this.nextButton(last ? 'नतीजा देखिए' : 'अगला राउंड', () => {
-        if (g.nextRound(null)) this.antakRound();
-        else this.finish();
-      }),
-    );
-    this.panel.append(box);
-    box.scrollIntoView({ block: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    this.completeAnswer(-1);
   }
 
   /* ------------------------- Mode 2: Complete the sher ------------------------- */
@@ -350,6 +170,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private completeButtons: HTMLButtonElement[] = [];
+  private msg!: HTMLElement;
 
   private completeQuestion() {
     const g = this.complete!;
