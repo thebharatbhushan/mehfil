@@ -12,6 +12,7 @@ import { ProfileSocialLinks } from '@/components/social/ProfileSocialLinks';
 import { PoemSaveAction } from '@/components/poem/PoemMarks';
 import { SherOfTheDay } from '@/components/home/SherOfTheDay';
 import { LafzOfTheDay } from '@/components/home/LafzOfTheDay';
+import { AdhuraKavya } from '@/components/home/AdhuraKavya';
 
 const formatDate = (date: string | Date | undefined | null) => {
   if (!date) return '';
@@ -290,6 +291,9 @@ export function HomeClient() {
         <div className="mehfil-container daily-grid">
           <SherOfTheDay poems={poems} ready={!loadingPoems} />
           <LafzOfTheDay />
+        </div>
+        <div className="mehfil-container adhura-wrap">
+          <AdhuraKavya />
         </div>
       </section>
 

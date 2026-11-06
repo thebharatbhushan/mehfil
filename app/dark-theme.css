@@ -352,6 +352,16 @@
 :where(html[data-theme="dark"]) .lafz-explain { color: hsl(30 59% 91.4% / 0.82); }
 :where(html[data-theme="dark"]) .lafz-example { color: hsl(31 100% 95.5%); background: hsl(31 32% 10.8% / 0.07); border-left: 3px solid hsl(26 30% 30.9%); }
 :where(html[data-theme="dark"]) .lafz-card .sher-skeleton span { background: hsl(31 32% 10.8% / 0.15); }
+/* आज का अधूरा काव्य */
+:where(html[data-theme="dark"]) .adhura-card { background: linear-gradient(160deg, hsl(43 32% 9.2%) 0%, hsl(34 32% 11.7%) 100%); border: 1px solid var(--border-light); }
+:where(html[data-theme="dark"]) .adhura-card::before { border: 1px solid hsl(16 49% 52.5% / 0.22); }
+:where(html[data-theme="dark"]) .adhura-first, :where(html[data-theme="dark"]) .adhura-prev-line { color: hsl(23 29% 85.3%); }
+:where(html[data-theme="dark"]) .adhura-label, :where(html[data-theme="dark"]) .adhura-poet-name { color: var(--accent-fg); }
+:where(html[data-theme="dark"]) .adhura-input { background: hsl(34 32% 7%); color: hsl(23 29% 85.3%); border: 1px solid var(--border-light); }
+:where(html[data-theme="dark"]) .adhura-prev { border-color: hsl(16 49% 52.5% / 0.25); }
+@media (max-width: 960px) {
+  :where(html[data-theme="dark"]) .adhura-prev { border-color: hsl(16 49% 52.5% / 0.25); }
+}
 @media (max-width: 560px) {
   :where(html[data-theme="dark"]) .lafz-detail-col { border-left: 0; border-top: 1px solid hsl(26 30% 30.9% / 0.3); }
 }
