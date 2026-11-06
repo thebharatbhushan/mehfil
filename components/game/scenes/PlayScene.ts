@@ -226,16 +226,16 @@ export class PlayScene extends Phaser.Scene {
       }
     }
 
-    // Reveal the whole sher with its attribution.
+    // "Next" comes first, right under the options, so it is always reachable without scrolling; the whole sher with its attribution follows.
     const box = h('div', 'sg-reply');
-    box.append(sherCard(q.entry));
     const last = g.index + 1 >= g.total;
     const advance = () => {
       if (g.next()) this.completeQuestion();
       else this.finish();
     };
-    box.append(this.nextButton(last ? 'नतीजा देखिए' : 'अगला सवाल', advance));
+    const nextBtn = this.nextButton(last ? 'नतीजा देखिए' : 'अगला सवाल', advance);
+    box.append(nextBtn, sherCard(q.entry));
     this.panel.append(box);
-    box.scrollIntoView({ block: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    nextBtn.scrollIntoView({ block: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   }
 }

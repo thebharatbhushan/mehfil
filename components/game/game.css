@@ -118,7 +118,7 @@ html[data-theme='dark'] .sg-msg.is-good { color: #6fc28a; }
 html[data-theme='dark'] .sg-msg.is-bad { color: #e57c72; }
 
 .sg-reply { display: flex; flex-direction: column; gap: calc(var(--u) * 10); align-items: stretch; }
-.sg-reply .sg-btn { align-self: flex-start; }
+.sg-reply .sg-btn { align-self: flex-start; scroll-margin-bottom: 110px; /* keeps it clear of the mobile bottom nav */ }
 
 .sg-score-big { font-family: var(--font-display); font-size: max(54px, calc(var(--u) * 96)); line-height: 1.2; color: var(--accent-fg, var(--accent-dark)); }
 .sg-best { font-size: max(15px, calc(var(--u) * 19)); color: var(--text-muted); }

@@ -6,7 +6,7 @@ import '@/components/game/game.css';
 
 const TITLE = 'शेर अंताक्षरी — शेर का खेल | Mehfil';
 const DESCRIPTION =
-  'मेहफ़िल का शेर अंताक्षरी खेल: कंप्यूटर के साथ शेर की आख़िरी अक्षर से अंताक्षरी खेलिए, या अधूरा शेर पूरा कीजिए। मोबाइल पर मुफ़्त, बिना लॉगिन के।';
+  'मेहफ़िल का शेर खेल: अधूरा शेर पूरा कीजिए और चार में से सही दूसरी पंक्ति चुनिए। मोबाइल पर मुफ़्त, बिना लॉगिन के।';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -24,7 +24,7 @@ export default function GamePage() {
         <div className="mehfil-container">
           <header className="sg-head">
             <h1>शेर अंताक्षरी</h1>
-            <p>शेर की आख़िरी अक्षर से अगला शेर शुरू कीजिए। लॉगिन की ज़रूरत नहीं।</p>
+            <p>अधूरा शेर पूरा कीजिए। लॉगिन की ज़रूरत नहीं।</p>
           </header>
           <GameClient />
         </div>
