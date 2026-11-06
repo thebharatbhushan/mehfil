@@ -2352,6 +2352,8 @@ footer::after {
 .adhura-single .adhura-prev { border-left: 0; padding-left: 0; }
 .adhura-prev-kicker { display: block; font-size: 0.75rem; font-weight: 600; color: var(--accent); margin-bottom: 0.6rem; }
 .adhura-prev-line { font-size: clamp(1.05rem, 0.95rem + 0.6vw, 1.3rem); }
+.adhura-poet-label { display: block; margin-top: 1rem; font-size: 0.75rem; font-weight: 600; color: var(--accent); }
+.adhura-poet-label + .adhura-poet { margin-top: 0.4rem; }
 .adhura-poet {
   display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 1rem; text-decoration: none; color: inherit;
 }

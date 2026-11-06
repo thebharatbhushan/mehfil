@@ -17,6 +17,7 @@ interface KavyaAuthor {
 }
 
 interface AdhuraToday {
+  id: string;
   dateKey: string;
   firstLine: string;
   closesAt: string;
@@ -93,6 +94,12 @@ export function AdhuraKavya() {
     }
   }, []);
 
+  // A different entry (e.g. the admin added a new one) starts with an empty box.
+  const todayId = today?.id;
+  useEffect(() => {
+    setLine('');
+  }, [todayId]);
+
   // When submissions are open, reload exactly when they close so the card flips without a page refresh.
   useEffect(() => {
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
@@ -120,9 +127,14 @@ export function AdhuraKavya() {
       if (document.visibilityState === 'visible') load();
     };
     document.addEventListener('visibilitychange', handleVisibility);
+    // A new entry added by the admin during the day shows up without a manual refresh.
+    const poll = setInterval(() => {
+      if (document.visibilityState === 'visible') load();
+    }, 60_000);
 
     return () => {
       cancelled = true;
+      clearInterval(poll);
       if (timerRef.current) clearTimeout(timerRef.current);
       document.removeEventListener('visibilitychange', handleVisibility);
     };
@@ -148,7 +160,7 @@ export function AdhuraKavya() {
       const response = await fetch(`${API_BASE_URL}/api/daily/adhura-kavya/submit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ dateKey: today.dateKey, line: text }),
+        body: JSON.stringify({ entryId: today.id, line: text }),
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.success) {
@@ -195,6 +207,8 @@ export function AdhuraKavya() {
               <>
                 <p className="adhura-first adhura-second">{today.selected.secondLine}</p>
                 {today.selected.author ? (
+                  <>
+                  <span className="adhura-poet-label">चयनित पंक्ति के रचनाकार</span>
                   <Link href={authorHref(today.selected.author)} className="adhura-poet" aria-label={`${todayAuthorName} की प्रोफ़ाइल देखें`}>
                     <img
                       src={today.selected.author.profilePic || DEFAULT_AVATAR}
@@ -207,6 +221,7 @@ export function AdhuraKavya() {
                     />
                     <span className="adhura-poet-name">{todayAuthorName}</span>
                   </Link>
+                  </>
                 ) : null}
               </>
             ) : (
@@ -260,6 +275,8 @@ export function AdhuraKavya() {
             <p className="adhura-prev-line">{previous.firstLine}</p>
             <p className="adhura-prev-line">{previous.secondLine}</p>
             {previous.author ? (
+              <>
+              <span className="adhura-poet-label">पिछली प्रविष्टि के रचनाकार</span>
               <Link href={authorHref(previous.author)} className="adhura-poet" aria-label={`${authorName} की प्रोफ़ाइल देखें`}>
                 <img
                   src={previous.author.profilePic || DEFAULT_AVATAR}
@@ -272,6 +289,7 @@ export function AdhuraKavya() {
                 />
                 <span className="adhura-poet-name">{authorName}</span>
               </Link>
+              </>
             ) : null}
           </div>
         ) : null}
