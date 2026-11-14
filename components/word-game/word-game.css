@@ -1,0 +1,87 @@
+/* लफ़्ज़ का मतलब (Word Master). Uses the site's own CSS variables, so light and dark themes (html[data-theme]) work automatically.
+   Visual values mirror components/game/game.css; class names are prefixed wg- so nothing in the other games is touched. */
+
+.wg-section { padding: 1rem 0 2.5rem; }
+.wg-head { text-align: center; margin-bottom: 1rem; }
+.wg-head h1 { font-family: var(--font-display); font-size: clamp(1.6rem, 5vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
+.wg-head p { color: var(--text-muted); line-height: 1.7; margin-top: 0.4rem; font-size: 0.98rem; }
+
+.wg-wrap {
+  position: relative; margin: 0 auto; width: min(100%, 560px); min-height: 26rem;
+  background: var(--bg); border: 1px solid var(--border-light); border-radius: 18px; box-shadow: var(--shadow-sm);
+  overflow: hidden; color: var(--text-dark); font-family: var(--font-deva); -webkit-text-size-adjust: 100%;
+}
+.wg-body { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem 1.25rem 1.5rem; }
+
+.wg-status {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; min-height: 26rem;
+  color: var(--text-muted); font-size: 1rem; line-height: 1.7; text-align: center; padding: 1rem;
+}
+.wg-spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--accent-soft); border-top-color: var(--accent); animation: wg-rot 0.9s linear infinite; }
+@keyframes wg-rot { to { transform: rotate(360deg); } }
+
+.wg-hud { display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 600; color: var(--accent-fg, var(--accent-dark)); }
+.wg-progress { height: 8px; border-radius: 4px; background: var(--border-light); overflow: hidden; }
+.wg-progress span { display: block; height: 100%; border-radius: 4px; background: var(--accent); transition: width 0.25s ease; }
+
+.wg-eyebrow { font-size: 0.85rem; letter-spacing: 0.08em; color: var(--accent-fg, var(--accent)); }
+.wg-title { font-family: var(--font-display); font-size: clamp(1.8rem, 6vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
+.wg-lead { font-size: 1.05rem; line-height: 1.7; color: var(--text-muted); }
+.wg-verdict { font-size: 1.05rem; line-height: 1.7; color: var(--text-dark); max-width: 24em; }
+.wg-label { font-size: 0.95rem; color: var(--text-muted); }
+
+.wg-wordcard {
+  padding: 1.1rem 1.1rem 0.9rem; text-align: center; background: var(--card-bg); border: 1px solid var(--border-light);
+  border-left: 4px solid var(--accent); border-radius: 12px;
+}
+.wg-word { margin: 0; font-family: var(--font-display); font-size: clamp(2.2rem, 9vw, 3.2rem); line-height: 1.4; color: var(--accent-fg, var(--accent-dark)); overflow-wrap: anywhere; }
+.wg-urdu { margin: 0; font-family: 'Noto Nastaliq Urdu', var(--font-deva); font-size: clamp(1.4rem, 5vw, 1.9rem); line-height: 2.2; color: var(--text-dark); }
+.wg-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin: 0.3rem 0 0; font-size: 0.8rem; color: var(--text-muted); }
+.wg-tags span { padding: 0.1rem 0.6rem; border: 1px solid var(--border-light); border-radius: 999px; }
+
+.wg-options { display: grid; gap: 0.6rem; }
+.wg-option {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 48px; text-align: left;
+  padding: 0.65rem 0.9rem; background: var(--surface-solid); color: var(--text-dark);
+  border: 1.5px solid var(--border-light); border-radius: 12px; font-family: var(--font-poetry); cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.wg-option:hover:not(:disabled) { border-color: var(--accent); }
+.wg-option:disabled { cursor: default; }
+.wg-letter { flex: none; width: 1.9rem; height: 1.9rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 600; color: var(--accent-fg, var(--accent-dark)); background: var(--accent-soft); }
+.wg-opt-text { font-size: 1.1rem; line-height: 1.6; overflow-wrap: anywhere; }
+.wg-option.is-correct { border-color: #2f8a52; background: rgba(47, 138, 82, 0.14); }
+.wg-option.is-wrong { border-color: #c0443a; background: rgba(192, 68, 58, 0.14); }
+
+.wg-msg { min-height: 1.5em; font-size: 1rem; line-height: 1.6; color: var(--text-muted); }
+.wg-msg.is-good { color: #2f7d4a; font-weight: 600; }
+.wg-msg.is-bad { color: #b3392f; font-weight: 600; }
+html[data-theme='dark'] .wg-msg.is-good { color: #6fc28a; }
+html[data-theme='dark'] .wg-msg.is-bad { color: #e57c72; }
+
+.wg-explain {
+  display: flex; flex-direction: column; gap: 0.35rem; padding: 0.8rem 1rem; background: var(--card-bg);
+  border: 1px solid var(--border-light); border-radius: 12px; font-size: 0.98rem; line-height: 1.75; color: var(--text-dark);
+}
+.wg-explain p { margin: 0; }
+.wg-example { font-family: var(--font-poetry); color: var(--text-muted); }
+
+.wg-btn {
+  align-self: flex-start; min-height: 48px; padding: 0.55rem 1.3rem; border-radius: 999px; border: 1.5px solid var(--accent);
+  background: var(--accent); color: #fff; font-family: inherit; font-weight: 600; font-size: 1rem; cursor: pointer;
+  scroll-margin-bottom: 110px; /* keeps it clear of the mobile bottom nav */
+}
+.wg-btn:hover { filter: brightness(1.06); }
+:where(.wg-btn, .wg-option):focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.wg-result { align-items: center; text-align: center; justify-content: center; min-height: 26rem; }
+.wg-score-big { font-family: var(--font-display); font-size: clamp(3.4rem, 14vw, 5.4rem); line-height: 1.2; color: var(--accent-fg, var(--accent-dark)); }
+.wg-best { font-size: 1rem; color: var(--text-muted); }
+.wg-best.is-new { color: var(--accent-fg, var(--accent)); font-weight: 700; }
+.wg-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 0.6rem; }
+.wg-result .wg-btn { align-self: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wg-spin { animation-duration: 2.4s; }
+  .wg-option, .wg-progress span { transition: none; }
+}

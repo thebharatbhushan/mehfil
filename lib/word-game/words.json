@@ -1,0 +1,1003 @@
+{
+ "version": 1,
+ "words": [
+  {
+   "id": "tishnagi",
+   "word": "तिश्नगी",
+   "roman": "tishnagi",
+   "meaning": "प्यास",
+   "meaningEn": "thirst",
+   "wrong": [
+    "मोहब्बत",
+    "ख़ुशी",
+    "तन्हाई"
+   ],
+   "explanation": "तिश्नगी का अर्थ प्यास या प्यास की तीव्र इच्छा है।",
+   "example": "शायरी में तिश्नगी अक्सर किसी गहरी चाहत के लिए भी आती है।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "تشنگی"
+  },
+  {
+   "id": "tanhai",
+   "word": "तन्हाई",
+   "roman": "tanhai",
+   "meaning": "अकेलापन",
+   "meaningEn": "loneliness",
+   "wrong": [
+    "भीड़",
+    "इंतज़ार",
+    "नींद"
+   ],
+   "explanation": "तन्हाई का अर्थ अकेलापन है, यानी किसी का साथ न होना।",
+   "example": "भरी महफ़िल में भी उसे तन्हाई महसूस हो रही थी।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "تنہائی"
+  },
+  {
+   "id": "sukoon",
+   "word": "सुकून",
+   "roman": "sukoon",
+   "meaning": "चैन, शांति",
+   "meaningEn": "peace, calm",
+   "wrong": [
+    "बेचैनी",
+    "ग़ुस्सा",
+    "थकान"
+   ],
+   "explanation": "सुकून का अर्थ मन का चैन और शांति है।",
+   "example": "माँ की गोद में उसे सुकून मिला।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "سکون"
+  },
+  {
+   "id": "hijr",
+   "word": "हिज्र",
+   "roman": "hijr",
+   "meaning": "जुदाई, बिछड़ना",
+   "meaningEn": "separation",
+   "wrong": [
+    "मिलन",
+    "शादी",
+    "सफ़र"
+   ],
+   "explanation": "हिज्र प्रिय से बिछड़ने की स्थिति को कहते हैं; शायरी का बहुत पुराना विषय है।",
+   "example": "हिज्र की रात बहुत लंबी होती है।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "ہجر"
+  },
+  {
+   "id": "visaal",
+   "word": "विसाल",
+   "roman": "visaal",
+   "meaning": "मिलन, प्रिय से मुलाक़ात",
+   "meaningEn": "union, meeting",
+   "wrong": [
+    "जुदाई",
+    "इनकार",
+    "शिकायत"
+   ],
+   "explanation": "विसाल का अर्थ मिलन है, ख़ासकर प्रेमी और प्रिय का। इसका उलटा हिज्र है।",
+   "example": "बरसों बाद विसाल की घड़ी आई।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "وصال"
+  },
+  {
+   "id": "nazakat",
+   "word": "नज़ाकत",
+   "roman": "nazakat",
+   "meaning": "कोमलता, नफ़ासत",
+   "meaningEn": "delicacy, grace",
+   "wrong": [
+    "कठोरता",
+    "चालाकी",
+    "ग़रीबी"
+   ],
+   "explanation": "नज़ाकत का अर्थ कोमलता और बारीक सुंदरता है।",
+   "example": "फूल की पंखुड़ी की नज़ाकत देखते ही बनती है।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "نزاکت"
+  },
+  {
+   "id": "ghurur",
+   "word": "ग़ुरूर",
+   "roman": "ghurur",
+   "meaning": "घमंड, अभिमान",
+   "meaningEn": "pride, arrogance",
+   "wrong": [
+    "शर्म",
+    "दया",
+    "उत्साह"
+   ],
+   "explanation": "ग़ुरूर का अर्थ घमंड है।",
+   "example": "दौलत के ग़ुरूर ने उसे अकेला कर दिया।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "غرور"
+  },
+  {
+   "id": "ibadat",
+   "word": "इबादत",
+   "roman": "ibadat",
+   "meaning": "पूजा, उपासना",
+   "meaningEn": "worship",
+   "wrong": [
+    "कारोबार",
+    "मनोरंजन",
+    "पढ़ाई"
+   ],
+   "explanation": "इबादत का अर्थ ईश्वर की उपासना या पूजा है।",
+   "example": "उसके लिए काम ही इबादत था।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "عبادت"
+  },
+  {
+   "id": "zakhm",
+   "word": "ज़ख़्म",
+   "roman": "zakhm",
+   "meaning": "घाव, चोट",
+   "meaningEn": "wound",
+   "wrong": [
+    "इलाज",
+    "नींद",
+    "आँसू"
+   ],
+   "explanation": "ज़ख़्म का अर्थ घाव है; शायरी में दिल के दर्द के लिए भी आता है।",
+   "example": "वक़्त हर ज़ख़्म भर देता है।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "زخم"
+  },
+  {
+   "id": "safar",
+   "word": "सफ़र",
+   "roman": "safar",
+   "meaning": "यात्रा",
+   "meaningEn": "journey",
+   "wrong": [
+    "ठहराव",
+    "घर",
+    "सामान"
+   ],
+   "explanation": "सफ़र का अर्थ यात्रा है।",
+   "example": "ज़िंदगी एक लंबा सफ़र है।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "سفر"
+  },
+  {
+   "id": "manzil",
+   "word": "मंज़िल",
+   "roman": "manzil",
+   "meaning": "गंतव्य, वह जगह जहाँ पहुँचना हो",
+   "meaningEn": "destination",
+   "wrong": [
+    "शुरुआत",
+    "सवारी",
+    "सामान"
+   ],
+   "explanation": "मंज़िल वह ठिकाना है जहाँ पहुँचना लक्ष्य हो।",
+   "example": "मेहनत करने वालों को मंज़िल ज़रूर मिलती है।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "منزل"
+  },
+  {
+   "id": "aarzoo",
+   "word": "आरज़ू",
+   "roman": "aarzoo",
+   "meaning": "इच्छा, कामना",
+   "meaningEn": "wish, desire",
+   "wrong": [
+    "डर",
+    "शिकायत",
+    "याद"
+   ],
+   "explanation": "आरज़ू का अर्थ दिल की इच्छा या कामना है।",
+   "example": "उसकी बस एक ही आरज़ू थी कि घर लौट आए।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "آرزو"
+  },
+  {
+   "id": "shikwa",
+   "word": "शिकवा",
+   "roman": "shikwa",
+   "meaning": "शिकायत",
+   "meaningEn": "complaint",
+   "wrong": [
+    "तारीफ़",
+    "वादा",
+    "दुआ"
+   ],
+   "explanation": "शिकवा का अर्थ शिकायत है।",
+   "example": "इक़बाल की मशहूर नज़्म \"शिकवा\" का नाम इसी शब्द पर है।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "شکوہ"
+  },
+  {
+   "id": "betabi",
+   "word": "बेताबी",
+   "roman": "betabi",
+   "meaning": "बेचैनी, अधीरता",
+   "meaningEn": "restlessness",
+   "wrong": [
+    "चैन",
+    "आलस्य",
+    "समझदारी"
+   ],
+   "explanation": "बेताबी का अर्थ बेचैनी या अधीरता है।",
+   "example": "मिलने की बेताबी में वह रात भर जागता रहा।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "بے تابی"
+  },
+  {
+   "id": "intezaar",
+   "word": "इंतिज़ार",
+   "roman": "intizaar",
+   "meaning": "प्रतीक्षा",
+   "meaningEn": "waiting",
+   "wrong": [
+    "स्मरण",
+    "तलाश",
+    "भरोसा"
+   ],
+   "explanation": "इंतिज़ार का अर्थ प्रतीक्षा है।",
+   "example": "उसके ख़त का इंतिज़ार रहा।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "انتظار"
+  },
+  {
+   "id": "yaqeen",
+   "word": "यक़ीन",
+   "roman": "yaqeen",
+   "meaning": "विश्वास, भरोसा",
+   "meaningEn": "belief, certainty",
+   "wrong": [
+    "संदेह",
+    "अफ़वाह",
+    "ग़ुस्सा"
+   ],
+   "explanation": "यक़ीन का अर्थ पक्का विश्वास है।",
+   "example": "मुझे तुम्हारी बात पर पूरा यक़ीन है।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "یقین"
+  },
+  {
+   "id": "khamoshi",
+   "word": "ख़ामोशी",
+   "roman": "khamoshi",
+   "meaning": "चुप्पी",
+   "meaningEn": "silence",
+   "wrong": [
+    "शोर",
+    "गीत",
+    "चीख़"
+   ],
+   "explanation": "ख़ामोशी का अर्थ चुप्पी या सन्नाटा है।",
+   "example": "उसकी ख़ामोशी बहुत कुछ कह गई।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "خاموشی"
+  },
+  {
+   "id": "rukhsat",
+   "word": "रुख़्सत",
+   "roman": "rukhsat",
+   "meaning": "विदाई, प्रस्थान",
+   "meaningEn": "departure, farewell",
+   "wrong": [
+    "स्वागत",
+    "मुलाक़ात",
+    "इनाम"
+   ],
+   "explanation": "रुख़्सत का अर्थ विदाई या जाने की घड़ी है।",
+   "example": "आँसुओं के साथ बेटी की रुख़्सत हुई।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "رخصت"
+  },
+  {
+   "id": "masroof",
+   "word": "मसरूफ़",
+   "roman": "masroof",
+   "meaning": "व्यस्त",
+   "meaningEn": "busy",
+   "wrong": [
+    "थका हुआ",
+    "ख़ाली",
+    "नाराज़"
+   ],
+   "explanation": "मसरूफ़ का अर्थ किसी काम में लगा हुआ, व्यस्त है।",
+   "example": "आजकल वह काम में बहुत मसरूफ़ है।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "مصروف"
+  },
+  {
+   "id": "fursat",
+   "word": "फ़ुरसत",
+   "roman": "fursat",
+   "meaning": "अवकाश, ख़ाली समय",
+   "meaningEn": "leisure",
+   "wrong": [
+    "जल्दबाज़ी",
+    "कमाई",
+    "मुसीबत"
+   ],
+   "explanation": "फ़ुरसत का अर्थ ख़ाली समय या अवकाश है।",
+   "example": "जब फ़ुरसत मिले तो आइए।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "فرصت"
+  },
+  {
+   "id": "wafa",
+   "word": "वफ़ा",
+   "roman": "wafa",
+   "meaning": "निष्ठा, वादा निभाना",
+   "meaningEn": "fidelity, loyalty",
+   "wrong": [
+    "धोखा",
+    "इनाम",
+    "ग़ुस्सा"
+   ],
+   "explanation": "वफ़ा का अर्थ निष्ठा और किया हुआ वादा निभाना है।",
+   "example": "सच्ची दोस्ती वफ़ा माँगती है।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "وفا"
+  },
+  {
+   "id": "sitam",
+   "word": "सितम",
+   "roman": "sitam",
+   "meaning": "ज़ुल्म, अत्याचार",
+   "meaningEn": "cruelty, oppression",
+   "wrong": [
+    "मेहरबानी",
+    "तोहफ़ा",
+    "सलाह"
+   ],
+   "explanation": "सितम का अर्थ ज़ुल्म या सख़्ती है।",
+   "example": "ज़माने के सितम सहकर भी वह मुस्कुराता रहा।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "ستم"
+  },
+  {
+   "id": "naqab",
+   "word": "नक़ाब",
+   "roman": "naqab",
+   "meaning": "चेहरा ढकने का पर्दा",
+   "meaningEn": "veil, mask",
+   "wrong": [
+    "ताज",
+    "आईना",
+    "दस्ताना"
+   ],
+   "explanation": "नक़ाब चेहरा ढकने वाला पर्दा है; मुहावरे में असली रूप छिपाने के लिए भी आता है।",
+   "example": "उसने अपने चेहरे से नक़ाब उठा दिया।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "نقاب"
+  },
+  {
+   "id": "veerana",
+   "word": "वीराना",
+   "roman": "veerana",
+   "meaning": "उजाड़, सुनसान जगह",
+   "meaningEn": "desolate place",
+   "wrong": [
+    "बाग़",
+    "महल",
+    "मेला"
+   ],
+   "explanation": "वीराना वह जगह है जो उजड़ी और सुनसान हो।",
+   "example": "पुराना क़िला अब वीराना बन चुका है।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "ویرانہ"
+  },
+  {
+   "id": "charagh",
+   "word": "चराग़",
+   "roman": "charagh",
+   "meaning": "दीपक",
+   "meaningEn": "lamp",
+   "wrong": [
+    "आईना",
+    "पंख",
+    "तलवार"
+   ],
+   "explanation": "चराग़ का अर्थ दीपक है।",
+   "example": "हवा चली तो चराग़ काँप उठा।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "چراغ"
+  },
+  {
+   "id": "parwana",
+   "word": "परवाना",
+   "roman": "parwana",
+   "meaning": "पतंगा (जो शम्अ पर मँडराता है)",
+   "meaningEn": "moth",
+   "wrong": [
+    "चिड़िया",
+    "मछली",
+    "साँप"
+   ],
+   "explanation": "परवाना का अर्थ पतंगा है; शायरी में शम्अ पर मरने वाले आशिक़ का प्रतीक है।",
+   "example": "शम्अ पर जल मरना परवाने की पहचान है।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "پروانہ"
+  },
+  {
+   "id": "dasht",
+   "word": "दश्त",
+   "roman": "dasht",
+   "meaning": "वीरान मैदान, जंगल",
+   "meaningEn": "wilderness, desert",
+   "wrong": [
+    "समुद्र",
+    "शहर",
+    "बाज़ार"
+   ],
+   "explanation": "दश्त का अर्थ वीरान मैदान या बियाबान है; शायरी में मजनूँ दश्त में भटकता है।",
+   "example": "आशिक़ दश्त की ख़ाक छानता फिरा।",
+   "level": "hard",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "دشت"
+  },
+  {
+   "id": "sahil",
+   "word": "साहिल",
+   "roman": "sahil",
+   "meaning": "किनारा, तट",
+   "meaningEn": "shore",
+   "wrong": [
+    "तूफ़ान",
+    "गहराई",
+    "नाव"
+   ],
+   "explanation": "साहिल का अर्थ नदी या समुद्र का किनारा है।",
+   "example": "नाव आख़िर साहिल तक पहुँच गई।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "ساحل"
+  },
+  {
+   "id": "mauj",
+   "word": "मौज",
+   "roman": "mauj",
+   "meaning": "लहर, तरंग",
+   "meaningEn": "wave",
+   "wrong": [
+    "रेत",
+    "पतवार",
+    "मछली"
+   ],
+   "explanation": "मौज का मूल अर्थ लहर है; आम बोलचाल में आनंद-मस्ती के लिए भी आता है।",
+   "example": "समंदर की हर मौज किनारे से टकराकर लौट गई।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "موج"
+  },
+  {
+   "id": "aashiyana",
+   "word": "आशियाना",
+   "roman": "aashiyana",
+   "meaning": "घोंसला, रहने का ठिकाना",
+   "meaningEn": "nest, home",
+   "wrong": [
+    "पिंजरा",
+    "खेत",
+    "सराय"
+   ],
+   "explanation": "आशियाना का अर्थ घोंसला है; घर के अर्थ में भी बोला जाता है।",
+   "example": "चिड़िया ने तिनके जोड़कर आशियाना बनाया।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "آشیانہ"
+  },
+  {
+   "id": "qafas",
+   "word": "क़फ़स",
+   "roman": "qafas",
+   "meaning": "पिंजरा",
+   "meaningEn": "cage",
+   "wrong": [
+    "दाना",
+    "पंख",
+    "आसमान"
+   ],
+   "explanation": "क़फ़स का अर्थ पिंजरा है; शायरी में क़ैद या बंदिश का प्रतीक है।",
+   "example": "क़फ़स में रहकर भी परिंदा गाता रहा।",
+   "level": "hard",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "قفس"
+  },
+  {
+   "id": "gulshan",
+   "word": "गुलशन",
+   "roman": "gulshan",
+   "meaning": "बाग़, फुलवारी",
+   "meaningEn": "flower garden",
+   "wrong": [
+    "जंगल",
+    "खेत",
+    "तालाब"
+   ],
+   "explanation": "गुलशन का अर्थ फूलों का बाग़ है।",
+   "example": "बहार आते ही गुलशन महक उठा।",
+   "level": "easy",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "گلشن"
+  },
+  {
+   "id": "saba",
+   "word": "सबा",
+   "roman": "saba",
+   "meaning": "सुबह की ठंडी, धीमी हवा",
+   "meaningEn": "gentle morning breeze",
+   "wrong": [
+    "आँधी",
+    "बारिश",
+    "धूप"
+   ],
+   "explanation": "सबा पूरब से चलने वाली ठंडी, मंद हवा है; शायरी में प्रिय का संदेश लाने वाली मानी जाती है।",
+   "example": "सबा ने फूलों से कुछ कहा और आगे बढ़ गई।",
+   "level": "hard",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "صبا"
+  },
+  {
+   "id": "shafaq",
+   "word": "शफ़क़",
+   "roman": "shafaq",
+   "meaning": "सुबह या शाम के आसमान की लालिमा",
+   "meaningEn": "twilight glow",
+   "wrong": [
+    "चाँदनी",
+    "बादल",
+    "तारा"
+   ],
+   "explanation": "शफ़क़ सूरज के उगने से पहले या डूबने के बाद आसमान में फैली लाल आभा है।",
+   "example": "शाम को शफ़क़ से आसमान सुनहरा हो गया।",
+   "level": "hard",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "شفق"
+  },
+  {
+   "id": "falak",
+   "word": "फ़लक",
+   "roman": "falak",
+   "meaning": "आसमान",
+   "meaningEn": "sky, heaven",
+   "wrong": [
+    "ज़मीन",
+    "समंदर",
+    "पर्वत"
+   ],
+   "explanation": "फ़लक का अर्थ आसमान है।",
+   "example": "उसके हौसले फ़लक को छूते थे।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "فلک"
+  },
+  {
+   "id": "zameer",
+   "word": "ज़मीर",
+   "roman": "zameer",
+   "meaning": "अंतरात्मा, विवेक",
+   "meaningEn": "conscience",
+   "wrong": [
+    "शरीर",
+    "दौलत",
+    "ताक़त"
+   ],
+   "explanation": "ज़मीर का अर्थ अंतरात्मा है, यानी भीतर की वह आवाज़ जो सही-ग़लत बताती है।",
+   "example": "उसका ज़मीर उसे चैन से बैठने नहीं देता था।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "ضمیر"
+  },
+  {
+   "id": "imaan",
+   "word": "ईमान",
+   "roman": "imaan",
+   "meaning": "आस्था, नीयत की सच्चाई",
+   "meaningEn": "faith, integrity",
+   "wrong": [
+    "क़र्ज़",
+    "दौलत",
+    "मज़ाक़"
+   ],
+   "explanation": "ईमान का अर्थ आस्था है; रोज़मर्रा में ईमानदारी और सच्चाई के अर्थ में भी बोला जाता है।",
+   "example": "वह अपने ईमान का पक्का आदमी है।",
+   "level": "medium",
+   "category": "उर्दू",
+   "active": true,
+   "urdu": "ایمان"
+  },
+  {
+   "id": "adab",
+   "word": "अदब",
+   "roman": "adab",
+   "meaning": "शिष्टाचार; साहित्य",
+   "meaningEn": "etiquette; literature",
+   "wrong": [
+    "बेरुख़ी",
+    "कारोबार",
+    "उत्सव"
+   ],
+   "explanation": "अदब के दो प्रचलित अर्थ हैं: शिष्टाचार और साहित्य। यहाँ दोनों अर्थ एक ही विकल्प में दिए गए हैं।",
+   "example": "बड़ों का अदब करना हमारी तहज़ीब है।",
+   "level": "medium",
+   "category": "अदबी",
+   "active": true,
+   "urdu": "ادب"
+  },
+  {
+   "id": "sukhanvar",
+   "word": "सुख़नवर",
+   "roman": "sukhanvar",
+   "meaning": "कवि, शायर",
+   "meaningEn": "poet",
+   "wrong": [
+    "व्यापारी",
+    "सिपाही",
+    "वैद्य"
+   ],
+   "explanation": "सुख़न का अर्थ बात या काव्य है; सुख़नवर यानी काव्य रचने वाला, शायर।",
+   "example": "ग़ालिब अपने दौर के बड़े सुख़नवर थे।",
+   "level": "hard",
+   "category": "अदबी",
+   "active": true,
+   "urdu": "سخنور"
+  },
+  {
+   "id": "matla",
+   "word": "मतला",
+   "roman": "matla",
+   "meaning": "ग़ज़ल का पहला शेर",
+   "meaningEn": "opening couplet of a ghazal",
+   "wrong": [
+    "ग़ज़ल का आख़िरी शेर",
+    "ग़ज़ल की धुन",
+    "ग़ज़ल का शीर्षक"
+   ],
+   "explanation": "मतला ग़ज़ल का पहला शेर है, जिसकी दोनों पंक्तियाँ तुकांत होती हैं।",
+   "example": "मतला सुनते ही महफ़िल में वाह-वाह होने लगी।",
+   "level": "hard",
+   "category": "अदबी",
+   "active": true,
+   "urdu": "مطلع"
+  },
+  {
+   "id": "maqta",
+   "word": "मक़ता",
+   "roman": "maqta",
+   "meaning": "ग़ज़ल का आख़िरी शेर (जिसमें शायर का तख़ल्लुस आता है)",
+   "meaningEn": "closing couplet of a ghazal",
+   "wrong": [
+    "ग़ज़ल का पहला शेर",
+    "ग़ज़ल की धुन",
+    "ग़ज़ल का विषय"
+   ],
+   "explanation": "मक़ता ग़ज़ल का अंतिम शेर है, जिसमें आम तौर पर शायर अपना तख़ल्लुस (उपनाम) रखता है।",
+   "example": "मक़ते में शायर ने अपना नाम बाँध दिया।",
+   "level": "hard",
+   "category": "अदबी",
+   "active": true,
+   "urdu": "مقطع"
+  },
+  {
+   "id": "takhallus",
+   "word": "तख़ल्लुस",
+   "roman": "takhallus",
+   "meaning": "शायर का उपनाम",
+   "meaningEn": "poetic pen-name",
+   "wrong": [
+    "शायर का जन्मस्थान",
+    "शायर की किताब",
+    "शायर का गुरु"
+   ],
+   "explanation": "तख़ल्लुस वह उपनाम है जिसे शायर अपनी रचनाओं में रखता है, जैसे \"ग़ालिब\", \"मीर\"।",
+   "example": "\"असद\" मिर्ज़ा ग़ालिब का पहला तख़ल्लुस था।",
+   "level": "hard",
+   "category": "अदबी",
+   "active": true,
+   "urdu": "تخلص"
+  },
+  {
+   "id": "qafiya",
+   "word": "क़ाफ़िया",
+   "roman": "qafiya",
+   "meaning": "तुकांत शब्द, तुक",
+   "meaningEn": "rhyme",
+   "wrong": [
+    "शेर की व्याख्या",
+    "शायर का उपनाम",
+    "ग़ज़ल का पहला शेर"
+   ],
+   "explanation": "क़ाफ़िया शेर की पंक्तियों के अंत में आने वाले तुक मिलाते शब्द हैं।",
+   "example": "\"दर्द\" और \"सर्द\" का क़ाफ़िया मिलता है।",
+   "level": "hard",
+   "category": "अदबी",
+   "active": true,
+   "urdu": "قافیہ"
+  },
+  {
+   "id": "radif",
+   "word": "रदीफ़",
+   "roman": "radif",
+   "meaning": "क़ाफ़िये के बाद दोहराया जाने वाला शब्द या पद",
+   "meaningEn": "repeated refrain after the rhyme",
+   "wrong": [
+    "ग़ज़ल का पहला शेर",
+    "शायर का उपनाम",
+    "शेर का अर्थ"
+   ],
+   "explanation": "रदीफ़ वह शब्द या पद है जो हर शेर में क़ाफ़िये के बाद ज्यों का त्यों दोहराया जाता है।",
+   "example": "\"हज़ारों ख़्वाहिशें ऐसी…\" वाली ग़ालिब की ग़ज़ल की रदीफ़ \"निकले\" है।",
+   "level": "hard",
+   "category": "अदबी",
+   "active": true,
+   "urdu": "ردیف"
+  },
+  {
+   "id": "deewan",
+   "word": "दीवान",
+   "roman": "deewan",
+   "meaning": "किसी शायर की ग़ज़लों का संग्रह",
+   "meaningEn": "collected poetry of a poet",
+   "wrong": [
+    "शायर का मित्र",
+    "मुशायरे का मंच",
+    "शेर की व्याख्या"
+   ],
+   "explanation": "अदब में दीवान शायर की ग़ज़लों का संकलन है, जो आम तौर पर रदीफ़ के वर्णक्रम में सजा होता है।",
+   "example": "\"दीवान-ए-ग़ालिब\" ग़ालिब की ग़ज़लों का संग्रह है।",
+   "level": "hard",
+   "category": "अदबी",
+   "active": true,
+   "urdu": "دیوان"
+  },
+  {
+   "id": "mushaira",
+   "word": "मुशायरा",
+   "roman": "mushaira",
+   "meaning": "कवि-सम्मेलन, जहाँ शायर अपना कलाम सुनाते हैं",
+   "meaningEn": "gathering of poets",
+   "wrong": [
+    "पुस्तक-मेला",
+    "कुश्ती का अखाड़ा",
+    "नाटक-मंडली"
+   ],
+   "explanation": "मुशायरा वह महफ़िल है जिसमें कई शायर बारी-बारी से अपना कलाम पढ़ते हैं।",
+   "example": "देर रात तक मुशायरा चलता रहा।",
+   "level": "medium",
+   "category": "अदबी",
+   "active": true,
+   "urdu": "مشاعرہ"
+  },
+  {
+   "id": "kshitij",
+   "word": "क्षितिज",
+   "roman": "kshitij",
+   "meaning": "वह रेखा जहाँ धरती और आसमान मिलते दिखते हैं",
+   "meaningEn": "horizon",
+   "wrong": [
+    "सूर्य की किरण",
+    "पर्वत की चोटी",
+    "आकाश-गंगा"
+   ],
+   "explanation": "क्षितिज वह काल्पनिक रेखा है जहाँ आकाश और धरती मिलते हुए दिखाई देते हैं।",
+   "example": "सूरज क्षितिज के पार डूब गया।",
+   "level": "medium",
+   "category": "हिंदी",
+   "active": true
+  },
+  {
+   "id": "nirjhar",
+   "word": "निर्झर",
+   "roman": "nirjhar",
+   "meaning": "झरना",
+   "meaningEn": "waterfall, spring",
+   "wrong": [
+    "तालाब",
+    "नदी का किनारा",
+    "बादल"
+   ],
+   "explanation": "निर्झर का अर्थ झरना है।",
+   "example": "पहाड़ से निर्झर बह रहा था।",
+   "level": "medium",
+   "category": "हिंदी",
+   "active": true
+  },
+  {
+   "id": "vyatha",
+   "word": "व्यथा",
+   "roman": "vyatha",
+   "meaning": "पीड़ा, दुख",
+   "meaningEn": "anguish, distress",
+   "wrong": [
+    "उल्लास",
+    "कथा",
+    "व्यवसाय"
+   ],
+   "explanation": "व्यथा का अर्थ पीड़ा या मन का दुख है।",
+   "example": "उसने अपनी व्यथा किसी से नहीं कही।",
+   "level": "medium",
+   "category": "हिंदी",
+   "active": true
+  },
+  {
+   "id": "neerav",
+   "word": "नीरव",
+   "roman": "neerav",
+   "meaning": "शांत, निःशब्द",
+   "meaningEn": "silent, still",
+   "wrong": [
+    "चंचल",
+    "प्रकाशमय",
+    "उग्र"
+   ],
+   "explanation": "नीरव का अर्थ शब्दरहित, शांत है।",
+   "example": "रात का नीरव वातावरण मन को भा गया।",
+   "level": "hard",
+   "category": "हिंदी",
+   "active": true
+  },
+  {
+   "id": "kautuhal",
+   "word": "कौतूहल",
+   "roman": "kautuhal",
+   "meaning": "उत्सुकता, जानने की इच्छा",
+   "meaningEn": "curiosity",
+   "wrong": [
+    "भय",
+    "आलस्य",
+    "क्रोध"
+   ],
+   "explanation": "कौतूहल का अर्थ किसी बात को जानने-देखने की उत्सुकता है।",
+   "example": "बच्चे कौतूहल से खिलौने को देखते रहे।",
+   "level": "medium",
+   "category": "हिंदी",
+   "active": true
+  },
+  {
+   "id": "anurag",
+   "word": "अनुराग",
+   "roman": "anurag",
+   "meaning": "प्रेम, लगाव",
+   "meaningEn": "affection, love",
+   "wrong": [
+    "द्वेष",
+    "उदासीनता",
+    "भय"
+   ],
+   "explanation": "अनुराग का अर्थ गहरा प्रेम या लगाव है।",
+   "example": "उसे संगीत से बचपन से ही अनुराग था।",
+   "level": "medium",
+   "category": "हिंदी",
+   "active": true
+  },
+  {
+   "id": "upvan",
+   "word": "उपवन",
+   "roman": "upvan",
+   "meaning": "छोटा बाग़, उद्यान",
+   "meaningEn": "small garden, grove",
+   "wrong": [
+    "मरुस्थल",
+    "पहाड़ी",
+    "खलिहान"
+   ],
+   "explanation": "उपवन का अर्थ छोटा बाग़ या उद्यान है।",
+   "example": "सुबह वे उपवन में टहलने गए।",
+   "level": "medium",
+   "category": "हिंदी",
+   "active": true
+  },
+  {
+   "id": "pahar",
+   "word": "प्रहर",
+   "roman": "prahar",
+   "meaning": "दिन-रात का आठवाँ भाग, लगभग तीन घंटे",
+   "meaningEn": "a watch (about three hours)",
+   "wrong": [
+    "एक क्षण",
+    "एक सप्ताह",
+    "एक वर्ष"
+   ],
+   "explanation": "पुरानी गणना में दिन और रात को मिलाकर आठ प्रहर होते हैं; एक प्रहर लगभग तीन घंटे का होता है।",
+   "example": "रात का तीसरा प्रहर बीत चुका था।",
+   "level": "hard",
+   "category": "हिंदी",
+   "active": true
+  },
+  {
+   "id": "aalok",
+   "word": "आलोक",
+   "roman": "aalok",
+   "meaning": "प्रकाश, उजाला",
+   "meaningEn": "light, radiance",
+   "wrong": [
+    "अंधकार",
+    "छाया",
+    "धुआँ"
+   ],
+   "explanation": "आलोक का अर्थ प्रकाश है।",
+   "example": "ज्ञान का आलोक अज्ञान मिटा देता है।",
+   "level": "medium",
+   "category": "हिंदी",
+   "active": true
+  },
+  {
+   "id": "timir",
+   "word": "तिमिर",
+   "roman": "timir",
+   "meaning": "अंधकार",
+   "meaningEn": "darkness",
+   "wrong": [
+    "प्रकाश",
+    "धुंध",
+    "चाँदनी"
+   ],
+   "explanation": "तिमिर का अर्थ अँधेरा है।",
+   "example": "दीपक ने तिमिर को दूर कर दिया।",
+   "level": "medium",
+   "category": "हिंदी",
+   "active": true
+  }
+ ]
+}
