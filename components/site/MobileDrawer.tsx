@@ -107,8 +107,7 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
     { href: '/poets', label: 'रचनाकार', sub: 'Authors', icon: 'fa-feather-alt', active: pathname.startsWith('/poets') || pathname.startsWith('/author') || pathname.startsWith('/u/') },
     { href: '/category', label: 'श्रेणियाँ', sub: 'Categories', icon: 'fa-th-large', active: pathname.startsWith('/category') },
     { href: '/dictionary', label: 'शब्दकोश', sub: 'Dictionary', icon: 'fa-book', active: pathname.startsWith('/dictionary') },
-    { href: '/game', label: 'खेल', sub: 'Sher Antakshari', icon: 'fa-gamepad', active: pathname.startsWith('/game') },
-    { href: '/game/poet', label: 'शेर पहचानिए', sub: 'Guess the Poet', icon: 'fa-question-circle', active: pathname.startsWith('/game/poet') },
+    { href: '/games', label: 'खेल', sub: 'Games', icon: 'fa-gamepad', active: pathname.startsWith('/game') },
     { href: '/about-contact', label: 'संपर्क करें', sub: 'About / Contact', icon: 'fa-envelope', active: pathname.startsWith('/about-contact') },
     { href: '/feedback', label: 'अपनी राय दें', sub: 'Feedback', icon: 'fa-comment-dots', active: pathname.startsWith('/feedback') },
   ];

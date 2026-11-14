@@ -1,0 +1,21 @@
+/* Games list page. Same tokens and card look as the game menu cards (components/game/game.css .sg-mode). */
+.gh-section { padding: 1rem 0 2.5rem; }
+.gh-head { text-align: center; margin-bottom: 1.25rem; }
+.gh-head h1 { font-family: var(--font-display); font-size: clamp(1.6rem, 5vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
+.gh-head p { color: var(--text-muted); line-height: 1.7; margin-top: 0.4rem; font-size: 0.98rem; }
+
+.gh-list { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 1rem; width: min(100%, 640px); }
+.gh-card {
+  display: flex; flex-direction: column; gap: 0.35rem; min-height: 48px; padding: 1.1rem 1.25rem; text-decoration: none;
+  background: var(--surface-solid); color: var(--text-dark); font-family: var(--font-deva);
+  border: 1.5px solid var(--border-light); border-left: 4px solid var(--accent); border-radius: 14px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.gh-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.gh-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.gh-title { font-size: 1.3rem; font-weight: 600; color: var(--accent-fg, var(--accent-dark)); }
+.gh-desc { font-size: 1rem; line-height: 1.7; color: var(--text-dark); }
+.gh-meta { font-size: 0.85rem; line-height: 1.6; color: var(--text-muted); }
+.gh-go { margin-top: 0.3rem; font-weight: 600; color: var(--accent-fg, var(--accent)); }
+
+@media (prefers-reduced-motion: reduce) { .gh-card { transition: none; } }

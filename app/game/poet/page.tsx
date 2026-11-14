@@ -21,7 +21,7 @@ export default function PoetGamePage() {
       <Breadcrumbs
         items={[
           { name: 'मुखपृष्ठ', path: '/' },
-          { name: 'खेल', path: '/game' },
+          { name: 'खेल', path: '/games' },
           { name: 'शेर पहचानिए', path: '/game/poet' },
         ]}
       />
