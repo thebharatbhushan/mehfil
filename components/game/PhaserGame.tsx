@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
 import fallbackJson from '@/lib/game/fallback-couplets.json';
 import { buildPool, type Couplet } from '@/lib/game/couplets';
+import { CompleteGame } from '@/lib/game/engine';
 import { loadSiteCouplets } from './loadCouplets';
 import { waitForGameFonts } from './fonts';
 import { readPalette } from './theme';
@@ -66,7 +67,8 @@ export default function PhaserGame() {
           // All interaction happens in the DOM overlay, so Phaser must not grab keyboard / pointer events (typing needs them).
           input: { keyboard: false, mouse: false, touch: false, gamepad: false },
           scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-          scene: [MenuScene, PlayScene, ResultScene],
+          // Phaser starts the first scene in the list: go straight into the game when it can be played, otherwise show the menu (it explains why not).
+          scene: CompleteGame.canPlay(entries) ? [PlayScene, MenuScene, ResultScene] : [MenuScene, PlayScene, ResultScene],
           callbacks: {
             preBoot: (g) => {
               g.registry.set(CTX_KEY, ctx);
