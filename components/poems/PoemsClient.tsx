@@ -105,10 +105,28 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
   // Any filter change returns to page 1 (and resets ?page= in the URL).
   const resetPage = () => setPage(1, { replace: true });
 
-  const goToPage = (p: number) => {
-    setPage(p);
-    filterBarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // While a page loads the list collapses to a small loader (document gets shorter), so a scroll started on click
+  // gets cut short and the user stays near the bottom. Scroll once the new page has rendered instead.
+  const pendingScroll = useRef(false);
+  const scrollToTop = () => {
+    const el = filterBarRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 90; // clear the sticky header
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   };
+
+  const goToPage = (p: number) => {
+    pendingScroll.current = true;
+    setPage(p);
+    scrollToTop(); // immediate start (covers the case where the page does not reload)
+  };
+
+  useEffect(() => {
+    if (loading || !pendingScroll.current) return;
+    pendingScroll.current = false;
+    // wait a frame so the new cards are laid out before measuring
+    requestAnimationFrame(scrollToTop);
+  }, [loading, poems]);
 
   return (
     <>
