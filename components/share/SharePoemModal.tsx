@@ -111,7 +111,7 @@ export default function SharePoemModal({ poem, onClose }: Props) {
     setBusy('share');
     try {
       const files = await getFiles();
-      const text = `${poem.title ? `${poem.title} — ` : ''}${poem.authorName}${poem.url ? `\n${poem.url}` : ''}\nmehfil.in`;
+      const text = `${poem.title ? `${poem.title} — ` : ''}${poem.authorName}${poem.url ? `\n${poem.url}` : ''}\nmehfilpoetry.in`;
       const outcome = await shareFiles(files, text, `${poem.authorName} | Mehfil`);
       if (outcome === 'shared') {
         showToast('✨ साझा करने के लिए तैयार!');

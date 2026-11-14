@@ -14,7 +14,7 @@ export type FontStyleId = 'classic' | 'elegant' | 'modern' | 'urdu';
 export type AlignId = 'left' | 'center' | 'right';
 export type SizeId = 'small' | 'medium' | 'large';
 
-/** The Mehfil watermark, logo and mehfil.in are mandatory on every card, so they are not options. */
+/** The Mehfil watermark, logo and mehfilpoetry.in are mandatory on every card, so they are not options. */
 export interface ShareCardOptions {
   background: BackgroundId;
   decoration: DecorationId;

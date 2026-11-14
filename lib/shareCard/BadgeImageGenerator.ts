@@ -12,8 +12,8 @@ import { BADGE_TONES, badgeTone } from '../recognition';
 
 export const BADGE_CARD_W = 1080;
 export const BADGE_CARD_H = 1350;
-export const BADGE_SITE_LABEL = 'mehfil.in';
-export const BADGE_SITE_URL = 'https://mehfil.in';
+export const BADGE_SITE_LABEL = 'mehfilpoetry.in';
+export const BADGE_SITE_URL = 'https://mehfilpoetry.in';
 
 export interface ShareBadgeData {
   badgeKey: string;
@@ -107,11 +107,11 @@ function fit(ctx: CanvasRenderingContext2D, text: string, start: number, min: nu
 
 export async function prepareBadgeCard(d: ShareBadgeData) {
   if (typeof document !== 'undefined' && document.fonts?.load) {
-    const sample = `${d.userName} ${d.badgeName} ${d.badgeDescription || ''} मेहफ़िल Mehfil mehfil.in`;
+    const sample = `${d.userName} ${d.badgeName} ${d.badgeDescription || ''} मेहफ़िल Mehfil mehfilpoetry.in`;
     await Promise.race([
       Promise.all([
         document.fonts.load(stack(40), sample).catch(() => []),
-        document.fonts.load(`700 40px ${LATIN}`, 'Mehfil mehfil.in').catch(() => []),
+        document.fonts.load(`700 40px ${LATIN}`, 'Mehfil mehfilpoetry.in').catch(() => []),
         document.fonts.load(BRAND_DEVA_FONT, 'मेहफ़िल').catch(() => []),
         preloadBrandLogo(),
       ]),

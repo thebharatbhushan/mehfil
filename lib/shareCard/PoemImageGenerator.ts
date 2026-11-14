@@ -5,7 +5,7 @@
  * exported PNG both call it, so what the user sees is exactly what they download / share.
  *
  * Layers (back to front): background -> watermark (always) -> frame -> decoration -> author photo + name + title
- * -> poem -> footer (logo + mehfil.in).
+ * -> poem -> footer (logo + mehfilpoetry.in).
  */
 import { drawBrandLockup, drawFeather } from './logo';
 import { loadAuthorImage, getLoadedAuthorImage } from './avatar';
@@ -242,7 +242,7 @@ function drawFooter(ctx: CanvasRenderingContext2D, options: ShareCardOptions, pa
   ctx.textBaseline = 'alphabetic';
   setTracking(ctx, 3);
   ctx.fillStyle = theme.accent;
-  const url = 'mehfil.in';
+  const url = 'mehfilpoetry.in';
   const w = ctx.measureText(url).width;
   ctx.fillText(url, CARD_WIDTH / 2 - w / 2, GEOMETRY.footerUrlY);
 

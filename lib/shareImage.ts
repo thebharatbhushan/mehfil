@@ -214,7 +214,7 @@ export async function generateShareImage(data: SharePoemData): Promise<Blob | nu
   ctx.fillText('जहाँ अल्फ़ाज़ एहसास बनते हैं', W / 2, bottomY + 62);
   ctx.fillStyle = '#9e7a64';
   ctx.font = 'bold 18px Georgia, serif';
-  ctx.fillText('www.mehfil.in', W / 2, bottomY + 88);
+  ctx.fillText('www.mehfilpoetry.in', W / 2, bottomY + 88);
 
   return new Promise((resolve) => {
     canvas.toBlob((blob) => resolve(blob), 'image/png', 0.95);
@@ -228,7 +228,7 @@ export async function sharePoemImage(data: SharePoemData, fallbackUrl: string): 
       try {
         await navigator.share({
           title: data.title || 'कविता',
-          text: `${(data.body || '').substring(0, 100)}\n\nwww.mehfil.in`,
+          text: `${(data.body || '').substring(0, 100)}\n\nwww.mehfilpoetry.in`,
           url: fallbackUrl,
         });
       } catch {}
@@ -239,7 +239,7 @@ export async function sharePoemImage(data: SharePoemData, fallbackUrl: string): 
   }
 
   const file = new File([blob], 'mehfil-poem.png', { type: 'image/png' });
-  const shareText = `${data.title || 'कविता'}\n${(data.body || '').substring(0, 100)}\n\nwww.mehfil.in`;
+  const shareText = `${data.title || 'कविता'}\n${(data.body || '').substring(0, 100)}\n\nwww.mehfilpoetry.in`;
 
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {

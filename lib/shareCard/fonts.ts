@@ -153,10 +153,10 @@ export async function ensureCardFonts(style: FontStyleId, text: string, timeoutM
     add(`${def.weight[k]} 40px ${def.families[k]}`, text);
   });
   // Author name (any script) and the fixed brand strings.
-  add(`${def.nameWeight} 40px ${def.families.latin}`, 'Mehfil mehfil.in');
+  add(`${def.nameWeight} 40px ${def.families.latin}`, 'Mehfil mehfilpoetry.in');
   add(`${def.nameWeight} 40px ${def.families.deva}`, 'मेहफ़िल');
   add(BRAND_DEVA_FONT, 'मेहफ़िल');
-  add(URL_FONT, 'mehfil.in');
+  add(URL_FONT, 'mehfilpoetry.in');
 
   jobs.push(preloadBrandLogo());
 
