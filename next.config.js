@@ -12,7 +12,9 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "media-src 'self' data: blob: https:",
   "connect-src 'self' https:",
-  "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://accounts.google.com https://translate.google.com",
+  // 'self' + about:/blob:/data: are needed by Google Translate: Chrome builds its hidden helper iframe from the page's own URL
+  // (".../#") or an about:blank / javascript: document; without them Chrome blocks it and the language never changes.
+  "frame-src 'self' about: blob: data: https://www.youtube-nocookie.com https://www.youtube.com https://accounts.google.com https://translate.google.com https://translate.googleapis.com",
   "frame-ancestors 'self'",
   "object-src 'none'",
   "base-uri 'self'",
