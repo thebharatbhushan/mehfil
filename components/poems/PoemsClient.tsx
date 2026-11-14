@@ -97,6 +97,9 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
   // Never show an empty page: a stale/out-of-range page (e.g. after the live list shrank) clamps to the last page.
   const page = Math.min(rawPage, totalPages);
   const pageItems = poems;
+  // Only the very first load (nothing to show yet) swaps the list for a loader. On page/filter changes the previous
+  // cards stay on screen, so the page height never collapses (which used to fling the scroll down to the footer).
+  const showLoader = loading && poems.length === 0;
 
   useEffect(() => {
     if (!loading && rawPage > totalPages) setPage(totalPages, { replace: true });
@@ -138,7 +141,7 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
       <section style={{ paddingTop: 0 }}>
         <div className="mehfil-container">
           {/* Poem of the Week */}
-          {!loading && poemOfTheWeek && (
+          {!showLoader && poemOfTheWeek && (
             <div className="potw-section fade-up" ref={wotwRef}>
               <div className="potw-card">
                 <div className="potw-shimmer" />
@@ -227,7 +230,7 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
             </div>
           </div>
 
-          {loading ? (
+          {showLoader ? (
             <div className="loader-wrapper">
               <div className="loader-dots"><span></span><span></span><span></span></div>
               <div className="loader-text">अल्फ़ाज़ आ रहे हैं...</div>
@@ -237,7 +240,7 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
               ✨ कोई रचनाएँ नहीं मिलीं।
             </p>
           ) : (
-            <div className="poems-list-grid">
+            <div className="poems-list-grid" style={loading ? { opacity: 0.55, transition: 'opacity .2s' } : undefined} aria-busy={loading}>
               {pageItems.map((poem) => (
                 <Link href={`/poem/${poem.slug}`} key={poem._id} className="poem-card fade-up">
                   <div className="poem-card-header">
@@ -255,7 +258,7 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
             </div>
           )}
 
-          {!loading && (
+          {!showLoader && (
             <Pagination page={page} totalPages={totalPages} hrefFor={hrefFor} onChange={goToPage} label="कविताओं के पृष्ठ" />
           )}
         </div>
