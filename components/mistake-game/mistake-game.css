@@ -1,0 +1,88 @@
+/* ग़लती पकड़िए (Spot the Mistake). Uses the site's own CSS variables, so light and dark themes (html[data-theme]) work automatically.
+   Visual values mirror components/game/game.css; class names are prefixed ms- so nothing in the other games is touched. */
+
+.ms-section { padding: 1rem 0 2.5rem; }
+.ms-head { text-align: center; margin-bottom: 1rem; }
+.ms-head h1 { font-family: var(--font-display); font-size: clamp(1.6rem, 5vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
+.ms-head p { color: var(--text-muted); line-height: 1.7; margin-top: 0.4rem; font-size: 0.98rem; }
+
+.ms-wrap {
+  position: relative; margin: 0 auto; width: min(100%, 560px); min-height: 26rem;
+  background: var(--bg); border: 1px solid var(--border-light); border-radius: 18px; box-shadow: var(--shadow-sm);
+  overflow: hidden; color: var(--text-dark); font-family: var(--font-deva); -webkit-text-size-adjust: 100%;
+}
+.ms-body { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem 1.25rem 1.5rem; }
+
+.ms-status {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; min-height: 26rem;
+  color: var(--text-muted); font-size: 1rem; line-height: 1.7; text-align: center; padding: 1rem;
+}
+.ms-spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--accent-soft); border-top-color: var(--accent); animation: ms-rot 0.9s linear infinite; }
+@keyframes ms-rot { to { transform: rotate(360deg); } }
+
+.ms-hud { display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 600; color: var(--accent-fg, var(--accent-dark)); }
+.ms-progress { height: 8px; border-radius: 4px; background: var(--border-light); overflow: hidden; }
+.ms-progress span { display: block; height: 100%; border-radius: 4px; background: var(--accent); transition: width 0.25s ease; }
+
+.ms-eyebrow { font-size: 0.85rem; letter-spacing: 0.08em; color: var(--accent-fg, var(--accent)); }
+.ms-title { font-family: var(--font-display); font-size: clamp(1.8rem, 6vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
+.ms-lead { font-size: 1.05rem; line-height: 1.7; color: var(--text-muted); }
+.ms-verdict { font-size: 1.05rem; line-height: 1.7; color: var(--text-dark); max-width: 24em; }
+.ms-label { font-size: 0.95rem; color: var(--text-muted); }
+
+.ms-sher {
+  display: flex; flex-direction: column; gap: 0.35rem; margin: 0; padding: 0.9rem 0.9rem; background: var(--card-bg);
+  border: 1px solid var(--border-light); border-left: 4px solid var(--accent); border-radius: 12px; font-family: var(--font-poetry);
+}
+.ms-line { display: flex; flex-wrap: wrap; justify-content: flex-start; text-align: left; gap: 0.1rem 0.1rem; margin: 0; }
+.ms-word {
+  min-height: 44px; padding: 0.15rem 0.4rem; background: transparent; color: var(--text-dark); border: 1.5px dashed transparent; border-radius: 10px;
+  font-family: var(--font-poetry); font-size: clamp(1.05rem, 3.8vw, 1.25rem); line-height: 1.6; cursor: pointer; touch-action: manipulation;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.ms-word:hover:not(:disabled) { border-color: var(--accent); }
+.ms-word:disabled { cursor: default; color: var(--text-dark); opacity: 1; }
+.ms-word.is-selected { background: var(--accent-soft); border: 1.5px solid var(--accent); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.ms-word.is-mistake { background: rgba(192, 68, 58, 0.14); border: 1.5px solid #c0443a; text-decoration: line-through; text-decoration-thickness: 2px; }
+.ms-word.is-missed { border: 1.5px dashed var(--accent); background: var(--accent-soft); }
+.ms-mark { font-family: var(--font-ui); font-size: 0.8rem; font-weight: 600; text-decoration: none; display: inline-block; }
+
+.ms-msg { min-height: 1.5em; font-size: 1rem; line-height: 1.6; color: var(--text-muted); }
+.ms-msg.is-good { color: #2f7d4a; font-weight: 600; }
+.ms-msg.is-bad { color: #b3392f; font-weight: 600; }
+html[data-theme='dark'] .ms-msg.is-good { color: #6fc28a; }
+html[data-theme='dark'] .ms-msg.is-bad { color: #e57c72; }
+
+.ms-original {
+  margin: 0; padding: 0.9rem 1.1rem; background: var(--card-bg); border: 1px solid var(--border-light);
+  border-left: 4px solid #2f8a52; border-radius: 12px; font-family: var(--font-poetry); text-align: left;
+}
+.ms-original-head { margin: 0 0 0.3rem; font-family: var(--font-ui); font-size: 0.8rem; letter-spacing: 0.06em; color: var(--text-muted); }
+.ms-original-line { margin: 0; font-size: clamp(1.05rem, 3.6vw, 1.3rem); line-height: 1.8; color: var(--text-dark); overflow-wrap: anywhere; }
+.ms-fix { background: rgba(47, 138, 82, 0.2); color: inherit; padding: 0 0.25rem; border-radius: 6px; border-bottom: 2px solid #2f8a52; font-weight: 700; }
+.ms-cite { display: block; margin-top: 0.35rem; font-family: var(--font-ui); font-style: normal; font-size: 0.9rem; color: var(--text-muted); }
+.ms-note { margin: 0.4rem 0 0; font-family: var(--font-deva); font-size: 0.95rem; line-height: 1.7; color: var(--text-muted); }
+
+.ms-btn {
+  align-self: flex-start; min-height: 48px; padding: 0.55rem 1.3rem; border-radius: 999px; border: 1.5px solid var(--accent);
+  background: var(--accent); color: #fff; font-family: inherit; font-weight: 600; font-size: 1rem; cursor: pointer;
+  scroll-margin-bottom: 110px; /* keeps it clear of the mobile bottom nav */
+}
+.ms-btn:hover:not(:disabled) { filter: brightness(1.06); }
+.ms-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+:where(.ms-btn, .ms-word):focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.ms-result { align-items: center; text-align: center; justify-content: center; min-height: 26rem; }
+.ms-score-big { font-family: var(--font-display); font-size: clamp(3.4rem, 14vw, 5.4rem); line-height: 1.2; color: var(--accent-fg, var(--accent-dark)); }
+.ms-best { font-size: 1rem; color: var(--text-muted); }
+.ms-best.is-new { color: var(--accent-fg, var(--accent)); font-weight: 700; }
+.ms-stats { list-style: none; margin: 0.2rem 0; padding: 0; display: grid; gap: 0.35rem; width: min(100%, 22rem); }
+.ms-stats li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.35rem 0.8rem; border: 1px solid var(--border-light); border-radius: 10px; font-size: 0.95rem; color: var(--text-muted); }
+.ms-stats strong { color: var(--accent-fg, var(--accent-dark)); }
+.ms-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 0.6rem; }
+.ms-result .ms-btn { align-self: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-spin { animation-duration: 2.4s; }
+  .ms-word, .ms-progress span { transition: none; }
+}
