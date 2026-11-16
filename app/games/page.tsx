@@ -5,7 +5,7 @@ import { DEFAULT_OG_IMAGE } from '@/lib/seo';
 import './games-hub.css';
 
 const TITLE = 'खेल — शेर के खेल | Mehfil';
-const DESCRIPTION = 'मेहफ़िल के शेर खेल: शेर पूरा कीजिए, शेर पहचानिए और लफ़्ज़ का मतलब। मोबाइल पर मुफ़्त, बिना लॉगिन के।';
+const DESCRIPTION = 'मेहफ़िल के शेर खेल: शेर पूरा कीजिए, शेर पहचानिए, लफ़्ज़ का मतलब और अल्फ़ाज़ सजाइए। मोबाइल पर मुफ़्त, बिना लॉगिन के।';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -20,6 +20,7 @@ const GAMES = [
   { href: '/game', title: 'शेर पूरा कीजिए', desc: 'अधूरा शेर पढ़िए और चार में से सही दूसरी पंक्ति चुनिए।', meta: '10 सवाल · हर सवाल 15 सेकंड' },
   { href: '/game/poet', title: 'शेर पहचानिए', desc: 'पहचानिए मशहूर शेरों के शायर।', meta: '10 सवाल · चार में से सही शायर चुनिए' },
   { href: '/game/lafz', title: 'लफ़्ज़ का मतलब', desc: 'पहचानिए अल्फ़ाज़ के सही मायने।', meta: '10 लफ़्ज़ · चार में से सही मतलब चुनिए' },
+  { href: '/game/alfaz', title: 'अल्फ़ाज़ सजाइए', desc: 'बिखरे हुए अल्फ़ाज़ को सही क्रम में सजाकर शेर पूरा कीजिए।', meta: '5 शेर · छूकर या खींचकर शब्द सजाइए' },
 ];
 
 export default function GamesPage() {
