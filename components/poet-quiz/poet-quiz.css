@@ -1,0 +1,88 @@
+/* शायर की पहचान (Poet Quiz). Uses the site's own CSS variables, so light and dark themes (html[data-theme]) work automatically.
+   Visual values mirror components/game/game.css; class names are prefixed pq- so nothing in the other games is touched. */
+
+.pq-section { padding: 1rem 0 2.5rem; }
+.pq-head { text-align: center; margin-bottom: 1rem; }
+.pq-head h1 { font-family: var(--font-display); font-size: clamp(1.6rem, 5vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
+.pq-head p { color: var(--text-muted); line-height: 1.7; margin-top: 0.4rem; font-size: 0.98rem; }
+
+.pq-wrap {
+  position: relative; margin: 0 auto; width: min(100%, 560px); min-height: 26rem;
+  background: var(--bg); border: 1px solid var(--border-light); border-radius: 18px; box-shadow: var(--shadow-sm);
+  overflow: hidden; color: var(--text-dark); font-family: var(--font-deva); -webkit-text-size-adjust: 100%;
+}
+.pq-body { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem 1.25rem 1.5rem; }
+
+.pq-status {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; min-height: 26rem;
+  color: var(--text-muted); font-size: 1rem; line-height: 1.7; text-align: center; padding: 1rem;
+}
+.pq-spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--accent-soft); border-top-color: var(--accent); animation: pq-rot 0.9s linear infinite; }
+@keyframes pq-rot { to { transform: rotate(360deg); } }
+
+.pq-hud { display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 600; color: var(--accent-fg, var(--accent-dark)); }
+.pq-progress { height: 8px; border-radius: 4px; background: var(--border-light); overflow: hidden; }
+.pq-progress span { display: block; height: 100%; border-radius: 4px; background: var(--accent); transition: width 0.25s ease; }
+
+.pq-eyebrow { font-size: 0.85rem; letter-spacing: 0.08em; color: var(--accent-fg, var(--accent)); }
+.pq-title { font-family: var(--font-display); font-size: clamp(1.8rem, 6vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
+.pq-lead { font-size: 1.05rem; line-height: 1.7; color: var(--text-muted); }
+.pq-verdict { font-size: 1.05rem; line-height: 1.7; color: var(--text-dark); max-width: 24em; }
+.pq-label { font-size: 0.95rem; color: var(--text-muted); }
+
+.pq-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; font-size: 0.8rem; color: var(--text-muted); }
+.pq-tags span { padding: 0.1rem 0.6rem; border: 1px solid var(--border-light); border-radius: 999px; }
+.pq-question {
+  margin: 0; padding: 1rem 1.1rem; background: var(--card-bg); border: 1px solid var(--border-light); border-left: 4px solid var(--accent);
+  border-radius: 12px; font-family: var(--font-poetry); font-size: clamp(1.1rem, 3.8vw, 1.35rem); line-height: 1.8; color: var(--text-dark); overflow-wrap: anywhere;
+}
+
+.pq-options { display: grid; gap: 0.6rem; }
+.pq-option {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 48px; text-align: left;
+  padding: 0.65rem 0.9rem; background: var(--surface-solid); color: var(--text-dark);
+  border: 1.5px solid var(--border-light); border-radius: 12px; font-family: var(--font-poetry); cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.pq-option:hover:not(:disabled) { border-color: var(--accent); }
+.pq-option:disabled { cursor: default; }
+.pq-letter { flex: none; width: 1.9rem; height: 1.9rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 600; color: var(--accent-fg, var(--accent-dark)); background: var(--accent-soft); }
+.pq-opt-text { font-size: 1.1rem; line-height: 1.6; overflow-wrap: anywhere; }
+.pq-option.is-correct { border-color: #2f8a52; background: rgba(47, 138, 82, 0.14); }
+.pq-option.is-wrong { border-color: #c0443a; background: rgba(192, 68, 58, 0.14); }
+
+.pq-msg { min-height: 1.5em; font-size: 1rem; line-height: 1.6; color: var(--text-muted); }
+.pq-msg.is-good { color: #2f7d4a; font-weight: 600; }
+.pq-msg.is-bad { color: #b3392f; font-weight: 600; }
+html[data-theme='dark'] .pq-msg.is-good { color: #6fc28a; }
+html[data-theme='dark'] .pq-msg.is-bad { color: #e57c72; }
+
+.pq-explain {
+  display: flex; flex-direction: column; gap: 0.35rem; padding: 0.8rem 1rem; background: var(--card-bg);
+  border: 1px solid var(--border-light); border-radius: 12px; font-size: 0.98rem; line-height: 1.75; color: var(--text-dark);
+}
+.pq-explain p { margin: 0; }
+.pq-source { font-size: 0.82rem; line-height: 1.6; color: var(--text-muted); }
+
+.pq-btn {
+  align-self: flex-start; min-height: 48px; padding: 0.55rem 1.3rem; border-radius: 999px; border: 1.5px solid var(--accent);
+  background: var(--accent); color: #fff; font-family: inherit; font-weight: 600; font-size: 1rem; cursor: pointer;
+  scroll-margin-bottom: 110px; /* keeps it clear of the mobile bottom nav */
+}
+.pq-btn:hover { filter: brightness(1.06); }
+:where(.pq-btn, .pq-option):focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.pq-result { align-items: center; text-align: center; justify-content: center; min-height: 26rem; }
+.pq-score-big { font-family: var(--font-display); font-size: clamp(3.4rem, 14vw, 5.4rem); line-height: 1.2; color: var(--accent-fg, var(--accent-dark)); }
+.pq-best { font-size: 1rem; color: var(--text-muted); }
+.pq-best.is-new { color: var(--accent-fg, var(--accent)); font-weight: 700; }
+.pq-cats { list-style: none; margin: 0.2rem 0; padding: 0; display: grid; gap: 0.35rem; width: min(100%, 22rem); }
+.pq-cats li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.35rem 0.8rem; border: 1px solid var(--border-light); border-radius: 10px; font-size: 0.95rem; color: var(--text-muted); }
+.pq-cats strong { color: var(--accent-fg, var(--accent-dark)); }
+.pq-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 0.6rem; }
+.pq-result .pq-btn { align-self: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pq-spin { animation-duration: 2.4s; }
+  .pq-option, .pq-progress span { transition: none; }
+}
