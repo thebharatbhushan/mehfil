@@ -46,7 +46,7 @@
    "poet": "मिर्ज़ा ग़ालिब",
    "poetEn": "Mirza Ghalib",
    "language": "hi",
-   "level": "medium",
+   "level": "easy",
    "active": true
   },
   {
@@ -58,7 +58,7 @@
    "poet": "मीर तक़ी मीर",
    "poetEn": "Mir Taqi Mir",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -70,7 +70,7 @@
    "poet": "मीर तक़ी मीर",
    "poetEn": "Mir Taqi Mir",
    "language": "hi",
-   "level": "medium",
+   "level": "easy",
    "active": true
   },
   {
@@ -82,7 +82,7 @@
    "poet": "मीर तक़ी मीर",
    "poetEn": "Mir Taqi Mir",
    "language": "hi",
-   "level": "medium",
+   "level": "easy",
    "active": true
   },
   {
@@ -118,7 +118,7 @@
    "poet": "अल्लामा इक़बाल",
    "poetEn": "Allama Iqbal",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -166,7 +166,7 @@
    "poet": "फ़ैज़ अहमद फ़ैज़",
    "poetEn": "Faiz Ahmed Faiz",
    "language": "hi",
-   "level": "medium",
+   "level": "easy",
    "active": true
   },
   {
@@ -178,7 +178,7 @@
    "poet": "दाग़ देहलवी",
    "poetEn": "Dagh Dehlvi",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -190,7 +190,7 @@
    "poet": "दाग़ देहलवी",
    "poetEn": "Dagh Dehlvi",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -202,7 +202,7 @@
    "poet": "दाग़ देहलवी",
    "poetEn": "Dagh Dehlvi",
    "language": "hi",
-   "level": "medium",
+   "level": "easy",
    "active": true
   },
   {
@@ -214,7 +214,7 @@
    "poet": "बहादुर शाह ज़फ़र",
    "poetEn": "Bahadur Shah Zafar",
    "language": "hi",
-   "level": "medium",
+   "level": "easy",
    "active": true
   },
   {
@@ -226,7 +226,7 @@
    "poet": "बहादुर शाह ज़फ़र",
    "poetEn": "Bahadur Shah Zafar",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -238,7 +238,7 @@
    "poet": "अहमद फ़राज़",
    "poetEn": "Ahmad Faraz",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -274,7 +274,7 @@
    "poet": "दुष्यंत कुमार",
    "poetEn": "Dushyant Kumar",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -286,7 +286,7 @@
    "poet": "दुष्यंत कुमार",
    "poetEn": "Dushyant Kumar",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -298,7 +298,7 @@
    "poet": "राहत इंदौरी",
    "poetEn": "Rahat Indori",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -322,7 +322,7 @@
    "poet": "निदा फ़ाज़ली",
    "poetEn": "Nida Fazli",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -358,7 +358,7 @@
    "poet": "मोमिन ख़ाँ मोमिन",
    "poetEn": "Momin Khan Momin",
    "language": "hi",
-   "level": "medium",
+   "level": "easy",
    "active": true
   },
   {
@@ -370,7 +370,7 @@
    "poet": "शेख़ इब्राहीम ज़ौक़",
    "poetEn": "Sheikh Ibrahim Zauq",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -394,7 +394,7 @@
    "poet": "मजरूह सुल्तानपुरी",
    "poetEn": "Majrooh Sultanpuri",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -406,7 +406,7 @@
    "poet": "अमीर मीनाई",
    "poetEn": "Ameer Minai",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   },
   {
@@ -430,7 +430,7 @@
    "poet": "वसीम बरेलवी",
    "poetEn": "Wasim Barelvi",
    "language": "hi",
-   "level": "hard",
+   "level": "medium",
    "active": true
   }
  ]

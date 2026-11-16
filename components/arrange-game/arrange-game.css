@@ -31,6 +31,12 @@
 .ag-level { display: inline-block; margin-left: 0.3rem; padding: 0 0.6rem; font-size: 0.8rem; border: 1px solid var(--border-light); border-radius: 999px; }
 .ag-note { font-size: 0.82rem; line-height: 1.6; color: var(--text-muted); }
 
+/* first line of the sher, given as the clue */
+.ag-given {
+  margin: 0; padding: 0.8rem 1.1rem; background: var(--card-bg); border: 1px solid var(--border-light); border-left: 4px solid var(--accent);
+  border-radius: 12px; font-family: var(--font-poetry); font-size: clamp(1.1rem, 3.8vw, 1.35rem); line-height: 1.75; color: var(--text-dark); overflow-wrap: anywhere;
+}
+
 /* answer area: visually distinct from the pool (solid card with a dashed slot) */
 .ag-answer {
   display: flex; flex-wrap: wrap; gap: 0.5rem; align-content: flex-start; min-height: 7.5rem; padding: 0.8rem;

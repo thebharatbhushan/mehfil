@@ -271,14 +271,17 @@ function Round({ shers }: { shers: Sher[] }) {
         </div>
 
         <p className="ag-label">
-          शब्दों को छूकर सही क्रम में लगाइए (या खींचकर छोड़िए)। <span className="ag-level">{LEVEL_LABEL[sher.level]}</span>
+          शेर की पहली पंक्ति दी गई है। दूसरी पंक्ति के शब्दों को छूकर सही क्रम में लगाइए (या खींचकर छोड़िए)। <span className="ag-level">{LEVEL_LABEL[sher.level]}</span>
         </p>
+
+        {/* first line = the clue */}
+        <p className="ag-given" aria-label="शेर की पहली पंक्ति">{puzzle.given}</p>
 
         {/* answer area */}
         <div
           className={`ag-answer${game.status === 'correct' ? ' is-correct' : ''}${wrongFlash ? ' is-wrong' : ''}${answer.length === 0 ? ' is-empty' : ''}`}
           role="group"
-          aria-label="आपका क्रम"
+          aria-label="दूसरी पंक्ति, आपका क्रम"
           onDragOver={allowDrop}
           onDrop={dropOnAnswer}
         >

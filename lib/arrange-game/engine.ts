@@ -26,6 +26,8 @@ export interface Tile {
 
 export interface Puzzle {
   sher: Sher;
+  /** first line, shown as the clue */
+  given: string;
   /** tiles in the original order */
   original: Tile[];
   /** the same tiles, shuffled */
@@ -58,14 +60,18 @@ export function wordKey(text: string): string {
     .replace(/[​-‍﻿]/g, '');
 }
 
-/** Words of a sher in original order (split on any whitespace, so extra spaces never create empty tiles). */
+/** The sher is shown with its first line given; only the words of the remaining line(s) are shuffled for the player to arrange. */
+export const givenLine = (lines: readonly string[]): string => lines[0] ?? '';
+export const hiddenLines = (lines: readonly string[]): string[] => lines.slice(1);
+
+/** Words of a line (or lines) in original order (split on any whitespace, so extra spaces never create empty tiles). */
 export function tokenize(lines: readonly string[]): string[] {
   return lines.flatMap((l) => l.split(/\s+/)).filter(Boolean);
 }
 
 /**
  * Validates untrusted data (a JSON file today, an API response tomorrow). Bad rows are dropped, never thrown on:
- * inactive, missing poet, fewer than two lines, fewer than three words, duplicate id or duplicate sher text.
+ * inactive, missing poet, fewer than two lines, fewer than three words in the line to arrange, duplicate id or duplicate sher text.
  */
 export function sanitizeShers(input: unknown): Sher[] {
   const src = (input && typeof input === 'object' ? (input as { shers?: unknown }).shers : input) as unknown;
@@ -78,8 +84,8 @@ export function sanitizeShers(input: unknown): Sher[] {
     const poet = clean(r.poet);
     const lines = (Array.isArray(r.lines) ? r.lines : []).map(clean).filter(Boolean);
     if (!id || !poet || lines.length < 2 || ids.has(id)) continue;
-    const words = tokenize(lines);
-    const text = words.map(wordKey).join(' ');
+    const words = tokenize(hiddenLines(lines));
+    const text = tokenize(lines).map(wordKey).join(' ');
     if (words.length < 3 || words.some((w) => !wordKey(w)) || texts.has(text)) continue;
     ids.add(id);
     texts.add(text);
@@ -99,12 +105,12 @@ export function canPlay(shers: readonly Sher[]): boolean {
 
 /** Shuffles the tiles; re-shuffles (a bounded number of times) so the result is not already the original order. */
 export function makePuzzle(sher: Sher, rng: Rng = Math.random): Puzzle {
-  const original: Tile[] = tokenize(sher.lines).map((text, i) => ({ id: `${sher.id}:${i}`, text }));
+  const original: Tile[] = tokenize(hiddenLines(sher.lines)).map((text, i) => ({ id: `${sher.id}:${i}`, text }));
   const key = (ts: readonly Tile[]) => ts.map((t) => wordKey(t.text)).join('\u0001');
   const target = key(original);
   let shuffled = shuffle(original, rng);
   for (let i = 0; i < 25 && key(shuffled) === target; i++) shuffled = shuffle(original, rng);
-  return { sher, original, shuffled };
+  return { sher, given: givenLine(sher.lines), original, shuffled };
 }
 
 export type Status = 'playing' | 'correct' | 'revealed';
