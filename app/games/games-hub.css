@@ -1,21 +1,115 @@
-/* Games list page. Same tokens and card look as the game menu cards (components/game/game.css .sg-mode). */
-.gh-section { padding: 1rem 0 2.5rem; }
-.gh-head { text-align: center; margin-bottom: 1.25rem; }
-.gh-head h1 { font-family: var(--font-display); font-size: clamp(1.6rem, 5vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
-.gh-head p { color: var(--text-muted); line-height: 1.7; margin-top: 0.4rem; font-size: 0.98rem; }
+/* Games list page — premium poetry-themed hub. Built only on the site's existing tokens, so light and dark themes both work. */
+.gh-section { position: relative; padding: 1.25rem 0 3rem; overflow: hidden; isolation: isolate; }
+.gh-wrap { position: relative; z-index: 1; max-width: 1040px; }
 
-.gh-list { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 1rem; width: min(100%, 640px); }
-.gh-card {
-  display: flex; flex-direction: column; gap: 0.35rem; min-height: 48px; padding: 1.1rem 1.25rem; text-decoration: none;
-  background: var(--surface-solid); color: var(--text-dark); font-family: var(--font-deva);
-  border: 1.5px solid var(--border-light); border-left: 4px solid var(--accent); border-radius: 14px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+/* ---------- ambient background ---------- */
+.gh-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.gh-bg::before, .gh-bg::after { content: ''; position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55; }
+.gh-bg::before { width: 340px; height: 340px; top: -90px; left: -80px; background: color-mix(in srgb, var(--accent) 22%, transparent); animation: gh-drift 14s ease-in-out infinite alternate; }
+.gh-bg::after { width: 300px; height: 300px; top: 160px; right: -90px; background: color-mix(in srgb, #d4a24c 26%, transparent); animation: gh-drift 17s ease-in-out infinite alternate-reverse; }
+.gh-float { position: absolute; font-family: var(--font-poetry); font-size: clamp(3rem, 9vw, 6rem); line-height: 1.3; color: var(--accent); opacity: 0.07; user-select: none; animation: gh-bob 9s ease-in-out infinite; }
+.gh-float-1 { top: 4%; left: 6%; }
+.gh-float-2 { top: 10%; right: 8%; animation-delay: -2s; font-family: 'Noto Nastaliq Urdu', var(--font-deva); }
+.gh-float-3 { top: 34%; left: 2%; animation-delay: -4s; }
+.gh-float-4 { top: 46%; right: 3%; animation-delay: -1s; }
+.gh-float-5 { top: 70%; left: 5%; animation-delay: -6s; font-family: 'Noto Nastaliq Urdu', var(--font-deva); }
+.gh-float-6 { top: 82%; right: 7%; animation-delay: -3s; }
+
+/* ---------- hero ---------- */
+.gh-head { text-align: center; margin-bottom: 2rem; display: flex; flex-direction: column; align-items: center; }
+.gh-eyebrow { display: inline-flex; align-items: center; gap: 0.75rem; font-family: var(--font-deva); font-size: 0.9rem; letter-spacing: 0.08em; color: var(--text-muted); animation: gh-rise 0.7s both; }
+.gh-eyebrow i { display: block; width: 38px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+.gh-eyebrow i:last-child { transform: scaleX(-1); }
+.gh-head h1 {
+  font-family: var(--font-display); font-size: clamp(2.4rem, 9vw, 4rem); line-height: var(--lh-heading); font-weight: 600; padding: 0.1em 0.2em; margin-top: 0.15rem;
+  color: var(--accent-fg, var(--accent-dark));
+  background: linear-gradient(100deg, var(--accent-fg, var(--accent-dark)) 20%, #d4a24c 50%, var(--accent-fg, var(--accent-dark)) 80%);
+  background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  animation: gh-rise 0.7s 0.08s both, gh-shine 7s linear 1s infinite;
 }
-.gh-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-.gh-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.gh-title { font-size: 1.3rem; font-weight: 600; color: var(--accent-fg, var(--accent-dark)); }
-.gh-desc { font-size: 1rem; line-height: 1.7; color: var(--text-dark); }
-.gh-meta { font-size: 0.85rem; line-height: 1.6; color: var(--text-muted); }
-.gh-go { margin-top: 0.3rem; font-weight: 600; color: var(--accent-fg, var(--accent)); }
+.gh-head p { color: var(--text-muted); line-height: 1.7; margin-top: 0.15rem; font-size: 1.02rem; animation: gh-rise 0.7s 0.16s both; }
 
-@media (prefers-reduced-motion: reduce) { .gh-card { transition: none; } }
+/* typewriter sher */
+.gh-sher { margin: 1.6rem auto 0; padding: 1.4rem clamp(1.1rem, 4vw, 2.2rem) 1.1rem; width: min(100%, 620px); position: relative; text-align: center;
+  background: var(--surface-glass); border: 1px solid var(--border-light); border-radius: 20px; box-shadow: var(--shadow-sm);
+  animation: gh-rise 0.8s 0.24s both; transition: opacity 0.6s ease, transform 0.6s ease; }
+.gh-sher::before, .gh-sher::after { position: absolute; font-family: var(--font-display); font-size: 3.4rem; line-height: 1; color: var(--accent); opacity: 0.28; }
+.gh-sher::before { content: '“'; top: 0.45rem; left: 0.9rem; }
+.gh-sher::after { content: '”'; bottom: -0.6rem; right: 0.9rem; }
+.gh-sher.is-out { opacity: 0; transform: translateY(6px); }
+.gh-sher-line { display: grid; font-family: var(--font-poetry); font-size: clamp(1.05rem, 3.6vw, 1.35rem); line-height: var(--lh-poetry); color: var(--text-dark); }
+.gh-sher-line > span { grid-area: 1 / 1; }
+.gh-sizer { visibility: hidden; }
+.gh-typed { text-align: center; }
+.gh-caret { display: inline-block; width: 2px; height: 1.1em; margin-left: 3px; vertical-align: -0.18em; background: var(--accent); animation: gh-blink 0.9s steps(1) infinite; }
+.gh-by { margin-top: 0.35rem; font-family: var(--font-deva); font-size: 0.88rem; color: var(--text-muted); opacity: 0; transform: translateY(4px); transition: opacity 0.6s ease, transform 0.6s ease; min-height: 1.5em; }
+.gh-by.is-on { opacity: 1; transform: none; }
+
+.gh-pills { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin: 1.3rem 0 0; padding: 0; animation: gh-rise 0.7s 0.34s both; }
+.gh-pills li { font-family: var(--font-deva); font-size: 0.85rem; padding: 0.3rem 0.85rem; border-radius: 999px; color: var(--chip-fg, var(--accent-dark)); background: var(--chip-bg, #f5e6dd); border: 1px solid var(--border-light); }
+
+/* ---------- cards ---------- */
+.gh-list { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 1.1rem; grid-template-columns: 1fr; width: 100%; }
+@media (min-width: 720px) { .gh-list { grid-template-columns: repeat(2, 1fr); gap: 1.3rem; } }
+
+.gh-item { --c: var(--accent); animation: gh-rise 0.75s both; animation-delay: calc(0.4s + var(--i, 0) * 0.07s); }
+.gh-tone-2 { --c: #c9993a; }
+.gh-tone-3 { --c: #b5546b; }
+.gh-tone-4 { --c: #3f8a82; }
+
+.gh-card {
+  position: relative; display: flex; align-items: flex-start; gap: 1rem; height: 100%; min-height: 48px; padding: 1.25rem 1.3rem 1.15rem; overflow: hidden; text-decoration: none;
+  background: linear-gradient(160deg, var(--surface-solid), color-mix(in srgb, var(--c) 6%, var(--surface-solid)));
+  color: var(--text-dark); font-family: var(--font-deva);
+  border: 1.5px solid var(--border-light); border-radius: 18px; box-shadow: var(--shadow-sm);
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+/* gold-to-accent top edge */
+.gh-card::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, var(--c), color-mix(in srgb, var(--c) 10%, transparent)); opacity: 0.85; }
+/* soft sheen that sweeps across on hover */
+.gh-card::after { content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, color-mix(in srgb, var(--c) 14%, transparent), transparent); transform: skewX(-18deg); transition: left 0.7s ease; pointer-events: none; }
+.gh-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover), 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); border-color: color-mix(in srgb, var(--c) 55%, var(--border-light)); }
+.gh-card:hover::after { left: 120%; }
+.gh-card:active { transform: translateY(-1px) scale(0.99); }
+.gh-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.gh-mark {
+  flex: 0 0 auto; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 50%;
+  font-family: var(--font-poetry); font-size: 1.55rem; line-height: 1; padding-top: 0.12em; color: var(--accent-fg, var(--accent-dark));
+  background: radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--c) 22%, transparent), color-mix(in srgb, var(--c) 6%, transparent));
+  border: 1.5px solid color-mix(in srgb, var(--c) 60%, transparent);
+  box-shadow: inset 0 0 0 4px var(--surface-solid), 0 0 0 1px color-mix(in srgb, var(--c) 25%, transparent);
+  transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+}
+.gh-card:hover .gh-mark { transform: rotate(-8deg) scale(1.08); }
+
+.gh-body { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; flex: 1; }
+.gh-tag { align-self: flex-start; font-size: 0.74rem; letter-spacing: 0.06em; padding: 0.05rem 0.6rem; border-radius: 999px; color: var(--accent-fg, var(--accent-dark)); background: color-mix(in srgb, var(--c) 14%, transparent); border: 1px solid color-mix(in srgb, var(--c) 35%, transparent); }
+.gh-title { font-size: 1.3rem; line-height: var(--lh-heading); font-weight: 600; color: var(--accent-fg, var(--accent-dark)); }
+.gh-desc { font-size: 0.98rem; line-height: 1.7; color: var(--text-dark); }
+.gh-meta { font-size: 0.84rem; line-height: 1.6; color: var(--text-muted); padding-top: 0.45rem; margin-top: 0.15rem; border-top: 1px dashed var(--border-light); }
+.gh-go { margin-top: auto; padding-top: 0.5rem; font-weight: 600; color: var(--accent-fg, var(--accent)); }
+.gh-go b { display: inline-block; font-weight: 600; transition: transform 0.3s ease; }
+.gh-card:hover .gh-go b { transform: translateX(6px); }
+
+/* ---------- motion ---------- */
+@keyframes gh-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes gh-shine { to { background-position: -220% 0; } }
+@keyframes gh-blink { 50% { opacity: 0; } }
+@keyframes gh-bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-16px) rotate(3deg); } }
+@keyframes gh-drift { to { transform: translate(40px, 30px) scale(1.12); } }
+
+@media (max-width: 480px) {
+  .gh-card { padding: 1.1rem 1rem 1rem; gap: 0.8rem; }
+  .gh-mark { width: 46px; height: 46px; font-size: 1.3rem; }
+  .gh-float { opacity: 0.05; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gh-eyebrow, .gh-head h1, .gh-head p, .gh-sher, .gh-pills, .gh-item, .gh-bg::before, .gh-bg::after, .gh-float, .gh-caret { animation: none !important; }
+  .gh-card, .gh-card::after, .gh-mark, .gh-go b, .gh-by, .gh-sher { transition: none !important; }
+  .gh-card:hover { transform: none; }
+  .gh-card:hover .gh-mark, .gh-card:hover .gh-go b { transform: none; }
+  .gh-by { opacity: 1; transform: none; }
+  .gh-head h1 { background-position: 0 0; }
+}

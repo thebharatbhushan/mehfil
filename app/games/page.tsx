@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { Breadcrumbs } from '@/components/site/Breadcrumbs';
 import { DEFAULT_OG_IMAGE } from '@/lib/seo';
+import SherTypewriter from './SherTypewriter';
 import './games-hub.css';
 
 const TITLE = 'खेल — शेर के खेल | Mehfil';
@@ -17,34 +19,54 @@ export const metadata: Metadata = {
 
 /** Add a game here and it appears on the page. */
 const GAMES = [
-  { href: '/game', title: 'शेर पूरा कीजिए', desc: 'अधूरा शेर पढ़िए और चार में से सही दूसरी पंक्ति चुनिए।', meta: '10 सवाल · हर सवाल 15 सेकंड' },
-  { href: '/game/poet', title: 'शेर पहचानिए', desc: 'पहचानिए मशहूर शेरों के शायर।', meta: '10 सवाल · चार में से सही शायर चुनिए' },
-  { href: '/game/lafz', title: 'लफ़्ज़ का मतलब', desc: 'पहचानिए अल्फ़ाज़ के सही मायने।', meta: '10 लफ़्ज़ · चार में से सही मतलब चुनिए' },
-  { href: '/game/alfaz', title: 'अल्फ़ाज़ सजाइए', desc: 'शेर की पहली पंक्ति देखिए और बिखरे हुए अल्फ़ाज़ सजाकर दूसरी पंक्ति बनाइए।', meta: '5 शेर · पहली पंक्ति देखकर दूसरी पंक्ति सजाइए' },
-  { href: '/game/shayar', title: 'शायर की पहचान', desc: 'हिंदी-उर्दू के शायरों, कवियों और उनकी रचनाओं की क्विज़।', meta: '10 सवाल · तख़ल्लुस, रचनाएँ, साहित्य-इतिहास' },
-  { href: '/game/galti', title: 'ग़लती पकड़िए', desc: 'मशहूर शेर में एक शब्द बदल दिया गया है, उस ग़लत शब्द को पकड़िए।', meta: '10 शेर · शब्द छूकर चुनिए, फिर जाँचिए' },
-  { href: '/game/matlab', title: 'शायरी का मतलब', desc: 'शेर पढ़िए और चार में से उसका सबसे उपयुक्त अर्थ चुनिए।', meta: '10 शेर · व्याख्या और शब्दों के मायने के साथ' },
-  { href: '/game/rachna', title: 'रचना पहचानिए', desc: 'रचना पढ़िए और चार में से उसका रूप पहचानिए — ग़ज़ल, नज़्म, रुबाई, क़िता या दोहा।', meta: '10 रचनाएँ · हर जवाब के साथ पहचान के लक्षण' },
+  { tag: 'पूरा कीजिए', href: '/game', title: 'शेर पूरा कीजिए', desc: 'अधूरा शेर पढ़िए और चार में से सही दूसरी पंक्ति चुनिए।', meta: '10 सवाल · हर सवाल 15 सेकंड' },
+  { tag: 'पहचान', href: '/game/poet', title: 'शेर पहचानिए', desc: 'पहचानिए मशहूर शेरों के शायर।', meta: '10 सवाल · चार में से सही शायर चुनिए' },
+  { tag: 'मायने', href: '/game/lafz', title: 'लफ़्ज़ का मतलब', desc: 'पहचानिए अल्फ़ाज़ के सही मायने।', meta: '10 लफ़्ज़ · चार में से सही मतलब चुनिए' },
+  { tag: 'सजाइए', href: '/game/alfaz', title: 'अल्फ़ाज़ सजाइए', desc: 'शेर की पहली पंक्ति देखिए और बिखरे हुए अल्फ़ाज़ सजाकर दूसरी पंक्ति बनाइए।', meta: '5 शेर · पहली पंक्ति देखकर दूसरी पंक्ति सजाइए' },
+  { tag: 'क्विज़', href: '/game/shayar', title: 'शायर की पहचान', desc: 'हिंदी-उर्दू के शायरों, कवियों और उनकी रचनाओं की क्विज़।', meta: '10 सवाल · तख़ल्लुस, रचनाएँ, साहित्य-इतिहास' },
+  { tag: 'पकड़िए', href: '/game/galti', title: 'ग़लती पकड़िए', desc: 'मशहूर शेर में एक शब्द बदल दिया गया है, उस ग़लत शब्द को पकड़िए।', meta: '10 शेर · शब्द छूकर चुनिए, फिर जाँचिए' },
+  { tag: 'अर्थ', href: '/game/matlab', title: 'शायरी का मतलब', desc: 'शेर पढ़िए और चार में से उसका सबसे उपयुक्त अर्थ चुनिए।', meta: '10 शेर · व्याख्या और शब्दों के मायने के साथ' },
+  { tag: 'विधा', href: '/game/rachna', title: 'रचना पहचानिए', desc: 'रचना पढ़िए और चार में से उसका रूप पहचानिए — ग़ज़ल, नज़्म, रुबाई, क़िता या दोहा।', meta: '10 रचनाएँ · हर जवाब के साथ पहचान के लक्षण' },
 ];
+
+const DIGITS = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+const deva = (n: number) => String(n).split('').map((d) => DIGITS[Number(d)]).join('');
+const FLOATERS = ['अ', 'ش', 'श', 'ग़', 'ن', 'म'];
 
 export default function GamesPage() {
   return (
     <>
       <Breadcrumbs items={[{ name: 'मुखपृष्ठ', path: '/' }, { name: 'खेल', path: '/games' }]} />
       <section className="gh-section">
-        <div className="mehfil-container">
+        <div className="gh-bg" aria-hidden="true">
+          {FLOATERS.map((f, i) => (
+            <span key={i} className={`gh-float gh-float-${i + 1}`}>{f}</span>
+          ))}
+        </div>
+        <div className="mehfil-container gh-wrap">
           <header className="gh-head">
+            <span className="gh-eyebrow"><i aria-hidden="true" />शेर के खेल<i aria-hidden="true" /></span>
             <h1>खेल</h1>
             <p>कोई खेल चुनिए और खेलना शुरू कीजिए। लॉगिन की ज़रूरत नहीं।</p>
+            <SherTypewriter />
+            <ul className="gh-pills" aria-label="खेलों की जानकारी">
+              <li>{deva(GAMES.length)} खेल</li>
+              <li>मुफ़्त</li>
+              <li>बिना लॉगिन</li>
+            </ul>
           </header>
           <ul className="gh-list">
-            {GAMES.map((g) => (
-              <li key={g.href}>
+            {GAMES.map((g, i) => (
+              <li key={g.href} style={{ '--i': i } as CSSProperties} className={`gh-item gh-tone-${(i % 4) + 1}`}>
                 <Link href={g.href} className="gh-card">
-                  <span className="gh-title">{g.title}</span>
-                  <span className="gh-desc">{g.desc}</span>
-                  <span className="gh-meta">{g.meta}</span>
-                  <span className="gh-go">खेलिए →</span>
+                  <span className="gh-mark" aria-hidden="true">{deva(i + 1)}</span>
+                  <span className="gh-body">
+                    <span className="gh-tag">{g.tag}</span>
+                    <span className="gh-title">{g.title}</span>
+                    <span className="gh-desc">{g.desc}</span>
+                    <span className="gh-meta">{g.meta}</span>
+                    <span className="gh-go">खेलिए <b aria-hidden="true">→</b></span>
+                  </span>
                 </Link>
               </li>
             ))}
