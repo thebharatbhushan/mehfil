@@ -29,8 +29,6 @@ const GAMES = [
   { tag: 'विधा', href: '/game/rachna', title: 'रचना पहचानिए', desc: 'रचना पढ़िए और चार में से उसका रूप पहचानिए — ग़ज़ल, नज़्म, रुबाई, क़िता या दोहा।', meta: '10 रचनाएँ · हर जवाब के साथ पहचान के लक्षण' },
 ];
 
-const DIGITS = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-const deva = (n: number) => String(n).split('').map((d) => DIGITS[Number(d)]).join('');
 const FLOATERS = ['अ', 'ش', 'श', 'ग़', 'ن', 'म'];
 
 export default function GamesPage() {
@@ -50,7 +48,7 @@ export default function GamesPage() {
             <p>कोई खेल चुनिए और खेलना शुरू कीजिए। लॉगिन की ज़रूरत नहीं।</p>
             <SherTypewriter />
             <ul className="gh-pills" aria-label="खेलों की जानकारी">
-              <li>{deva(GAMES.length)} खेल</li>
+              <li>{GAMES.length} खेल</li>
               <li>मुफ़्त</li>
               <li>बिना लॉगिन</li>
             </ul>
