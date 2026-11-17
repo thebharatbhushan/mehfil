@@ -115,6 +115,13 @@ export async function fetchAllPoems(): Promise<Poem[]> {
   return (await fetchAllPoemsOrNull()) || [];
 }
 
+/** "सप्ताह की रचना" (admin's pick, else this week's most-viewed poem). null = API unreachable / none. */
+export async function fetchPoemOfTheWeek(): Promise<Poem | null> {
+  const { data } = await getApi<{ success?: boolean; poem?: Poem | null }>('/api/poems/poem-of-the-week');
+  const poem = data?.poem;
+  return poem && poem.slug && poem.title ? poem : null;
+}
+
 export async function fetchFeaturedPoems(): Promise<Poem[]> {
   const { data } = await getApi<{ poems?: Poem[] } | Poem[]>('/api/poems/featured');
   return ((Array.isArray(data) ? data : data?.poems) || []).filter((p) => p && p.slug && p.title);

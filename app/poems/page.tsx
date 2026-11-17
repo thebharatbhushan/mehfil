@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Breadcrumbs } from '@/components/site/Breadcrumbs';
 import { PoemsClient } from '@/components/poems/PoemsClient';
 import { POEMS_LIST_PER_PAGE, SEO_CATEGORIES, categoryHref } from '@/lib/categories';
-import { fetchPoemsPage, parsePage } from '@/lib/seo';
+import { fetchPoemOfTheWeek, fetchPoemsPage, parsePage } from '@/lib/seo';
 
 export const revalidate = 3600; // ISR: poems are in the initial HTML, refreshed hourly (client also refreshes live).
 
@@ -33,14 +33,15 @@ export default async function PoemsPage(props: Props) {
   const searchParams = await props.searchParams;
   const page = pageOf(searchParams);
   // Only the requested page is fetched (never the whole library).
-  const data = await fetchPoemsPage(page, POEMS_LIST_PER_PAGE);
+  // Poem of the week is fetched on the server too, so its card is in the first HTML (no layout jump when it loads).
+  const [data, poemOfTheWeek] = await Promise.all([fetchPoemsPage(page, POEMS_LIST_PER_PAGE), fetchPoemOfTheWeek()]);
   const poems = data?.poems || [];
   // A page number beyond the last page is a real 404 (never a thin empty page). Skipped if the API returned nothing.
   if (data && data.total > 0 && page > data.totalPages) notFound();
   return (
     <>
       <Breadcrumbs items={[{ name: 'होम', path: '/' }, { name: 'कविताएँ', path: '/poems' }]} />
-      <PoemsClient initialPoems={poems} initialPage={page} initialTotal={data?.total ?? poems.length} />
+      <PoemsClient initialPoems={poems} initialPage={page} initialTotal={data?.total ?? poems.length} initialPoemOfTheWeek={poemOfTheWeek} />
       <section style={{ paddingTop: 0 }}>
         <div className="mehfil-container" style={{ paddingBottom: '3rem', lineHeight: 2 }}>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: 'var(--accent-dark)', marginBottom: '0.8rem' }}>

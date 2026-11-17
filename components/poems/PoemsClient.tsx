@@ -12,7 +12,7 @@ const MOOD_ICONS: Record<string, string> = {
   Love: '❤️', Sad: '🌧', Motivation: '✨', Nature: '🍃', Life: '🌙', Sufi: '☪', Friendship: '🤝', Shayari: '🖋',
 };
 
-export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal = 0 }: { initialPoems?: Poem[]; initialPage?: number; initialTotal?: number }) {
+export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal = 0, initialPoemOfTheWeek = null }: { initialPoems?: Poem[]; initialPage?: number; initialTotal?: number; initialPoemOfTheWeek?: Poem | null }) {
   // initialPoems = just the current page, rendered on the server so it is present in the first HTML.
   const [poems, setPoems] = useState<Poem[]>(initialPoems);
   const [total, setTotal] = useState(initialTotal);
@@ -27,7 +27,7 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
   const firstLoad = useRef(true);
   // Poem of the week = admin's pick, otherwise the poem with the most views this week (decided by the API);
   // kept separately so it survives paging/filtering.
-  const [poemOfTheWeek, setPoemOfTheWeek] = useState<Poem | null>(null);
+  const [poemOfTheWeek, setPoemOfTheWeek] = useState<Poem | null>(initialPoemOfTheWeek);
 
   // Home-page hero search sends people here as /poems?q=...
   useEffect(() => {
