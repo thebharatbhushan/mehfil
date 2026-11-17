@@ -100,7 +100,7 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
       document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
     }, 100);
     return () => { clearTimeout(timer); observer.disconnect(); };
-  }, [loading, debouncedSearch, mood, rawPage]);
+  }, [loading, debouncedSearch, mood, rawPage, poemOfTheWeek]);
 
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   // Never show an empty page: a stale/out-of-range page (e.g. after the live list shrank) clamps to the last page.
