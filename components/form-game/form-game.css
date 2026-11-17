@@ -1,4 +1,8 @@
 /* रचना पहचानिए (Identify the Form). Site CSS variables only (light/dark via html[data-theme]); classes prefixed fg-. Derived from the other Mehfil games. */
+<<<<<<< HEAD
+=======
+   Visual values mirror components/game/game.css; class names are prefixed fg- so nothing in the other games is touched. */
+>>>>>>> e002a8be2373235a98174fa1c0778204d4871e9e
 
 .fg-section { padding: 1rem 0 2.5rem; }
 .fg-head { text-align: center; margin-bottom: 1rem; }
