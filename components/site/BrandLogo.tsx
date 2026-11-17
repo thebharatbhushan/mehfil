@@ -41,7 +41,7 @@ export function BrandLogo({ variant = 'full', tone = 'dark', className = '', alt
     return (
       <>
         {img(s.dark, 'brand-logo-on-light', !priority)}
-        {img(s.light, 'brand-logo-on-dark', true, true)}
+        {img(s.light, 'brand-logo-on-dark', true)}
       </>
     );
   }

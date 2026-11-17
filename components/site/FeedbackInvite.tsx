@@ -21,7 +21,7 @@ export function FeedbackInvite({ variant = 'card' }: { variant?: 'footer' | 'car
   }
 
   return (
-    <aside className={`fbi fbi-${variant}`} aria-label="Feedback / सुझाव">
+    <section className={`fbi fbi-${variant}`} aria-label="Feedback / सुझाव">
       <span className="fbi-icon" aria-hidden="true"><i className="fas fa-hand-holding-heart" /></span>
       <div className="fbi-body">
         <div className="fbi-lang" lang="hi">
@@ -34,6 +34,6 @@ export function FeedbackInvite({ variant = 'card' }: { variant?: 'footer' | 'car
         </div>
         {mail}
       </div>
-    </aside>
+    </section>
   );
 }

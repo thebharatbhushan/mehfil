@@ -152,8 +152,8 @@
 :where(html[data-theme="dark"]) .app-download-text small { color: hsl(27 22% 73.9%); }
 :where(html[data-theme="dark"]) .app-download-text strong { color: hsl(26 57% 88.2%); }
 :where(html[data-theme="dark"]) .app-download-android { color: hsl(116 44% 68.0%); }
-:where(html[data-theme="dark"]) .footer-col h4 { color: hsl(26 57% 88.2%); }
-:where(html[data-theme="dark"]) .footer-col h4::after { background: var(--accent); }
+:where(html[data-theme="dark"]) .footer-col h2 { color: hsl(26 57% 88.2%); }
+:where(html[data-theme="dark"]) .footer-col h2::after { background: var(--accent); }
 :where(html[data-theme="dark"]) .footer-links a { color: hsl(27 22% 73.9%); }
 :where(html[data-theme="dark"]) .footer-links a:hover { color: hsl(20 75% 82%); }
 :where(html[data-theme="dark"]) .newsletter-text { color: hsl(27 22% 73.9%); }

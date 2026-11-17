@@ -47,7 +47,7 @@ export function Footer() {
           </div>
 
           <div className="footer-col">
-            <h4>Explore</h4>
+            <h2>Explore</h2>
             <div className="footer-links">
               <Link href="/"><i className="fas fa-chevron-right" /> विशेष रचनाएँ</Link>
               <Link href="/poets"><i className="fas fa-chevron-right" /> लोकप्रिय रचनाकार</Link>
@@ -61,7 +61,7 @@ export function Footer() {
           </div>
 
           <div className="footer-col">
-            <h4>Community</h4>
+            <h2>Community</h2>
             <div className="footer-links">
               <Link href="/publish"><i className="fas fa-chevron-right" /> Write a Poem</Link>
               <Link href="/about-contact"><i className="fas fa-chevron-right" /> About Us / Contact Us</Link>
@@ -73,7 +73,7 @@ export function Footer() {
           </div>
 
           <div className="footer-col">
-            <h4>पत्रिका</h4>
+            <h2>पत्रिका</h2>
             <p className="newsletter-text">
               Subscribe to receive poetic musings &amp; latest verses in your
               inbox.
