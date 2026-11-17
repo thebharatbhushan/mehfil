@@ -1,0 +1,105 @@
+/* रचना पहचानिए (Identify the Form). Site CSS variables only (light/dark via html[data-theme]); classes prefixed fg-. Derived from the other Mehfil games. */
+
+.fg-section { padding: 1rem 0 2.5rem; }
+.fg-head { text-align: center; margin-bottom: 1rem; }
+.fg-head h1 { font-family: var(--font-display); font-size: clamp(1.6rem, 5vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
+.fg-head p { color: var(--text-muted); line-height: 1.7; margin-top: 0.4rem; font-size: 0.98rem; }
+
+.fg-wrap {
+  position: relative; margin: 0 auto; width: min(100%, 560px); min-height: 26rem;
+  background: var(--bg); border: 1px solid var(--border-light); border-radius: 18px; box-shadow: var(--shadow-sm);
+  overflow: hidden; color: var(--text-dark); font-family: var(--font-deva); -webkit-text-size-adjust: 100%;
+}
+.fg-body { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem 1.25rem 1.5rem; }
+
+.fg-status {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; min-height: 26rem;
+  color: var(--text-muted); font-size: 1rem; line-height: 1.7; text-align: center; padding: 1rem;
+}
+.fg-spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--accent-soft); border-top-color: var(--accent); animation: fg-rot 0.9s linear infinite; }
+@keyframes fg-rot { to { transform: rotate(360deg); } }
+
+.fg-hud { display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 600; color: var(--accent-fg, var(--accent-dark)); }
+.fg-progress { height: 8px; border-radius: 4px; background: var(--border-light); overflow: hidden; }
+.fg-progress span { display: block; height: 100%; border-radius: 4px; background: var(--accent); transition: width 0.25s ease; }
+
+.fg-eyebrow { font-size: 0.85rem; letter-spacing: 0.08em; color: var(--accent-fg, var(--accent)); }
+.fg-title { font-family: var(--font-display); font-size: clamp(1.8rem, 6vw, 2.4rem); line-height: var(--lh-heading); color: var(--accent-fg, var(--accent-dark)); }
+.fg-lead { font-size: 1.05rem; line-height: 1.7; color: var(--text-muted); }
+.fg-verdict { font-size: 1.05rem; line-height: 1.7; color: var(--text-dark); max-width: 24em; }
+.fg-label { font-size: 0.95rem; color: var(--text-muted); }
+
+.fg-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; font-size: 0.8rem; color: var(--text-muted); }
+.fg-tags span { padding: 0.1rem 0.6rem; border: 1px solid var(--border-light); border-radius: 999px; }
+.fg-question {
+  margin: 0; padding: 1rem 1.1rem; background: var(--card-bg); border: 1px solid var(--border-light); border-left: 4px solid var(--accent);
+  border-radius: 12px; font-family: var(--font-poetry); font-size: clamp(1.1rem, 3.8vw, 1.35rem); line-height: 1.8; color: var(--text-dark); overflow-wrap: anywhere;
+}
+
+.fg-options { display: grid; gap: 0.6rem; }
+.fg-option {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 48px; text-align: left;
+  padding: 0.65rem 0.9rem; background: var(--surface-solid); color: var(--text-dark);
+  border: 1.5px solid var(--border-light); border-radius: 12px; font-family: var(--font-poetry); cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.fg-option:hover:not(:disabled) { border-color: var(--accent); }
+.fg-option:disabled { cursor: default; }
+.fg-letter { flex: none; width: 1.9rem; height: 1.9rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 600; color: var(--accent-fg, var(--accent-dark)); background: var(--accent-soft); }
+.fg-opt-text { font-size: 1.1rem; line-height: 1.6; overflow-wrap: anywhere; }
+.fg-option.is-correct { border-color: #2f8a52; background: rgba(47, 138, 82, 0.14); }
+.fg-option.is-wrong { border-color: #c0443a; background: rgba(192, 68, 58, 0.14); }
+
+.fg-msg { min-height: 1.5em; font-size: 1rem; line-height: 1.6; color: var(--text-muted); }
+.fg-msg.is-good { color: #2f7d4a; font-weight: 600; }
+.fg-msg.is-bad { color: #b3392f; font-weight: 600; }
+html[data-theme='dark'] .fg-msg.is-good { color: #6fc28a; }
+html[data-theme='dark'] .fg-msg.is-bad { color: #e57c72; }
+
+.fg-explain {
+  display: flex; flex-direction: column; gap: 0.35rem; padding: 0.8rem 1rem; background: var(--card-bg);
+  border: 1px solid var(--border-light); border-radius: 12px; font-size: 0.98rem; line-height: 1.75; color: var(--text-dark);
+}
+.fg-explain p { margin: 0; }
+.fg-source { font-size: 0.82rem; line-height: 1.6; color: var(--text-muted); }
+
+.fg-btn {
+  align-self: flex-start; min-height: 48px; padding: 0.55rem 1.3rem; border-radius: 999px; border: 1.5px solid var(--accent);
+  background: var(--accent); color: #fff; font-family: inherit; font-weight: 600; font-size: 1rem; cursor: pointer;
+  scroll-margin-bottom: 110px; /* keeps it clear of the mobile bottom nav */
+}
+.fg-btn:hover { filter: brightness(1.06); }
+:where(.fg-btn, .fg-option):focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.fg-result { align-items: center; text-align: center; justify-content: center; min-height: 26rem; }
+.fg-score-big { font-family: var(--font-display); font-size: clamp(3.4rem, 14vw, 5.4rem); line-height: 1.2; color: var(--accent-fg, var(--accent-dark)); }
+.fg-best { font-size: 1rem; color: var(--text-muted); }
+.fg-best.is-new { color: var(--accent-fg, var(--accent)); font-weight: 700; }
+.fg-cats { list-style: none; margin: 0.2rem 0; padding: 0; display: grid; gap: 0.35rem; width: min(100%, 22rem); }
+.fg-cats li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.35rem 0.8rem; border: 1px solid var(--border-light); border-radius: 10px; font-size: 0.95rem; color: var(--text-muted); }
+.fg-cats strong { color: var(--accent-fg, var(--accent-dark)); }
+.fg-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 0.6rem; }
+.fg-result .fg-btn { align-self: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fg-spin { animation-duration: 2.4s; }
+  .fg-option, .fg-progress span { transition: none; }
+}
+
+/* composition card */
+.fg-poem { margin: 0; padding: 0.9rem 1.1rem; background: var(--card-bg); border: 1px solid var(--border-light); border-left: 4px solid var(--accent); border-radius: 12px; font-family: var(--font-poetry); }
+.fg-poem-title { margin: 0 0 0.4rem; font-family: var(--font-display); font-size: 1rem; color: var(--accent-fg, var(--accent-dark)); }
+.fg-poem-by { margin: 0.5rem 0 0; font-family: var(--font-ui); font-size: 0.82rem; color: var(--text-muted); }
+.fg-line { margin: 0; font-size: clamp(1.05rem, 3.6vw, 1.3rem); line-height: 1.8; color: var(--text-dark); overflow-wrap: anywhere; }
+.fg-gap { height: 0.6rem; }
+.fg-tag-ex { border-style: dashed; }
+.fg-mark { flex: none; font-family: var(--font-ui); font-size: 0.78rem; font-weight: 700; margin-left: auto; }
+.fg-option.is-correct .fg-mark { color: #2f7d4a; }
+.fg-option.is-wrong .fg-mark { color: #b3392f; }
+html[data-theme='dark'] .fg-option.is-correct .fg-mark { color: #6fc28a; }
+html[data-theme='dark'] .fg-option.is-wrong .fg-mark { color: #e57c72; }
+.fg-opt-en { display: block; font-family: var(--font-ui); font-size: 0.78rem; color: var(--text-muted); }
+.fg-markers { margin: 0.2rem 0 0; padding-left: 1.2rem; font-size: 0.92rem; line-height: 1.7; color: var(--text-dark); }
+.fg-sheet { list-style: none; margin: 0.3rem 0; padding: 0; display: grid; gap: 0.4rem; width: 100%; text-align: left; }
+.fg-sheet li { padding: 0.5rem 0.8rem; border: 1px solid var(--border-light); border-radius: 10px; font-size: 0.9rem; line-height: 1.65; color: var(--text-muted); }
+.fg-sheet strong { display: block; color: var(--accent-fg, var(--accent-dark)); font-size: 1rem; }
