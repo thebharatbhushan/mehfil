@@ -9,13 +9,15 @@ import {
   getCurrentLang,
   setSiteLanguage,
 } from '@/lib/googleTranslate';
+import { useSiteLang, useTr } from '@/lib/uiTranslate';
 
 type Variant = 'nav' | 'drawer';
 
-const THEME_OPTIONS: { key: ThemePref; label: string; sub: string; icon: string }[] = [
-  { key: 'light', label: 'लाइट', sub: 'Light', icon: 'fa-sun' },
-  { key: 'dark', label: 'डार्क', sub: 'Dark', icon: 'fa-moon' },
-  { key: 'system', label: 'सिस्टम', sub: 'System', icon: 'fa-desktop' },
+// `phrase` is what gets translated (a full phrase translates better than the single word `label`).
+const THEME_OPTIONS: { key: ThemePref; label: string; phrase: string; sub: string; icon: string }[] = [
+  { key: 'light', label: 'लाइट', phrase: 'लाइट मोड', sub: 'Light', icon: 'fa-sun' },
+  { key: 'dark', label: 'डार्क', phrase: 'डार्क मोड', sub: 'Dark', icon: 'fa-moon' },
+  { key: 'system', label: 'सिस्टम', phrase: 'सिस्टम (डिवाइस जैसा)', sub: 'System', icon: 'fa-desktop' },
 ];
 
 /** Closes a popover on outside click / Escape. */
@@ -39,18 +41,20 @@ function useDismiss(open: boolean, close: () => void, ref: React.RefObject<HTMLE
 
 export function ThemeSwitcher({ variant = 'nav' }: { variant?: Variant }) {
   const { pref, resolved, setPref } = useTheme();
+  const tr = useTr();
+  const translated = useSiteLang() !== SOURCE_LANG; // English sub-labels only make sense next to the Hindi original
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   useDismiss(open, () => setOpen(false), rootRef);
 
   if (variant === 'drawer') {
     return (
-      <div className="m-pref-row" role="group" aria-label="थीम · Theme">
+      <div className="m-pref-row notranslate" translate="no" role="group" aria-label={`${tr('थीम')} · Theme`}>
         <span className="m-pref-label">
           <i className={`fas ${resolved === 'dark' ? 'fa-moon' : 'fa-sun'}`} aria-hidden="true" />
           <span className="m-drawer-link-text">
-            थीम
-            <small>Theme</small>
+            {tr('थीम')}
+            {!translated && <small>Theme</small>}
           </span>
         </span>
         <div className="m-seg">
@@ -61,8 +65,8 @@ export function ThemeSwitcher({ variant = 'nav' }: { variant?: Variant }) {
               className={`m-seg-btn${pref === o.key ? ' active' : ''}`}
               aria-pressed={pref === o.key}
               onClick={() => setPref(o.key)}
-              aria-label={`${o.sub} theme`}
-              title={o.sub}
+              aria-label={tr(o.phrase)}
+              title={tr(o.phrase)}
             >
               <i className={`fas ${o.icon}`} aria-hidden="true" />
             </button>
@@ -73,15 +77,15 @@ export function ThemeSwitcher({ variant = 'nav' }: { variant?: Variant }) {
   }
 
   return (
-    <div className="site-ctl" ref={rootRef}>
+    <div className="site-ctl notranslate" translate="no" ref={rootRef}>
       <button
         type="button"
         className="site-ctl-btn"
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label="थीम बदलें · Change theme"
-        title="Theme"
+        aria-label={`${tr('थीम बदलें')} · Change theme`}
+        title={tr('थीम')}
       >
         <i className={`fas ${resolved === 'dark' ? 'fa-moon' : 'fa-sun'}`} aria-hidden="true" />
       </button>
@@ -101,7 +105,7 @@ export function ThemeSwitcher({ variant = 'nav' }: { variant?: Variant }) {
             >
               <i className={`fas ${o.icon}`} aria-hidden="true" />
               <span>
-                {o.label} <small>{o.sub}</small>
+                {tr(o.phrase)} {!translated && <small>{o.sub}</small>}
               </span>
               {pref === o.key && <i className="fas fa-check site-ctl-check" aria-hidden="true" />}
             </button>
