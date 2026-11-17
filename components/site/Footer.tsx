@@ -55,6 +55,7 @@ export function Footer() {
               <Link href="/dictionary"><i className="fas fa-chevron-right" /> शब्दकोश</Link>
               <Link href="/game"><i className="fas fa-chevron-right" /> शेर अंताक्षरी</Link>
               <Link href="/game/poet"><i className="fas fa-chevron-right" /> शेर पहचानिए</Link>
+              <Link href="/games"><i className="fas fa-chevron-right" /> सभी खेल</Link>
               <Link href="/poems"><i className="fas fa-chevron-right" /> Community Hub</Link>
             </div>
           </div>

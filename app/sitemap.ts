@@ -14,6 +14,9 @@ const latest = (poems: Poem[]): Date | undefined => {
   return t ? new Date(t) : undefined;
 };
 
+// Game pages (static routes under app/game). /games is the hub that lists them all.
+const GAME_PATHS = ['/game', '/game/poet', '/game/lafz', '/game/alfaz', '/game/shayar', '/game/galti', '/game/matlab', '/game/rachna'];
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE_URL;
   const [poems, writers, dictionarySlugs] = await Promise.all([fetchAllPoems(), fetchAllWriters(), fetchDictionarySlugs().catch(() => [])]);
@@ -24,6 +27,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/poems`, lastModified: newest, changeFrequency: 'daily', priority: 0.9 },
     { url: `${base}/poets`, lastModified: newest, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${base}/category`, lastModified: newest, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${base}/games`, changeFrequency: 'monthly', priority: 0.7 },
+    ...GAME_PATHS.map((g) => ({ url: `${base}${g}`, changeFrequency: 'monthly' as const, priority: 0.6 })),
     { url: `${base}/about-contact`, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${base}/faq`, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${base}/submission-guidelines`, changeFrequency: 'yearly', priority: 0.3 },

@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { Breadcrumbs } from '@/components/site/Breadcrumbs';
-import { DEFAULT_OG_IMAGE } from '@/lib/seo';
+import { JsonLd } from '@/components/site/JsonLd';
+import { DEFAULT_OG_IMAGE, absoluteUrl } from '@/lib/seo';
 import SherTypewriter from './SherTypewriter';
 import './games-hub.css';
 
@@ -35,6 +36,14 @@ export default function GamesPage() {
   return (
     <>
       <Breadcrumbs items={[{ name: 'मुखपृष्ठ', path: '/' }, { name: 'खेल', path: '/games' }]} />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'मेहफ़िल के शेर खेल',
+          itemListElement: GAMES.map((g, i) => ({ '@type': 'ListItem', position: i + 1, name: g.title, url: absoluteUrl(g.href) })),
+        }}
+      />
       <section className="gh-section">
         <div className="gh-bg" aria-hidden="true">
           {FLOATERS.map((f, i) => (

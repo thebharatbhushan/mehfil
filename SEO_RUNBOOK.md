@@ -7,13 +7,14 @@
 | `/category/<slug>` | yes if >= 3 poems | yes if >= 3 poems | else `noindex,follow` (thin) |
 | `/poem/<slug>` | yes | yes | 404 only when API answers 404 |
 | `/u/<username>` | yes if author has >= 1 poem | same | else `noindex,follow` |
+| `/games`, `/game`, `/game/<name>` | yes | yes | 8 game pages; hub lists all of them (ItemList JSON-LD) |
 | `/feedback` | no (`noindex,follow`) | no | low value |
 | `/login /signup /profile /publish /author` | no (`noindex`) + robots disallow | no | |
 | tag pages | **do not exist** | - | tags are text only (thin, near-duplicate pages hurt more than help). Revisit only if a tag has 10+ poems and unique intro text |
 | `/search?q=` | not a route | - | robots disallows `/search`; if ever added, use `noindex,follow` |
 
 ## Slug redirects (needs backend)
-Frontend cannot know old slugs. Add `previousSlugs: [String]` to Poem and `previousUsernames` to User; on slug/username change push the old value. Then in `app/poem/[slug]/layout.tsx` / `app/u/[username]/layout.tsx`, when the API returns the record under an old slug, call `permanentRedirect(newPath)` (Next 13.5: `redirect` from `next/navigation`).
+Frontend cannot know old slugs. Add `previousSlugs: [String]` to Poem and `previousUsernames` to User; on slug/username change push the old value. Then in `app/poem/[slug]/layout.tsx` / `app/u/[username]/layout.tsx`, when the API returns the record under an old slug, call `permanentRedirect(newPath)` (Next 15: `permanentRedirect` from `next/navigation`).
 
 ## After deploy (manual, in Google tools)
 1. Search Console -> add property -> Sitemaps -> submit `https://<domain>/sitemap.xml`.
