@@ -59,7 +59,7 @@ export default function GamesPage() {
             {GAMES.map((g, i) => (
               <li key={g.href} style={{ '--i': i } as CSSProperties} className={`gh-item gh-tone-${(i % 4) + 1}`}>
                 <Link href={g.href} className="gh-card">
-                  <span className="gh-mark" aria-hidden="true">{deva(i + 1)}</span>
+                  <span className="gh-mark" aria-hidden="true">{i + 1}</span>
                   <span className="gh-body">
                     <span className="gh-tag">{g.tag}</span>
                     <span className="gh-title">{g.title}</span>
