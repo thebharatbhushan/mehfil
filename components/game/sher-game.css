@@ -1,0 +1,41 @@
+/* "शेर पूरा कीजिए" drawing layer in plain DOM/CSS (replaces the Phaser canvas). Layout/colour values are the ones the canvas used;
+   everything else (wrapper, body, options, buttons...) still comes from game.css. 1 logical unit = var(--u). */
+
+.sg-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.sg-backdrop circle { fill: none; stroke: var(--accent-soft); stroke-width: 2; opacity: 0.5; }
+.sg-backdrop .sg-frame { fill: none; stroke: var(--accent); stroke-width: 1.5; opacity: 0.35; }
+html[data-theme='dark'] .sg-backdrop circle { opacity: 0.6; }
+html[data-theme='dark'] .sg-backdrop .sg-frame { opacity: 0.45; }
+
+.sg-mote { position: absolute; border-radius: 50%; background: var(--accent-soft); opacity: 0.1; pointer-events: none; animation: sg-mote 7s ease-in-out infinite alternate; }
+@keyframes sg-mote { to { transform: translateY(calc(var(--u) * -140)); opacity: 0.55; } }
+
+.sg-hud { position: absolute; left: 0; right: 0; top: 0; height: calc(var(--u) * 98); pointer-events: none; font-family: var(--font-ui); }
+.sg-hud-round, .sg-hud-score, .sg-hud-time, .sg-hud-streak { position: absolute; line-height: 1.3; white-space: nowrap; }
+.sg-hud-round, .sg-hud-score { top: calc(var(--u) * 10); font-size: max(14px, calc(var(--u) * 22)); font-weight: 600; color: var(--accent-fg, var(--accent-dark)); }
+.sg-hud-round { left: calc(var(--u) * 28); }
+.sg-hud-score { right: calc(var(--u) * 28); animation: sg-pop 0.24s ease-out; transform-origin: right center; }
+.sg-hud-time { top: calc(var(--u) * 4); left: 50%; transform: translateX(-50%); font-size: max(20px, calc(var(--u) * 32)); font-weight: 700; color: var(--text-dark); }
+.sg-hud-time.is-low { color: #b3392f; }
+html[data-theme='dark'] .sg-hud-time.is-low { color: #e57c72; }
+.sg-hud-streak { top: calc(var(--u) * 48); left: 50%; transform: translateX(-50%); font-size: max(11px, calc(var(--u) * 15)); font-weight: 500; color: var(--text-muted); }
+.sg-bar { position: absolute; left: calc(var(--u) * 28); right: calc(var(--u) * 28); top: calc(var(--u) * 76); height: calc(var(--u) * 8); border-radius: 4px; background: var(--border-light); overflow: hidden; }
+.sg-bar span { display: block; height: 100%; border-radius: 4px; background: var(--accent); transition: width 0.12s linear; }
+.sg-bar span.is-low { background: #b3392f; }
+html[data-theme='dark'] .sg-bar span.is-low { background: #e57c72; }
+@keyframes sg-pop { 50% { transform: scale(1.25); } }
+
+.sg-fx { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.sg-spark { position: absolute; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%; background: var(--accent); animation: sg-spark 0.75s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+@keyframes sg-spark { to { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; } }
+.sg-float { position: absolute; transform: translateX(-50%); font-family: var(--font-ui); font-size: max(20px, calc(var(--u) * 30)); font-weight: 700; color: var(--accent-fg, var(--accent-dark)); animation: sg-float 0.9s ease-out forwards; }
+@keyframes sg-float { to { transform: translate(-50%, calc(var(--u) * -50)); opacity: 0; } }
+
+.sg-shake { animation: sg-shake 0.22s linear; }
+@keyframes sg-shake { 20% { transform: translateX(-3px); } 40% { transform: translateX(3px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sg-mote, .sg-hud-score, .sg-shake { animation: none; }
+  .sg-float { animation-duration: 0.9s; }
+  .sg-bar span { transition: none; }
+}
