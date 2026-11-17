@@ -25,8 +25,9 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
   const perPage = POEMS_LIST_PER_PAGE;
   const wotwRef = useRef<HTMLDivElement>(null);
   const firstLoad = useRef(true);
-  // Poem of the week = the newest poem overall; kept separately so it survives paging/filtering.
-  const [poemOfTheWeek, setPoemOfTheWeek] = useState<Poem | null>(initialPage === 1 ? initialPoems[0] || null : null);
+  // Poem of the week = admin's pick, otherwise the poem with the most views this week (decided by the API);
+  // kept separately so it survives paging/filtering.
+  const [poemOfTheWeek, setPoemOfTheWeek] = useState<Poem | null>(null);
 
   // Home-page hero search sends people here as /poems?q=...
   useEffect(() => {
@@ -40,12 +41,20 @@ export function PoemsClient({ initialPoems = [], initialPage = 1, initialTotal =
   }, [search]);
 
   useEffect(() => {
-    if (poemOfTheWeek) return;
-    fetch(`${API_BASE_URL}/api/poems?page=1&limit=1`)
+    let cancelled = false;
+    fetch(`${API_BASE_URL}/api/poems/poem-of-the-week`, { cache: 'no-store' })
       .then((r) => r.json())
-      .then((d) => setPoemOfTheWeek((d.poems || [])[0] || null))
+      .then((d) => {
+        if (cancelled) return;
+        if (d?.success && d.poem) { setPoemOfTheWeek(d.poem); return; }
+        // Older backend / no poem: fall back to the newest poem like before
+        return fetch(`${API_BASE_URL}/api/poems?page=1&limit=1`)
+          .then((r) => r.json())
+          .then((d2) => { if (!cancelled) setPoemOfTheWeek((d2.poems || [])[0] || null); });
+      })
       .catch(() => {});
-  }, [poemOfTheWeek]);
+    return () => { cancelled = true; };
+  }, []);
 
   // Each page / filter change asks the API for just that page (never the full list).
   useEffect(() => {
