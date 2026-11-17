@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import type { MouseEvent, ReactNode } from 'react';
+import { useTr } from '@/lib/uiTranslate';
 import { iconFor, linkKind, timeAgo, type NotificationItem } from '@/lib/notifications';
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
 
 /** One notification row. The whole row is a link when the notification has one, otherwise a plain row. */
 export function NotificationItemView({ item, onOpen, actions, compact }: Props) {
+  const tr = useTr();
   const kind = linkKind(item.link);
   const cls = `ntf-item${item.read ? '' : ' unread'}${item.priority === 'high' ? ' high' : ''}${compact ? ' compact' : ''}`;
 
@@ -25,11 +27,11 @@ export function NotificationItemView({ item, onOpen, actions, compact }: Props) 
       </span>
       <span className="ntf-text">
         <span className="ntf-title">
-          {item.title}
-          {!item.read && <span className="ntf-dot" aria-label="अपठित" />}
+          {tr(item.title)}
+          {!item.read && <span className="ntf-dot" aria-label={tr('अपठित')} />}
         </span>
-        {item.message && <span className="ntf-msg">{item.message}</span>}
-        <span className="ntf-time">{timeAgo(item.createdAt)}</span>
+        {item.message && <span className="ntf-msg">{tr(item.message)}</span>}
+        <span className="ntf-time">{tr(timeAgo(item.createdAt))}</span>
       </span>
     </>
   );
@@ -37,7 +39,7 @@ export function NotificationItemView({ item, onOpen, actions, compact }: Props) 
   const open = () => onOpen(item);
 
   return (
-    <li className={cls}>
+    <li className={`${cls} notranslate`} translate="no">
       {kind === 'internal' ? (
         <Link href={item.link} className="ntf-main" onClick={open}>
           {body}

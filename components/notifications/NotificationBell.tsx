@@ -10,6 +10,7 @@ import {
   markNotificationRead,
   type NotificationItem,
 } from '@/lib/notifications';
+import { useTr } from '@/lib/uiTranslate';
 import { NotificationItemView } from './NotificationItemView';
 
 interface Props {
@@ -25,6 +26,7 @@ export function NotificationBell({ unreadCount, onUnreadChange }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
+  const tr = useTr();
 
   const load = useCallback(async () => {
     setState('loading');
@@ -81,10 +83,10 @@ export function NotificationBell({ unreadCount, onUnreadChange }: Props) {
     }
   };
 
-  const label = unreadCount > 0 ? `सूचनाएँ, ${unreadCount} अपठित` : 'सूचनाएँ';
+  const label = unreadCount > 0 ? `${tr('सूचनाएँ')}, ${unreadCount} ${tr('अपठित')}` : tr('सूचनाएँ');
 
   return (
-    <div className="ntf-wrap" ref={wrapRef}>
+    <div className="ntf-wrap notranslate" translate="no" ref={wrapRef}>
       <button
         ref={btnRef}
         type="button"
@@ -100,24 +102,24 @@ export function NotificationBell({ unreadCount, onUnreadChange }: Props) {
       </button>
 
       {open && (
-        <div id="ntf-panel" className="ntf-panel" role="region" aria-label="सूचनाएँ">
+        <div id="ntf-panel" className="ntf-panel" role="region" aria-label={tr('सूचनाएँ')}>
           <div className="ntf-panel-head">
-            <strong>सूचनाएँ</strong>
+            <strong>{tr('सूचनाएँ')}</strong>
             <button type="button" className="ntf-link-btn" onClick={readAll} disabled={unreadCount === 0}>
-              सब पढ़ा हुआ करें
+              {tr('सब पढ़ा हुआ करें')}
             </button>
           </div>
 
           <div className="ntf-panel-body">
-            {state === 'loading' && items.length === 0 && <p className="ntf-empty">लोड हो रहा है…</p>}
+            {state === 'loading' && items.length === 0 && <p className="ntf-empty">{tr('लोड हो रहा है…')}</p>}
             {state === 'error' && (
               <p className="ntf-empty">
-                सूचनाएँ लोड नहीं हो सकीं। <button type="button" className="ntf-link-btn" onClick={load}>फिर कोशिश करें</button>
+                {tr('सूचनाएँ लोड नहीं हो सकीं।')} <button type="button" className="ntf-link-btn" onClick={load}>{tr('फिर कोशिश करें')}</button>
               </p>
             )}
             {state === 'idle' && items.length === 0 && (
               <p className="ntf-empty">
-                <i className="far fa-bell-slash" aria-hidden="true" /> अभी कोई सूचना नहीं है।
+                <i className="far fa-bell-slash" aria-hidden="true" /> {tr('अभी कोई सूचना नहीं है।')}
               </p>
             )}
             {items.length > 0 && (
@@ -130,7 +132,7 @@ export function NotificationBell({ unreadCount, onUnreadChange }: Props) {
           </div>
 
           <Link href="/notifications" className="ntf-panel-foot" onClick={() => setOpen(false)}>
-            सभी सूचनाएँ देखें <i className="fas fa-arrow-right" aria-hidden="true" />
+            {tr('सभी सूचनाएँ देखें')} <i className="fas fa-arrow-right" aria-hidden="true" />
           </Link>
         </div>
       )}

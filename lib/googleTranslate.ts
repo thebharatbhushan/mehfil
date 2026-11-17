@@ -9,6 +9,9 @@
 
 export const SOURCE_LANG = 'hi';
 
+/** Fired on `window` whenever the chosen language changes (kept here to avoid a circular import). */
+export const LANG_EVENT = 'mehfil:lang';
+
 export interface SiteLanguage {
   code: string; // Google language code
   native: string; // name written in that language (never translated)
@@ -169,10 +172,13 @@ export async function setSiteLanguage(code: string): Promise<void> {
   if (code === SOURCE_LANG) {
     const wasTranslated = getCurrentLang() !== SOURCE_LANG;
     writeCookie('', true);
+    window.dispatchEvent(new Event(LANG_EVENT));
     if (wasTranslated) window.location.reload(); // simplest reliable way to drop Google's DOM changes
     return;
   }
   writeCookie(`/${SOURCE_LANG}/${code}`, false);
+  // Lets menus/popovers that translate themselves (see lib/uiTranslate.ts) switch language right away.
+  window.dispatchEvent(new Event(LANG_EVENT));
   await ensureGoogleTranslate();
   const combo = await waitForCombo();
   if (combo) {
