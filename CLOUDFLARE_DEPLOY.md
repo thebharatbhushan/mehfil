@@ -3,10 +3,7 @@
 Already wired: `wrangler.jsonc`, `open-next.config.ts`, `build:cf` / `deploy:cf` scripts. No code changes needed.
 
 ## One-time setup
-1. Create the ISR cache bucket (name must match wrangler.jsonc):
-   Dashboard -> R2 -> Create bucket -> `mehfil-cache`
-   (or `npx wrangler r2 bucket create mehfil-cache`)
-2. Push this repo to GitHub.
+1. (No R2 bucket needed.) Push this repo to GitHub.
 3. Cloudflare -> Workers & Pages -> Create -> Import a repository -> pick the repo.
    - Project/Worker name: `mehfil` (must equal `name` in wrangler.jsonc)
    - Build command:  `npx opennextjs-cloudflare build`

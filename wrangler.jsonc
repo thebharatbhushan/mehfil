@@ -13,11 +13,5 @@
       "binding": "WORKER_SELF_REFERENCE",
       "service": "mehfil"
     }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "mehfil-cache"
-    }
   ]
 }

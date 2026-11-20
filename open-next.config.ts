@@ -1,8 +1,7 @@
 import { defineCloudflareConfig } from '@opennextjs/cloudflare';
-import r2IncrementalCache from '@opennextjs/cloudflare/overrides/incremental-cache/r2-incremental-cache';
 
-// ISR pages (revalidate = 3600) are stored in an R2 bucket, so a visit is served from cache
-// instead of re-rendering the page and calling the backend on every request.
-export default defineCloudflareConfig({
-  incrementalCache: r2IncrementalCache,
-});
+// No R2 / KV bindings, so deploy works on any Cloudflare account without extra setup.
+// To enable ISR caching later: enable R2 in the dashboard, create bucket `mehfil-cache`, then add
+// `incrementalCache: r2IncrementalCache` (from '@opennextjs/cloudflare/overrides/incremental-cache/r2-incremental-cache')
+// here and the `r2_buckets` binding back in wrangler.jsonc.
+export default defineCloudflareConfig();
