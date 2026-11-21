@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { API_BASE_URL, type Poem } from '@/lib/mehfil';
 import { localDayNumber, pickSherOfTheDay, type Sher } from '@/lib/daily';
+import { SharePoemButton } from '@/components/share/SharePoemButton';
+import { sherShareData } from '@/lib/shareCard/dailyCards';
 
 interface Props {
   poems: Poem[];
@@ -111,6 +113,12 @@ export function SherOfTheDay({ poems, ready }: Props) {
         )
       ) : (
         <div className="sher-skeleton" aria-hidden="true"><span /><span /></div>
+      )}
+      {/* Outside the <Link>: a button inside a link is invalid and would navigate. */}
+      {sher && (
+        <div className="daily-share">
+          <SharePoemButton poem={sherShareData(sher, localDateKey())} label="Share as Image" className="share-img-btn--sm" />
+        </div>
       )}
     </section>
   );

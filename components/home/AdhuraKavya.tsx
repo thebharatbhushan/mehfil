@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { API_BASE_URL, DEFAULT_AVATAR, authorHref } from '@/lib/mehfil';
 import { getActiveToken, loginUrlWithNext } from '@/lib/auth';
 import { useToast } from '@/components/site/ToastProvider';
+import { SharePoemButton } from '@/components/share/SharePoemButton';
+import { adhuraShareData } from '@/lib/shareCard/dailyCards';
 
 const MAX_LINE = 200;
 
@@ -223,6 +225,19 @@ export function AdhuraKavya() {
                   </Link>
                   </>
                 ) : null}
+                  <div className="adhura-share">
+                    <SharePoemButton
+                      poem={adhuraShareData({
+                        dateKey: today.dateKey,
+                        firstLine: today.firstLine,
+                        secondLine: today.selected.secondLine,
+                        writerName: todayAuthorName,
+                        writerImage: today.selected.author?.profilePic,
+                      })}
+                      label="Share as Image"
+                      className="share-img-btn--sm"
+                    />
+                  </div>
               </>
             ) : (
               <>
@@ -291,6 +306,19 @@ export function AdhuraKavya() {
               </Link>
               </>
             ) : null}
+            <div className="adhura-share">
+              <SharePoemButton
+                poem={adhuraShareData({
+                  dateKey: previous.dateKey,
+                  firstLine: previous.firstLine,
+                  secondLine: previous.secondLine,
+                  writerName: authorName,
+                  writerImage: previous.author?.profilePic,
+                })}
+                label="Share as Image"
+                className="share-img-btn--sm"
+              />
+            </div>
           </div>
         ) : null}
       </div>

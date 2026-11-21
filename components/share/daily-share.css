@@ -1,0 +1,4 @@
+/* Share button under the daily homepage cards (आज का काव्य, अधूरा काव्य). Colours come from .share-img-btn. */
+.share-img-btn--sm { padding: 0.5rem 1.2rem; font-size: 0.8rem; gap: 8px; box-shadow: none; }
+.daily-share { display: flex; justify-content: center; margin-top: 1.1rem; }
+.adhura-share { margin-top: 0.9rem; }
