@@ -10,11 +10,12 @@ import type { SharePoemData } from './types';
 const siteOrigin = (): string => (typeof window !== 'undefined' ? window.location.origin : '');
 
 /** आज का काव्य -> card. The poet is shown as the card's author; links to the full poem when it is a Mehfil poem. */
-export function sherShareData(sher: Sher, dateKey: string): SharePoemData {
+export function sherShareData(sher: Sher, dateKey: string, poetImage?: string): SharePoemData {
   return {
     id: `sher-${dateKey}`,
     title: 'आज का काव्य',
     authorName: sher.poet,
+    authorImage: poetImage || sher.poetImage || undefined,
     body: `${sher.lines[0]}\n${sher.lines[1]}`,
     url: `${siteOrigin()}${sher.href || '/'}`,
   };

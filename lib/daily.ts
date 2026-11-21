@@ -15,6 +15,8 @@ export interface Sher {
   tag?: string;
   /** Present when the sher comes from a poem published on Mehfil. */
   href?: string;
+  /** Poet's profile picture, when the sher comes from a Mehfil member (used on the share card). */
+  poetImage?: string;
 }
 
 /**
@@ -90,6 +92,7 @@ export function pickSherOfTheDay(poems: Poem[], day: number = localDayNumber()):
       poet,
       tag: poem.category || undefined,
       href: poem.slug ? `/poem/${poem.slug}` : undefined,
+      poetImage: author?.profilePic || undefined,
     });
     byWriter.set(key, list);
   }

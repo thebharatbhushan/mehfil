@@ -28,6 +28,7 @@ function nextLocalMidnightDelay(): number {
 
 export function SherOfTheDay({ poems, ready }: Props) {
   const [sher, setSher] = useState<Sher | null>(null);
+  const [poetImage, setPoetImage] = useState('');
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -82,6 +83,24 @@ export function SherOfTheDay({ poems, ready }: Props) {
     };
   }, [poems, ready]);
 
+  // The poet's picture for the share card. The picked-from-poems fallback already carries it; an admin-configured sher
+  // only has a poem link, so the picture is read from that poem's author.
+  const sherHref = sher?.href;
+  const sherImage = sher?.poetImage || '';
+  useEffect(() => {
+    setPoetImage(sherImage);
+    if (sherImage || !sherHref || !sherHref.startsWith('/poem/')) return;
+    let cancelled = false;
+    fetch(`${API_BASE_URL}/api/poems/slug/${sherHref.slice('/poem/'.length)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const pic = (data?.poem || data)?.author?.profilePic;
+        if (!cancelled && typeof pic === 'string' && pic) setPoetImage(pic);
+      })
+      .catch(() => { /* no picture: the card falls back to the default avatar */ });
+    return () => { cancelled = true; };
+  }, [sherHref, sherImage]);
+
   const body = sher && (
     <>
       <blockquote className="sher-text">
@@ -117,7 +136,7 @@ export function SherOfTheDay({ poems, ready }: Props) {
       {/* Outside the <Link>: a button inside a link is invalid and would navigate. */}
       {sher && (
         <div className="daily-share">
-          <SharePoemButton poem={sherShareData(sher, localDateKey())} label="Share as Image" className="share-img-btn--sm" />
+          <SharePoemButton poem={sherShareData(sher, localDateKey(), poetImage)} label="Share as Image" className="share-img-btn--sm" />
         </div>
       )}
     </section>
