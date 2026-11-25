@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/site/JsonLd';
 import { Breadcrumbs } from '@/components/site/Breadcrumbs';
 import { categoryForPoem, categoryHref } from '@/lib/categories';
-import { DEFAULT_OG_IMAGE, absoluteUrl, fetchAuthor, fullNameOf, pickImage, truncate } from '@/lib/seo';
+import { DEFAULT_OG_IMAGE, absoluteUrl, fetchAuthor, fullNameOf, oneLine, pickImage, truncate } from '@/lib/seo';
 import { getVisibleSocialLinks } from '@/lib/socialLinks';
 
 type Props = { params: Promise<{ username: string }>; children: React.ReactNode };
@@ -41,7 +41,7 @@ export async function generateMetadata(props: Pick<Props, 'params'>): Promise<Me
     alternates: { canonical: path },
     // Profiles without any poem are thin content: keep them out of the index (links still followed).
     robots: { index: poems.length > 0, follow: true },
-    openGraph: { title: `${title} | Mehfil`, description, url: path, type: 'profile', siteName: 'Mehfil', locale: 'hi_IN', images: image ? [{ url: image }] : [DEFAULT_OG_IMAGE] },
+    openGraph: { title: `${title} | Mehfil`, description, url: path, type: 'profile', username: user.username || ident, ...(user.firstName ? { firstName: oneLine(user.firstName) } : {}), ...(user.lastName ? { lastName: oneLine(user.lastName) } : {}), siteName: 'Mehfil', locale: 'hi_IN', images: image ? [{ url: image, alt: name }] : [DEFAULT_OG_IMAGE] },
     twitter: { card: image ? 'summary' : 'summary_large_image', title: `${title} | Mehfil`, description, images: [image || DEFAULT_OG_IMAGE.url] },
   };
 }

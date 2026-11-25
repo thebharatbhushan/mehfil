@@ -13,6 +13,7 @@ import { hasSocialLinks } from '@/lib/socialLinks';
 import { frameClassName, frameLabel } from '@/lib/recognition';
 import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
 import ShareBadgeModal from '@/components/share/ShareBadgeModal';
+import { ShareProfileMenu } from '@/components/author/ShareProfileMenu';
 import type { ProfileBadge } from '@/lib/recognition';
 
 function getLanguageLabel(langPref?: string): string {
@@ -193,22 +194,6 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
     [sortedPoems, query],
   );
 
-  const handleShare = async () => {
-    const url = window.location.href;
-    const fullName = `${author?.firstName || ''} ${author?.lastName || ''}`.trim();
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: `${fullName} | Mehfil Poetry`, text: `${fullName} की रचनाएँ पढ़ें`, url });
-      } catch {
-        navigator.clipboard?.writeText(url);
-        showToast('🔗 प्रोफ़ाइल लिंक कॉपी हो गया! अब साझा करें');
-      }
-    } else {
-      navigator.clipboard?.writeText(url);
-      showToast('🔗 प्रोफ़ाइल लिंक कॉपी हो गया! अब साझा करें');
-    }
-  };
-
   const isOwner = !!author && !!viewerId && String(author._id) === viewerId;
 
   const openEdit = () => {
@@ -363,9 +348,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
           </div>
 
           <div className="ap-actions">
-            <button type="button" className="ap-btn" onClick={handleShare}>
-              <i className="fas fa-share-alt" aria-hidden="true" /> प्रोफ़ाइल साझा करें
-            </button>
+            <ShareProfileMenu name={fullName} />
             {isOwner && (
               <>
                 <button type="button" className="ap-btn ap-btn-ghost" onClick={openEdit}>

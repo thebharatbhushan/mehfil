@@ -1,0 +1,20 @@
+/* Share-profile popover. Uses the site's theme variables, so light and dark both work. */
+.spm-root { position: relative; display: inline-block; }
+.spm-menu {
+  position: absolute; z-index: 40; top: calc(100% + 0.5rem); left: 0; min-width: 14.5rem; padding: 0.4rem;
+  background: var(--surface-solid, #fff); color: var(--text-dark);
+  border: 1px solid var(--border-light); border-radius: 1rem; box-shadow: var(--shadow-hover);
+}
+.spm-item {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 44px; padding: 0.5rem 0.8rem;
+  border: 0; border-radius: 0.7rem; background: transparent; color: inherit; font: inherit; font-size: 0.92rem;
+  text-align: left; text-decoration: none; cursor: pointer;
+}
+.spm-item i { width: 1.2rem; text-align: center; color: var(--accent); }
+.spm-item small { display: block; font-size: 0.72rem; color: var(--text-muted); }
+.spm-item:hover, .spm-item:focus-visible { background: var(--chip-bg); outline: none; }
+.spm-item:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+@media (max-width: 760px) {
+  .spm-root { display: block; width: 100%; }
+  .spm-menu { left: 0; right: 0; min-width: 0; }
+}
