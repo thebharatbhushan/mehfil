@@ -108,7 +108,6 @@ const LATIN = '"Cormorant Garamond"';
 const stack = (px: number, weight = 700) => `${weight} ${px}px ${DEVA}, ${LATIN}, serif`;
 const sans = (px: number, weight = 600) => `${weight} ${px}px "Inter", ${LATIN}, sans-serif`;
 
-const MAX_BADGES = 5;
 
 /** Metal ring colours for the member's profile frame; the default frame uses the theme gold. */
 const FRAME_METAL: Record<Exclude<FrameKey, 'default'>, [string, string, string]> = {
@@ -134,7 +133,7 @@ function clip(text: string, max: number): string {
 }
 
 function shownBadges(d: ProfileCardData): ProfileCardBadge[] {
-  return (d.badges || []).filter((b) => b.key && b.name).slice(0, MAX_BADGES);
+  return (d.badges || []).filter((b) => b.key && b.name);
 }
 
 /** Loads fonts, the logo, the profile photo and the badge icons. Never rejects. */
@@ -146,7 +145,7 @@ export async function prepareProfileCard(d: ProfileCardData): Promise<PreparedPr
         document.fonts.load(stack(40), sample).catch(() => []),
         document.fonts.load(stack(40, 400), sample).catch(() => []),
         document.fonts.load(`700 40px ${LATIN}`, 'Mehfil mehfilpoetry.in @0123456789').catch(() => []),
-        document.fonts.load(sans(30), 'mehfilpoetry.in').catch(() => []),
+        document.fonts.load(sans(30), 'mehfilpoetry.in 0123456789').catch(() => []),
         document.fonts.load(BRAND_DEVA_FONT, 'मेहफ़िल').catch(() => []),
         preloadBrandLogo(),
       ]),
@@ -420,11 +419,12 @@ function paint(ctx: CanvasRenderingContext2D, d: ProfileCardData, p: Palette, pr
   drawBrandLockup(ctx, p.logoTheme, CX, 112, 84);
 
   // Photo
-  const ay = hasBadges ? 300 : 360;
-  paintAvatar(ctx, d, p, prep, ay, 112);
+  const ar = hasBadges ? 96 : 112;
+  const ay = hasBadges ? 276 : 360;
+  paintAvatar(ctx, d, p, prep, ay, ar);
 
   // Name + @username
-  let y = ay + 112 + 92;
+  let y = ay + ar + (hasBadges ? 84 : 92);
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = p.ink;
@@ -474,7 +474,7 @@ function paint(ctx: CanvasRenderingContext2D, d: ProfileCardData, p: Palette, pr
   stats.push({ v: String(badges.length ? (d.badges || []).length : 0), l: 'बैज' });
   const showStats = stats.filter((s) => !(s.l === 'बैज' && s.v === '0'));
 
-  const stTop = hasBadges ? 784 : 840;
+  const stTop = hasBadges ? 736 : 840;
   const stH = 130;
   const stW = W - 220;
   if (showStats.length) {
@@ -501,38 +501,63 @@ function paint(ctx: CanvasRenderingContext2D, d: ProfileCardData, p: Palette, pr
       ctx.fillStyle = metalGradient(ctx, x - 60, stTop, x + 60, stTop + 80, p.gold);
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(fit(ctx, s.v, (px) => `700 ${px}px ${LATIN}, ${DEVA}, serif`, 64, 34, colW - 30), x, stTop + 54);
+      ctx.fillText(fit(ctx, s.v, (px) => `700 ${px}px "Inter", ${LATIN}, sans-serif`, 58, 32, colW - 30), x, stTop + 54);
       ctx.fillStyle = p.sub;
       ctx.font = stack(25, 500);
       ctx.fillText(s.l, x, stTop + 102);
     });
   }
 
-  // Badges
+  // Badges: every earned badge is shown. Few badges -> big medals with names; many -> smaller medals in rows
+  // (names are dropped once the medals get too small to label legibly).
   if (hasBadges) {
-    const by = stTop + stH + 56;
+    const by = stTop + stH + 54;
     ctx.fillStyle = p.accent;
     ctx.font = sans(22, 600);
     ctx.save();
     if ('letterSpacing' in ctx) (ctx as unknown as { letterSpacing: string }).letterSpacing = '5px';
     ctx.textAlign = 'center';
-    ctx.fillText('✦  उपलब्धियाँ  ✦', CX, by);
+    ctx.fillText(`✦  उपलब्धियाँ  ✦`, CX, by);
     ctx.restore();
 
     const n = badges.length;
-    const slot = Math.min(190, (W - 200) / n);
-    const startX = CX - (slot * (n - 1)) / 2;
-    const my = by + 78;
-    const mr = 44;
-    badges.forEach((b, i) => {
-      const bx = startX + slot * i;
-      paintMedal(ctx, b, prep.icons.get(b.key) ?? null, bx, my, mr);
-      ctx.fillStyle = p.ink;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      const label = fit(ctx, b.name, (s) => stack(s, 500), 24, 17, slot - 14);
-      ctx.fillText(label, bx, my + mr + 38);
-    });
+    const areaTop = by + 30;
+    const areaH = 1152 - areaTop;
+    const maxW = W - 180;
+    type Tier = { r: number; named: boolean; slot: number; perRow: number; rows: number; rowH: number; font: number };
+    const mkTier = (r: number, named: boolean): Tier & { score: number } => {
+      const font = Math.max(16, Math.min(26, Math.round(r * 0.5)));
+      const slot = named ? 2 * r + 44 : 2 * r + 14;
+      const perRow = Math.max(1, Math.floor(maxW / slot));
+      const rows = Math.ceil(n / perRow);
+      const rowH = named ? 2 * r + 12 + font + 12 : 2 * r + 18;
+      return { r, named, slot, perRow, rows, rowH, font, score: r + (named ? 10 : 0) };
+    };
+    const tiers = [
+      ...[58, 50, 44, 38, 32].map((r) => mkTier(r, true)),
+      ...[50, 44, 38, 32, 28, 24, 20, 17, 14].map((r) => mkTier(r, false)),
+    ].sort((x, y) => y.score - x.score);
+    const t = tiers.find((x) => x.rows * x.rowH <= areaH) ?? tiers[tiers.length - 1];
+    const total = t.rows * t.rowH;
+    let top = areaTop + Math.max(0, (areaH - total) / 2) * 0.6;
+
+    for (let row = 0; row < t.rows; row++) {
+      const inRow = Math.min(t.perRow, n - row * t.perRow);
+      // spread the last (shorter) row evenly so a lone badge is centred
+      const startX = CX - (t.slot * (inRow - 1)) / 2;
+      const my = top + row * t.rowH + t.r + 8;
+      for (let i = 0; i < inRow; i++) {
+        const b = badges[row * t.perRow + i];
+        const bx = startX + t.slot * i;
+        paintMedal(ctx, b, prep.icons.get(b.key) ?? null, bx, my, t.r);
+        if (t.named) {
+          ctx.fillStyle = p.ink;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(fit(ctx, b.name, (sz) => stack(sz, 500), t.font, 14, t.slot - 10), bx, my + t.r + 14 + t.font * 0.8);
+        }
+      }
+    }
   }
 
   // Footer
