@@ -1,5 +1,6 @@
 import { API_BASE_URL } from '@/lib/mehfil';
 import { normalizeFrameKey, sanitizeBadges } from '@/lib/recognition';
+import { sanitizeStreak } from '@/lib/streak';
 import type { Poem, Writer } from '@/lib/mehfil';
 
 /**
@@ -200,6 +201,7 @@ export function publicWriter(w: Writer): Writer {
     socialLinks: w.socialLinks,
     // Only present on the single-author endpoint; list/poem pages are unchanged.
     ...(w.badges?.length ? { badges: sanitizeBadges(w.badges) } : {}),
+    ...(sanitizeStreak(w.writerStreak)?.current ? { writerStreak: sanitizeStreak(w.writerStreak)! } : {}),
     ...(normalizeFrameKey(w.profileFrame) !== 'default' ? { profileFrame: { key: normalizeFrameKey(w.profileFrame) } } : {}),
   };
 }

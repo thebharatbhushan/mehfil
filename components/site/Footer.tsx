@@ -51,6 +51,7 @@ export function Footer() {
             <div className="footer-links">
               <Link href="/"><i className="fas fa-chevron-right" /> विशेष रचनाएँ</Link>
               <Link href="/poets"><i className="fas fa-chevron-right" /> लोकप्रिय रचनाकार</Link>
+              <Link href="/leaderboard"><i className="fas fa-chevron-right" /> साप्ताहिक लीडरबोर्ड</Link>
               <Link href="/category"><i className="fas fa-chevron-right" /> Poetry Moods</Link>
               <Link href="/dictionary"><i className="fas fa-chevron-right" /> शब्दकोश</Link>
               <Link href="/game"><i className="fas fa-chevron-right" /> शेर अंताक्षरी</Link>

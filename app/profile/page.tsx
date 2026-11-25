@@ -17,6 +17,7 @@ import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
 import ShareBadgeModal from '@/components/share/ShareBadgeModal';
 import { ShareProfileMenu } from '@/components/author/ShareProfileMenu';
 import { BookManager } from '@/components/profile/BookManager';
+import { WriterStreakBadge } from '@/components/profile/WriterStreakBadge';
 import { ProfileBadge, ProfileFrameInfo, frameClassName, frameLabel, sanitizeBadges } from '@/lib/recognition';
 import { useOwnBirthday } from '@/lib/useOwnBirthday';
 import { SOCIAL_PLATFORMS, SocialKey, SocialLinks, hasSocialLinks, toSocialForm, validateSocialForm } from '@/lib/socialLinks';
@@ -34,6 +35,7 @@ interface Profile extends ProfileCompletionUser {
   socialLinks?: SocialLinks;
   badges?: ProfileBadge[];
   profileFrame?: ProfileFrameInfo;
+  writerStreak?: unknown;
 }
 
 type EditSection = 'basic' | 'account' | 'location' | 'education' | 'about' | 'interests' | 'languages' | 'social' | 'password' | null;
@@ -539,6 +541,7 @@ export default function ProfilePage() {
               <h1>{fullName}</h1>
               {profile.username && <div className="profile-username">@{profile.username}</div>}
               <BadgeMedals badges={profile.badges} onShare={setShareBadge} />
+              <WriterStreakBadge streak={profile.writerStreak} isOwner />
               <div className="profile-header-tags">
                 <span><i className="fas fa-user" /> {genderLabel}</span>
                 <span><i className="fas fa-language" /> {getLanguageLabel(profile.languagePref)}</span>

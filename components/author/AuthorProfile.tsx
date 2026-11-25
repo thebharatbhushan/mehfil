@@ -12,6 +12,7 @@ import { BirthdayAvatarDecor } from '@/components/birthday/BirthdayAvatarDecor';
 import { hasSocialLinks } from '@/lib/socialLinks';
 import { frameClassName, frameLabel } from '@/lib/recognition';
 import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
+import { WriterStreakBadge } from '@/components/profile/WriterStreakBadge';
 import ShareBadgeModal from '@/components/share/ShareBadgeModal';
 import { ShareProfileMenu } from '@/components/author/ShareProfileMenu';
 import { BooksShowcase } from '@/components/profile/BooksShowcase';
@@ -342,6 +343,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
             <h1 className="ap-name">{fullName}</h1>
             {username && <div className="ap-username">@{username}</div>}
             <BadgeMedals badges={author.badges} onShare={isOwner ? setShareBadge : undefined} />
+            <WriterStreakBadge streak={author.writerStreak} isOwner={isOwner} />
             <p className="ap-bio">{bioText}</p>
             <ul className="ap-chips">
               <li><i className="fas fa-language" aria-hidden="true" /> {langPref}</li>

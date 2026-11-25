@@ -1,5 +1,6 @@
 import type { SocialLinks } from '@/lib/socialLinks';
 import type { ProfileBadge, ProfileFrameInfo } from '@/lib/recognition';
+import type { WriterStreak } from '@/lib/streak';
 
 // Set NEXT_PUBLIC_API_URL=http://localhost:5000 in .env.local to talk to a local backend.
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mehfilbackend-lhfl.onrender.com';
@@ -69,6 +70,8 @@ export interface Writer {
   profileFrame?: ProfileFrameInfo;
   /** Approved books (cover + link) shown on the public profile. */
   books?: Book[];
+  /** Weekly writing streak (public profile responses only). */
+  writerStreak?: WriterStreak;
 }
 
 /** Public profile URL: /u/<username> when known, otherwise the id-based fallback. */

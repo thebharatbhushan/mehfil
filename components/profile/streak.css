@@ -1,0 +1,18 @@
+/* Weekly writing streak badge (profile) */
+.mf-streak-wrap { margin: 0.75rem 0 0; }
+.mf-streak {
+  display: inline-flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
+  padding: 0.35rem 0.8rem; border-radius: 999px; font-family: var(--font-deva); font-size: 0.82rem; line-height: 1.6;
+  color: #7a3412; background: linear-gradient(135deg, #fff1d6, #ffd9a8); border: 1px solid #f0b46a;
+  box-shadow: 0 3px 10px rgba(217, 119, 6, 0.18);
+}
+.mf-streak i { color: #e8590c; font-size: 0.95rem; }
+.mf-streak strong { font-size: 1rem; font-weight: 700; }
+.mf-streak em { font-style: normal; font-size: 0.72rem; font-weight: 600; padding: 0 0.45rem; border-radius: 999px; background: rgba(255, 255, 255, 0.65); color: #9a3412; }
+.mf-streak[data-tier="8"], .mf-streak[data-tier="12"], .mf-streak[data-tier="26"], .mf-streak[data-tier="52"] {
+  background: linear-gradient(135deg, #ffe7a3, #f6b73c); border-color: #d9961c;
+}
+.mf-streak.is-at-risk { filter: saturate(0.75); }
+.mf-streak-hint { margin: 0.4rem 0 0; font-family: var(--font-deva); font-size: 0.78rem; color: var(--text-muted); }
+:where(html[data-theme="dark"]) .mf-streak { color: #ffd9a8; background: linear-gradient(135deg, #4a2a12, #5e3413); border-color: #a8651f; box-shadow: none; }
+:where(html[data-theme="dark"]) .mf-streak em { background: rgba(255, 255, 255, 0.12); color: #ffd9a8; }

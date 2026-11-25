@@ -101,6 +101,7 @@ export function Header() {
     { href: '/', label: 'मुखपृष्ठ', active: pathname === '/' },
     { href: '/poems', label: 'कविताएँ', active: pathname.startsWith('/poems') || pathname.startsWith('/poem/') },
     { href: '/poets', label: 'रचनाकार', active: pathname.startsWith('/poets') || pathname.startsWith('/author') || pathname.startsWith('/u/') },
+    { href: '/leaderboard', label: 'लीडरबोर्ड', active: pathname.startsWith('/leaderboard') },
     { href: '/category', label: 'श्रेणियाँ', active: pathname.startsWith('/category') },
     { href: '/dictionary', label: 'शब्दकोश', active: pathname.startsWith('/dictionary') },
     { href: '/games', label: 'खेल', active: pathname.startsWith('/game') },
