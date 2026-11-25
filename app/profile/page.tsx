@@ -561,6 +561,7 @@ export default function ProfilePage() {
                     bio: profile.bio,
                     profilePic: profile.profilePic,
                     poemsCount: poems.filter((p) => p.status !== 'unpublished' && p.status !== 'rejected').length,
+                    booksCount: ((profile as { books?: { status?: string }[] }).books || []).filter((b) => b.status === 'approved').length,
                     city: (profile as { city?: string }).city || undefined,
                     language: (profile.languagePref ? ({ hindi: 'हिंदी', urdu: 'उर्दू', english: 'अंग्रेज़ी', bilingual: 'द्विभाषी' } as Record<string, string>)[profile.languagePref.toLowerCase()] : '') || 'हिंदी / उर्दू',
                     memberSince: profile.createdAt ? String(new Date(profile.createdAt).getFullYear()) : undefined,

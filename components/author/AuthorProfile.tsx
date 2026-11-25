@@ -290,6 +290,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
   const memberSince = formatDate(author.createdAt);
   const langPref = getLanguageLabel(author.languagePref);
   const poemsCount = author.poemsCount || poems.length || 0;
+  const booksCount = author.books?.length || 0;
   const bioText = author.bio || 'शब्दों का मुसाफ़िर, एहसासों का हमसफ़र।';
   const featured = query === '' ? sortedPoems[0] : undefined;
 
@@ -358,6 +359,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
                 bio: author.bio,
                 profilePic: author.profilePic,
                 poemsCount,
+                booksCount,
                 city: author.city || undefined,
                 language: langPref,
                 memberSince: author.createdAt ? String(new Date(author.createdAt).getFullYear()) : undefined,
@@ -383,6 +385,12 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
             <dt>रचनाएँ</dt>
             <dd>{poemsCount}</dd>
           </div>
+          {booksCount > 0 && (
+            <div className="ap-stat">
+              <dt>किताबें</dt>
+              <dd>{booksCount}</dd>
+            </div>
+          )}
           <div className="ap-stat">
             <dt>भाषा</dt>
             <dd className="ap-stat-text">{langPref}</dd>

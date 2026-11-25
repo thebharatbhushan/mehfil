@@ -38,6 +38,8 @@ export interface ProfileCardData {
   city?: string;
   language?: string;
   poemsCount?: number;
+  /** Approved books on the profile; the stat is only shown when this is above 0. */
+  booksCount?: number;
   /** Already formatted, e.g. "2024". */
   memberSince?: string;
   /** Earned (unlocked) badges only. */
@@ -139,7 +141,7 @@ function shownBadges(d: ProfileCardData): ProfileCardBadge[] {
 /** Loads fonts, the logo, the profile photo and the badge icons. Never rejects. */
 export async function prepareProfileCard(d: ProfileCardData): Promise<PreparedProfile> {
   if (typeof document !== 'undefined' && document.fonts?.load) {
-    const sample = `${d.name} ${d.bio || ''} ${d.city || ''} ${d.language || ''} ${(d.badges || []).map((b) => b.name).join(' ')} रचनाएँ भाषा सदस्यता उपलब्धियाँ मेहफ़िल Mehfil mehfilpoetry.in 0123456789`;
+    const sample = `${d.name} ${d.bio || ''} ${d.city || ''} ${d.language || ''} ${(d.badges || []).map((b) => b.name).join(' ')} रचनाएँ किताबें भाषा सदस्यता उपलब्धियाँ मेहफ़िल Mehfil mehfilpoetry.in 0123456789`;
     await Promise.race([
       Promise.all([
         document.fonts.load(stack(40), sample).catch(() => []),
@@ -470,6 +472,7 @@ function paint(ctx: CanvasRenderingContext2D, d: ProfileCardData, p: Palette, pr
   // Stats
   const stats: { v: string; l: string }[] = [];
   if (d.poemsCount != null) stats.push({ v: String(d.poemsCount), l: 'रचनाएँ' });
+  if (d.booksCount && d.booksCount > 0) stats.push({ v: String(d.booksCount), l: 'किताबें' });
   if (d.memberSince) stats.push({ v: d.memberSince, l: 'सदस्य बने' });
   stats.push({ v: String(badges.length ? (d.badges || []).length : 0), l: 'बैज' });
   const showStats = stats.filter((s) => !(s.l === 'बैज' && s.v === '0'));
