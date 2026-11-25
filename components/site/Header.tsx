@@ -160,6 +160,13 @@ export function Header() {
                 aria-label="खाता मेन्यू"
                 onClick={(e) => {
                   e.stopPropagation();
+                  // A click on a menu item (profile / poems / notifications / logout) closes the menu. The blur is needed
+                  // because the CSS :focus-within rule would otherwise keep the dropdown open after the click.
+                  if ((e.target as HTMLElement).closest('.profile-dropdown a')) {
+                    setAvatarOpen(false);
+                    (document.activeElement as HTMLElement | null)?.blur();
+                    return;
+                  }
                   setAvatarOpen(!avatarOpen);
                 }}
                 onKeyDown={(e) => {
