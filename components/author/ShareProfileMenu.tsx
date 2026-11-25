@@ -6,12 +6,11 @@ import dynamic from 'next/dynamic';
 import { useToast } from '@/components/site/ToastProvider';
 import { SOURCE_LANG } from '@/lib/googleTranslate';
 import { useSiteLang, useTr } from '@/lib/uiTranslate';
-import { buildProfileCardData } from '@/lib/shareCard/profileCard';
-import type { ProfileCardInput } from '@/lib/shareCard/profileCard';
+import type { ProfileCardData } from '@/lib/shareCard/ProfileImageGenerator';
 import './share-profile.css';
 
 // The card editor, canvas renderer and fonts are only needed once the member opens "Share as card".
-const SharePoemModal = dynamic(() => import('@/components/share/SharePoemModal'), { ssr: false });
+const ShareProfileCardModal = dynamic(() => import('@/components/share/ShareProfileCardModal'), { ssr: false });
 
 interface Props {
   /** Writer's display name, used in the share text. */
@@ -19,7 +18,7 @@ interface Props {
   /** Public profile path (e.g. /u/rahul). Defaults to the current page, so pass it on private pages like /profile. */
   path?: string;
   /** Data for the "share as card" image. Omit to hide that option. The profile URL is added here. */
-  card?: Omit<ProfileCardInput, 'url' | 'name'>;
+  card?: Omit<ProfileCardData, 'url' | 'name'>;
   /** Class of the trigger button (defaults to the public profile's `ap-btn`). */
   className?: string;
 }
@@ -60,7 +59,7 @@ async function copyText(text: string): Promise<boolean> {
 /**
  * "Share profile" button. The menu is rendered in a portal on <body> (so no parent card can clip it):
  * a bottom sheet on phones, a popover under the button on larger screens.
- * Options: share as card image (same editor as poems), copy link, WhatsApp, X / Twitter, Facebook.
+ * Options: share as card image (premium profile card), copy link, WhatsApp, X / Twitter, Facebook.
  * On touch devices with the Web Share API the button first tries the native share sheet.
  * UI text is Hindi with an English sub-label and goes through useTr().
  */
@@ -217,8 +216,8 @@ export function ShareProfileMenu({ name, path, card, className = 'ap-btn' }: Pro
       </button>
       {menu}
       {cardOpen && card && (
-        <SharePoemModal
-          poem={buildProfileCardData({ ...card, name, url: url || profileUrl(path) })}
+        <ShareProfileCardModal
+          data={{ ...card, name, url: url || profileUrl(path) }}
           onClose={() => setCardOpen(false)}
         />
       )}

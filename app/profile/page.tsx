@@ -16,7 +16,7 @@ import { BirthdayAvatarDecor } from '@/components/birthday/BirthdayAvatarDecor';
 import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
 import ShareBadgeModal from '@/components/share/ShareBadgeModal';
 import { ShareProfileMenu } from '@/components/author/ShareProfileMenu';
-import { ProfileBadge, ProfileFrameInfo, frameClassName, frameLabel } from '@/lib/recognition';
+import { ProfileBadge, ProfileFrameInfo, frameClassName, frameLabel, sanitizeBadges } from '@/lib/recognition';
 import { useOwnBirthday } from '@/lib/useOwnBirthday';
 import { SOCIAL_PLATFORMS, SocialKey, SocialLinks, hasSocialLinks, toSocialForm, validateSocialForm } from '@/lib/socialLinks';
 import {
@@ -560,7 +560,11 @@ export default function ProfilePage() {
                     bio: profile.bio,
                     profilePic: profile.profilePic,
                     poemsCount: poems.filter((p) => p.status !== 'unpublished' && p.status !== 'rejected').length,
-                    latestPoemBody: poems.find((p) => p.status !== 'unpublished' && p.status !== 'rejected')?.body,
+                    city: (profile as { city?: string }).city || undefined,
+                    language: (profile.languagePref ? ({ hindi: 'हिंदी', urdu: 'उर्दू', english: 'अंग्रेज़ी', bilingual: 'द्विभाषी' } as Record<string, string>)[profile.languagePref.toLowerCase()] : '') || 'हिंदी / उर्दू',
+                    memberSince: profile.createdAt ? String(new Date(profile.createdAt).getFullYear()) : undefined,
+                    badges: sanitizeBadges(profile.badges).filter((b) => b.unlocked).map((b) => ({ key: b.key, name: b.name, icon: b.icon })),
+                    frame: profile.profileFrame?.key,
                   }}
                 />
               </div>

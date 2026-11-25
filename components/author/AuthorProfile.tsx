@@ -14,6 +14,7 @@ import { frameClassName, frameLabel } from '@/lib/recognition';
 import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
 import ShareBadgeModal from '@/components/share/ShareBadgeModal';
 import { ShareProfileMenu } from '@/components/author/ShareProfileMenu';
+import { sanitizeBadges } from '@/lib/recognition';
 import type { ProfileBadge } from '@/lib/recognition';
 
 function getLanguageLabel(langPref?: string): string {
@@ -356,7 +357,11 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
                 bio: author.bio,
                 profilePic: author.profilePic,
                 poemsCount,
-                latestPoemBody: sortedPoems[0]?.body,
+                city: author.city || undefined,
+                language: langPref,
+                memberSince: author.createdAt ? String(new Date(author.createdAt).getFullYear()) : undefined,
+                badges: sanitizeBadges(author.badges).filter((b) => b.unlocked).map((b) => ({ key: b.key, name: b.name, icon: b.icon })),
+                frame: author.profileFrame?.key,
               }}
             />
             {isOwner && (

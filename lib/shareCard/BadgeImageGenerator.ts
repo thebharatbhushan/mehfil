@@ -34,7 +34,7 @@ const stack = (px: number, weight = 700) => `${weight} ${px}px ${DEVA}, ${LATIN}
 const FA_ICON = /^fa-[a-z0-9-]{1,40}$/;
 const HTTPS_URL = /^https:\/\/[^\s"'<>]{1,300}$/;
 
-type IconSpec = { kind: 'glyph'; char: string; font: (px: number) => string } | { kind: 'img'; img: HTMLImageElement } | null;
+export type IconSpec = { kind: 'glyph'; char: string; font: (px: number) => string } | { kind: 'img'; img: HTMLImageElement } | null;
 
 function loadPlainImage(url: string, timeoutMs = 6000): Promise<HTMLImageElement | null> {
   return new Promise((resolve) => {
@@ -48,7 +48,7 @@ function loadPlainImage(url: string, timeoutMs = 6000): Promise<HTMLImageElement
 }
 
 /** The badge icon exactly as the site shows it: Font Awesome glyph (read from the loaded stylesheet) or an https image. */
-async function resolveIcon(icon?: string): Promise<IconSpec> {
+export async function resolveIcon(icon?: string): Promise<IconSpec> {
   const v = (icon || '').trim();
   if (HTTPS_URL.test(v)) {
     const img = await loadPlainImage(v);
