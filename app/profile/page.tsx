@@ -15,6 +15,7 @@ import { DeleteAccountSection } from '@/components/profile/DeleteAccountSection'
 import { BirthdayAvatarDecor } from '@/components/birthday/BirthdayAvatarDecor';
 import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
 import ShareBadgeModal from '@/components/share/ShareBadgeModal';
+import { ShareProfileMenu } from '@/components/author/ShareProfileMenu';
 import { ProfileBadge, ProfileFrameInfo, frameClassName, frameLabel } from '@/lib/recognition';
 import { useOwnBirthday } from '@/lib/useOwnBirthday';
 import { SOCIAL_PLATFORMS, SocialKey, SocialLinks, hasSocialLinks, toSocialForm, validateSocialForm } from '@/lib/socialLinks';
@@ -549,6 +550,19 @@ export default function ProfilePage() {
                   <i className="fas fa-sparkles" /> {completion < 100 ? 'प्रोफ़ाइल पूरी करें' : 'प्रोफ़ाइल संपादित करें'}
                 </button>
                 <Link href={myProfileHref()} className="profile-secondary-btn"><i className="fas fa-external-link-alt" /> सार्वजनिक प्रोफ़ाइल</Link>
+                <ShareProfileMenu
+                  name={fullName}
+                  path={myProfileHref()}
+                  className="profile-secondary-btn"
+                  card={{
+                    id: `writer-${profile.username || profile._id}`,
+                    username: profile.username || undefined,
+                    bio: profile.bio,
+                    profilePic: profile.profilePic,
+                    poemsCount: poems.filter((p) => p.status !== 'unpublished' && p.status !== 'rejected').length,
+                    latestPoemBody: poems.find((p) => p.status !== 'unpublished' && p.status !== 'rejected')?.body,
+                  }}
+                />
               </div>
             </div>
             <div className="profile-completion-card">

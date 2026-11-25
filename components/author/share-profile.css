@@ -1,20 +1,27 @@
-/* Share-profile popover. Uses the site's theme variables, so light and dark both work. */
-.spm-root { position: relative; display: inline-block; }
+/* Share-profile menu (rendered in a portal on <body>). Theme variables make light and dark both work. */
 .spm-menu {
-  position: absolute; z-index: 40; top: calc(100% + 0.5rem); left: 0; min-width: 14.5rem; padding: 0.4rem;
+  position: fixed; z-index: 1000; padding: 0.4rem;
   background: var(--surface-solid, #fff); color: var(--text-dark);
   border: 1px solid var(--border-light); border-radius: 1rem; box-shadow: var(--shadow-hover);
+  max-height: calc(100vh - 16px); overflow-y: auto;
+}
+.spm-backdrop { position: fixed; inset: 0; z-index: 999; background: rgba(20, 12, 8, 0.45); }
+.spm-sheet {
+  left: 0; right: 0; bottom: 0; top: auto; width: auto; max-width: 560px; margin: 0 auto;
+  border-radius: 1.2rem 1.2rem 0 0; border-bottom: 0;
+  padding: 0.6rem 0.6rem calc(0.8rem + env(safe-area-inset-bottom, 0px));
+}
+.spm-sheet::before {
+  content: ''; display: block; width: 2.5rem; height: 4px; margin: 0.1rem auto 0.5rem;
+  border-radius: 4px; background: var(--border-light);
 }
 .spm-item {
-  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 44px; padding: 0.5rem 0.8rem;
-  border: 0; border-radius: 0.7rem; background: transparent; color: inherit; font: inherit; font-size: 0.92rem;
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 48px; padding: 0.5rem 0.8rem;
+  border: 0; border-radius: 0.7rem; background: transparent; color: inherit; font: inherit; font-size: 0.95rem;
   text-align: left; text-decoration: none; cursor: pointer;
 }
-.spm-item i { width: 1.2rem; text-align: center; color: var(--accent); }
+.spm-item i { width: 1.3rem; text-align: center; color: var(--accent); }
 .spm-item small { display: block; font-size: 0.72rem; color: var(--text-muted); }
+.spm-item-main { font-weight: 600; }
 .spm-item:hover, .spm-item:focus-visible { background: var(--chip-bg); outline: none; }
 .spm-item:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
-@media (max-width: 760px) {
-  .spm-root { display: block; width: 100%; }
-  .spm-menu { left: 0; right: 0; min-width: 0; }
-}

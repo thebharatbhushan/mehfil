@@ -41,6 +41,10 @@ export interface SharePoemData {
   authorImage?: string;
   /** Absolute poem URL, included in the share text. */
   url?: string;
+  /** Draw `title` as plain text instead of in curly quotes (used by the writer-profile card for "@username"). */
+  titlePlain?: boolean;
+  /** Which kind of card this is; only changes the exported file name (mehfil-poem-... vs mehfil-writer-...). */
+  fileKind?: 'poem' | 'writer';
 }
 
 export interface OptionItem<T extends string> {

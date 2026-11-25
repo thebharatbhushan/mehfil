@@ -191,7 +191,7 @@ function drawTitle(ctx: CanvasRenderingContext2D, poem: SharePoemData, options: 
   if (!raw) return;
   const theme = THEMES[options.background];
   const dom = dominantScript(raw);
-  const text = `\u201C${raw}\u201D`;
+  const text = poem.titlePlain ? raw : `\u201C${raw}\u201D`;
 
   ctx.save();
   ctx.direction = isRtlLine(raw) ? 'rtl' : 'ltr';
@@ -306,8 +306,9 @@ export function renderCard(
 }
 
 export function exportFileName(poem: SharePoemData, page: number, pageCount: number): string {
-  const safeId = String(poem.id || 'poem').replace(/[^A-Za-z0-9_-]+/g, '');
-  return pageCount > 1 ? `mehfil-poem-${safeId}-${page + 1}.png` : `mehfil-poem-${safeId}.png`;
+  const kind = poem.fileKind === 'writer' ? 'writer' : 'poem';
+  const safeId = String(poem.id || kind).replace(/[^A-Za-z0-9_-]+/g, '');
+  return pageCount > 1 ? `mehfil-${kind}-${safeId}-${page + 1}.png` : `mehfil-${kind}-${safeId}.png`;
 }
 
 /** Renders one page at export resolution and encodes it as PNG. */

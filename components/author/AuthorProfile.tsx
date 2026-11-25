@@ -348,7 +348,17 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
           </div>
 
           <div className="ap-actions">
-            <ShareProfileMenu name={fullName} />
+            <ShareProfileMenu
+              name={fullName}
+              card={{
+                id: `writer-${username || author._id}`,
+                username: username || undefined,
+                bio: author.bio,
+                profilePic: author.profilePic,
+                poemsCount,
+                latestPoemBody: sortedPoems[0]?.body,
+              }}
+            />
             {isOwner && (
               <>
                 <button type="button" className="ap-btn ap-btn-ghost" onClick={openEdit}>
