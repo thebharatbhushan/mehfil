@@ -167,6 +167,8 @@ export function Header() {
                     (document.activeElement as HTMLElement | null)?.blur();
                     return;
                   }
+                  // Clicking the avatar while the menu is open closes it (blur, so :focus-within lets go too).
+                  if (avatarOpen) (document.activeElement as HTMLElement | null)?.blur();
                   setAvatarOpen(!avatarOpen);
                 }}
                 onKeyDown={(e) => {
@@ -179,9 +181,11 @@ export function Header() {
                   }
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
+                    if (avatarOpen) e.currentTarget.blur();
                     setAvatarOpen((o) => !o);
                   } else if (e.key === 'Escape') {
                     setAvatarOpen(false);
+                    e.currentTarget.blur();
                   }
                 }}
               >
