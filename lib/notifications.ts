@@ -134,6 +134,8 @@ const TYPE_ICONS: Record<string, string> = {
   poem_rejected: 'fa-times-circle',
   poem_unpublished: 'fa-eye-slash',
   poem_restored: 'fa-undo',
+  book_approved: 'fa-book-open',
+  book_rejected: 'fa-ban',
   copyright_report: 'fa-copyright',
   report_action: 'fa-flag-checkered',
   moderation_notice: 'fa-gavel',

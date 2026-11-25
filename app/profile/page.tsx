@@ -16,6 +16,7 @@ import { BirthdayAvatarDecor } from '@/components/birthday/BirthdayAvatarDecor';
 import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
 import ShareBadgeModal from '@/components/share/ShareBadgeModal';
 import { ShareProfileMenu } from '@/components/author/ShareProfileMenu';
+import { BookManager } from '@/components/profile/BookManager';
 import { ProfileBadge, ProfileFrameInfo, frameClassName, frameLabel, sanitizeBadges } from '@/lib/recognition';
 import { useOwnBirthday } from '@/lib/useOwnBirthday';
 import { SOCIAL_PLATFORMS, SocialKey, SocialLinks, hasSocialLinks, toSocialForm, validateSocialForm } from '@/lib/socialLinks';
@@ -634,6 +635,8 @@ export default function ProfilePage() {
                 ? <ProfileSocialLinks socialLinks={profile.socialLinks} variant="chips" />
                 : <div className="profile-optional-note"><i className="fas fa-info-circle" /> ये लिंक optional हैं और Profile Completion में शामिल नहीं हैं।</div>}
             </SectionCard>
+
+            <BookManager />
           </div>
 
           <aside className="profile-sidebar">

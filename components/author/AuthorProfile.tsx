@@ -14,6 +14,7 @@ import { frameClassName, frameLabel } from '@/lib/recognition';
 import { ProfileBadges, BadgeMedals } from '@/components/profile/ProfileBadges';
 import ShareBadgeModal from '@/components/share/ShareBadgeModal';
 import { ShareProfileMenu } from '@/components/author/ShareProfileMenu';
+import { BooksShowcase } from '@/components/profile/BooksShowcase';
 import { sanitizeBadges } from '@/lib/recognition';
 import type { ProfileBadge } from '@/lib/recognition';
 
@@ -397,6 +398,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
 
       {/* Badges — names/icons only; locked ones are grayscale. No XP is ever shown. */}
       <ProfileBadges badges={author.badges} onShare={isOwner ? setShareBadge : undefined} />
+      <BooksShowcase books={author.books} />
       {isOwner && shareBadge && (
         <ShareBadgeModal
           data={{ badgeKey: shareBadge.key, badgeName: shareBadge.name, badgeDescription: shareBadge.description, badgeIcon: shareBadge.icon, userName: fullName, username, profilePic: author.profilePic }}

@@ -34,6 +34,22 @@ export interface Poem {
   updatedAt?: string;
 }
 
+/** A book on a writer's public profile (only admin-approved books are ever sent to visitors). */
+export interface Book {
+  _id: string;
+  title: string;
+  /** https link to where the book can be read / bought. */
+  link: string;
+  coverUrl: string;
+}
+
+/** The writer's own view of a book, including its review state. */
+export interface OwnBook extends Book {
+  status: 'pending' | 'approved' | 'rejected';
+  moderationReason?: string;
+  createdAt?: string;
+}
+
 export interface Writer {
   _id: string;
   username?: string;
@@ -51,6 +67,8 @@ export interface Writer {
   /** Public recognition from the API: badge shelf + profile frame. Never contains XP. */
   badges?: ProfileBadge[];
   profileFrame?: ProfileFrameInfo;
+  /** Approved books (cover + link) shown on the public profile. */
+  books?: Book[];
 }
 
 /** Public profile URL: /u/<username> when known, otherwise the id-based fallback. */
