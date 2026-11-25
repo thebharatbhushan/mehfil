@@ -12,12 +12,15 @@ interface Props {
   /** Optional extra controls shown on the right (mark read / delete on the full page). */
   actions?: ReactNode;
   compact?: boolean;
+  /** When set, clicking the row always goes to this internal page instead of the notification's own link. */
+  linkOverride?: string;
 }
 
 /** One notification row. The whole row is a link when the notification has one, otherwise a plain row. */
-export function NotificationItemView({ item, onOpen, actions, compact }: Props) {
+export function NotificationItemView({ item, onOpen, actions, compact, linkOverride }: Props) {
   const tr = useTr();
-  const kind = linkKind(item.link);
+  const kind = linkOverride ? 'internal' : linkKind(item.link);
+  const href = linkOverride || item.link;
   const cls = `ntf-item${item.read ? '' : ' unread'}${item.priority === 'high' ? ' high' : ''}${compact ? ' compact' : ''}`;
 
   const body = (
@@ -41,7 +44,7 @@ export function NotificationItemView({ item, onOpen, actions, compact }: Props) 
   return (
     <li className={`${cls} notranslate`} translate="no">
       {kind === 'internal' ? (
-        <Link href={item.link} className="ntf-main" onClick={open}>
+        <Link href={href} className="ntf-main" onClick={open}>
           {body}
         </Link>
       ) : kind === 'external' ? (

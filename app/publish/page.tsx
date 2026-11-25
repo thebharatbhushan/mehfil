@@ -108,7 +108,9 @@ export default function PublishPage() {
       if (data.success) {
         localStorage.removeItem('mehfil_draft');
         showToast('✨ आपकी रचना प्रकाशित हो गई!');
-        setTimeout(() => router.push('/profile'), 1000);
+        // Open the poem that was just published; fall back to the profile if the API sent no slug.
+        const slug = typeof data.poem?.slug === 'string' ? data.poem.slug : '';
+        setTimeout(() => router.push(slug ? `/poem/${encodeURIComponent(slug)}` : '/profile'), 1000);
       } else {
         showToast(data.message || '❌ प्रकाशन विफल।', true);
       }

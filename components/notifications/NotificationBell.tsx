@@ -125,7 +125,7 @@ export function NotificationBell({ unreadCount, onUnreadChange }: Props) {
             {items.length > 0 && (
               <ul className="ntf-list">
                 {items.map((n) => (
-                  <NotificationItemView key={n._id} item={n} onOpen={openItem} compact />
+                  <NotificationItemView key={n._id} item={n} onOpen={openItem} compact linkOverride="/notifications" />
                 ))}
               </ul>
             )}
