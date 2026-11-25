@@ -105,7 +105,6 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
     { href: '/', label: 'मुखपृष्ठ', sub: 'Home', icon: 'fa-home', active: pathname === '/' },
     { href: '/poems', label: 'कविताएँ', sub: 'Poems', icon: 'fa-book-open', active: pathname.startsWith('/poems') || pathname.startsWith('/poem/') },
     { href: '/poets', label: 'रचनाकार', sub: 'Authors', icon: 'fa-feather-alt', active: pathname.startsWith('/poets') || pathname.startsWith('/author') || pathname.startsWith('/u/') },
-    { href: '/leaderboard', label: 'लीडरबोर्ड', sub: 'Weekly Leaderboard', icon: 'fa-trophy', active: pathname.startsWith('/leaderboard') },
     { href: '/category', label: 'श्रेणियाँ', sub: 'Categories', icon: 'fa-th-large', active: pathname.startsWith('/category') },
     { href: '/dictionary', label: 'शब्दकोश', sub: 'Dictionary', icon: 'fa-book', active: pathname.startsWith('/dictionary') },
     { href: '/games', label: 'खेल', sub: 'Games', icon: 'fa-gamepad', active: pathname.startsWith('/game') },

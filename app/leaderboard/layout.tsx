@@ -7,6 +7,7 @@ const DESCRIPTION = 'इस हफ़्ते के शीर्ष रचन�
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
+  robots: { index: false, follow: false }, // hidden for now: remove this line when the leaderboard is launched
   alternates: { canonical: '/leaderboard' },
   openGraph: { title: TITLE, description: DESCRIPTION, url: '/leaderboard', type: 'website', siteName: 'Mehfil', locale: 'hi_IN', images: [DEFAULT_OG_IMAGE] },
   twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION, images: [DEFAULT_OG_IMAGE.url] },

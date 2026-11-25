@@ -26,7 +26,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: base, lastModified: newest, changeFrequency: 'daily', priority: 1 },
     { url: `${base}/poems`, lastModified: newest, changeFrequency: 'daily', priority: 0.9 },
     { url: `${base}/poets`, lastModified: newest, changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/leaderboard`, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${base}/category`, lastModified: newest, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${base}/games`, changeFrequency: 'monthly', priority: 0.7 },
     ...GAME_PATHS.map((g) => ({ url: `${base}${g}`, changeFrequency: 'monthly' as const, priority: 0.6 })),
