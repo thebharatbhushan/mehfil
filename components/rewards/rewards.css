@@ -4,7 +4,7 @@
 .rw-kicker { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; }
 .rw-head h1, .rw-join-card h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); line-height: 1.4; color: var(--text-dark); margin: 0.25rem 0 0.5rem; }
 .rw-head p, .rw-join-card p { color: var(--text-muted); line-height: 1.8; font-size: 0.95rem; margin: 0 0 0.75rem; }
-.rw-tabs { display: flex; gap: 0.25rem; padding: 0.25rem; border-radius: 999px; background: var(--chip-bg, #f5e6dd); overflow-x: auto; max-width: 100%; margin: 0 auto 1.25rem; width: fit-content; scrollbar-width: none; }
+.rw-tabs { position: relative; z-index: 0; display: flex; gap: 0.25rem; padding: 0.25rem; border-radius: 999px; background: var(--chip-bg, #f5e6dd); overflow-x: auto; max-width: 100%; margin: 0 auto 1.25rem; width: fit-content; scrollbar-width: none; }
 .rw-tabs::-webkit-scrollbar { display: none; }
 .rw-tabs button { border: 0; background: transparent; padding: 0.5rem 1rem; border-radius: 999px; font-family: inherit; font-size: 0.88rem; color: var(--accent-dark); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 0.4rem; align-items: center; }
 .rw-tabs button.is-active { background: var(--accent); color: #fff; }
@@ -84,8 +84,8 @@
   .rw-head { margin-bottom: 1rem; }
   .rw-head p { font-size: 0.88rem; line-height: 1.7; }
   /* main tabs: four equal columns, icon over a short label, no sideways scrolling */
-  .rw-tabs:not(.rw-tabs-sm) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; border-radius: 18px; overflow: visible; gap: 0.2rem; }
-  .rw-tabs:not(.rw-tabs-sm) button { flex-direction: column; gap: 0.2rem; padding: 0.5rem 0.15rem; border-radius: 14px; font-size: 0.68rem; line-height: 1.25; white-space: normal; text-align: center; justify-content: center; }
+  .rw-tabs:not(.rw-tabs-sm) { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: 100%; border-radius: 18px; overflow: visible; gap: 0.2rem; }
+  .rw-tabs:not(.rw-tabs-sm) button { flex-direction: column; gap: 0.2rem; padding: 0.5rem 0.15rem; border-radius: 14px; font-size: 0.62rem; line-height: 1.25; white-space: normal; text-align: center; justify-content: center; }
   .rw-tabs:not(.rw-tabs-sm) button i { font-size: 1rem; }
   .rw-tabs-sm { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
   .rw-tabs-sm button { justify-content: center; }
@@ -113,3 +113,17 @@
   .rw-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rw-tabs:not(.rw-tabs-sm) button { font-size: 0.62rem; }
 }
+
+/* ---------- daily streak ---------- */
+.rw-streak-card { text-align: center; display: grid; justify-items: center; gap: 0.6rem; }
+.rw-flame { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; font-size: 2rem; color: #fff; background: linear-gradient(135deg, #f59e0b, #dc2626); box-shadow: 0 8px 24px rgba(220, 80, 30, 0.35); }
+.rw-streak-num b { font-size: 2.6rem; color: var(--text-dark); line-height: 1; } .rw-streak-num span { color: var(--text-muted); font-size: 0.95rem; }
+.rw-week { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.35rem; width: 100%; max-width: 420px; }
+.rw-week li { display: grid; justify-items: center; gap: 0.25rem; font-size: 0.68rem; color: var(--text-muted); padding: 0.4rem 0; border-radius: 12px; border: 1px solid transparent; }
+.rw-week li i { font-size: 1rem; opacity: 0.35; } .rw-week li.is-done i { color: #f59e0b; opacity: 1; }
+.rw-week li.is-today { border-color: var(--accent); }
+.rw-checkin { justify-content: center; padding: 0.7rem 1.4rem; font-size: 0.95rem; max-width: 100%; text-align: center; }
+.rw-benefits { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+.rw-benefits li { display: flex; gap: 0.7rem; align-items: flex-start; font-size: 0.88rem; color: var(--text-dark); line-height: 1.7; }
+.rw-benefits li i { color: var(--accent); margin-top: 0.35rem; flex: none; width: 1.2rem; text-align: center; }
+@media (max-width: 640px) { .rw-checkin { width: 100%; white-space: normal; } }

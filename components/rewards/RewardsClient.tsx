@@ -7,10 +7,12 @@ import { ReferEarn } from './ReferEarn';
 import { MyBadges } from './MyBadges';
 import { MyFrames } from './MyFrames';
 import { ReferralLeaderboard } from './ReferralLeaderboard';
+import { DailyStreak } from './DailyStreak';
 import './rewards.css';
 
-type Tab = 'refer' | 'badges' | 'frames' | 'board';
+type Tab = 'streak' | 'refer' | 'badges' | 'frames' | 'board';
 const TABS: { id: Tab; label: string; icon: string; members: boolean }[] = [
+  { id: 'streak', label: 'Daily Streak', icon: 'fa-fire', members: true },
   { id: 'refer', label: 'Refer & Earn', icon: 'fa-user-plus', members: true },
   { id: 'badges', label: 'My Badges', icon: 'fa-medal', members: true },
   { id: 'frames', label: 'My Frames', icon: 'fa-circle-notch', members: true },
@@ -18,7 +20,7 @@ const TABS: { id: Tab; label: string; icon: string; members: boolean }[] = [
 ];
 
 export function RewardsClient() {
-  const [tab, setTab] = useState<Tab>('refer');
+  const [tab, setTab] = useState<Tab>('streak');
   const [member, setMember] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -41,13 +43,13 @@ export function RewardsClient() {
         <p>दोस्तों को जोड़िए, लिखते रहिए — और XP, बैज व प्रोफ़ाइल फ़्रेम कमाइए।</p>
       </header>
 
-      <nav className="rw-tabs" role="tablist" aria-label="Mehfil Rewards">
+      <div className="rw-tabs" role="tablist" aria-label="Mehfil Rewards">
         {TABS.map((t) => (
           <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? 'is-active' : ''} onClick={() => select(t.id)}>
             <i className={`fas ${t.icon}`} aria-hidden="true" /> <span>{t.label}</span>
           </button>
         ))}
-      </nav>
+      </div>
 
       {member === null && <p className="rw-note" role="status">लोड हो रहा है…</p>}
       {member === false && current.members && (
@@ -59,6 +61,7 @@ export function RewardsClient() {
       )}
       {member !== null && (member || !current.members) && (
         <section aria-live="polite">
+          {tab === 'streak' && <DailyStreak />}
           {tab === 'refer' && <ReferEarn />}
           {tab === 'badges' && <MyBadges />}
           {tab === 'frames' && <MyFrames />}

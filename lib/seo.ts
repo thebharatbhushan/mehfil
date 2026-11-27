@@ -202,6 +202,9 @@ export function publicWriter(w: Writer): Writer {
     // Only present on the single-author endpoint; list/poem pages are unchanged.
     ...(w.badges?.length ? { badges: sanitizeBadges(w.badges) } : {}),
     ...(sanitizeStreak(w.writerStreak)?.current ? { writerStreak: sanitizeStreak(w.writerStreak)! } : {}),
+    ...(typeof w.xp === 'number' && Number.isFinite(w.xp) ? { xp: Math.max(0, Math.floor(w.xp)) } : {}),
+    ...(w.level && typeof w.level.level === 'number' ? { level: { level: w.level.level, title: String(w.level.title ?? '').slice(0, 40), xp: w.level.xp, min: w.level.min, nextMin: w.level.nextMin, nextTitle: w.level.nextTitle, fraction: w.level.fraction } } : {}),
+    ...(w.dailyStreak && w.dailyStreak.current > 0 ? { dailyStreak: { current: Math.floor(w.dailyStreak.current), longest: Math.floor(w.dailyStreak.longest || 0) } } : {}),
     ...(normalizeFrameKey(w.profileFrame) !== 'default' ? { profileFrame: { key: normalizeFrameKey(w.profileFrame) } } : {}),
   };
 }

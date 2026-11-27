@@ -342,6 +342,13 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
           <div className="ap-identity">
             <h1 className="ap-name">{fullName}</h1>
             {username && <div className="ap-username">@{username}</div>}
+            {typeof author.xp === 'number' && (
+              <div className="ap-xp" aria-label={`${author.xp} XP${author.level ? `, लेवल ${author.level.level}` : ''}`}>
+                <span className="ap-xp-chip"><i className="fas fa-star" aria-hidden="true" /> {author.xp.toLocaleString('en-IN')} XP</span>
+                {author.level && <span className="ap-xp-chip is-level"><i className="fas fa-level-up-alt" aria-hidden="true" /> लेवल {author.level.level} · {author.level.title}</span>}
+                {(author.dailyStreak?.current ?? 0) > 0 && <span className="ap-xp-chip is-fire"><i className="fas fa-fire" aria-hidden="true" /> {author.dailyStreak!.current} दिन की स्ट्रीक</span>}
+              </div>
+            )}
             <BadgeMedals badges={author.badges} onShare={isOwner ? setShareBadge : undefined} />
             <WriterStreakBadge streak={author.writerStreak} isOwner={isOwner} />
             <p className="ap-bio">{bioText}</p>
@@ -387,6 +394,12 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
             <dt>रचनाएँ</dt>
             <dd>{poemsCount}</dd>
           </div>
+          {typeof author.xp === 'number' && (
+            <div className="ap-stat">
+              <dt>XP</dt>
+              <dd>{author.xp.toLocaleString('en-IN')}</dd>
+            </div>
+          )}
           {booksCount > 0 && (
             <div className="ap-stat">
               <dt>किताबें</dt>
@@ -406,7 +419,7 @@ export function AuthorProfile({ ident, initial }: { ident: string | null; initia
         </dl>
       </header>
 
-      {/* Badges — names/icons only; locked ones are grayscale. No XP is ever shown. */}
+      {/* Badges — names/icons only; locked ones are grayscale. */}
       <ProfileBadges badges={author.badges} onShare={isOwner ? setShareBadge : undefined} />
       <BooksShowcase books={author.books} />
       {isOwner && shareBadge && (

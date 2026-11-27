@@ -123,3 +123,12 @@ export interface FrameRequirement { type: string; threshold: number | null; badg
 export interface FrameItem { key: string; name: string; nameHi: string; description: string; unlocked: boolean; selected: boolean; source: string | null; requirements: FrameRequirement[] }
 export interface RewardBadge { key: string; name: string; description: string; icon: string; group: 'referral' | 'general'; unlocked: boolean; unlockedAt: string | null; condition: { type: string; threshold: number | null }; progress: { current: number; required: number } | null }
 export interface BoardRow { rank: number; writer: { _id: string; firstName: string; lastName: string; username: string; profilePic: string; profileFrame: string }; successfulReferrals: number; xpFromReferrals: number; badge: { key: string; name: string; icon: string } | null }
+
+export interface XpLevel { level: number; title: string; xp: number; min: number; nextMin: number | null; nextTitle: string | null; fraction: number }
+export interface StreakData {
+  current: number; longest: number; totalDays: number; checkedToday: boolean; today: string; lastDay: string; dailyXp: number;
+  next: { days: number; xp: number; remaining: number } | null;
+  milestones: { days: number; xp: number; reached: boolean }[];
+  xp: number; level: XpLevel;
+  already?: boolean; awarded?: { type: 'daily' | 'milestone'; xp: number; days?: number }[];
+}

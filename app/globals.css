@@ -4422,3 +4422,10 @@ a.category:focus-visible { outline: 3px solid rgba(168, 90, 63, 0.5); outline-of
 .mf-frame-legendary::before { background: conic-gradient(from 0deg, #fff7c2, #f59e0b, #b91c1c, #7c2d12, #f59e0b, #fff7c2, #fbbf24, #fff7c2); animation: mfFrameSpin 9s linear infinite; }
 .mf-frame-legendary::after { content: '✦'; position: absolute; top: -12px; right: 6px; z-index: 2; pointer-events: none; font-size: 1.1rem; line-height: 1; color: #fff3d6; text-shadow: 0 0 10px #f59e0b, 0 0 4px #b91c1c; animation: mfTwinkle 2.4s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .mf-frame-legendary::before, .mf-frame-legendary::after { animation: none; } }
+
+/* XP / level / daily streak chips on the profile header */
+.ap-xp { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0 0.2rem; }
+.ap-xp-chip { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; background: var(--chip-bg, #f5e6dd); color: var(--accent-dark); border: 1px solid var(--border-light); }
+.ap-xp-chip i { color: #e8a317; }
+.ap-xp-chip.is-fire i { color: #f2602a; }
+@media (max-width: 880px) { .ap-xp { justify-content: center; } }

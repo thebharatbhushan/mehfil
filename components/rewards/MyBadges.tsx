@@ -9,6 +9,7 @@ export function conditionText(b: RewardBadge): string {
   const t = b.condition.threshold;
   switch (b.condition.type) {
     case 'referral_count': return `${t} सफल रेफ़रल`;
+    case 'daily_streak_days': return `${t} दिन लगातार रोज़ाना हाज़िरी लगाएँ`;
     case 'xp_threshold': return `${t} XP अर्जित करें`;
     case 'poem_count':
     case 'eligible_poem_count': return `${t} रचनाएँ प्रकाशित करें`;

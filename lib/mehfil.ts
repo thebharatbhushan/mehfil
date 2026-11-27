@@ -65,13 +65,17 @@ export interface Writer {
   poemsCount?: number;
   /** Optional social / website links (public data; safe to render after validation). */
   socialLinks?: SocialLinks;
-  /** Public recognition from the API: badge shelf + profile frame. Never contains XP. */
+  /** Public recognition from the API: badge shelf + profile frame. */
   badges?: ProfileBadge[];
   profileFrame?: ProfileFrameInfo;
   /** Approved books (cover + link) shown on the public profile. */
   books?: Book[];
   /** Weekly writing streak (public profile responses only). */
   writerStreak?: WriterStreak;
+  /** Total XP, level and daily check-in streak (public profile responses only; read-only numbers from the server). */
+  xp?: number;
+  level?: { level: number; title: string; xp: number; min: number; nextMin: number | null; nextTitle: string | null; fraction: number };
+  dailyStreak?: { current: number; longest: number };
 }
 
 /** Public profile URL: /u/<username> when known, otherwise the id-based fallback. */

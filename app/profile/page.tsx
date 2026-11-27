@@ -36,6 +36,9 @@ interface Profile extends ProfileCompletionUser {
   badges?: ProfileBadge[];
   profileFrame?: ProfileFrameInfo;
   writerStreak?: unknown;
+  xp?: number;
+  level?: { level: number; title: string };
+  dailyStreak?: { current: number; longest: number };
 }
 
 type EditSection = 'basic' | 'account' | 'location' | 'education' | 'about' | 'interests' | 'languages' | 'social' | 'password' | null;
@@ -540,6 +543,13 @@ export default function ProfilePage() {
               <div className="profile-eyebrow"><span>मेहफ़िल सदस्य</span><span className="profile-eyebrow-dot" /> <span>{memberSince} से</span></div>
               <h1>{fullName}</h1>
               {profile.username && <div className="profile-username">@{profile.username}</div>}
+              {typeof profile.xp === 'number' && (
+                <div className="ap-xp">
+                  <span className="ap-xp-chip"><i className="fas fa-star" aria-hidden="true" /> {profile.xp.toLocaleString('en-IN')} XP</span>
+                  {profile.level && <span className="ap-xp-chip is-level"><i className="fas fa-level-up-alt" aria-hidden="true" /> लेवल {profile.level.level} · {profile.level.title}</span>}
+                  {(profile.dailyStreak?.current ?? 0) > 0 && <span className="ap-xp-chip is-fire"><i className="fas fa-fire" aria-hidden="true" /> {profile.dailyStreak!.current} दिन की स्ट्रीक</span>}
+                </div>
+              )}
               <BadgeMedals badges={profile.badges} onShare={setShareBadge} />
               <WriterStreakBadge streak={profile.writerStreak} isOwner />
               <div className="profile-header-tags">

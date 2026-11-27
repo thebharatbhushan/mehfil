@@ -11,6 +11,7 @@ function reqText(r: FrameRequirement): string {
   switch (r.type) {
     case 'referral_count': return `${r.threshold} सफल रेफ़रल`;
     case 'poem_count': return `${r.threshold} मौलिक रचनाएँ प्रकाशित करें`;
+    case 'xp': return `${r.threshold} XP अर्जित करें`;
     case 'poem_streak_weeks': return `${r.threshold} हफ़्ते की लेखन स्ट्रीक`;
     case 'badge': return 'विशेष प्रतियोगिता / योगदान बैज';
     case 'manual': return 'मेहफ़िल टीम की विशेष मान्यता';
