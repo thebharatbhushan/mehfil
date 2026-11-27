@@ -117,6 +117,8 @@ const FRAME_METAL: Record<Exclude<FrameKey, 'default'>, [string, string, string]
   silver: ['#ffffff', '#c3c8d2', '#7d8594'],
   gold: ['#fff1b8', '#e5b93c', '#9a6a12'],
   special: ['#f7d6ff', '#b57bf0', '#5d2fa3'],
+  royal: ['#e9d5ff', '#7c3aed', '#3b1478'],
+  legendary: ['#fff7c2', '#f59e0b', '#b91c1c'],
 };
 
 export interface PreparedProfile {

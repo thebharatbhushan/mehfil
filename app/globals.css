@@ -4413,3 +4413,12 @@ a.category:focus-visible { outline: 3px solid rgba(168, 90, 63, 0.5); outline-of
   html[data-theme="dark"] nav:not(.bottom-nav) { background: hsl(35 32% 9.9% / 0.96); }
   nav.bottom-nav { -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+/* ===== Referral & Rewards: extra profile frames (pure CSS, no images). Existing frames above are unchanged. ===== */
+.mf-frame-royal { --mf-frame-a: #c4a1ff; --mf-frame-b: #5b21b6; --mf-frame-glow: rgba(124, 58, 237, 0.4); }
+.mf-frame-royal::before { background: conic-gradient(from 30deg, #e9d5ff, #7c3aed, #3b1478, #a78bfa, #e9d5ff, #7c3aed, #e9d5ff); }
+.mf-frame-royal::after { content: '♛'; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); z-index: 2; pointer-events: none; font-size: 1.1rem; line-height: 1; color: #fbbf24; text-shadow: 0 0 8px rgba(124, 58, 237, 0.8); }
+.mf-frame-legendary { --mf-frame-a: #fde68a; --mf-frame-b: #b91c1c; --mf-frame-glow: rgba(245, 158, 11, 0.55); }
+.mf-frame-legendary::before { background: conic-gradient(from 0deg, #fff7c2, #f59e0b, #b91c1c, #7c2d12, #f59e0b, #fff7c2, #fbbf24, #fff7c2); animation: mfFrameSpin 9s linear infinite; }
+.mf-frame-legendary::after { content: '✦'; position: absolute; top: -12px; right: 6px; z-index: 2; pointer-events: none; font-size: 1.1rem; line-height: 1; color: #fff3d6; text-shadow: 0 0 10px #f59e0b, 0 0 4px #b91c1c; animation: mfTwinkle 2.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .mf-frame-legendary::before, .mf-frame-legendary::after { animation: none; } }

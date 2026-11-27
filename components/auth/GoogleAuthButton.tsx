@@ -1,5 +1,6 @@
 'use client';
 
+import { getStoredReferralCode, clearStoredReferralCode } from '@/lib/referral';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/mehfil';
@@ -59,7 +60,7 @@ export default function GoogleAuthButton({ mode }: { mode: 'login' | 'signup' })
       const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...deviceHeaders() },
-        body: JSON.stringify({ credential: response.credential }),
+        body: JSON.stringify({ credential: response.credential, ...(getStoredReferralCode() ? { referralCode: getStoredReferralCode() } : {}) }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.success || !data.user || !data.token) {
@@ -70,6 +71,7 @@ export default function GoogleAuthButton({ mode }: { mode: 'login' | 'signup' })
       sessionStorage.removeItem('mehfil_user');
       localStorage.setItem('mehfil_user', JSON.stringify({ ...data.user, id: data.user._id }));
       localStorage.setItem('mehfil_remember', 'true');
+      if (data.isNewUser) clearStoredReferralCode();
       localStorage.setItem('token', data.token);
       window.dispatchEvent(new Event('mehfil-auth-change'));
 

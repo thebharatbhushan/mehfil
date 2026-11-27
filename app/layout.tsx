@@ -17,6 +17,7 @@ import { API_BASE_URL } from '@/lib/mehfil';
 import { DeferredStylesheet } from '@/components/site/DeferredStylesheet';
 import { MehfilLoader } from '@/components/site/MehfilLoader';
 import { RouteLoader } from '@/components/site/RouteLoader';
+import { ReferralCapture } from '@/components/referral/ReferralCapture';
 
 const SITE_DESCRIPTION =
   'मेहफ़िल — हिंदी और उर्दू कविता, शायरी और साहित्य का मंच। दिल को छू लेने वाली कविताएँ पढ़ें, रचनाकारों से मिलें और अपनी रचनाएँ साझा करें।';
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="skip-link">मुख्य सामग्री पर जाएँ</a>
         <MehfilLoader />
         <RouteLoader />
+        <ReferralCapture />
         <JsonLd
           data={{
             '@context': 'https://schema.org',

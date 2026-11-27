@@ -114,6 +114,7 @@ export function MobileDrawer({ open, onClose, user, pathname, onPublish, onLogou
   const mine: NavItem[] = user
     ? [
         { href: '/profile', label: 'मेरी प्रोफ़ाइल', sub: 'Profile', icon: 'fa-user-circle', active: pathname.startsWith('/profile') },
+        { href: '/rewards', label: 'Mehfil Rewards', sub: 'Refer & Earn', icon: 'fa-gift', active: pathname.startsWith('/rewards') },
         { href: '/notifications', label: 'सूचनाएँ', sub: 'Notifications', icon: 'fa-bell', active: pathname.startsWith('/notifications'), badge: unreadCount },
         { href: myProfileHref(), label: 'मेरी रचनाएँ', sub: 'My Rachna', icon: 'fa-pen-nib', active: false },
       ]

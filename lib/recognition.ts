@@ -16,7 +16,7 @@ export interface ProfileFrameInfo {
   name?: string;
 }
 
-export const FRAME_KEYS = ['default', 'bronze', 'silver', 'gold', 'special'] as const;
+export const FRAME_KEYS = ['default', 'bronze', 'silver', 'gold', 'special', 'royal', 'legendary'] as const;
 export type FrameKey = (typeof FRAME_KEYS)[number];
 
 /** Only known frame keys ever reach a className. */
@@ -32,7 +32,7 @@ export function frameClassName(frame?: ProfileFrameInfo | string | null): string
 }
 
 export function frameLabel(frame?: ProfileFrameInfo | string | null): string {
-  const labels: Record<FrameKey, string> = { default: '', bronze: 'ब्रॉन्ज़ फ़्रेम', silver: 'सिल्वर फ़्रेम', gold: 'गोल्ड फ़्रेम', special: 'विशेष फ़्रेम' };
+  const labels: Record<FrameKey, string> = { default: '', bronze: 'ब्रॉन्ज़ फ़्रेम', silver: 'सिल्वर फ़्रेम', gold: 'गोल्ड फ़्रेम', special: 'विशेष फ़्रेम', royal: 'रॉयल फ़्रेम', legendary: 'लीजेंडरी फ़्रेम' };
   return labels[normalizeFrameKey(frame)];
 }
 
@@ -63,8 +63,19 @@ export const BADGE_TONES = [
   { name: 'onyx',     light: '#d9d6e8', mid: '#5b5877', dark: '#1f1d33', glow: '70,68,100' },
 ] as const;
 
+/** Referral badges get their own fixed tone (a distinct visual per badge); every other badge keeps its hashed tone. */
+const BADGE_TONE_OVERRIDES: Record<string, number> = {
+  first_invite: 1, // emerald
+  community_supporter: 2, // sapphire
+  community_builder: 3, // amethyst
+  mehfil_ambassador: 0, // gold
+  elite_ambassador: 4, // ruby
+  legendary_supporter: 5, // rosegold
+};
+
 /** Stable tone index (0-7) for a badge key. */
 export function badgeTone(key: string): number {
+  if (key in BADGE_TONE_OVERRIDES) return BADGE_TONE_OVERRIDES[key];
   let h = 0;
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
   return h % BADGE_TONES.length;

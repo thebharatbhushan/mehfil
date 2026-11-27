@@ -214,6 +214,9 @@ export function Header() {
                   <Link href={myProfileHref()} className="dropdown-item">
                     <i className="fas fa-book-open" /> मेरी रचनाएँ
                   </Link>
+                  <Link href="/rewards" className="dropdown-item">
+                    <i className="fas fa-gift" /> Mehfil Rewards
+                  </Link>
                   <Link href="/notifications" className="dropdown-item">
                     <i className="fas fa-bell" /> सूचनाएँ{unreadCount > 0 ? ` (${unreadCount > 99 ? '99+' : unreadCount})` : ''}
                   </Link>

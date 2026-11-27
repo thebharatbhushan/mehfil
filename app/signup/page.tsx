@@ -8,6 +8,7 @@ import { BrandLogo } from '@/components/site/BrandLogo';
 import { useToast } from '@/components/site/ToastProvider';
 import { deviceHeaders } from '@/lib/notifications';
 import GoogleAuthButton from '@/components/auth/GoogleAuthButton';
+import { getStoredReferralCode, clearStoredReferralCode } from '@/lib/referral';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -117,6 +118,7 @@ export default function SignupPage() {
       dob: formData.dob,
       languagePref: formData.languagePref,
       acceptedTerms,
+      ...(getStoredReferralCode() ? { referralCode: getStoredReferralCode() } : {}),
     };
     const res = await fetch(`${API_BASE_URL}/api/auth/send-signup-otp`, {
       method: 'POST',
@@ -156,6 +158,7 @@ export default function SignupPage() {
 
       localStorage.setItem('mehfil_user', JSON.stringify({ ...data.user, id: data.user?._id ?? data.user?.id }));
       localStorage.setItem('token', data.token);
+      clearStoredReferralCode(); // attribution is done server-side; the code is no longer needed
       window.dispatchEvent(new Event('mehfil-auth-change'));
       showToast('✨ ईमेल सत्यापित! मेहफ़िल में आपका स्वागत है।');
       setTimeout(() => router.push('/'), 800);
