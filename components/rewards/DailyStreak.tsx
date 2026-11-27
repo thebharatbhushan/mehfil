@@ -6,20 +6,22 @@ import { StreakData, rewardsApi } from '@/lib/referral';
 
 const DAY_LABELS = ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'];
 
-/** The last 7 IST days ending today; a day is "done" when it falls inside the current streak run. */
+/** The current IST week, Monday to Sunday. A day is "done" when it falls inside the current streak run; later days are future. */
 function weekStrip(s: StreakData) {
-  const out: { key: string; label: string; done: boolean; today: boolean }[] = [];
+  const out: { key: string; label: string; done: boolean; today: boolean; future: boolean }[] = [];
   const base = Date.parse(`${s.today}T12:00:00Z`);
   const last = s.lastDay ? Date.parse(`${s.lastDay}T12:00:00Z`) : NaN;
-  for (let i = 6; i >= 0; i--) {
-    const t = base - i * 86400000;
+  const sinceMonday = (new Date(base).getUTCDay() + 6) % 7; // Monday = 0 ... Sunday = 6
+  for (let i = 0; i < 7; i++) {
+    const t = base + (i - sinceMonday) * 86400000;
     const d = new Date(t);
     const diffFromLast = Number.isNaN(last) ? Infinity : Math.round((last - t) / 86400000);
     out.push({
       key: d.toISOString().slice(0, 10),
       label: DAY_LABELS[d.getUTCDay()],
       done: s.current > 0 && diffFromLast >= 0 && diffFromLast < s.current,
-      today: i === 0,
+      today: i === sinceMonday,
+      future: i > sinceMonday,
     });
   }
   return out;
@@ -62,9 +64,9 @@ export function DailyStreak() {
       <div className="rw-card rw-streak-card">
         <div className="rw-flame" aria-hidden="true"><i className="fas fa-fire" /></div>
         <div className="rw-streak-num"><b>{data.current}</b> <span>दिन की स्ट्रीक</span></div>
-        <ul className="rw-week" aria-label="पिछले 7 दिन">
+        <ul className="rw-week" aria-label="इस हफ़्ते के दिन (सोमवार से रविवार)">
           {week.map((d) => (
-            <li key={d.key} className={`${d.done ? 'is-done' : ''}${d.today ? ' is-today' : ''}`}>
+            <li key={d.key} className={`${d.done ? 'is-done' : ''}${d.today ? ' is-today' : ''}${d.future ? ' is-future' : ''}`}>
               <span>{d.label}</span>
               <i className={`fas ${d.done ? 'fa-fire' : 'fa-circle'}`} aria-hidden="true" />
             </li>

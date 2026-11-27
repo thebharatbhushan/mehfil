@@ -127,3 +127,4 @@
 .rw-benefits li { display: flex; gap: 0.7rem; align-items: flex-start; font-size: 0.88rem; color: var(--text-dark); line-height: 1.7; }
 .rw-benefits li i { color: var(--accent); margin-top: 0.35rem; flex: none; width: 1.2rem; text-align: center; }
 @media (max-width: 640px) { .rw-checkin { width: 100%; white-space: normal; } }
+.rw-week li.is-future { opacity: 0.55; }
