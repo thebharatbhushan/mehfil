@@ -1,5 +1,5 @@
 /* Mehfil Rewards. Uses the site's existing tokens (--accent, --card-bg, --border-light, --font-deva ...). */
-.rw-page, .rw-join { padding-top: 1.5rem; padding-bottom: 3rem; font-family: var(--font-deva); }
+.rw-page, .rw-join { padding-top: 1.5rem; padding-bottom: 3rem; font-family: var(--font-deva); max-width: 100%; overflow-x: clip; }
 .rw-head { text-align: center; max-width: 640px; margin: 0 auto 1.25rem; }
 .rw-kicker { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--accent); font-weight: 600; }
 .rw-head h1, .rw-join-card h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); line-height: 1.4; color: var(--text-dark); margin: 0.25rem 0 0.5rem; }
@@ -9,8 +9,7 @@
 .rw-tabs button { border: 0; background: transparent; padding: 0.5rem 1rem; border-radius: 999px; font-family: inherit; font-size: 0.88rem; color: var(--accent-dark); cursor: pointer; white-space: nowrap; display: inline-flex; gap: 0.4rem; align-items: center; }
 .rw-tabs button.is-active { background: var(--accent); color: #fff; }
 .rw-tabs-sm { margin-bottom: 0.75rem; }
-@media (max-width: 520px) { .rw-tabs:not(.rw-tabs-sm) button span { display: none; } .rw-tabs:not(.rw-tabs-sm) button.is-active span { display: inline; } }
-.rw-stack { display: grid; gap: 1.1rem; max-width: 860px; margin: 0 auto; }
+.rw-stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.1rem; max-width: 860px; margin: 0 auto; }
 .rw-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 18px; padding: 1.1rem 1rem; box-shadow: var(--shadow-sm); max-width: 860px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 .rw-card h2 { font-size: 1.1rem; color: var(--accent-dark); margin: 0 0 0.6rem; }
 .rw-card h2 small { font-weight: 500; color: var(--text-muted); font-size: 0.8rem; margin-left: 0.4rem; }
@@ -75,3 +74,42 @@
 .rw-board .rw-medal { width: 38px; height: 38px; font-size: 1rem; }
 .rw-join-card { text-align: center; max-width: 520px; padding: 2rem 1.25rem; }
 @media (prefers-reduced-motion: reduce) { .rw-progress span { transition: none; } }
+
+/* ---------- mobile ---------- */
+.rw-history li > div:first-child { min-width: 0; overflow-wrap: anywhere; }
+.rw-miles li span { min-width: 0; overflow-wrap: anywhere; }
+.rw-next, .rw-detail, .rw-note { overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .rw-page, .rw-join { padding-top: 1rem; padding-bottom: 5.5rem; }
+  .rw-head { margin-bottom: 1rem; }
+  .rw-head p { font-size: 0.88rem; line-height: 1.7; }
+  /* main tabs: four equal columns, icon over a short label, no sideways scrolling */
+  .rw-tabs:not(.rw-tabs-sm) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; border-radius: 18px; overflow: visible; gap: 0.2rem; }
+  .rw-tabs:not(.rw-tabs-sm) button { flex-direction: column; gap: 0.2rem; padding: 0.5rem 0.15rem; border-radius: 14px; font-size: 0.68rem; line-height: 1.25; white-space: normal; text-align: center; justify-content: center; }
+  .rw-tabs:not(.rw-tabs-sm) button i { font-size: 1rem; }
+  .rw-tabs-sm { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+  .rw-tabs-sm button { justify-content: center; }
+  .rw-card { padding: 0.9rem 0.8rem; border-radius: 16px; }
+  .rw-linkbox { flex-direction: column; }
+  .rw-linkbox input, .rw-linkbox .rw-btn { flex: none; width: 100%; box-sizing: border-box; justify-content: center; }
+  .rw-shares { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rw-shares .rw-btn { justify-content: center; padding: 0.5rem 0.5rem; }
+  .rw-stats { gap: 0.5rem; }
+  .rw-stat { padding: 0.7rem 0.3rem; } .rw-stat b { font-size: 1.2rem; }
+  .rw-miles li { align-items: flex-start; font-size: 0.82rem; }
+  .rw-badge-row { gap: 0.6rem; justify-content: center; } .rw-badge-row li { width: 78px; }
+  .rw-badge-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+  .rw-frame-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+  /* invited friends: name + status on one row, the three steps below */
+  .rw-history li { grid-template-columns: minmax(0, 1fr) auto; row-gap: 0.35rem; }
+  .rw-history li .rw-steps { grid-column: 1 / -1; }
+  .rw-board li { gap: 0.5rem; }
+  .rw-board-info a { font-size: 0.9rem; }
+  .rw-pager { flex-wrap: wrap; }
+  .rw-privacy { align-items: flex-start; text-align: left; }
+  .rw-join-card { padding: 1.5rem 1rem; }
+}
+@media (max-width: 360px) {
+  .rw-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rw-tabs:not(.rw-tabs-sm) button { font-size: 0.62rem; }
+}

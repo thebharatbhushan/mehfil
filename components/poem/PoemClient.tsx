@@ -212,6 +212,19 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
           </button>
         </div>
 
+        {/* Report: shown under every poem so a copyright / abuse report is one tap away (link + reason are pre-filled) */}
+        <div className="poem-report-row" style={{ display: 'flex', justifyContent: 'center', margin: '-1rem 0 2.5rem' }}>
+          <Link
+            href={`/report-content?poem=${encodeURIComponent(poem.slug || '')}&reason=copyright`}
+            className="poem-report-link"
+            rel="nofollow"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '0.55rem 1.2rem', borderRadius: '60px', border: '1px solid var(--border-light)', background: 'var(--surface-glass)', color: 'var(--text-muted)', fontSize: '0.82rem', fontWeight: 600, textDecoration: 'none' }}
+          >
+            <i className="fas fa-flag" aria-hidden="true" /> सामग्री की रिपोर्ट करें
+            <span style={{ fontWeight: 400, fontSize: '0.72rem' }}>(कॉपीराइट / अनुचित)</span>
+          </Link>
+        </div>
+
         {/* Author Card */}
         {poem.author?._id && (
           <div

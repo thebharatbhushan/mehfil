@@ -85,7 +85,7 @@ export function ReferEarn() {
             <button className="rw-btn rw-share" onClick={native}><i className="fas fa-share-alt" aria-hidden="true" /> और</button>
           )}
         </div>
-        <p className="rw-note">रेफ़रल तब सफल गिना जाता है जब आपका साथी रजिस्टर करे, ईमेल सत्यापित करे, प्रोफ़ाइल पूरी करे और अपनी पहली मौलिक रचना प्रकाशित करे।</p>
+        <p className="rw-note">आपके लिंक से कोई साथी सफलतापूर्वक साइनअप कर ले (ईमेल सत्यापित), तो आपका रेफ़रल तुरंत सफल गिना जाता है और XP व बैज आपको मिल जाते हैं।</p>
       </div>
 
       <div className="rw-stats">

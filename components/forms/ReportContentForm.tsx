@@ -39,6 +39,20 @@ export function ReportContentForm() {
     setEmail((cur) => cur || account.email);
   }, [account.name, account.email]);
 
+  // Arriving from a poem page (/report-content?poem=<slug>&reason=copyright): pre-fill the poem link and reason.
+  useEffect(() => {
+    try {
+      const q = new URLSearchParams(window.location.search);
+      const slug = (q.get('poem') || '').trim();
+      if (slug && slug.length <= 200 && !/[\s<>"'\\]/.test(slug)) {
+        setLink((cur) => cur || `${window.location.origin}/poem/${encodeURIComponent(slug)}`);
+      }
+      const key = (q.get('reason') || '').trim();
+      const found = REASON_OPTIONS.find((r) => r.key === key);
+      if (found) setReason(found.label);
+    } catch { /* ignore a malformed link */ }
+  }, []);
+
   const emailLocked = account.loggedIn && !!account.email;
 
   const validate = (): Errors => {
