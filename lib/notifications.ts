@@ -127,6 +127,7 @@ const TYPE_ICONS: Record<string, string> = {
   account_restored: 'fa-user-check',
   badge_unlocked: 'fa-medal',
   achievement: 'fa-trophy',
+  xp_adjustment: 'fa-star',
   first_poem: 'fa-feather-alt',
   featured_writer: 'fa-star',
   weekly_writer: 'fa-crown',
