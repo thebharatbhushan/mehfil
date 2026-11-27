@@ -156,6 +156,7 @@ export function PoemMarks({ poemId }: { poemId?: string }) {
         disabled={!!pending}
         aria-pressed={active}
         aria-busy={isPending}
+        className="poem-action-btn"
         style={{ ...(looksActive ? activePill : pill), ...(pending && !isPending ? { opacity: 0.6 } : null), cursor: pending ? 'progress' : 'pointer' }}
       >
         {isPending ? <Spinner /> : <i className={`${active ? 'fas' : 'far'} ${icon}`} />} {text}

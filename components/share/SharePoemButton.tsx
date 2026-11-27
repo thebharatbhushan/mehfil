@@ -20,7 +20,7 @@ export function SharePoemButton({ poem, label = 'Share as Image', className = ''
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button type="button" className={`share-img-btn${className ? ` ${className}` : ''}`} onClick={() => setOpen(true)} aria-haspopup="dialog">
+      <button type="button" className={`share-img-btn poem-action-btn${className ? ` ${className}` : ''}`} onClick={() => setOpen(true)} aria-haspopup="dialog">
         <i className="far fa-image" aria-hidden="true" /> {label}
       </button>
       {open && <SharePoemModal poem={poem} onClose={() => setOpen(false)} />}

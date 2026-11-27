@@ -177,7 +177,7 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
         </div>
 
         {/* Share Button */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2rem' }}>
+        <div className="poem-actions">
           <PoemMarks poemId={poem._id} />
           <SharePoemButton
             poem={{
@@ -190,6 +190,7 @@ export function PoemContent({ slug, initialPoem = null, initialAuthor = null, in
             }}
           />
           <button
+            className="poem-action-btn"
             onClick={handleShare}
             style={{
               background: 'rgba(193, 106, 75, 0.1)',

@@ -4429,3 +4429,11 @@ a.category:focus-visible { outline: 3px solid rgba(168, 90, 63, 0.5); outline-of
 .ap-xp-chip i { color: #e8a317; }
 .ap-xp-chip.is-fire i { color: #f2602a; }
 @media (max-width: 880px) { .ap-xp { justify-content: center; } }
+
+/* Poem page action row (save / like / share as image / share): wraps on desktop, a tidy 2x2 grid on phones */
+.poem-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2rem; }
+@media (max-width: 640px) {
+  .poem-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; justify-content: stretch; }
+  .poem-actions .poem-action-btn,
+  .poem-actions .share-img-btn { width: 100%; min-width: 0; box-sizing: border-box; justify-content: center !important; padding: 0.7rem 0.5rem !important; font-size: 0.82rem !important; line-height: 1.3; white-space: normal; text-align: center; gap: 8px !important; }
+}
